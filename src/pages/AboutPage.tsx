@@ -75,16 +75,14 @@ const AboutPage = () => {
     <div className="min-h-screen bg-travel-light-bg">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center bg-gradient-to-br from-primary/10 to-secondary/10 overflow-hidden">
-        {/* Background Video */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          src={aboutVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40 z-10"></div>
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2070&q=80')`
+          }}
+        ></div>
+        {/* Removed overlay */}
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">

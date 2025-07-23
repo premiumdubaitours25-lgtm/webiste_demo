@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Clock, ArrowRight } from "lucide-react";
+import blogHeroImage from "@/assets/image.png";
 
 const BlogsPage = () => {
   const blogs = [
@@ -86,22 +87,23 @@ const BlogsPage = () => {
   return (
     <div className="min-h-screen bg-travel-light-bg">
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-to-br from-primary/10 to-secondary/10 overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=1920&h=1080&fit=crop" 
-            alt="Travel Blogs"
-            className="w-full h-full object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center space-y-6 fade-in">
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground">
-              Travel <span className="text-primary">Blogs</span>
+      <section className="relative min-h-screen flex items-center bg-gradient-to-br from-primary/10 to-secondary/10 overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{
+            backgroundImage: `url('${blogHeroImage}')`
+          }}
+        ></div>
+        {/* Removed overlay */}
+        <div className="container mx-auto px-4 relative z-20">
+          <div className="text-center space-y-6 fade-in relative z-30">
+            <h1 className="text-5xl lg:text-6xl font-bold text-white">
+              Travel Blogs
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Discover travel insights, tips, and stories from our adventures around the world
+            {/* Removed the visible hero image */}
+            <p className="text-xl text-white/90 max-w-3xl mx-auto bg-black/40 rounded-lg py-2 px-4 inline-block">
+              Read our latest travel stories and tips
             </p>
           </div>
         </div>

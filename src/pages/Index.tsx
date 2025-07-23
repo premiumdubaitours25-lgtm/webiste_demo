@@ -3,7 +3,7 @@ import ImageCarousel from "@/components/ImageCarousel";
 import ImageGrid from "@/components/ImageGrid";
 import MasonryGallery from "@/components/MasonryGallery";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Package, Camera, BookOpen } from "lucide-react";
+import { ArrowRight, MapPin, Package, Camera, BookOpen, Phone, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -24,19 +24,8 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Image Grid Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <ImageGrid />
-        </div>
-      </section>
-      
-      {/* Masonry Gallery Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <MasonryGallery />
-        </div>
-      </section>
+     
+     
       
       {/* About Section Preview */}
       <section className="py-20 bg-muted/30">
@@ -75,7 +64,7 @@ const Index = () => {
               <img 
                 src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80" 
                 alt="Travel Experience" 
-                className="rounded-lg shadow-lg hover-lift w-full"
+                className="rounded-lg shadow-2xl w-full"
               />
             </div>
           </div>
@@ -103,32 +92,31 @@ const Index = () => {
                 duration: "5D/4N",
                 price: "₹29,999",
                 image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Explore the mystical kingdom of Bhutan with cultural heritage and natural beauty."
+                description: "Explore the mystical kingdom of Bhutan with cultural heritage and natural beauty.",
+                type: "INTERNATIONAL"
               },
               {
                 title: "Meghalaya Adventure",
                 duration: "4D/3N",
                 price: "₹16,500",
                 image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Discover the 'Abode of Clouds' with pristine waterfalls and unique experiences."
+                description: "Discover the 'Abode of Clouds' with pristine waterfalls and unique experiences.",
+                type: "DOMESTIC"
               },
               {
                 title: "North East Explorer",
                 duration: "8D/7N",
                 price: "₹34,990",
                 image: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Immerse yourself in the natural beauty and cultural charm of North East India."
+                description: "Immerse yourself in the natural beauty and cultural charm of North East India.",
+                type: "DOMESTIC"
               }
             ].map((pkg, index) => (
-              <div key={index} className="bg-card rounded-lg shadow-lg overflow-hidden hover-lift">
-                <img src={pkg.image} alt={pkg.title} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-secondary">{pkg.title}</h3>
-                  <p className="text-muted-foreground mb-4">{pkg.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">{pkg.duration}</span>
-                    <span className="text-lg font-bold text-primary">{pkg.price}/person</span>
-                  </div>
+              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative">
+                <img src={pkg.image} alt={pkg.title} className="w-full h-64 object-cover" />
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left">
+                  <div className="text-xs text-muted-foreground font-medium mb-1">{pkg.type}</div>
+                  <div className="text-lg font-bold text-foreground">{pkg.title.toUpperCase()}</div>
                 </div>
               </div>
             ))}
@@ -153,21 +141,20 @@ const Index = () => {
           </div>
           <div className="grid md:grid-cols-4 gap-6 slide-up">
             {[
-              { name: "Nepal", type: "International", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Bali", type: "International", image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Bhutan", type: "International", image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Goa", type: "Domestic", image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Sikkim", type: "Domestic", image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Andaman", type: "Domestic", image: "https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Darjeeling", type: "Domestic", image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Meghalaya", type: "Domestic", image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
+              { name: "Nepal", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Bali", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Bhutan", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Goa", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Sikkim", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Andaman", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Darjeeling", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Meghalaya", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
             ].slice(0, 4).map((destination, index) => (
-              <div key={index} className="relative overflow-hidden rounded-lg hover-lift group">
-                <img src={destination.image} alt={destination.name} className="w-full h-64 object-cover transition-transform group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-semibold">{destination.name}</h3>
-                  <p className="text-sm opacity-90">{destination.type}</p>
+              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative">
+                <img src={destination.image} alt={destination.name} className="w-full h-64 object-cover" />
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left">
+                  <div className="text-xs text-muted-foreground font-medium mb-1">{destination.type}</div>
+                  <div className="text-lg font-bold text-foreground">{destination.name.toUpperCase()}</div>
                 </div>
               </div>
             ))}
@@ -315,6 +302,26 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Floating WhatsApp and Call Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col items-end gap-4 z-50">
+        <a
+          href="https://wa.me/91970393335"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg p-4 flex items-center justify-center transition-colors duration-200"
+          aria-label="Chat on WhatsApp"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </a>
+        <a
+          href="tel:91970393335"
+          className="bg-primary hover:bg-primary/90 text-white rounded-full shadow-lg p-4 flex items-center justify-center transition-colors duration-200"
+          aria-label="Call us"
+        >
+          <Phone className="w-6 h-6" />
+        </a>
+      </div>
     </div>
   );
 };

@@ -98,15 +98,15 @@ const PackagesPage = () => {
     <div className="min-h-screen bg-travel-light-bg">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center bg-gradient-to-br from-primary/10 to-secondary/10 overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-            alt="Travel Packages"
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40"></div>
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=2070&q=80')`
+          }}
+        ></div>
+        {/* Removed overlay */}
+        <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
               Our <span className="text-primary">Packages</span>
