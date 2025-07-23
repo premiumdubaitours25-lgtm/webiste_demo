@@ -123,7 +123,7 @@ const AboutPage = () => {
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-primary">5+ Years</h3>
                   <p className="text-muted-foreground">of Creating Memories</p>
-                </div>
+              </div>
               </div>
             </div>
           </div>

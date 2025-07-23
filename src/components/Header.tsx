@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
+import logo from "@/assets/image-Photoroom.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,21 +17,10 @@ const Header = () => {
     { name: "Contact Us", href: "/contact" },
   ];
 
-  // Transparent on homepage only
-  const isHome = location.pathname === "/";
-
   return (
-    <header
-      className={`
-        ${isHome ?
-          "bg-transparent absolute top-0 left-0 w-full z-50 transition-colors duration-300" :
-          "bg-background shadow-lg sticky top-0 z-50 transition-colors duration-300"
-        }
-      `}
-      style={{backdropFilter: isHome ? 'blur(2px)' : undefined}}
-    >
+    <header className="bg-background shadow-lg sticky top-0 z-50 transition-colors duration-300">
       {/* Top bar */}
-      <div className={`${isHome ? "bg-transparent text-white" : "bg-primary text-primary-foreground"} py-2 transition-colors duration-300`}>
+      <div className={`bg-primary text-primary-foreground py-2 transition-colors duration-300`}>
         <div className="container mx-auto px-4 flex justify-between items-center text-sm">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -49,7 +39,7 @@ const Header = () => {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/lovable-uploads/13166268-8dd7-4f78-a633-ef4e288bfd2a.png" alt="JJ&Tia Tours" className="h-12 w-auto" />
+            <img src={logo} alt="JJ&Tia Tours" className="h-16 w-auto object-contain" style={{maxHeight: '64px', minWidth: '64px'}} />
           </Link>
 
           {/* Desktop navigation */}
@@ -59,7 +49,7 @@ const Header = () => {
                 key={item.name}
                 to={item.href}
                 className={`transition-colors duration-200 font-medium ${
-                  location.pathname === item.href ? 'text-primary' : isHome ? 'text-white hover:text-primary' : 'text-foreground hover:text-primary'
+                  location.pathname === item.href ? 'text-primary' : 'text-foreground hover:text-primary'
                 }`}
               >
                 {item.name}
@@ -90,7 +80,7 @@ const Header = () => {
                   key={item.name}
                   to={item.href}
                   className={`transition-colors duration-200 font-medium ${
-                    location.pathname === item.href ? 'text-primary' : isHome ? 'text-white hover:text-primary' : 'text-foreground hover:text-primary'
+                    location.pathname === item.href ? 'text-primary' : 'text-foreground hover:text-primary'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >

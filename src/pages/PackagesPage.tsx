@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, MapPin, Users, Eye, Phone } from "lucide-react";
+import { Clock, MapPin, Users, Eye, Phone, Filter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const PackagesPage = () => {
   const navigate = useNavigate();
+  const [filter, setFilter] = useState<'all' | 'bhutan'>('all');
 
   const packages = [
     {
@@ -86,6 +88,12 @@ const PackagesPage = () => {
     navigate('/contact');
   };
 
+  // Filter logic
+  const filteredPackages =
+    filter === 'bhutan'
+      ? packages.filter((pkg) => pkg.destination === "Bhutan")
+      : packages;
+
   return (
     <div className="min-h-screen bg-travel-light-bg">
       {/* Hero Section */}
@@ -110,11 +118,29 @@ const PackagesPage = () => {
         </div>
       </section>
 
+      {/* Filter Buttons - Left aligned */}
+      <div className="container mx-auto px-4 mt-10 flex justify-start gap-3">
+        <Button
+          variant={filter === 'bhutan' ? "default" : "outline"}
+          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'bhutan' ? 'bg-primary text-white' : 'bg-white text-primary border-primary'}`}
+          onClick={() => setFilter('bhutan')}
+        >
+          Bhutan
+        </Button>
+        <Button
+          variant={filter === 'all' ? "default" : "outline"}
+          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'all' ? 'bg-primary text-white' : 'bg-white text-primary border-primary'}`}
+          onClick={() => setFilter('all')}
+        >
+          Show All
+        </Button>
+      </div>
+
       {/* Packages Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {packages.map((pkg, index) => (
+            {filteredPackages.map((pkg, index) => (
               <Card key={pkg.id} className={`overflow-hidden hover-lift bg-white shadow-lg hover:shadow-xl transition-all duration-300 ${index % 2 === 0 ? 'slide-up' : 'scale-in'}`}>
                 <div className="relative">
                   <img 
