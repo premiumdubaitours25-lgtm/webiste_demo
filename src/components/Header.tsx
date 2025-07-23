@@ -17,10 +17,16 @@ const Header = () => {
     { name: "Contact Us", href: "/contact" },
   ];
 
+  // Always transparent overlay for all hero sections
+  const isOverlayHero = true;
+
   return (
-    <header className="bg-background shadow-lg sticky top-0 z-50 transition-colors duration-300">
+    <header
+      className="absolute top-0 left-0 w-full z-50 transition-colors duration-300 bg-transparent"
+      style={{ background: "transparent" }}
+    >
       {/* Top bar */}
-      <div className={`bg-primary text-primary-foreground py-2 transition-colors duration-300`}>
+      <div className="bg-transparent text-white py-2 transition-colors duration-300">
         <div className="container mx-auto px-4 flex justify-between items-center text-sm">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -39,7 +45,9 @@ const Header = () => {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logo} alt="JJ&Tia Tours" className="h-16 w-auto object-contain" style={{maxHeight: '64px', minWidth: '64px'}} />
+            <span className="flex items-center justify-center bg-white rounded-full shadow" style={{width: '72px', height: '72px'}}>
+              <img src={logo} alt="JJ&Tia Tours" className="h-14 w-14 object-contain" style={{maxHeight: '56px', maxWidth: '56px'}} />
+            </span>
           </Link>
 
           {/* Desktop navigation */}
@@ -48,9 +56,7 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`transition-colors duration-200 font-medium ${
-                  location.pathname === item.href ? 'text-primary' : 'text-foreground hover:text-primary'
-                }`}
+                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === item.href ? 'text-primary' : ''}`}
               >
                 {item.name}
               </Link>
@@ -79,9 +85,7 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`transition-colors duration-200 font-medium ${
-                    location.pathname === item.href ? 'text-primary' : 'text-foreground hover:text-primary'
-                  }`}
+                  className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === item.href ? 'text-primary' : ''}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}

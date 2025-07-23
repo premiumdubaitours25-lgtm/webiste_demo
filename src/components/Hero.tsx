@@ -1,21 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroVideo from "@/assets/home.mp4";
 
 const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`
-        }}
-      ></div>
-      
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src={heroVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
-      
-      <div className="container mx-auto px-4 py-20 relative z-10">
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60 z-10"></div>
+      <div className="container mx-auto px-4 py-20 relative z-20">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
           <div className="space-y-6 fade-in">
             <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight">
