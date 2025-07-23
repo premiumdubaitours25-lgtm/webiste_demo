@@ -113,7 +113,7 @@ const Index = () => {
               }
             ].map((pkg, index) => (
               <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative">
-                <img src={pkg.image} alt={pkg.title} className="w-full h-64 object-cover" />
+                <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover" />
                 <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left">
                   <div className="text-xs text-muted-foreground font-medium mb-1">{pkg.type}</div>
                   <div className="text-lg font-bold text-foreground">{pkg.title.toUpperCase()}</div>
@@ -151,7 +151,7 @@ const Index = () => {
               { name: "Meghalaya", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
             ].slice(0, 4).map((destination, index) => (
               <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative">
-                <img src={destination.image} alt={destination.name} className="w-full h-64 object-cover" />
+                <img src={destination.image} alt={destination.name} className="w-full h-96 object-cover" />
                 <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left">
                   <div className="text-xs text-muted-foreground font-medium mb-1">{destination.type}</div>
                   <div className="text-lg font-bold text-foreground">{destination.name.toUpperCase()}</div>
@@ -192,7 +192,7 @@ const Index = () => {
                 <img 
                   src={image} 
                   alt={`Gallery ${index + 1}`} 
-                  className="w-full h-48 object-cover transition-transform group-hover:scale-110" 
+                  className="w-full h-64 object-cover transition-transform group-hover:scale-110" 
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
@@ -312,7 +312,7 @@ const Index = () => {
           className="bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg p-4 flex items-center justify-center transition-colors duration-200"
           aria-label="Chat on WhatsApp"
         >
-          <MessageCircle className="w-6 h-6" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" className="w-7 h-7"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.637.86 5.08 2.34 7.09L4 29l7.18-2.29A12.93 12.93 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 22c-1.98 0-3.85-.58-5.41-1.58l-.39-.25-4.27 1.36 1.4-4.15-.25-.4A9.94 9.94 0 016 15c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10zm5.07-7.75c-.28-.14-1.65-.81-1.9-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.25-1.4-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.34.42-.51.14-.17.18-.29.28-.48.09-.19.05-.36-.02-.5-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.62-.47-.16-.01-.36-.01-.56-.01-.19 0-.5.07-.76.36-.26.29-1 1-1 2.43s1.02 2.82 1.16 3.02c.14.2 2.01 3.08 4.88 4.2.68.29 1.21.46 1.62.59.68.22 1.3.19 1.79.12.55-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.53-.32z"/></svg>
         </a>
         <a
           href="tel:91970393335"

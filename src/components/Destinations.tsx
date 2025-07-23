@@ -65,7 +65,7 @@ const Destinations = () => {
                 <img 
                   src={destination.image} 
                   alt={destination.name}
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <Badge 
                   className={`absolute top-4 left-4 ${
