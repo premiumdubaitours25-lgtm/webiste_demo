@@ -99,7 +99,7 @@ const Footer = () => {
           
           <div className="text-center mt-8 pt-8 border-t border-muted-foreground/20">
             <p className="text-white/80">
-              © 2025 JJ&Tia Tours and Travels | Crafted TripClap - Travel Leads Marketplace
+              © 2025 JJ&Tia Tours and Travels
             </p>
           </div>
         </div>

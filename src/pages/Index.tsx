@@ -112,11 +112,11 @@ const Index = () => {
                 type: "DOMESTIC"
               }
             ].map((pkg, index) => (
-              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative">
-                <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover" />
-                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left">
-                  <div className="text-xs text-muted-foreground font-medium mb-1">{pkg.type}</div>
-                  <div className="text-lg font-bold text-foreground">{pkg.title.toUpperCase()}</div>
+              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+                <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
+                  <div className="text-lg font-bold text-foreground group-hover:text-white">{pkg.title.toUpperCase()}</div>
                 </div>
               </div>
             ))}
@@ -150,11 +150,11 @@ const Index = () => {
               { name: "Darjeeling", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
               { name: "Meghalaya", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
             ].slice(0, 4).map((destination, index) => (
-              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative">
-                <img src={destination.image} alt={destination.name} className="w-full h-96 object-cover" />
-                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left">
-                  <div className="text-xs text-muted-foreground font-medium mb-1">{destination.type}</div>
-                  <div className="text-lg font-bold text-foreground">{destination.name.toUpperCase()}</div>
+              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+                <img src={destination.image} alt={destination.name} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{destination.type}</div>
+                  <div className="text-lg font-bold text-foreground group-hover:text-white">{destination.name.toUpperCase()}</div>
                 </div>
               </div>
             ))}
@@ -188,13 +188,15 @@ const Index = () => {
               "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
               "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
             ].map((image, index) => (
-              <div key={index} className="relative overflow-hidden rounded-lg hover-lift group">
+              <div key={index} className="relative overflow-hidden rounded-lg group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
                 <img 
                   src={image} 
                   alt={`Gallery ${index + 1}`} 
-                  className="w-full h-64 object-cover transition-transform group-hover:scale-110" 
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-125" 
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span className="text-white font-semibold text-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">View Image</span>
+                </div>
               </div>
             ))}
           </div>
@@ -237,12 +239,14 @@ const Index = () => {
                 date: "January 5, 2025"
               }
             ].map((blog, index) => (
-              <div key={index} className="bg-card rounded-lg shadow-lg overflow-hidden hover-lift">
-                <img src={blog.image} alt={blog.title} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <p className="text-sm text-muted-foreground mb-2">{blog.date}</p>
-                  <h3 className="text-lg font-semibold mb-3 text-secondary line-clamp-2">{blog.title}</h3>
-                  <p className="text-muted-foreground text-sm line-clamp-3">{blog.excerpt}</p>
+              <div key={index} className="bg-card rounded-lg shadow-lg overflow-hidden group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+                <div className="overflow-hidden">
+                  <img src={blog.image} alt={blog.title} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700" />
+                </div>
+                <div className="p-6 group-hover:bg-primary/5 transition-colors duration-300">
+                  <p className="text-sm text-muted-foreground mb-2 group-hover:text-primary transition-colors duration-300">{blog.date}</p>
+                  <h3 className="text-lg font-semibold mb-3 text-secondary line-clamp-2 group-hover:text-primary transition-colors duration-300">{blog.title}</h3>
+                  <p className="text-muted-foreground text-sm line-clamp-3 group-hover:text-foreground transition-colors duration-300">{blog.excerpt}</p>
                 </div>
               </div>
             ))}
@@ -286,16 +290,16 @@ const Index = () => {
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-card rounded-lg shadow-lg p-6 hover-lift">
+              <div key={index} className="bg-card rounded-lg shadow-lg p-6 group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2 hover:bg-primary/5">
                 <div className="flex mb-4">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
+                    <span key={i} className="text-yellow-400 group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 100}ms` }}>★</span>
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-4 italic">"{testimonial.review}"</p>
+                <p className="text-muted-foreground mb-4 italic group-hover:text-foreground transition-colors duration-300">"{testimonial.review}"</p>
                 <div>
-                  <h4 className="font-semibold text-secondary">{testimonial.name}</h4>
-                  <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                  <h4 className="font-semibold text-secondary group-hover:text-primary transition-colors duration-300">{testimonial.name}</h4>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">{testimonial.location}</p>
                 </div>
               </div>
             ))}
