@@ -1,16 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import homeVideo from "@/assets/home.mp4";
 
 const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2070&q=80')`
-        }}
-      ></div>
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src={homeVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
       {/* Removed overlay */}
       <div className="container mx-auto px-4 py-20 relative z-20">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
