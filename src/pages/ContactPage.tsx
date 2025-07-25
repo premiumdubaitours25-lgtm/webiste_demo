@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import contactHeroImage from "@/assets/modify.webp";
+import BestPlaceSection from "@/components/BestPlaceSection";
 
 const ContactPage = () => {
   const contactInfo = [
@@ -196,6 +197,15 @@ const ContactPage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Best Place Section */}
+      <BestPlaceSection 
+        subtitle="Let's Connect"
+        title="Plan your dream trip with"
+        destination="Our Experts"
+        buttonText="GET QUOTE"
+        buttonLink="/contact"
+      />
     </div>
   );
 };

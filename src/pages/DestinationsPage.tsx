@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Star, Clock } from "lucide-react";
+import BestPlaceSection from "@/components/BestPlaceSection";
 
 const DestinationsPage = () => {
   const destinations = [
@@ -212,6 +213,15 @@ const DestinationsPage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Best Place Section */}
+      <BestPlaceSection 
+        subtitle="Explore More"
+        title="Discover hidden gems in"
+        destination="Northeast India"
+        buttonText="EXPLORE NOW"
+        buttonLink="/destinations"
+      />
     </div>
   );
 };

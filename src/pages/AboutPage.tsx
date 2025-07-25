@@ -2,6 +2,7 @@ import { Users, MapPin, Award, Heart, Globe, Shield, Clock, Star, CheckCircle, P
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import aboutVideo from "@/assets/About.mp4";
+import BestPlaceSection from "@/components/BestPlaceSection";
 
 const AboutPage = () => {
   const teamMembers = [
@@ -348,6 +349,15 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Best Place Section */}
+      <BestPlaceSection 
+        subtitle="Trusted Experience"
+        title="Crafting memories with"
+        destination="Excellence"
+        buttonText="LEARN MORE"
+        buttonLink="/packages"
+      />
     </div>
   );
 };

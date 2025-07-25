@@ -5,6 +5,7 @@ import { Clock, MapPin, Users, Eye, Phone, Filter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import packageVideo from "@/assets/Package.mp4";
+import BestPlaceSection from "@/components/BestPlaceSection";
 
 const PackagesPage = () => {
   const navigate = useNavigate();
@@ -13,15 +14,123 @@ const PackagesPage = () => {
   const packages = [
     {
       id: 1,
-      title: "4 NIGHTS 5 DAYS BHUTAN FAMILY TOUR PACKAGES",
-      description: "The Bhutan Family Tour Packages offer a blend of cultural heritage, natural beauty, and adventure, perfect for families looking to explore this mystical kingdom. With stops in Paro, Thimphu, and…",
-      duration: "5D/4N",
+      title: "Bhutan Tour for 3 Nights / 4 Days",
+      description: "Experience the mystical kingdom of Bhutan with our comprehensive 3N/4D tour covering Thimphu & Paro. This package includes guided tours, local experiences, and cultural immersion in the Land of Happiness.",
+      duration: "3N/4D",
       destination: "Bhutan",
-      price: "29,999.00",
-      originalPrice: "35,999.00",
-      discount: "17% OFF",
+      price: "18,500.00",
+      originalPrice: "22,000.00",
+      discount: "16% OFF",
       image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-      highlights: ["Cultural Heritage Sites", "Mountain Views", "Traditional Cuisine", "Guided Tours"]
+      highlights: ["Thimphu & Paro", "Tiger's Nest Trek", "Cultural Heritage", "Guided Tours"],
+      detailedInfo: {
+        companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
+        services: [
+          "Customized travel planning",
+          "Guided tours & local experiences", 
+          "Group & family vacations",
+          "Luxury & adventure travel",
+          "Honeymoons & romantic getaways",
+          "Corporate & incentive travel"
+        ],
+        destinations: ["Thimphu", "Paro"],
+        transportation: {
+          inBhutan: "Ertiga",
+          transfers: "Swift Desire transfers from Bagdogra Airport/NJP Station"
+        },
+        tourDetails: {
+          duration: "3N/4D",
+          travelers: "4 Adults", 
+          hotelCategory: "3 Star",
+          mealPlan: "Breakfast & Dinner",
+          month: "Oct"
+        },
+        itinerary: [
+          {
+            day: "DAY 1",
+            description: "Bhutan from NJP Station/ Airport – Phuentsholing To Thimphu."
+          },
+          {
+            day: "DAY 2", 
+            description: "Thimphu Local Sightseeing to Paro Transfer."
+          },
+          {
+            day: "DAY 3",
+            description: "Paro Local Sightseeing."
+          },
+          {
+            day: "DAY 4",
+            description: "Paro To Bagdogra/ NJP Station Transfer."
+          }
+        ],
+        hotels: [
+          {
+            city: "Thimphu",
+            hotel: "Hotel Park or Similar",
+            rooms: "2 Rooms",
+            roomType: "Double Sharing",
+            nights: "01"
+          },
+          {
+            city: "Paro",
+            hotel: "Hotel Tashiling or Similar", 
+            rooms: "2 Rooms",
+            roomType: "Double Sharing",
+            nights: "02"
+          }
+        ],
+        packageCost: "18,500/- Per Person",
+        inclusions: [
+          "Accommodation on twin Sharing Basis.",
+          "Meals as per plan",
+          "SDF Charges (1200/-per person per night) Mandatory",
+          "Bhutanese guide Mandatory",
+          "Mineral water bottle per day",
+          "Exclusive vehicle for transfers & sightseeing. Please brief to guest that vehicle will not be at disposal it will be available to guest as per itinerary only (point to point basis) (CAR TIMING 9 AM TO 7 PM DURING SIGHTSEEING)",
+          "All permit fees & hotel taxes (as per itinerary).",
+          "Rates are valid for INDIAN NATIONALS only."
+        ],
+        exclusions: [
+          "Air Fare / Train fare.",
+          "Personal expenses such as laundry, telephone calls, tips & gratuity, Extra mineral water, soft & hard drinks, rafting,",
+          "Entrance Fees, (Monument fee)",
+          "Additional sightseeing or extra usage of vehicles, other than mentioned in the itinerary. Any cost arising due to natural calamities like, landslides, road blockage, political disturbances (strikes), etc. (to be borne by the client, who is directly payable on the spot).",
+          "Any increase in taxes or fuel price, leading to increase in cost on surface transportation & land arrangements, which may come into effect prior to departure.",
+          "Anything which is not included in the inclusion."
+        ],
+        dayDetails: {
+          day1: {
+            title: "DAY 1: Arrival & Transfer to Thimphu",
+            description: "Upon arrival, you will be greeted by our driver or tour representative at the Railway Station. On arrival in Phuentsholing, our tour representative will assist you with the Bhutan immigration process. Immigration formalities include submitting your travel permits and identification (passport or voter ID for Indian citizens). After which you will be transferred to Thimpu. The capital of Bhutan via Gedu, which is located about 9000 ft. above the sea and on the way you can enjoy the view of Chukha Dam. We will have a quick stopover for photo session at Wankha Waterfalls. The journey from Phuentsholing to Thimphu is a scenic drive, and there are several noteworthy stops en route where you can relax, enjoy the views, and experience Bhutan's natural beauty and culture. Below are the details of en-route stops. On arrival at Thimphu check in to the hotel and in the evening, visit the Tashichho Dzong (Fortress of the Glorious Religion). Overnight stay at Thimphu."
+          },
+          day2: {
+            title: "DAY 2: Thimphu Local Sightseeing",
+            description: "After Breakfast you can visit places like: The National Memorial Chorten: Built-in the memory of the third Druk Gyalpo (Head of Kingdom) of Bhutan, the National Memorial Chorten is devoted to World Peace. The Chorten popular amongst the localities for various major Buddhist religious festivals and it is one of the best places to see in Thimphu Bhutan. Buddha Dordenma Statue - Atop a hill in Thimphu, is a massive, golden Buddha sitting atop a gilded meditation hall. Hidden inside it has 125,000 smaller Buddha's. This means that in Thimphu, there are more Buddha statues than this city's population (100000), it is also known as Budda point. Changangkha Lhakhang – In Thimphu there are many monasteries and temple that you will get to see and among them. Changangkha Lhakhang is one of the most religious structures. It was built in the 12th century and its one of the oldest Lhakhang located in Thimphu .It's also known as the wish fulfilling temple, from here you can see the amazing view of Thimphu city The motitang Takin Preserve – For animal lovers, Motithang Takin Preserve is one of the best places to visit in Thimphu. This attractive preserved area was built as a small zoo but later it was converted into an animal preserve center. Takin -The national animal of Bhutan, lives in the Motithang Takin Preserve in Thimphu Tashi Chho Dzong (It is open @ 5pm for 1 Hrs only) - It is a monastery which is located next to bank of Wang Chhu River, It is also known as Thimphu Dzong. Annual 3 days Tsechu festival is also hosted every year at TashiChho Dzong. It was built in 1216 A.D. After visiting the places in Thimphu you will be transferred to Paro. Overnight stay in Paro."
+          },
+          day3: {
+            title: "DAY 3: Paro Local Sightseeing",
+            description: "Start your day with a delightful breakfast. Then set off to discover the enchanting sights of Paro, which includes places like: Simtokha Dzong : This Dzong, was built in the year 1629 also known as Sangak Zabdhon Phodrang by Zhabdrung Ngawang Namgyal, Simtokha Dzong was built in the 17th century and it is one of the oldest Dzong built .An very important and oldest structure.. National Museum of Bhutan: An ancient watchtower that now displays hundreds of ancient Bhutanese artifacts and artwork including traditional costumes, armor, weaponry, and handcrafted implements for daily life. The collections represent the rich cultural traditions of the country. Drukgyal Dzong: Drukgyal Dzong was a Buddhist Monastery. It is also translates as the 'Victorious Fortress'. This is the place where several victories over marauding Tibetan invaders. It is considered the most beautiful and famous archaeological site in Bhutan. Paro Airport View: This is one of the most stunning airports in the World and also the country's first and only international airport. With a breathtaking view, this airport became a must-visit place in Paro. Kyichu Lhakhang – It is also known as Kyerchu Buddhist Temple, Kyichu Lhakhang is a pilgrimage place as it is part of 108 temples which was built by the king ,it's very old and very beautiful and most visited OR Tiger's Nest Trek (Paro Taktsang): Tiger's Nest, or Paro Taktsang, is Bhutan's most iconic monastery, perched dramatically on a Cliffside 3,120 meters above sea level. It is a sacred pilgrimage site and one of the most photographed landmarks in Bhutan. Built in 1692, it is said to mark the meditation site of Guru Rinpoche (Padmasambhava), who arrived here on the back of a flying tigress in the 8th century. The monastery suffered a fire in 1998 and was carefully restored to its former glory. The trek is moderately challenging and takes you through pine forests, prayer flags, and scenic viewpoints. To reach their it will take around 5–7 hours (round trip), including time to explore the monastery. Overnight stay hotel in Paro."
+          },
+          day4: {
+            title: "DAY 4: Departure",
+            description: "After soaking in the beauty of Bhutan's sights, you will be greeted with a delightful breakfast. After which you'll be transferred to NJP (New Jalpaiguri Station) or Bagdogra in Siliguri, passing through the scenic Phuentsholing, as you embark on your journey back home, carrying unforgettable memories of your Bhutan adventure."
+          }
+        },
+        importantNotes: [
+          "Documents required for Bhutan Immigration is Voter id / Passport (Passport with 6 month and above validity).",
+          "Children under 18 years can carry original birth Certificate along with school id/Aadhar Card.",
+          "Hotels are very strict with the child policy. Please carry the age proof so that it can be produced if asked by the hotel.",
+          "A valid photo ID proof for all guests staying at the hotel is mandatory.",
+          "For Extra adult in the room, we will provide an extra bed (wherever possible), but most of the hotels only provide an extra mattress or roll out bed. Most of the hotels have no provision of an extra bed.",
+          "The above-mentioned hotels will be confirmed as per the room availability. Otherwise, a similar category hotel will be provided. All the rooms are base category."
+        ],
+        contactInfo: {
+          address: "Nyati Estate, Mohammadwadi, Pune, 411060",
+          phone: "+91 9970393335",
+          email: "shneiur.joseph@jjtia.com",
+          website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+        }
+      }
     },
     {
       id: 2,
@@ -222,6 +331,15 @@ const PackagesPage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Best Place Section */}
+      <BestPlaceSection 
+        subtitle="Exclusive Deals"
+        title="Unlock amazing packages in"
+        destination="Bhutan & Beyond"
+        buttonText="VIEW PACKAGES"
+        buttonLink="/packages"
+      />
     </div>
   );
 };

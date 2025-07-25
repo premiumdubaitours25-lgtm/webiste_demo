@@ -14,7 +14,13 @@ import {
   CheckCircle,
   ArrowLeft,
   Heart,
-  Share2
+  Share2,
+  Building,
+  Car,
+  Hotel,
+  Utensils,
+  Map,
+  Info
 } from "lucide-react";
 
 const PackageDetailPage = () => {
@@ -22,9 +28,200 @@ const PackageDetailPage = () => {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
 
-  // Mock data - in a real app, this would come from an API
-  const packageData = {
+  // Comprehensive Bhutan package data
+  const bhutanPackage = {
     id: 1,
+    title: "Bhutan Tour for 3 Nights / 4 Days",
+    description: "Experience the mystical kingdom of Bhutan with our comprehensive 3N/4D tour covering Thimphu & Paro. This package includes guided tours, local experiences, and cultural immersion in the Land of Happiness.",
+    duration: "3N/4D",
+    destination: "Bhutan",
+    price: "18,500.00",
+    originalPrice: "22,000.00",
+    discount: "16% OFF",
+    mainImage: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+    ],
+    highlights: ["Thimphu & Paro", "Tiger's Nest Trek", "Cultural Heritage", "Guided Tours"],
+    itinerary: [
+      {
+        day: "Day 1",
+        title: "Arrival & Transfer to Thimphu",
+        description: "Arrive at NJP Station/Airport and transfer to Thimphu via Phuentsholing with immigration formalities.",
+        activities: ["Airport pickup", "Immigration process", "Thimphu transfer"]
+      },
+      {
+        day: "Day 2",
+        title: "Thimphu Local Sightseeing",
+        description: "Explore Thimphu's key attractions including National Memorial Chorten and Buddha Dordenma statue.",
+        activities: ["City tour", "Cultural sites", "Transfer to Paro"]
+      },
+      {
+        day: "Day 3",
+        title: "Paro Local Sightseeing",
+        description: "Discover Paro's enchanting sights including Tiger's Nest Monastery and ancient dzongs.",
+        activities: ["Monastery visits", "Tiger's Nest trek", "Cultural exploration"]
+      },
+      {
+        day: "Day 4",
+        title: "Departure",
+        description: "Transfer back to NJP Station/Bagdogra with unforgettable memories of Bhutan.",
+        activities: ["Hotel checkout", "Return transfer", "Departure"]
+      }
+    ],
+    inclusions: [
+      "Accommodation on twin Sharing Basis.",
+      "Meals as per plan",
+      "SDF Charges (1200/-per person per night) Mandatory",
+      "Bhutanese guide Mandatory",
+      "Mineral water bottle per day",
+      "Exclusive vehicle for transfers & sightseeing",
+      "All permit fees & hotel taxes (as per itinerary).",
+      "Rates are valid for INDIAN NATIONALS only."
+    ],
+    exclusions: [
+      "Air Fare / Train fare.",
+      "Personal expenses such as laundry, telephone calls, tips & gratuity",
+      "Entrance Fees, (Monument fee)",
+      "Additional sightseeing or extra usage of vehicles",
+      "Any increase in taxes or fuel price",
+      "Anything which is not included in the inclusion."
+    ],
+    reviews: [
+      {
+        name: "Sarah Johnson",
+        rating: 5,
+        comment: "Amazing experience with JJ&Tia Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
+      },
+      {
+        name: "Raj Patel",
+        rating: 5,
+        comment: "Fantastic service and great value for money. Our Bhutan tour was unforgettable!"
+      },
+      {
+        name: "Priya Sharma",
+        rating: 5,
+        comment: "Professional team with excellent attention to detail. Highly recommend for family trips!"
+      }
+    ],
+    detailedInfo: {
+      companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
+      services: [
+        "Customized travel planning",
+        "Guided tours & local experiences", 
+        "Group & family vacations",
+        "Luxury & adventure travel",
+        "Honeymoons & romantic getaways",
+        "Corporate & incentive travel"
+      ],
+      destinations: ["Thimphu", "Paro"],
+      transportation: {
+        inBhutan: "Ertiga",
+        transfers: "Swift Desire transfers from Bagdogra Airport/NJP Station"
+      },
+      tourDetails: {
+        duration: "3N/4D",
+        travelers: "4 Adults", 
+        hotelCategory: "3 Star",
+        mealPlan: "Breakfast & Dinner",
+        month: "Oct"
+      },
+      itinerary: [
+        {
+          day: "DAY 1",
+          description: "Bhutan from NJP Station/ Airport – Phuentsholing To Thimphu."
+        },
+        {
+          day: "DAY 2", 
+          description: "Thimphu Local Sightseeing to Paro Transfer."
+        },
+        {
+          day: "DAY 3",
+          description: "Paro Local Sightseeing."
+        },
+        {
+          day: "DAY 4",
+          description: "Paro To Bagdogra/ NJP Station Transfer."
+        }
+      ],
+      hotels: [
+        {
+          city: "Thimphu",
+          hotel: "Hotel Park or Similar",
+          rooms: "2 Rooms",
+          roomType: "Double Sharing",
+          nights: "01"
+        },
+        {
+          city: "Paro",
+          hotel: "Hotel Tashiling or Similar", 
+          rooms: "2 Rooms",
+          roomType: "Double Sharing",
+          nights: "02"
+        }
+      ],
+      packageCost: "18,500/- Per Person",
+      inclusions: [
+        "Accommodation on twin Sharing Basis.",
+        "Meals as per plan",
+        "SDF Charges (1200/-per person per night) Mandatory",
+        "Bhutanese guide Mandatory",
+        "Mineral water bottle per day",
+        "Exclusive vehicle for transfers & sightseeing. Please brief to guest that vehicle will not be at disposal it will be available to guest as per itinerary only (point to point basis) (CAR TIMING 9 AM TO 7 PM DURING SIGHTSEEING)",
+        "All permit fees & hotel taxes (as per itinerary).",
+        "Rates are valid for INDIAN NATIONALS only."
+      ],
+      exclusions: [
+        "Air Fare / Train fare.",
+        "Personal expenses such as laundry, telephone calls, tips & gratuity, Extra mineral water, soft & hard drinks, rafting,",
+        "Entrance Fees, (Monument fee)",
+        "Additional sightseeing or extra usage of vehicles, other than mentioned in the itinerary. Any cost arising due to natural calamities like, landslides, road blockage, political disturbances (strikes), etc. (to be borne by the client, who is directly payable on the spot).",
+        "Any increase in taxes or fuel price, leading to increase in cost on surface transportation & land arrangements, which may come into effect prior to departure.",
+        "Anything which is not included in the inclusion."
+      ],
+      dayDetails: {
+        day1: {
+          title: "DAY 1: Arrival & Transfer to Thimphu",
+          description: "Upon arrival, you will be greeted by our driver or tour representative at the Railway Station. On arrival in Phuentsholing, our tour representative will assist you with the Bhutan immigration process. Immigration formalities include submitting your travel permits and identification (passport or voter ID for Indian citizens). After which you will be transferred to Thimpu. The capital of Bhutan via Gedu, which is located about 9000 ft. above the sea and on the way you can enjoy the view of Chukha Dam. We will have a quick stopover for photo session at Wankha Waterfalls. The journey from Phuentsholing to Thimphu is a scenic drive, and there are several noteworthy stops en route where you can relax, enjoy the views, and experience Bhutan's natural beauty and culture. Below are the details of en-route stops. On arrival at Thimphu check in to the hotel and in the evening, visit the Tashichho Dzong (Fortress of the Glorious Religion). Overnight stay at Thimphu."
+        },
+        day2: {
+          title: "DAY 2: Thimphu Local Sightseeing",
+          description: "After Breakfast you can visit places like: The National Memorial Chorten: Built-in the memory of the third Druk Gyalpo (Head of Kingdom) of Bhutan, the National Memorial Chorten is devoted to World Peace. The Chorten popular amongst the localities for various major Buddhist religious festivals and it is one of the best places to see in Thimphu Bhutan. Buddha Dordenma Statue - Atop a hill in Thimphu, is a massive, golden Buddha sitting atop a gilded meditation hall. Hidden inside it has 125,000 smaller Buddha's. This means that in Thimphu, there are more Buddha statues than this city's population (100000), it is also known as Budda point. Changangkha Lhakhang – In Thimphu there are many monasteries and temple that you will get to see and among them. Changangkha Lhakhang is one of the most religious structures. It was built in the 12th century and its one of the oldest Lhakhang located in Thimphu .It's also known as the wish fulfilling temple, from here you can see the amazing view of Thimphu city The motitang Takin Preserve – For animal lovers, Motithang Takin Preserve is one of the best places to visit in Thimphu. This attractive preserved area was built as a small zoo but later it was converted into an animal preserve center. Takin -The national animal of Bhutan, lives in the Motithang Takin Preserve in Thimphu Tashi Chho Dzong (It is open @ 5pm for 1 Hrs only) - It is a monastery which is located next to bank of Wang Chhu River, It is also known as Thimphu Dzong. Annual 3 days Tsechu festival is also hosted every year at TashiChho Dzong. It was built in 1216 A.D. After visiting the places in Thimphu you will be transferred to Paro. Overnight stay in Paro."
+        },
+        day3: {
+          title: "DAY 3: Paro Local Sightseeing",
+          description: "Start your day with a delightful breakfast. Then set off to discover the enchanting sights of Paro, which includes places like: Simtokha Dzong : This Dzong, was built in the year 1629 also known as Sangak Zabdhon Phodrang by Zhabdrung Ngawang Namgyal, Simtokha Dzong was built in the 17th century and it is one of the oldest Dzong built .An very important and oldest structure.. National Museum of Bhutan: An ancient watchtower that now displays hundreds of ancient Bhutanese artifacts and artwork including traditional costumes, armor, weaponry, and handcrafted implements for daily life. The collections represent the rich cultural traditions of the country. Drukgyal Dzong: Drukgyal Dzong was a Buddhist Monastery. It is also translates as the 'Victorious Fortress'. This is the place where several victories over marauding Tibetan invaders. It is considered the most beautiful and famous archaeological site in Bhutan. Paro Airport View: This is one of the most stunning airports in the World and also the country's first and only international airport. With a breathtaking view, this airport became a must-visit place in Paro. Kyichu Lhakhang – It is also known as Kyerchu Buddhist Temple, Kyichu Lhakhang is a pilgrimage place as it is part of 108 temples which was built by the king ,it's very old and very beautiful and most visited OR Tiger's Nest Trek (Paro Taktsang): Tiger's Nest, or Paro Taktsang, is Bhutan's most iconic monastery, perched dramatically on a Cliffside 3,120 meters above sea level. It is a sacred pilgrimage site and one of the most photographed landmarks in Bhutan. Built in 1692, it is said to mark the meditation site of Guru Rinpoche (Padmasambhava), who arrived here on the back of a flying tigress in the 8th century. The monastery suffered a fire in 1998 and was carefully restored to its former glory. The trek is moderately challenging and takes you through pine forests, prayer flags, and scenic viewpoints. To reach their it will take around 5–7 hours (round trip), including time to explore the monastery. Overnight stay hotel in Paro."
+        },
+        day4: {
+          title: "DAY 4: Departure",
+          description: "After soaking in the beauty of Bhutan's sights, you will be greeted with a delightful breakfast. After which you'll be transferred to NJP (New Jalpaiguri Station) or Bagdogra in Siliguri, passing through the scenic Phuentsholing, as you embark on your journey back home, carrying unforgettable memories of your Bhutan adventure."
+        }
+      },
+      importantNotes: [
+        "Documents required for Bhutan Immigration is Voter id / Passport (Passport with 6 month and above validity).",
+        "Children under 18 years can carry original birth Certificate along with school id/Aadhar Card.",
+        "Hotels are very strict with the child policy. Please carry the age proof so that it can be produced if asked by the hotel.",
+        "A valid photo ID proof for all guests staying at the hotel is mandatory.",
+        "For Extra adult in the room, we will provide an extra bed (wherever possible), but most of the hotels only provide an extra mattress or roll out bed. Most of the hotels have no provision of an extra bed.",
+        "The above-mentioned hotels will be confirmed as per the room availability. Otherwise, a similar category hotel will be provided. All the rooms are base category."
+      ],
+      contactInfo: {
+        address: "Nyati Estate, Mohammadwadi, Pune, 411060",
+        phone: "+91 9970393335",
+        email: "shneiur.joseph@jjtia.com",
+        website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+      }
+    }
+  };
+
+  // Use the Bhutan package data if ID is 1, otherwise use mock data
+  const packageData = id === "1" ? bhutanPackage : {
+    id: 2,
     title: "4 NIGHTS 5 DAYS BHUTAN FAMILY TOUR PACKAGES",
     description: "The Bhutan Family Tour Packages offer a blend of cultural heritage, natural beauty, and adventure, perfect for families looking to explore this mystical kingdom. With stops in Paro, Thimphu, and Punakha, this comprehensive tour provides an authentic experience of Bhutan's rich culture and stunning landscapes.",
     duration: "5D/4N",
@@ -99,17 +296,17 @@ const PackageDetailPage = () => {
       {
         name: "Sarah Johnson",
         rating: 5,
-        comment: "Amazing experience! The Tiger's Nest hike was challenging but absolutely worth it. Our guide was knowledgeable and friendly."
+        comment: "Amazing experience with JJ&Tia Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
       },
       {
         name: "Raj Patel",
         rating: 5,
-        comment: "Perfect family vacation. The kids loved the cultural experiences and the mountain views were breathtaking."
+        comment: "Fantastic service and great value for money. Our Bhutan tour was unforgettable!"
       },
       {
         name: "Priya Sharma",
-        rating: 4,
-        comment: "Great value for money. The accommodations were comfortable and the food was delicious. Highly recommend!"
+        rating: 5,
+        comment: "Professional team with excellent attention to detail. Highly recommend for family trips!"
       }
     ]
   };
@@ -119,62 +316,42 @@ const PackageDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-travel-light-bg">
-      {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-to-br from-primary/10 to-secondary/10 overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={packageData.mainImage}
-            alt={packageData.title}
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-secondary/40"></div>
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center gap-4 mb-6">
-            <Link to="/packages">
-              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                <ArrowLeft className="mr-2 h-4 w-4" />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/packages" className="flex items-center text-gray-600 hover:text-gray-900">
+              <ArrowLeft className="h-5 w-5 mr-2" />
                 Back to Packages
-              </Button>
             </Link>
-          </div>
-          <div className="text-center space-y-6 fade-in">
-            <h1 className="text-4xl lg:text-5xl font-bold text-white">
-              {packageData.title}
-            </h1>
-            <div className="flex items-center justify-center gap-6 text-white/90">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                <span>{packageData.destination}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                <span>{packageData.duration}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="h-5 w-5" />
-                <span>4.8/5 (24 reviews)</span>
-              </div>
+            <div className="flex items-center space-x-4">
+              <Button variant="outline" size="sm">
+                <Heart className="h-4 w-4 mr-2" />
+                Save
+              </Button>
+              <Button variant="outline" size="sm">
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Main Content */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Left Column - Main Content */}
-            <div className="lg:col-span-2 space-y-12">
-              {/* Image Gallery */}
-              <div className="space-y-4">
-                <div className="relative overflow-hidden rounded-lg">
+      <div className="container mx-auto px-4 py-8">
+        {/* Image Gallery Section - Only for Bhutan Package */}
+        {id === "1" && (
+          <div className="mb-8">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              {/* Main Large Image */}
+              <div className="relative h-[500px] overflow-hidden">
                   <img 
                     src={packageData.gallery[selectedImage]}
                     alt={packageData.title}
-                    className="w-full h-96 object-cover"
+                  className="w-full h-full object-cover"
                   />
+                <div className="absolute inset-0 bg-black/20"></div>
                   <div className="absolute top-4 right-4 flex gap-2">
                     <Button size="icon" variant="ghost" className="bg-white/20 hover:bg-white/30 text-white">
                       <Heart className="h-4 w-4" />
@@ -182,8 +359,28 @@ const PackageDetailPage = () => {
                     <Button size="icon" variant="ghost" className="bg-white/20 hover:bg-white/30 text-white">
                       <Share2 className="h-4 w-4" />
                     </Button>
+                </div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h1 className="text-3xl font-bold mb-2">{packageData.title}</h1>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center">
+                      <MapPin className="h-4 w-4 mr-1" />
+                      {packageData.destination}
+                    </div>
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 mr-1" />
+                      {packageData.duration}
+                    </div>
+                    <div className="flex items-center">
+                      <Users className="h-4 w-4 mr-1" />
+                      4 Adults
+                    </div>
                   </div>
                 </div>
+              </div>
+              
+              {/* Thumbnail Gallery */}
+              <div className="p-4">
                 <div className="grid grid-cols-4 gap-2">
                   {packageData.gallery.map((image, index) => (
                     <button
@@ -196,171 +393,327 @@ const PackageDetailPage = () => {
                       <img 
                         src={image}
                         alt={`Gallery ${index + 1}`}
-                        className="w-full h-20 object-cover hover:scale-105 transition-transform"
+                        className="w-full h-32 object-cover hover:scale-105 transition-transform"
                       />
                     </button>
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        )}
 
-              {/* Description */}
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-foreground">About This Tour</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  {packageData.description}
-                </p>
-              </div>
-
-              {/* Highlights */}
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-foreground">Highlights</h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {packageData.highlights.map((highlight, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
-                      <span className="text-muted-foreground">{highlight}</span>
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Package Header */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{packageData.title}</h1>
+                  <p className="text-gray-600 mb-4">{packageData.description}</p>
+                  <div className="flex items-center space-x-6 text-sm text-gray-500">
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 mr-2" />
+                      {packageData.duration}
                     </div>
-                  ))}
+                    <div className="flex items-center">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      {packageData.destination}
+                    </div>
+                    <div className="flex items-center">
+                      <Users className="h-4 w-4 mr-2" />
+                      4 Adults
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              {/* Itinerary */}
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-foreground">Detailed Itinerary</h2>
-                <div className="space-y-6">
-                  {packageData.itinerary.map((day, index) => (
-                    <Card key={index} className="overflow-hidden">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="bg-primary text-white p-3 rounded-full min-w-[60px] text-center">
-                            <span className="text-sm font-bold">{day.day}</span>
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-xl font-semibold text-foreground mb-2">{day.title}</h3>
-                            <p className="text-muted-foreground mb-3">{day.description}</p>
-                            <div className="flex flex-wrap gap-2">
-                              {day.activities.map((activity, idx) => (
-                                <Badge key={idx} variant="secondary" className="text-xs">
-                                  {activity}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reviews */}
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-foreground">Customer Reviews</h2>
-                <div className="space-y-4">
-                  {packageData.reviews.map((review, index) => (
-                    <Card key={index}>
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-4 mb-3">
-                          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                            <span className="text-primary font-semibold">{review.name[0]}</span>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-foreground">{review.name}</h4>
-                            <div className="flex items-center gap-1">
-                              {Array.from({ length: review.rating }).map((_, i) => (
-                                <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-muted-foreground">{review.comment}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-primary mb-1">₹{packageData.price}</div>
+                  {packageData.originalPrice && (
+                    <div className="text-gray-500 line-through">₹{packageData.originalPrice}</div>
+                  )}
+                  {packageData.discount && (
+                    <Badge className="bg-green-100 text-green-800">{packageData.discount}</Badge>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Booking Card */}
-            <div className="space-y-6">
-              <Card className="sticky top-6">
-                <CardContent className="p-6">
-                  <div className="space-y-6">
-                    {/* Price */}
-                    <div className="text-center">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <span className="text-3xl font-bold text-primary">₹ {packageData.price}</span>
-                        <span className="text-lg text-muted-foreground line-through">₹ {packageData.originalPrice}</span>
+            {/* Company Information - Only for Bhutan Package */}
+            {id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">About JJ&Tia Tours and Travels</h2>
+                <p className="text-gray-600 mb-6 leading-relaxed">{packageData.detailedInfo.companyDescription}</p>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Our Services</h3>
+                    <ul className="space-y-2">
+                      {packageData.detailedInfo.services.map((service, index) => (
+                        <li key={index} className="flex items-center text-gray-600">
+                          <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                          {service}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Tour Details</h3>
+                    <div className="space-y-2 text-gray-600">
+                      <div className="flex items-center">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        <span><strong>Duration:</strong> {packageData.detailedInfo.tourDetails.duration}</span>
                       </div>
-                      <Badge className="bg-destructive text-destructive-foreground">
-                        {packageData.discount}
-                      </Badge>
-                      <p className="text-sm text-muted-foreground mt-2">per person</p>
-                    </div>
-
-                    {/* Quick Info */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <Clock className="h-5 w-5 text-primary" />
-                        <span className="text-muted-foreground">{packageData.duration}</span>
+                      <div className="flex items-center">
+                        <Users className="h-4 w-4 mr-2" />
+                        <span><strong>Travelers:</strong> {packageData.detailedInfo.tourDetails.travelers}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <MapPin className="h-5 w-5 text-primary" />
-                        <span className="text-muted-foreground">{packageData.destination}</span>
+                      <div className="flex items-center">
+                        <Hotel className="h-4 w-4 mr-2" />
+                        <span><strong>Hotel Category:</strong> {packageData.detailedInfo.tourDetails.hotelCategory}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <Users className="h-5 w-5 text-primary" />
-                        <span className="text-muted-foreground">Max 12 people</span>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="space-y-3">
-                      <Button 
-                        className="w-full bg-primary hover:bg-primary/90"
-                        onClick={handleBookNow}
-                      >
-                        <Phone className="mr-2 h-4 w-4" />
-                        Book Now
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <Mail className="mr-2 h-4 w-4" />
-                        Enquire Now
-                      </Button>
-                    </div>
-
-                    {/* Inclusions & Exclusions */}
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-semibold text-foreground mb-2">What's Included</h4>
-                        <div className="space-y-1">
-                          {packageData.inclusions.slice(0, 4).map((item, index) => (
-                            <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <CheckCircle className="h-3 w-3 text-green-500" />
-                              <span>{item}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground mb-2">What's Not Included</h4>
-                        <div className="space-y-1">
-                          {packageData.exclusions.slice(0, 3).map((item, index) => (
-                            <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span className="w-3 h-3 rounded-full border border-red-500"></span>
-                              <span>{item}</span>
-                            </div>
-                          ))}
-                        </div>
+                      <div className="flex items-center">
+                        <Utensils className="h-4 w-4 mr-2" />
+                        <span><strong>Meal Plan:</strong> {packageData.detailedInfo.tourDetails.mealPlan}</span>
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
+            )}
+
+            {/* Transportation Details - Only for Bhutan Package */}
+            {id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Transportation</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">In Bhutan</h3>
+                    <div className="flex items-center text-gray-600">
+                      <Car className="h-4 w-4 mr-2" />
+                      {packageData.detailedInfo.transportation.inBhutan}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Transfers</h3>
+                    <div className="flex items-center text-gray-600">
+                      <Car className="h-4 w-4 mr-2" />
+                      {packageData.detailedInfo.transportation.transfers}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Hotels Information - Only for Bhutan Package */}
+            {id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Accommodation</h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="border border-gray-200 px-4 py-2 text-left">City</th>
+                        <th className="border border-gray-200 px-4 py-2 text-left">Hotel/Resort</th>
+                        <th className="border border-gray-200 px-4 py-2 text-left">Rooms</th>
+                        <th className="border border-gray-200 px-4 py-2 text-left">Room Type</th>
+                        <th className="border border-gray-200 px-4 py-2 text-left">Nights</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {packageData.detailedInfo.hotels.map((hotel, index) => (
+                        <tr key={index}>
+                          <td className="border border-gray-200 px-4 py-2">{hotel.city}</td>
+                          <td className="border border-gray-200 px-4 py-2">{hotel.hotel}</td>
+                          <td className="border border-gray-200 px-4 py-2">{hotel.rooms}</td>
+                          <td className="border border-gray-200 px-4 py-2">{hotel.roomType}</td>
+                          <td className="border border-gray-200 px-4 py-2">{hotel.nights}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Detailed Itinerary - Only for Bhutan Package */}
+            {id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Detailed Itinerary</h2>
+              <div className="space-y-6">
+                  {Object.entries(packageData.detailedInfo.dayDetails).map(([dayKey, dayData]) => (
+                    <div key={dayKey} className="border-l-4 border-primary pl-4">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{dayData.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{dayData.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Regular Itinerary for other packages */}
+            {id !== "1" && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Itinerary</h2>
+                <div className="space-y-6">
+                  {packageData.itinerary.map((day, index) => (
+                    <div key={index} className="border-l-4 border-primary pl-4">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{day.day}: {day.title}</h3>
+                      <p className="text-gray-600 mb-3">{day.description}</p>
+                            <div className="flex flex-wrap gap-2">
+                        {day.activities.map((activity, actIndex) => (
+                          <Badge key={actIndex} variant="secondary">{activity}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Inclusions & Exclusions */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Included</h2>
+                <ul className="space-y-2">
+                  {(id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.inclusions : packageData.inclusions)?.map((item, index) => (
+                    <li key={index} className="flex items-start text-gray-600">
+                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                            </div>
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Not Included</h2>
+                <ul className="space-y-2">
+                  {(id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.exclusions : packageData.exclusions)?.map((item, index) => (
+                    <li key={index} className="flex items-start text-gray-600">
+                      <div className="h-4 w-4 text-red-500 mr-2 mt-0.5 flex-shrink-0">×</div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Important Notes - Only for Bhutan Package */}
+            {id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Important Notes</h2>
+                <ul className="space-y-2">
+                  {packageData.detailedInfo.importantNotes.map((note, index) => (
+                    <li key={index} className="flex items-start text-gray-600">
+                      <Info className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>{note}</span>
+                    </li>
+                  ))}
+                </ul>
+                      </div>
+            )}
+
+            {/* Contact Information - Only for Bhutan Package */}
+            {id === "1" && 'detailedInfo' in packageData && packageData.detailedInfo && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">JJ&Tia Tours and Travels</h3>
+                    <div className="space-y-2 text-gray-600">
+                      <div className="flex items-center">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        {packageData.detailedInfo.contactInfo.address}
+                      </div>
+                      <div className="flex items-center">
+                        <Phone className="h-4 w-4 mr-2" />
+                        {packageData.detailedInfo.contactInfo.phone}
+                      </div>
+                      <div className="flex items-center">
+                        <Mail className="h-4 w-4 mr-2" />
+                        {packageData.detailedInfo.contactInfo.email}
+                      </div>
+                    </div>
+                    </div>
+                      <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Package Cost</h3>
+                    <div className="text-2xl font-bold text-primary">{packageData.detailedInfo.packageCost}</div>
+                    <p className="text-sm text-gray-500 mt-1">Includes cost for 4 Adults</p>
+                  </div>
+                </div>
+                            </div>
+            )}
+
+            {/* Reviews */}
+            {packageData.reviews && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Customer Reviews</h2>
+                <div className="space-y-4">
+                  {packageData.reviews.map((review, index) => (
+                    <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-gray-900">{review.name}</h3>
+                        <div className="flex items-center">
+                          {Array.from({ length: review.rating }).map((_, i) => (
+                            <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-gray-600">{review.comment}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Booking Card */}
+            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Book This Package</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Price per person:</span>
+                  <span className="text-2xl font-bold text-primary">₹{packageData.price}</span>
+                </div>
+                {packageData.originalPrice && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Original price:</span>
+                    <span className="text-gray-500 line-through">₹{packageData.originalPrice}</span>
+                  </div>
+                )}
+                {packageData.discount && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Discount:</span>
+                    <span className="text-green-600 font-semibold">{packageData.discount}</span>
+                  </div>
+                )}
+                <Button onClick={handleBookNow} className="w-full">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Book Now
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <Mail className="h-4 w-4 mr-2" />
+                  Get Quote
+                </Button>
+                      </div>
+                    </div>
+
+            {/* Highlights */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Highlights</h3>
+              <div className="space-y-2">
+                {packageData.highlights.map((highlight, index) => (
+                  <div key={index} className="flex items-center text-gray-600">
+                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                    {highlight}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

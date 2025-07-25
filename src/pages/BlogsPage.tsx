@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Clock, ArrowRight } from "lucide-react";
 import blogHeroImage from "@/assets/image.png";
+import BestPlaceSection from "@/components/BestPlaceSection";
 
 const BlogsPage = () => {
   const blogs = [
@@ -227,6 +228,15 @@ const BlogsPage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Best Place Section */}
+      <BestPlaceSection 
+        subtitle="Travel Stories"
+        title="Get inspired by adventures in"
+        destination="Every Corner"
+        buttonText="READ MORE"
+        buttonLink="/blogs"
+      />
     </div>
   );
 };

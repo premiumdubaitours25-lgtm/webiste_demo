@@ -2,11 +2,22 @@ import Hero from "@/components/Hero";
 import ImageCarousel from "@/components/ImageCarousel";
 import ImageGrid from "@/components/ImageGrid";
 import MasonryGallery from "@/components/MasonryGallery";
+import BestPlaceSection from "@/components/BestPlaceSection";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Package, Camera, BookOpen, Phone, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Index = () => {
+  const carouselAnimation = useScrollAnimation(0.2);
+  const aboutAnimation = useScrollAnimation(0.2);
+  const packagesAnimation = useScrollAnimation(0.2);
+  const destinationsAnimation = useScrollAnimation(0.2);
+  const galleryAnimation = useScrollAnimation(0.2);
+  const blogsAnimation = useScrollAnimation(0.2);
+  const testimonialsAnimation = useScrollAnimation(0.2);
+  const bestPlaceAnimation = useScrollAnimation(0.2);
+
   return (
     <div className="min-h-screen">
       <Hero />
@@ -14,7 +25,14 @@ const Index = () => {
       {/* Image Carousel Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={carouselAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              carouselAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">Discover Amazing Destinations</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Explore our curated collection of breathtaking destinations captured through the lens of talented photographers
@@ -24,13 +42,17 @@ const Index = () => {
         </div>
       </section>
       
-     
-     
-      
       {/* About Section Preview */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={aboutAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              aboutAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">About JJ&Tia Tours and Travels</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences 
@@ -38,8 +60,12 @@ const Index = () => {
               exceptional service, we transform your travel dreams into unforgettable memories.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-12 items-center slide-up">
-            <div>
+          <div className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-1000 ease-out delay-300 ${
+            aboutAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
+            <div className="space-y-4">
               <h3 className="text-2xl font-semibold mb-6 text-secondary">Why Choose Us?</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -81,11 +107,22 @@ const Index = () => {
       {/* Packages Section Preview */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={packagesAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              packagesAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">Popular Packages</h2>
             <p className="text-lg text-muted-foreground">Discover our handpicked travel packages for unforgettable experiences</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 slide-up">
+          <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
+            packagesAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
             {[
               {
                 title: "Bhutan Family Tour",
@@ -112,7 +149,15 @@ const Index = () => {
                 type: "DOMESTIC"
               }
             ].map((pkg, index) => (
-              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+              <div 
+                key={index} 
+                className={`rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
+                  packagesAnimation.isVisible 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 200}ms` }}
+              >
                 <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
@@ -135,11 +180,22 @@ const Index = () => {
       {/* Destinations Section Preview */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={destinationsAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              destinationsAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">Popular Destinations</h2>
             <p className="text-lg text-muted-foreground">Explore amazing places around the world</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-6 slide-up">
+          <div className={`grid md:grid-cols-4 gap-6 transition-all duration-1000 ease-out delay-300 ${
+            destinationsAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
             {[
               { name: "Nepal", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
               { name: "Bali", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
@@ -150,7 +206,15 @@ const Index = () => {
               { name: "Darjeeling", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
               { name: "Meghalaya", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
             ].slice(0, 4).map((destination, index) => (
-              <div key={index} className="rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+              <div 
+                key={index} 
+                className={`rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
+                  destinationsAnimation.isVisible 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
+              >
                 <img src={destination.image} alt={destination.name} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{destination.type}</div>
@@ -173,11 +237,22 @@ const Index = () => {
       {/* Gallery Section Preview */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={galleryAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              galleryAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">Photo Gallery</h2>
             <p className="text-lg text-muted-foreground">Memories captured from our amazing journeys</p>
           </div>
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 slide-up">
+          <div className={`grid md:grid-cols-3 lg:grid-cols-4 gap-4 transition-all duration-1000 ease-out delay-300 ${
+            galleryAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
             {[
               "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
               "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
@@ -188,7 +263,15 @@ const Index = () => {
               "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
               "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
             ].map((image, index) => (
-              <div key={index} className="relative overflow-hidden rounded-lg group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+              <div 
+                key={index} 
+                className={`relative overflow-hidden rounded-lg group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
+                  galleryAnimation.isVisible 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
                 <img 
                   src={image} 
                   alt={`Gallery ${index + 1}`} 
@@ -214,11 +297,22 @@ const Index = () => {
       {/* Blogs Section Preview */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={blogsAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              blogsAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">Travel Blogs</h2>
             <p className="text-lg text-muted-foreground">Read our latest travel stories and tips</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 slide-up">
+          <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
+            blogsAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
             {[
               {
                 title: "Goa on a Shoe-string Budget? Check out These Chic Apartments for a Comfy Stay!",
@@ -239,7 +333,15 @@ const Index = () => {
                 date: "January 5, 2025"
               }
             ].map((blog, index) => (
-              <div key={index} className="bg-card rounded-lg shadow-lg overflow-hidden group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2">
+              <div 
+                key={index} 
+                className={`bg-card rounded-lg shadow-lg overflow-hidden group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
+                  blogsAnimation.isVisible 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 200}ms` }}
+              >
                 <div className="overflow-hidden">
                   <img src={blog.image} alt={blog.title} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
@@ -265,11 +367,22 @@ const Index = () => {
       {/* Testimonials Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 fade-in">
+          <div 
+            ref={testimonialsAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              testimonialsAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h2 className="text-4xl font-bold mb-4 text-primary">What Our Travelers Say</h2>
             <p className="text-lg text-muted-foreground">Real experiences from our happy customers</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 slide-up">
+          <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
+            testimonialsAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
             {[
               {
                 name: "Sarah Johnson",
@@ -290,7 +403,15 @@ const Index = () => {
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-card rounded-lg shadow-lg p-6 group hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-in-out transform hover:-translate-y-2 hover:bg-primary/5">
+              <div 
+                key={index} 
+                className={`bg-card rounded-lg shadow-lg p-6 group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 hover:bg-primary/5 transition-all duration-1000 ease-out ${
+                  testimonialsAnimation.isVisible 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 200}ms` }}
+              >
                 <div className="flex mb-4">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
                     <span key={i} className="text-yellow-400 group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 100}ms` }}>★</span>
@@ -306,6 +427,23 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Best Place Section */}
+      <div 
+        ref={bestPlaceAnimation.ref}
+        className={`transition-all duration-1000 ease-out ${
+          bestPlaceAnimation.isVisible 
+            ? 'opacity-100 translate-y-0' 
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
+        <BestPlaceSection 
+          subtitle="Adventure Awaits"
+          title="Embark on unforgettable journeys"
+          destination="the World"
+          buttonText="START EXPLORING"
+        />
+      </div>
 
       {/* Floating WhatsApp and Call Buttons */}
       <div className="fixed bottom-6 right-6 flex flex-col items-end gap-4 z-50">
