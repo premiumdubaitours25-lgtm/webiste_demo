@@ -13,7 +13,6 @@ const Index = () => {
   const aboutAnimation = useScrollAnimation(0.2);
   const packagesAnimation = useScrollAnimation(0.2);
   const destinationsAnimation = useScrollAnimation(0.2);
-  const galleryAnimation = useScrollAnimation(0.2);
   const blogsAnimation = useScrollAnimation(0.2);
   const testimonialsAnimation = useScrollAnimation(0.2);
   const bestPlaceAnimation = useScrollAnimation(0.2);
@@ -104,8 +103,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Packages Section Preview */}
-      <section className="py-20">
+      {/* Domestic Packages Section Preview */}
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div 
             ref={packagesAnimation.ref}
@@ -115,8 +114,8 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">Popular Packages</h2>
-            <p className="text-lg text-muted-foreground">Discover our handpicked travel packages for unforgettable experiences</p>
+            <h2 className="text-4xl font-bold mb-4 text-primary">Domestic Packages</h2>
+            <p className="text-lg text-muted-foreground">Discover our handpicked domestic travel packages for unforgettable experiences</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
             packagesAnimation.isVisible 
@@ -125,12 +124,12 @@ const Index = () => {
           }`}>
             {[
               {
-                title: "Bhutan Family Tour",
-                duration: "5D/4N",
-                price: "₹29,999",
-                image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Explore the mystical kingdom of Bhutan with cultural heritage and natural beauty.",
-                type: "INTERNATIONAL"
+                title: "Sikkim Darjeeling Tour",
+                duration: "6D/5N",
+                price: "₹24,999",
+                image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                description: "Experience the beauty of Eastern Himalayas with Gangtok and Darjeeling.",
+                type: "DOMESTIC"
               },
               {
                 title: "Meghalaya Adventure",
@@ -141,11 +140,11 @@ const Index = () => {
                 type: "DOMESTIC"
               },
               {
-                title: "North East Explorer",
-                duration: "8D/7N",
-                price: "₹34,990",
-                image: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Immerse yourself in the natural beauty and cultural charm of North East India.",
+                title: "Goa Beach Paradise",
+                duration: "5D/4N",
+                price: "₹18,999",
+                image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                description: "Relax and unwind in the tropical paradise of Goa with pristine beaches.",
                 type: "DOMESTIC"
               }
             ].map((pkg, index) => (
@@ -167,10 +166,83 @@ const Index = () => {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link to="/packages">
+            <Link to="/packages/domestic">
+              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+                <Package className="mr-2 h-4 w-4" />
+                View Domestic Packages
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* International Packages Section Preview */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div 
+            ref={packagesAnimation.ref}
+            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+              packagesAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
+            <h2 className="text-4xl font-bold mb-4 text-primary">International Packages</h2>
+            <p className="text-lg text-muted-foreground">Discover our handpicked international travel packages for unforgettable experiences</p>
+          </div>
+          <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
+            packagesAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
+            {[
+              {
+                title: "Bhutan Family Tour",
+                duration: "5D/4N",
+                price: "₹29,999",
+                image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                description: "Explore the mystical kingdom of Bhutan with cultural heritage and natural beauty.",
+                type: "INTERNATIONAL"
+              },
+              {
+                title: "Nepal Adventure Tour",
+                duration: "6D/5N",
+                price: "₹35,500",
+                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                description: "Experience the majestic Himalayas and rich culture of Nepal.",
+                type: "INTERNATIONAL"
+              },
+              {
+                title: "Bali Paradise Tour",
+                duration: "7D/6N",
+                price: "₹42,990",
+                image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                description: "Discover the tropical paradise of Bali with pristine beaches and temples.",
+                type: "INTERNATIONAL"
+              }
+            ].map((pkg, index) => (
+              <div 
+                key={index} 
+                className={`rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
+                  packagesAnimation.isVisible 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 200}ms` }}
+              >
+                <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
+                  <div className="text-lg font-bold text-foreground group-hover:text-white">{pkg.title.toUpperCase()}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/packages/international">
               <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
                 <Package className="mr-2 h-4 w-4" />
-                View All Packages
+                View International Packages
               </Button>
             </Link>
           </div>
@@ -234,65 +306,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Gallery Section Preview */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div 
-            ref={galleryAnimation.ref}
-            className={`text-center mb-12 transition-all duration-1000 ease-out ${
-              galleryAnimation.isVisible 
-                ? 'opacity-100 translate-y-0' 
-                : 'opacity-0 translate-y-10'
-            }`}
-          >
-            <h2 className="text-4xl font-bold mb-4 text-primary">Photo Gallery</h2>
-            <p className="text-lg text-muted-foreground">Memories captured from our amazing journeys</p>
-          </div>
-          <div className={`grid md:grid-cols-3 lg:grid-cols-4 gap-4 transition-all duration-1000 ease-out delay-300 ${
-            galleryAnimation.isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-10'
-          }`}>
-            {[
-              "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-            ].map((image, index) => (
-              <div 
-                key={index} 
-                className={`relative overflow-hidden rounded-lg group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
-                  galleryAnimation.isVisible 
-                    ? 'opacity-100 translate-y-0' 
-                    : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <img 
-                  src={image} 
-                  alt={`Gallery ${index + 1}`} 
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-125" 
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <span className="text-white font-semibold text-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">View Image</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link to="/gallery">
-              <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
-                <Camera className="mr-2 h-4 w-4" />
-                View Full Gallery
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+
 
       {/* Blogs Section Preview */}
       <section className="py-20 bg-muted/30">

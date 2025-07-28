@@ -1,7 +1,16 @@
 import { useState } from "react";
-import { Menu, X, Phone, Mail } from "lucide-react";
+import { Menu, X, Phone, Mail, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 import logo from "@/assets/image-Photoroom.png";
 
 const Header = () => {
@@ -11,7 +20,6 @@ const Header = () => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
-    { name: "Packages", href: "/packages" },
     { name: "Destinations", href: "/destinations" },
     { name: "Blogs", href: "/blogs" },
     { name: "Contact Us", href: "/contact" },
@@ -52,15 +60,87 @@ const Header = () => {
 
           {/* Desktop navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === item.href ? 'text-primary' : ''}`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {/* Home */}
+            <Link
+              to="/"
+              className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/" ? 'text-primary' : ''}`}
+            >
+              Home
+            </Link>
+            
+            {/* About Us */}
+            <Link
+              to="/about"
+              className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/about" ? 'text-primary' : ''}`}
+            >
+              About Us
+            </Link>
+            
+            {/* Packages Dropdown */}
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent text-white hover:text-primary hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-primary">
+                    Packages
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[200px] gap-3 p-4 md:w-[250px] md:grid-cols-1 lg:w-[300px] bg-white rounded-lg shadow-lg">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to="/packages/domestic"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none text-foreground">Domestic</div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Explore amazing destinations within India
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to="/packages/international"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none text-foreground">International</div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Discover incredible destinations worldwide
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+            
+            {/* Destinations */}
+            <Link
+              to="/destinations"
+              className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/destinations" ? 'text-primary' : ''}`}
+            >
+              Destinations
+            </Link>
+            
+            {/* Blogs */}
+            <Link
+              to="/blogs"
+              className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/blogs" ? 'text-primary' : ''}`}
+            >
+              Blogs
+            </Link>
+            
+            {/* Contact Us */}
+            <Link
+              to="/contact"
+              className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/contact" ? 'text-primary' : ''}`}
+            >
+              Contact Us
+            </Link>
+
             <Link to="/contact">
               <Button className="bg-primary hover:bg-primary/90 hover-lift">
                 Book Now
@@ -81,16 +161,72 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t border-border">
             <div className="flex flex-col space-y-4 pt-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === item.href ? 'text-primary' : ''}`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {/* Home */}
+              <Link
+                to="/"
+                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/" ? 'text-primary' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              
+              {/* About Us */}
+              <Link
+                to="/about"
+                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/about" ? 'text-primary' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About Us
+              </Link>
+              
+              {/* Mobile Packages Dropdown */}
+              <div className="space-y-2">
+                <div className="font-medium text-white">Packages</div>
+                <div className="ml-4 space-y-2">
+                  <Link
+                    to="/packages/domestic"
+                    className="block text-white/80 hover:text-primary transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Domestic
+                  </Link>
+                  <Link
+                    to="/packages/international"
+                    className="block text-white/80 hover:text-primary transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    International
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Destinations */}
+              <Link
+                to="/destinations"
+                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/destinations" ? 'text-primary' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Destinations
+              </Link>
+              
+              {/* Blogs */}
+              <Link
+                to="/blogs"
+                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/blogs" ? 'text-primary' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Blogs
+              </Link>
+              
+              {/* Contact Us */}
+              <Link
+                to="/contact"
+                className={`transition-colors duration-200 font-medium text-white hover:text-primary ${location.pathname === "/contact" ? 'text-primary' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact Us
+              </Link>
+              
               <Link to="/contact">
                 <Button className="bg-primary hover:bg-primary/90 w-fit">
                   Book Now
