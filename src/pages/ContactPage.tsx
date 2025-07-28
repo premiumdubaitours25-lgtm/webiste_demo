@@ -50,7 +50,7 @@ const ContactPage = () => {
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              Contact <span className="text-primary">JJ&Tia Tours</span>
+              Contact <span className="text-secondary">JJ&Tia Tours</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
               We're here to help you plan your next adventure. Get in touch with us!
@@ -65,7 +65,7 @@ const ContactPage = () => {
             {/* Contact Information */}
             <div className="space-y-8 slide-up">
               <div>
-                <h2 className="text-3xl font-bold text-foreground mb-4">Get In Touch</h2>
+                <h2 className="text-3xl font-bold text-secondary mb-4">Get In Touch</h2>
                 <p className="text-lg text-muted-foreground">
                   Ready to embark on your next adventure? We're here to help you plan the perfect trip. 
                   Contact us today and let's make your travel dreams come true.
@@ -77,8 +77,8 @@ const ContactPage = () => {
                   <Card key={index} className="hover-lift bg-white shadow-lg">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 p-3 rounded-lg">
-                          <info.icon className="h-6 w-6 text-primary" />
+                        <div className="bg-secondary/10 p-3 rounded-lg">
+                          <info.icon className="h-6 w-6 text-secondary" />
                         </div>
                         <div className="space-y-2">
                           <h3 className="font-semibold text-foreground">{info.title}</h3>
@@ -99,7 +99,7 @@ const ContactPage = () => {
                   <MessageCircle className="h-5 w-5" />
                   WhatsApp
                 </Button>
-                <Button variant="outline" className="hover-lift flex items-center gap-2">
+                <Button variant="outline" className="hover-lift flex items-center gap-2 border-secondary text-secondary hover:bg-secondary/10">
                   <Phone className="h-5 w-5" />
                   Call Now
                 </Button>
@@ -110,7 +110,7 @@ const ContactPage = () => {
             <div className="scale-in">
               <Card className="bg-white shadow-xl">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-center text-foreground">
+                  <CardTitle className="text-2xl font-bold text-center text-secondary">
                     Book Your Trip / Get Quote
                   </CardTitle>
                   <p className="text-center text-muted-foreground">
@@ -172,7 +172,7 @@ const ContactPage = () => {
                       />
                     </div>
 
-                    <Button className="w-full bg-primary hover:bg-primary/90 hover-lift text-lg py-3">
+                    <Button className="w-full bg-secondary hover:bg-secondary/90 hover-lift text-lg py-3">
                       Send Inquiry
                     </Button>
                   </form>
@@ -187,7 +187,7 @@ const ContactPage = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 fade-in">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Visit Our Office</h2>
+            <h2 className="text-3xl font-bold text-secondary mb-4">Visit Our Office</h2>
             <p className="text-lg text-muted-foreground">
               Come meet us in person for personalized travel planning
             </p>

@@ -28,7 +28,7 @@ const Hero = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-6 scale-in">
             <Link to="/packages">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 hover-lift text-lg px-8 py-4">
+              <Button size="lg" className="bg-secondary hover:bg-secondary/90 hover-lift text-lg px-8 py-4">
                 View Packages
               </Button>
             </Link>

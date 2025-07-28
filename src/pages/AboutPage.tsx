@@ -89,7 +89,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              About <span className="text-primary">JJ&Tia Tours</span>
+              About <span className="text-secondary">JJ&Tia Tours</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
               Crafting unique and personalized travel experiences that take you beyond the ordinary
@@ -103,7 +103,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8 slide-up">
-              <h2 className="text-4xl font-bold text-foreground">
+              <h2 className="text-4xl font-bold text-secondary">
                 Our Story
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
@@ -125,7 +125,7 @@ const AboutPage = () => {
               />
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-lg">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-primary">5+ Years</h3>
+                  <h3 className="text-2xl font-bold text-secondary">5+ Years</h3>
                   <p className="text-muted-foreground">of Creating Memories</p>
               </div>
               </div>
@@ -138,13 +138,13 @@ const AboutPage = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">Our Achievements</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Our Achievements</h2>
             <p className="text-lg text-muted-foreground">Numbers that tell our story</p>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
             {achievements.map((achievement, index) => (
-              <div key={index} className="text-center p-6 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg hover-lift">
-                <div className="text-primary mb-4 flex justify-center">
+              <div key={index} className="text-center p-6 bg-gradient-to-br from-secondary/5 to-secondary/5 rounded-lg hover-lift">
+                <div className="text-secondary mb-4 flex justify-center">
                   {achievement.icon}
                 </div>
                 <h3 className="text-3xl font-bold text-foreground mb-2">{achievement.number}</h3>
@@ -160,37 +160,37 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-6 fade-in">
-              <h2 className="text-3xl font-bold text-foreground">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-secondary">Our Mission</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 To create extraordinary travel experiences that inspire, educate, and transform our travelers while promoting sustainable tourism practices that benefit local communities and preserve natural environments.
               </p>
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-secondary">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Sustainable Tourism</span>
               </div>
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-secondary">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Cultural Preservation</span>
               </div>
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-secondary">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Community Support</span>
               </div>
             </div>
             <div className="space-y-6 fade-in">
-              <h2 className="text-3xl font-bold text-foreground">Our Vision</h2>
+              <h2 className="text-3xl font-bold text-secondary">Our Vision</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 To be the leading travel company that bridges cultures, creates lasting memories, and fosters a deeper understanding of our beautiful world through authentic and meaningful travel experiences.
               </p>
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-secondary">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Global Connection</span>
               </div>
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-secondary">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Authentic Experiences</span>
               </div>
-              <div className="flex items-center space-x-2 text-primary">
+              <div className="flex items-center space-x-2 text-secondary">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Cultural Exchange</span>
               </div>
@@ -203,14 +203,14 @@ const AboutPage = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">Our Values</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Our Values</h2>
             <p className="text-lg text-muted-foreground">The principles that guide everything we do</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
               <Card key={index} className="text-center p-6 hover-lift">
                 <CardContent className="space-y-4">
-                  <div className="text-primary flex justify-center">
+                  <div className="text-secondary flex justify-center">
                     {value.icon}
                   </div>
                   <h3 className="text-xl font-semibold text-foreground">{value.title}</h3>
@@ -226,7 +226,7 @@ const AboutPage = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">Meet Our Team</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Meet Our Team</h2>
             <p className="text-lg text-muted-foreground">The passionate people behind your perfect journey</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -242,7 +242,7 @@ const AboutPage = () => {
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-foreground mb-2">{member.name}</h3>
-                  <p className="text-primary font-medium mb-3">{member.role}</p>
+                  <p className="text-secondary font-medium mb-3">{member.role}</p>
                   <p className="text-muted-foreground text-sm">{member.description}</p>
                 </CardContent>
               </Card>
@@ -256,11 +256,11 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8 slide-up">
-              <h2 className="text-4xl font-bold text-foreground">Why Choose JJ&Tia Tours?</h2>
+              <h2 className="text-4xl font-bold text-secondary">Why Choose JJ&Tia Tours?</h2>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="bg-primary/10 p-3 rounded-full">
-                    <Clock className="h-6 w-6 text-primary" />
+                  <div className="bg-secondary/10 p-3 rounded-full">
+                    <Clock className="h-6 w-6 text-secondary" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-foreground mb-2">24/7 Support</h3>
@@ -268,8 +268,8 @@ const AboutPage = () => {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <div className="bg-primary/10 p-3 rounded-full">
-                    <Shield className="h-6 w-6 text-primary" />
+                  <div className="bg-secondary/10 p-3 rounded-full">
+                    <Shield className="h-6 w-6 text-secondary" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-foreground mb-2">Safe & Secure</h3>
@@ -277,8 +277,8 @@ const AboutPage = () => {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <div className="bg-primary/10 p-3 rounded-full">
-                    <Globe className="h-6 w-6 text-primary" />
+                  <div className="bg-secondary/10 p-3 rounded-full">
+                    <Globe className="h-6 w-6 text-secondary" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-foreground mb-2">Local Expertise</h3>
@@ -286,8 +286,8 @@ const AboutPage = () => {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <div className="bg-primary/10 p-3 rounded-full">
-                    <Star className="h-6 w-6 text-primary" />
+                  <div className="bg-secondary/10 p-3 rounded-full">
+                    <Star className="h-6 w-6 text-secondary" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-foreground mb-2">Quality Guaranteed</h3>
@@ -303,7 +303,7 @@ const AboutPage = () => {
                 alt="Why Choose Us"
                 className="rounded-lg shadow-xl"
               />
-              <div className="absolute -top-6 -right-6 bg-primary text-white p-6 rounded-lg shadow-lg">
+              <div className="absolute -top-6 -right-6 bg-secondary text-white p-6 rounded-lg shadow-lg">
                 <div className="text-center">
                   <h3 className="text-2xl font-bold">100%</h3>
                   <p className="text-sm">Satisfaction Rate</p>
@@ -315,7 +315,7 @@ const AboutPage = () => {
       </section>
 
       {/* Contact CTA */}
-      <section className="py-20 bg-gradient-to-r from-primary to-secondary">
+      <section className="py-20 bg-gradient-to-r from-secondary to-secondary/80">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-8">
             <h2 className="text-4xl font-bold text-white">Ready to Start Your Journey?</h2>
@@ -323,11 +323,11 @@ const AboutPage = () => {
               Let us help you create the perfect travel experience. Contact our team of experts today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90">
+              <Button size="lg" className="bg-white text-secondary hover:bg-white/90">
                 <Phone className="mr-2 h-5 w-5" />
                 Call Us Now
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-secondary">
                 <Mail className="mr-2 h-5 w-5" />
                 Send Email
               </Button>

@@ -109,13 +109,13 @@ const DomesticPackagesPage = () => {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2070&q=80')`
+            backgroundImage: `url('https://images.unsplash.com/photo-1438565434616-3ef039228b15?auto=format&fit=crop&w=2070&q=80')`
           }}
         ></div>
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              Domestic <span className="text-primary">Packages</span>
+              Domestic <span className="text-secondary">Packages</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
               Explore the incredible beauty of India with our carefully curated domestic travel packages
@@ -128,14 +128,14 @@ const DomesticPackagesPage = () => {
       <div className="container mx-auto px-4 mt-10 flex justify-start gap-3">
         <Button
           variant={filter === 'sikkim' ? "default" : "outline"}
-          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'sikkim' ? 'bg-primary text-white' : 'bg-white text-primary border-primary'}`}
+          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'sikkim' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
           onClick={() => setFilter('sikkim')}
         >
           Sikkim
         </Button>
         <Button
           variant={filter === 'all' ? "default" : "outline"}
-          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'all' ? 'bg-primary text-white' : 'bg-white text-primary border-primary'}`}
+          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'all' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
           onClick={() => setFilter('all')}
         >
           Show All
@@ -201,7 +201,7 @@ const DomesticPackagesPage = () => {
 
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-primary">₹ {pkg.price}</span>
+                      <span className="text-2xl font-bold text-secondary">₹ {pkg.price}</span>
                       <span className="text-sm text-muted-foreground line-through">₹ {pkg.originalPrice}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">per person</p>
@@ -216,7 +216,7 @@ const DomesticPackagesPage = () => {
                     </Button>
                   </Link>
                   <Button 
-                    className="w-full bg-primary hover:bg-primary/90 hover-lift"
+                    className="w-full bg-secondary hover:bg-secondary/90 hover-lift"
                     onClick={handleBookNow}
                   >
                     <Phone className="mr-2 h-4 w-4" />

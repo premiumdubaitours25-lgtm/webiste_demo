@@ -32,7 +32,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">Discover Amazing Destinations</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Discover Amazing Destinations</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Explore our curated collection of breathtaking destinations captured through the lens of talented photographers
             </p>
@@ -52,7 +52,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">About JJ&Tia Tours and Travels</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">About JJ&Tia Tours and Travels</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences 
               that take you beyond the ordinary. Founded on a passion for exploration and a deep commitment to 
@@ -68,19 +68,19 @@ const Index = () => {
               <h3 className="text-2xl font-semibold mb-6 text-secondary">Why Choose Us?</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                   <p className="text-muted-foreground">Personalized itineraries tailored to your preferences</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                   <p className="text-muted-foreground">Expert local guides and insider knowledge</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                   <p className="text-muted-foreground">24/7 support throughout your journey</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
                   <p className="text-muted-foreground">Competitive pricing with no hidden costs</p>
                 </div>
               </div>
@@ -95,7 +95,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-8">
             <Link to="/about">
-              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+              <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
                 Know More About Us <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -114,7 +114,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">Domestic Packages</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Domestic Packages</h2>
             <p className="text-lg text-muted-foreground">Discover our handpicked domestic travel packages for unforgettable experiences</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
@@ -158,7 +158,7 @@ const Index = () => {
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-secondary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
                   <div className="text-lg font-bold text-foreground group-hover:text-white">{pkg.title.toUpperCase()}</div>
                 </div>
@@ -167,7 +167,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-8">
             <Link to="/packages/domestic">
-              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+              <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
                 <Package className="mr-2 h-4 w-4" />
                 View Domestic Packages
               </Button>
@@ -187,7 +187,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">International Packages</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">International Packages</h2>
             <p className="text-lg text-muted-foreground">Discover our handpicked international travel packages for unforgettable experiences</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
@@ -231,7 +231,7 @@ const Index = () => {
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-secondary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
                   <div className="text-lg font-bold text-foreground group-hover:text-white">{pkg.title.toUpperCase()}</div>
                 </div>
@@ -260,7 +260,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">Popular Destinations</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Popular Destinations</h2>
             <p className="text-lg text-muted-foreground">Explore amazing places around the world</p>
           </div>
           <div className={`grid md:grid-cols-4 gap-6 transition-all duration-1000 ease-out delay-300 ${
@@ -288,7 +288,7 @@ const Index = () => {
                 style={{ transitionDelay: `${index * 150}ms` }}
               >
                 <img src={destination.image} alt={destination.name} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-secondary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{destination.type}</div>
                   <div className="text-lg font-bold text-foreground group-hover:text-white">{destination.name.toUpperCase()}</div>
                 </div>
@@ -297,7 +297,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-8">
             <Link to="/destinations">
-              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+              <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
                 <MapPin className="mr-2 h-4 w-4" />
                 View All Destinations
               </Button>
@@ -305,8 +305,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-
 
       {/* Blogs Section Preview */}
       <section className="py-20 bg-muted/30">
@@ -319,7 +317,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">Travel Blogs</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Travel Blogs</h2>
             <p className="text-lg text-muted-foreground">Read our latest travel stories and tips</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
@@ -359,9 +357,9 @@ const Index = () => {
                 <div className="overflow-hidden">
                   <img src={blog.image} alt={blog.title} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
-                <div className="p-6 group-hover:bg-primary/5 transition-colors duration-300">
-                  <p className="text-sm text-muted-foreground mb-2 group-hover:text-primary transition-colors duration-300">{blog.date}</p>
-                  <h3 className="text-lg font-semibold mb-3 text-secondary line-clamp-2 group-hover:text-primary transition-colors duration-300">{blog.title}</h3>
+                <div className="p-6 group-hover:bg-secondary/5 transition-colors duration-300">
+                  <p className="text-sm text-muted-foreground mb-2 group-hover:text-secondary transition-colors duration-300">{blog.date}</p>
+                  <h3 className="text-lg font-semibold mb-3 text-secondary line-clamp-2 group-hover:text-secondary transition-colors duration-300">{blog.title}</h3>
                   <p className="text-muted-foreground text-sm line-clamp-3 group-hover:text-foreground transition-colors duration-300">{blog.excerpt}</p>
                 </div>
               </div>
@@ -369,7 +367,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-8">
             <Link to="/blogs">
-              <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-3">
+              <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
                 <BookOpen className="mr-2 h-4 w-4" />
                 Read All Blogs
               </Button>
@@ -389,7 +387,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-primary">What Our Travelers Say</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">What Our Travelers Say</h2>
             <p className="text-lg text-muted-foreground">Real experiences from our happy customers</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
@@ -419,7 +417,7 @@ const Index = () => {
             ].map((testimonial, index) => (
               <div 
                 key={index} 
-                className={`bg-card rounded-lg shadow-lg p-6 group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 hover:bg-primary/5 transition-all duration-1000 ease-out ${
+                className={`bg-card rounded-lg shadow-lg p-6 group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 hover:bg-secondary/5 transition-all duration-1000 ease-out ${
                   testimonialsAnimation.isVisible 
                     ? 'opacity-100 translate-y-0' 
                     : 'opacity-0 translate-y-10'
@@ -433,7 +431,7 @@ const Index = () => {
                 </div>
                 <p className="text-muted-foreground mb-4 italic group-hover:text-foreground transition-colors duration-300">"{testimonial.review}"</p>
                 <div>
-                  <h4 className="font-semibold text-secondary group-hover:text-primary transition-colors duration-300">{testimonial.name}</h4>
+                  <h4 className="font-semibold text-secondary group-hover:text-secondary transition-colors duration-300">{testimonial.name}</h4>
                   <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">{testimonial.location}</p>
                 </div>
               </div>
@@ -472,7 +470,7 @@ const Index = () => {
         </a>
         <a
           href="tel:91970393335"
-          className="bg-primary hover:bg-primary/90 text-white rounded-full shadow-lg p-4 flex items-center justify-center transition-colors duration-200"
+          className="bg-secondary hover:bg-secondary/90 text-white rounded-full shadow-lg p-4 flex items-center justify-center transition-colors duration-200"
           aria-label="Call us"
         >
           <Phone className="w-6 h-6" />

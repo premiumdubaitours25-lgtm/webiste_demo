@@ -142,7 +142,7 @@ const Header = () => {
             </Link>
 
             <Link to="/contact">
-              <Button className="bg-primary hover:bg-primary/90 hover-lift">
+              <Button className="bg-secondary hover:bg-secondary/90 hover-lift">
                 Book Now
               </Button>
             </Link>

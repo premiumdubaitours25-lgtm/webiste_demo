@@ -139,7 +139,7 @@ const DestinationsPage = () => {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 onClick={() => setSelectedCategory(category)}
-                className="hover-lift"
+                className={`hover-lift ${selectedCategory === category ? 'bg-secondary hover:bg-secondary/90' : 'border-secondary text-secondary hover:bg-secondary/10'}`}
               >
                 {category}
               </Button>
@@ -160,7 +160,7 @@ const DestinationsPage = () => {
                     alt={destination.name}
                     className="w-full h-56 object-cover"
                   />
-                  <Badge className={`absolute top-4 left-4 ${destination.category === 'International' ? 'bg-primary' : 'bg-secondary'} text-white`}>
+                  <Badge className={`absolute top-4 left-4 ${destination.category === 'International' ? 'bg-secondary' : 'bg-secondary'} text-white`}>
                     {destination.category}
                   </Badge>
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
@@ -203,7 +203,7 @@ const DestinationsPage = () => {
                       </div>
                     </div>
 
-                    <Button className="w-full bg-primary hover:bg-primary/90 hover-lift">
+                    <Button className="w-full bg-secondary hover:bg-secondary/90 hover-lift">
                       Explore {destination.name}
                     </Button>
                   </div>

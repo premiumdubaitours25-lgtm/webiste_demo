@@ -114,7 +114,7 @@ const BlogsPage = () => {
       {featuredBlog && (
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Featured Story</h2>
+            <h2 className="text-3xl font-bold text-secondary mb-8 text-center">Featured Story</h2>
             <Card className="overflow-hidden bg-white shadow-xl hover-lift scale-in">
               <div className="grid lg:grid-cols-2 gap-0">
                 <div className="relative">
@@ -123,7 +123,7 @@ const BlogsPage = () => {
                     alt={featuredBlog.title}
                     className="w-full h-64 lg:h-full object-cover"
                   />
-                  <Badge className="absolute top-4 left-4 bg-primary text-white">
+                  <Badge className="absolute top-4 left-4 bg-secondary text-white">
                     Featured
                   </Badge>
                 </div>
@@ -147,7 +147,7 @@ const BlogsPage = () => {
                         <User className="h-4 w-4" />
                         <span>{featuredBlog.author}</span>
                       </div>
-                      <Button className="bg-primary hover:bg-primary/90 hover-lift">
+                      <Button className="bg-secondary hover:bg-secondary/90 hover-lift">
                         Read More <ArrowRight className="h-4 w-4 ml-2" />
                       </Button>
                     </div>
@@ -168,7 +168,7 @@ const BlogsPage = () => {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 onClick={() => setSelectedCategory(category)}
-                className="hover-lift"
+                className={`hover-lift ${selectedCategory === category ? 'bg-secondary hover:bg-secondary/90' : 'border-secondary text-secondary hover:bg-secondary/10'}`}
               >
                 {category}
               </Button>
@@ -218,7 +218,7 @@ const BlogsPage = () => {
                       <User className="h-4 w-4" />
                       <span>{blog.author}</span>
                     </div>
-                    <Button variant="outline" size="sm" className="hover-lift">
+                    <Button variant="outline" size="sm" className="hover-lift border-secondary text-secondary hover:bg-secondary/10">
                       Read More
                     </Button>
                   </div>
