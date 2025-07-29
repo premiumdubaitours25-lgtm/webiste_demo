@@ -52,7 +52,7 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">About JJ&Tia Tours and Travels</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">About JJ & Tia Tours and Travels</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences 
               that take you beyond the ordinary. Founded on a passion for exploration and a deep commitment to 

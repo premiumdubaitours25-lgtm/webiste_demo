@@ -53,8 +53,8 @@ const Header = () => {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <span className="flex items-center justify-center bg-white rounded-full shadow" style={{width: '72px', height: '72px'}}>
-              <img src={logo} alt="JJ&Tia Tours" className="h-14 w-14 object-contain" style={{maxHeight: '56px', maxWidth: '56px'}} />
+            <span className="flex items-center justify-center bg-white rounded-full shadow" style={{width: '88px', height: '88px'}}>
+              <img src={logo} alt="JJ&Tia Tours" className="h-16 w-16 object-contain" style={{maxHeight: '64px', maxWidth: '64px'}} />
             </span>
           </Link>
 

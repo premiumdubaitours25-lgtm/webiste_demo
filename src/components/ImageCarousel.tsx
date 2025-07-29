@@ -7,27 +7,27 @@ const ImageCarousel = () => {
 
   const images = [
     {
-      url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      url: "https://res.cloudinary.com/drxzuvrbq/image/upload/v1753780534/CB2_lzq57f.png",
       title: "Mountain Adventures",
       description: "Explore the world's most breathtaking peaks"
     },
     {
-      url: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      url: "https://res.cloudinary.com/drxzuvrbq/image/upload/v1753780417/CB1_ochijh.png",
       title: "Tropical Paradise",
       description: "Discover pristine beaches and crystal clear waters"
     },
     {
-      url: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      url: "https://res.cloudinary.com/drxzuvrbq/image/upload/v1753780653/CB3_esmfup.png",
       title: "Cultural Heritage",
       description: "Immerse yourself in rich traditions and history"
     },
     {
-      url: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      url: "https://res.cloudinary.com/drxzuvrbq/image/upload/v1753780735/CB4_w9kx2n.png",
       title: "Wildlife Encounters",
       description: "Experience nature's most magnificent creatures"
     },
     {
-      url: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      url: "https://res.cloudinary.com/drxzuvrbq/image/upload/v1753780830/CB5_audraq.png",
       title: "Waterfall Wonders",
       description: "Witness nature's most spectacular displays"
     }
