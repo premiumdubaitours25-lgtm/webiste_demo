@@ -93,7 +93,7 @@ const Footer = () => {
               <Button className="bg-green-500 hover:bg-green-600 text-white">
                 WhatsApp
               </Button>
-              <Button variant="outline" className="border-background text-white hover:bg-background hover:text-foreground">
+              <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
                 Call Me
               </Button>
             </div>
