@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/image-Photoroom.png";
 
 const Footer = () => {
   return (
@@ -10,11 +10,13 @@ const Footer = () => {
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
           {/* Company Info */}
           <div className="space-y-6">
-            <img src={logo} alt="JJ&Tia Tours" className="h-12 w-auto brightness-0 invert" />
+            <div className="flex items-center justify-center bg-white rounded-full shadow" style={{width: '72px', height: '72px'}}>
+              <img src={logo} alt="JJ&Tia Tours" className="h-12 w-12 object-contain" style={{maxHeight: '48px', maxWidth: '48px'}} />
+            </div>
             <p className="text-white/80 leading-relaxed">
               At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep understanding of what makes travel truly memorable.
             </p>
-            <Button variant="outline" className="border-background text-white hover:bg-background hover:text-foreground">
+            <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
               Read More
             </Button>
           </div>
@@ -62,7 +64,7 @@ const Footer = () => {
                 placeholder="Your email address" 
                 className="bg-background text-white border-muted-foreground/20"
               />
-              <Button variant="outline" className="border-background text-white hover:bg-background hover:text-foreground">
+              <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
                 Subscribe
               </Button>
             </div>
