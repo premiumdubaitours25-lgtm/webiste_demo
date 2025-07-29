@@ -9,13 +9,14 @@ import { Link } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Index = () => {
-  const carouselAnimation = useScrollAnimation(0.2);
-  const aboutAnimation = useScrollAnimation(0.2);
-  const packagesAnimation = useScrollAnimation(0.2);
-  const destinationsAnimation = useScrollAnimation(0.2);
-  const blogsAnimation = useScrollAnimation(0.2);
-  const testimonialsAnimation = useScrollAnimation(0.2);
-  const bestPlaceAnimation = useScrollAnimation(0.2);
+  const carouselAnimation = useScrollAnimation(0.1);
+  const aboutAnimation = useScrollAnimation(0.1);
+  const domesticPackagesAnimation = useScrollAnimation(0.05); // Domestic triggers first
+  const internationalPackagesAnimation = useScrollAnimation(0.1); // International triggers second
+  const destinationsAnimation = useScrollAnimation(0.1);
+  const blogsAnimation = useScrollAnimation(0.1);
+  const testimonialsAnimation = useScrollAnimation(0.1);
+  const bestPlaceAnimation = useScrollAnimation(0.1);
 
   return (
     <div className="min-h-screen">
@@ -42,61 +43,90 @@ const Index = () => {
       </section>
       
       {/* About Section Preview */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="container mx-auto px-4">
           <div 
             ref={aboutAnimation.ref}
-            className={`text-center mb-12 transition-all duration-1000 ease-out ${
+            className={`text-center mb-16 transition-all duration-1000 ease-out ${
               aboutAnimation.isVisible 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">About JJ & Tia Tours and Travels</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences 
+            <h2 className="text-4xl font-bold mb-6 text-secondary">About JJ & Tia Tours and Travels</h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences 
               that take you beyond the ordinary. Founded on a passion for exploration and a deep commitment to 
               exceptional service, we transform your travel dreams into unforgettable memories.
             </p>
           </div>
-          <div className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-1000 ease-out delay-300 ${
+          
+          {/* Content Grid */}
+          <div className={`grid lg:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-400 ${
             aboutAnimation.isVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-10'
           }`}>
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold mb-6 text-secondary">Why Choose Us?</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                  <p className="text-muted-foreground">Personalized itineraries tailored to your preferences</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                  <p className="text-muted-foreground">Expert local guides and insider knowledge</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                  <p className="text-muted-foreground">24/7 support throughout your journey</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                  <p className="text-muted-foreground">Competitive pricing with no hidden costs</p>
+            {/* Image Section */}
+            <div className="lg:col-span-1">
+              <div className="relative">
+                <img 
+                  src="https://res.cloudinary.com/drxzuvrbq/image/upload/v1753782292/CB6_ckhups.png" 
+                  alt="Travel Experience" 
+                  className="rounded-2xl shadow-2xl w-full h-96 object-cover"
+                />
+                <div className="absolute -bottom-4 -right-4 bg-secondary text-white px-6 py-3 rounded-lg shadow-lg">
+                  <div className="text-sm font-medium">Since 2019</div>
                 </div>
               </div>
             </div>
-            <div className="text-center">
-              <img 
-                src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80" 
-                alt="Travel Experience" 
-                className="rounded-lg shadow-2xl w-full"
-              />
+
+            {/* Features Section */}
+            <div className="lg:col-span-2 space-y-8">
+              <h3 className="text-4xl font-bold text-secondary mb-8 text-center">Why Choose Us?</h3>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {[
+                  {
+                    icon: "🎯",
+                    title: "Personalized Itineraries",
+                    description: "Tailored travel plans designed specifically for your preferences and interests"
+                  },
+                  {
+                    icon: "👥",
+                    title: "Expert Local Guides",
+                    description: "Insider knowledge and authentic experiences with certified local experts"
+                  },
+                  {
+                    icon: "🛡️",
+                    title: "24/7 Support",
+                    description: "Round-the-clock assistance throughout your entire journey"
+                  },
+                  {
+                    icon: "💰",
+                    title: "Transparent Pricing",
+                    description: "Competitive rates with no hidden costs or surprise fees"
+                  }
+                ].map((feature, index) => (
+                  <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="text-3xl mb-4">{feature.icon}</div>
+                    <h4 className="text-lg font-semibold text-secondary mb-2">{feature.title}</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="text-center mt-8">
+
+          {/* CTA Section */}
+          <div className={`text-center mt-16 transition-all duration-1000 ease-out delay-600 ${
+            aboutAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}>
             <Link to="/about">
-              <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-3">
-                Know More About Us <ArrowRight className="ml-2 h-4 w-4" />
+              <Button className="bg-secondary hover:bg-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                Discover Our Story <ArrowRight className="ml-3 h-5 w-5" />
               </Button>
             </Link>
           </div>
@@ -107,9 +137,9 @@ const Index = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div 
-            ref={packagesAnimation.ref}
+            ref={domesticPackagesAnimation.ref}
             className={`text-center mb-12 transition-all duration-1000 ease-out ${
-              packagesAnimation.isVisible 
+              domesticPackagesAnimation.isVisible 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-10'
             }`}
@@ -118,7 +148,7 @@ const Index = () => {
             <p className="text-lg text-muted-foreground">Discover our handpicked domestic travel packages for unforgettable experiences</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
-            packagesAnimation.isVisible 
+            domesticPackagesAnimation.isVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-10'
           }`}>
@@ -127,7 +157,7 @@ const Index = () => {
                 title: "Sikkim Darjeeling Tour",
                 duration: "6D/5N",
                 price: "₹24,999",
-                image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?auto=format&fit=crop&w=400&q=60",
                 description: "Experience the beauty of Eastern Himalayas with Gangtok and Darjeeling.",
                 type: "DOMESTIC"
               },
@@ -135,7 +165,7 @@ const Index = () => {
                 title: "Meghalaya Adventure",
                 duration: "4D/3N",
                 price: "₹16,500",
-                image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=60",
                 description: "Discover the 'Abode of Clouds' with pristine waterfalls and unique experiences.",
                 type: "DOMESTIC"
               },
@@ -151,7 +181,7 @@ const Index = () => {
               <div 
                 key={index} 
                 className={`rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
-                  packagesAnimation.isVisible 
+                  domesticPackagesAnimation.isVisible 
                     ? 'opacity-100 translate-y-0' 
                     : 'opacity-0 translate-y-10'
                 }`}
@@ -180,9 +210,9 @@ const Index = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div 
-            ref={packagesAnimation.ref}
+            ref={internationalPackagesAnimation.ref}
             className={`text-center mb-12 transition-all duration-1000 ease-out ${
-              packagesAnimation.isVisible 
+              internationalPackagesAnimation.isVisible 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-10'
             }`}
@@ -191,7 +221,7 @@ const Index = () => {
             <p className="text-lg text-muted-foreground">Discover our handpicked international travel packages for unforgettable experiences</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
-            packagesAnimation.isVisible 
+            internationalPackagesAnimation.isVisible 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-10'
           }`}>
@@ -224,7 +254,7 @@ const Index = () => {
               <div 
                 key={index} 
                 className={`rounded-2xl shadow-lg overflow-hidden bg-white relative group hover:scale-105 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-1000 ease-out ${
-                  packagesAnimation.isVisible 
+                  internationalPackagesAnimation.isVisible 
                     ? 'opacity-100 translate-y-0' 
                     : 'opacity-0 translate-y-10'
                 }`}
@@ -399,7 +429,7 @@ const Index = () => {
               {
                 name: "Sarah Johnson",
                 location: "Mumbai",
-                review: "Amazing experience with JJ&Tia Tours! The Bhutan trip was perfectly organized and exceeded all our expectations.",
+                review: "Amazing experience with JJ & TIA Tours! The Bhutan trip was perfectly organized and exceeded all our expectations.",
                 rating: 5
               },
               {

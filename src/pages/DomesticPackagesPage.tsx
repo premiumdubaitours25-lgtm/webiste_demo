@@ -1,14 +1,20 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, MapPin, Users, Eye, Phone, Filter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import BestPlaceSection from "@/components/BestPlaceSection";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const DomesticPackagesPage = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<'all' | 'sikkim'>('all');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Page-specific scroll animations
+  const heroAnimation = useScrollAnimation(0.2, 'domestic-hero');
+  const packagesAnimation = useScrollAnimation(0.2, 'domestic-packages');
 
   const domesticPackages = [
     {
@@ -20,7 +26,7 @@ const DomesticPackagesPage = () => {
       price: "24,999.00",
       originalPrice: "32,000.00",
       discount: "22% OFF",
-      image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?auto=format&fit=crop&w=400&q=60",
       highlights: ["Gangtok City Tour", "Darjeeling Tea Gardens", "Kanchenjunga View", "Buddhist Monasteries"],
       type: "DOMESTIC"
     },
@@ -33,7 +39,7 @@ const DomesticPackagesPage = () => {
       price: "18,500.00",
       originalPrice: "25,000.00",
       discount: "26% OFF",
-      image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?auto=format&fit=crop&w=400&q=60",
       highlights: ["Trekking", "River Rafting", "Mountain Biking", "Camping"],
       type: "DOMESTIC"
     },
@@ -46,7 +52,7 @@ const DomesticPackagesPage = () => {
       price: "21,999.00",
       originalPrice: "28,500.00",
       discount: "23% OFF",
-      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=400&q=60",
       highlights: ["Monastery Visits", "Local Markets", "Cultural Shows", "Traditional Cuisine"],
       type: "DOMESTIC"
     },
@@ -59,7 +65,7 @@ const DomesticPackagesPage = () => {
       price: "45,999.00",
       originalPrice: "58,000.00",
       discount: "21% OFF",
-      image: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?auto=format&fit=crop&w=400&q=60",
       highlights: ["Luxury Resorts", "Spa Treatments", "Gourmet Dining", "Private Tours"],
       type: "DOMESTIC"
     },
@@ -72,7 +78,7 @@ const DomesticPackagesPage = () => {
       price: "32,500.00",
       originalPrice: "42,000.00",
       discount: "23% OFF",
-      image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3?auto=format&fit=crop&w=400&q=60",
       highlights: ["Kid-friendly Activities", "Family Tours", "Comfortable Stays", "Guided Tours"],
       type: "DOMESTIC"
     },
@@ -85,7 +91,7 @@ const DomesticPackagesPage = () => {
       price: "38,999.00",
       originalPrice: "52,000.00",
       discount: "25% OFF",
-      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=400&q=60",
       highlights: ["Candlelight Dinners", "Couple Spa", "Private Rooms", "Romantic Tours"],
       type: "DOMESTIC"
     }
@@ -95,11 +101,13 @@ const DomesticPackagesPage = () => {
     navigate('/contact');
   };
 
-  // Filter logic
-  const filteredPackages =
+  // Filter logic - memoized for better performance
+  const filteredPackages = React.useMemo(() => 
     filter === 'sikkim'
       ? domesticPackages.filter((pkg) => pkg.destination === "Sikkim")
-      : domesticPackages;
+      : domesticPackages,
+    [filter]
+  );
 
   return (
     <div className="min-h-screen bg-travel-light-bg">
@@ -109,11 +117,18 @@ const DomesticPackagesPage = () => {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1438565434616-3ef039228b15?auto=format&fit=crop&w=2070&q=80')`
+            backgroundImage: `url('https://images.unsplash.com/photo-1438565434616-3ef039228b15?auto=format&fit=crop&w=1200&q=60')`
           }}
         ></div>
         <div className="container mx-auto px-4 relative z-20">
-          <div className="text-center space-y-6 fade-in">
+          <div 
+            ref={heroAnimation.ref}
+            className={`text-center space-y-6 transition-all duration-1000 ease-out ${
+              heroAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
               Domestic <span className="text-secondary">Packages</span>
             </h1>
@@ -144,15 +159,30 @@ const DomesticPackagesPage = () => {
 
       {/* Packages Grid */}
       <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div 
+          ref={packagesAnimation.ref}
+          className={`container mx-auto px-4 transition-all duration-1000 ease-out ${
+            packagesAnimation.isVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10'
+          }`}
+        >
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-gray-200 animate-pulse rounded-lg h-96"></div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPackages.map((pkg, index) => (
-              <Card key={pkg.id} className={`overflow-hidden hover-lift bg-white shadow-lg hover:shadow-xl transition-all duration-300 ${index % 2 === 0 ? 'slide-up' : 'scale-in'}`}>
+              <Card key={pkg.id} className="overflow-hidden bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="relative">
                   <img 
                     src={pkg.image} 
                     alt={pkg.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <Badge className="absolute top-4 left-4 bg-destructive text-destructive-foreground">
                     {pkg.discount}
@@ -226,6 +256,7 @@ const DomesticPackagesPage = () => {
               </Card>
             ))}
           </div>
+          )}
         </div>
       </section>
       

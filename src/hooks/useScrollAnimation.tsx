@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useScrollAnimation = (threshold = 0.1) => {
+export const useScrollAnimation = (threshold = 0.1, pageId?: string) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -28,6 +28,13 @@ export const useScrollAnimation = (threshold = 0.1) => {
       }
     };
   }, [threshold]);
+
+  // Reset visibility when page changes
+  useEffect(() => {
+    if (pageId) {
+      setIsVisible(false);
+    }
+  }, [pageId]);
 
   return { ref, isVisible };
 }; 

@@ -24,7 +24,7 @@ const PackagesPage = () => {
       image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
       highlights: ["Thimphu & Paro", "Tiger's Nest Trek", "Cultural Heritage", "Guided Tours"],
       detailedInfo: {
-        companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
+        companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ & TIA Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
         services: [
           "Customized travel planning",
           "Guided tours & local experiences", 
@@ -128,7 +128,7 @@ const PackagesPage = () => {
           address: "Nyati Estate, Mohammadwadi, Pune, 411060",
           phone: "+91 9970393335",
           email: "shneiur.joseph@jjtia.com",
-          website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+          website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
         }
       }
     },
@@ -144,7 +144,7 @@ const PackagesPage = () => {
       image: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
       highlights: ["Phuentsholing", "Thimphu & Paro", "Tiger's Nest Trek", "Cultural Heritage"],
       detailedInfo: {
-        companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+        companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ & TIA Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
         services: [
           "Customized travel planning",
           "Guided tours & local experiences", 
@@ -319,7 +319,7 @@ const PackagesPage = () => {
           address: "Nyati Estate, Mohammadwadi, Pune, 411060",
           phone: "+91 9970393335",
           email: "shneiur.joseph@jjtia.com",
-          website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+          website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
         }
       }
     },
@@ -335,7 +335,7 @@ const PackagesPage = () => {
       image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
       highlights: ["Phuentsholing", "Thimphu & Paro", "Tiger's Nest Trek", "Cultural Heritage"],
       detailedInfo: {
-        companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+        companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ & TIA Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
         services: [
           "Customized travel planning",
           "Guided tours & local experiences", 
@@ -503,7 +503,7 @@ const PackagesPage = () => {
           address: "Nyati Estate, Mohammadwadi, Pune, 411060",
           phone: "+91 9970393335",
           email: "shneiur.joseph@jjtia.com",
-          website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+          website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
         }
       }
     },
@@ -579,7 +579,7 @@ const PackagesPage = () => {
       image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
       highlights: ["Phuentsholing", "Thimphu & Paro", "Tiger's Nest Trek", "Cultural Heritage"],
       detailedInfo: {
-        companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+        companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ & TIA Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
         services: [
           "Customized travel planning",
           "Guided tours & local experiences", 
@@ -747,7 +747,7 @@ const PackagesPage = () => {
           address: "Nyati Estate, Mohammadwadi, Pune, 411060",
           phone: "+91 9970393335",
           email: "shneiur.joseph@jjtia.com",
-          website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+          website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
         }
       }
     }

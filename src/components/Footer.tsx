@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="space-y-6">
             <img src={logo} alt="JJ&Tia Tours" className="h-12 w-auto brightness-0 invert" />
             <p className="text-white/80 leading-relaxed">
-              At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep understanding of what makes travel truly memorable.
+              At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep understanding of what makes travel truly memorable.
             </p>
             <Button variant="outline" className="border-background text-white hover:bg-background hover:text-foreground">
               Read More
@@ -99,7 +99,7 @@ const Footer = () => {
           
           <div className="text-center mt-8 pt-8 border-t border-muted-foreground/20">
             <p className="text-white/80">
-              © 2025 JJ&Tia Tours and Travels
+              © 2025 JJ & TIA Tours and Travels
             </p>
           </div>
         </div>

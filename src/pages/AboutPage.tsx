@@ -89,7 +89,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              About <span className="text-secondary">JJ&Tia Tours</span>
+              About <span className="text-secondary">JJ & TIA Tours</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
               Crafting unique and personalized travel experiences that take you beyond the ordinary
@@ -107,7 +107,7 @@ const AboutPage = () => {
                 Our Story
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Founded in 2019, JJ&Tia Tours and Travels was born from a simple yet powerful vision: to make extraordinary travel experiences accessible to everyone. What started as a passion project between two travel enthusiasts has grown into a trusted name in the travel industry.
+                Founded in 2019, JJ & TIA Tours and Travels was born from a simple yet powerful vision: to make extraordinary travel experiences accessible to everyone. What started as a passion project between two travel enthusiasts has grown into a trusted name in the travel industry.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Our founders, John and Tia, met during a backpacking trip through Southeast Asia. Their shared love for authentic travel experiences and cultural immersion led them to create a company that would help others discover the world in meaningful ways.
@@ -256,7 +256,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8 slide-up">
-              <h2 className="text-4xl font-bold text-secondary">Why Choose JJ&Tia Tours?</h2>
+              <h2 className="text-4xl font-bold text-secondary">Why Choose JJ & TIA Tours?</h2>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="bg-secondary/10 p-3 rounded-full">

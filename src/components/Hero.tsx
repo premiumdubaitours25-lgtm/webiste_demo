@@ -23,7 +23,7 @@ const Hero = () => {
               <span className="text-primary block slide-up">Adventure</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto scale-in">
-              At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary.
+              At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-6 scale-in">

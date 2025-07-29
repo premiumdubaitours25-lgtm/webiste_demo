@@ -255,7 +255,7 @@ const PackageDetailPage = () => {
         address: "Nyati Estate, Mohammadwadi, Pune, 411060",
         phone: "+91 9970393335",
         email: "shneiur.joseph@jjtia.com",
-        website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+        website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
       }
     }
   };
@@ -334,7 +334,7 @@ const PackageDetailPage = () => {
       {
         name: "Sarah Johnson",
         rating: 5,
-        comment: "Amazing experience with JJ&Tia Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
+        comment: "Amazing experience with JJ & TIA Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
       },
       {
         name: "Raj Patel",
@@ -348,7 +348,7 @@ const PackageDetailPage = () => {
       }
     ],
     detailedInfo: {
-      companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+      companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
       services: [
         "Customized travel planning",
         "Guided tours & local experiences", 
@@ -523,7 +523,7 @@ const PackageDetailPage = () => {
         address: "Nyati Estate, Mohammadwadi, Pune, 411060",
         phone: "+91 9970393335",
         email: "shneiur.joseph@jjtia.com",
-        website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+        website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
       }
     }
   };
@@ -602,7 +602,7 @@ const PackageDetailPage = () => {
       {
         name: "Sarah Johnson",
         rating: 5,
-        comment: "Amazing experience with JJ&Tia Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
+        comment: "Amazing experience with JJ & TIA Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
       },
       {
         name: "Raj Patel",
@@ -616,7 +616,7 @@ const PackageDetailPage = () => {
       }
     ],
     detailedInfo: {
-      companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+      companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ & TIA Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
       services: [
         "Customized travel planning",
         "Guided tours & local experiences", 
@@ -784,7 +784,7 @@ const PackageDetailPage = () => {
         address: "Nyati Estate, Mohammadwadi, Pune, 411060",
         phone: "+91 9970393335",
         email: "shneiur.joseph@jjtia.com",
-        website: "JJ&Tia Tours and Travels | Book Your Tour Package Now"
+        website: "JJ & TIA Tours and Travels | Book Your Tour Package Now"
       }
     }
   };
@@ -881,7 +881,7 @@ const PackageDetailPage = () => {
       {
         name: "Sarah Johnson",
         rating: 5,
-        comment: "Amazing experience with JJ&Tia Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
+        comment: "Amazing experience with JJ & TIA Tours! The Bhutan trip was perfectly organized and exceeded all our expectations."
       },
       {
         name: "Raj Patel",
@@ -1030,7 +1030,7 @@ const PackageDetailPage = () => {
             {/* Company Information - Only for Bhutan Package */}
             {(id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo && (
               <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">About JJ&Tia Tours and Travels</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">About JJ & TIA Tours and Travels</h2>
                 <p className="text-gray-600 mb-6 leading-relaxed">{packageData.detailedInfo.companyDescription}</p>
                 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -1210,7 +1210,7 @@ const PackageDetailPage = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">JJ&Tia Tours and Travels</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">JJ & TIA Tours and Travels</h3>
                     <div className="space-y-2 text-gray-600">
                       <div className="flex items-center">
                         <MapPin className="h-4 w-4 mr-2" />

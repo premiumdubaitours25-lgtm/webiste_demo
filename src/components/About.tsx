@@ -33,9 +33,9 @@ const About = () => {
           {/* Left content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-4xl font-bold">About JJ&Tia Tours and Travels</h2>
+              <h2 className="text-4xl font-bold">About JJ & TIA Tours and Travels</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                At JJ&Tia Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep understanding of what makes travel truly memorable, we are committed to turning your wanderlust into reality.
+                At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep understanding of what makes travel truly memorable, we are committed to turning your wanderlust into reality.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Whether you're seeking adventure in the mountains of Bhutan, relaxation on the beaches of Goa, or cultural immersion in the mystical lands of Nepal, our expert team is here to guide you every step of the way.
