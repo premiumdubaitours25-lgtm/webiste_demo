@@ -3,12 +3,17 @@ import ImageCarousel from "@/components/ImageCarousel";
 import ImageGrid from "@/components/ImageGrid";
 import MasonryGallery from "@/components/MasonryGallery";
 import BestPlaceSection from "@/components/BestPlaceSection";
+import InquiryFormPopup from "@/components/InquiryFormPopup";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Package, Camera, BookOpen, Phone, MessageCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowRight, MapPin, Package, Camera, BookOpen, Phone, MessageCircle, Plane } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useState, useEffect } from "react";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [showInquiryForm, setShowInquiryForm] = useState(false);
+  
   const carouselAnimation = useScrollAnimation(0.1);
   const aboutAnimation = useScrollAnimation(0.1);
   const domesticPackagesAnimation = useScrollAnimation(0.05); // Domestic triggers first
@@ -17,6 +22,15 @@ const Index = () => {
   const blogsAnimation = useScrollAnimation(0.1);
   const testimonialsAnimation = useScrollAnimation(0.1);
   const bestPlaceAnimation = useScrollAnimation(0.1);
+
+  // Show inquiry form popup after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowInquiryForm(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -33,109 +47,22 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">Discover Amazing Destinations</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Wanderlust in Frames</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Explore our curated collection of breathtaking destinations captured through the lens of talented photographers
+            Explore the world through the eyes of our talented travel photographers. Each image tells a story of adventure, culture, and untamed beauty.
             </p>
           </div>
           <ImageCarousel />
         </div>
       </section>
       
-      {/* About Section Preview */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto px-4">
-          <div 
-            ref={aboutAnimation.ref}
-            className={`text-center mb-16 transition-all duration-1000 ease-out ${
-              aboutAnimation.isVisible 
-                ? 'opacity-100 translate-y-0' 
-                : 'opacity-0 translate-y-10'
-            }`}
-          >
-            <h2 className="text-4xl font-bold mb-6 text-secondary">About JJ & Tia Tours and Travels</h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences 
-              that take you beyond the ordinary. Founded on a passion for exploration and a deep commitment to 
-              exceptional service, we transform your travel dreams into unforgettable memories.
-            </p>
-          </div>
-          
-          {/* Content Grid */}
-          <div className={`grid lg:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-400 ${
-            aboutAnimation.isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-10'
-          }`}>
-            {/* Image Section */}
-            <div className="lg:col-span-1">
-              <div className="relative">
-                <img 
-                  src="https://res.cloudinary.com/drxzuvrbq/image/upload/v1753782292/CB6_ckhups.png" 
-                  alt="Travel Experience" 
-                  className="rounded-2xl shadow-2xl w-full h-96 object-cover"
-                />
-                <div className="absolute -bottom-4 -right-4 bg-secondary text-white px-6 py-3 rounded-lg shadow-lg">
-                  <div className="text-sm font-medium">Since 2019</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Features Section */}
-            <div className="lg:col-span-2 space-y-8">
-              <h3 className="text-4xl font-bold text-secondary mb-8 text-center">Why Choose Us?</h3>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  {
-                    icon: "🎯",
-                    title: "Personalized Itineraries",
-                    description: "Tailored travel plans designed specifically for your preferences and interests"
-                  },
-                  {
-                    icon: "👥",
-                    title: "Expert Local Guides",
-                    description: "Insider knowledge and authentic experiences with certified local experts"
-                  },
-                  {
-                    icon: "🛡️",
-                    title: "24/7 Support",
-                    description: "Round-the-clock assistance throughout your entire journey"
-                  },
-                  {
-                    icon: "💰",
-                    title: "Transparent Pricing",
-                    description: "Competitive rates with no hidden costs or surprise fees"
-                  }
-                ].map((feature, index) => (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div className="text-3xl mb-4">{feature.icon}</div>
-                    <h4 className="text-lg font-semibold text-secondary mb-2">{feature.title}</h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* CTA Section */}
-          <div className={`text-center mt-16 transition-all duration-1000 ease-out delay-600 ${
-            aboutAnimation.isVisible 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-10'
-          }`}>
-            <Link to="/about">
-              <Button className="bg-secondary hover:bg-secondary/90 text-white px-10 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                Discover Our Story <ArrowRight className="ml-3 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Domestic Packages Section Preview */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
+         
+
           <div 
             ref={domesticPackagesAnimation.ref}
             className={`text-center mb-12 transition-all duration-1000 ease-out ${
@@ -144,8 +71,25 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">Domestic Packages</h2>
-            <p className="text-lg text-muted-foreground">Discover our handpicked domestic travel packages for unforgettable experiences</p>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">Explore India with JJ&Tia Tours and Travels</h2>
+            <p className="text-lg text-muted-foreground">Discover handpicked domestic travel packages across India. From hill stations to beaches, we make your holiday seamless and unforgettable.</p>
+          </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-center mb-8">
+            <div className="flex gap-4">
+              <Link to="/packages/domestic">
+                <Button className="bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <MapPin className="mr-2 h-4 w-4" />
+                  Domestic Packages
+                </Button>
+              </Link>
+              <Link to="/packages/international">
+                <Button variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <Plane className="mr-2 h-4 w-4" />
+                  International Packages
+                </Button>
+              </Link>
+            </div>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
             domesticPackagesAnimation.isVisible 
@@ -154,7 +98,8 @@ const Index = () => {
           }`}>
             {[
               {
-                title: "Sikkim Darjeeling Tour",
+                title: "Discover the Magic of Darjeeling & Sikkim",
+                subheader: "Himalayan Heritage & Tea Gardens",
                 duration: "6D/5N",
                 price: "₹24,999",
                 image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?auto=format&fit=crop&w=400&q=60",
@@ -162,7 +107,8 @@ const Index = () => {
                 type: "DOMESTIC"
               },
               {
-                title: "Meghalaya Adventure",
+                title: "Seven Sisters, One Epic Adventure",
+                subheader: "Northeast India's Natural Wonders",
                 duration: "4D/3N",
                 price: "₹16,500",
                 image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=60",
@@ -170,7 +116,8 @@ const Index = () => {
                 type: "DOMESTIC"
               },
               {
-                title: "Goa Beach Paradise",
+                title: "Leh Ladakh",
+                subheader: "High Altitude Desert Adventure",
                 duration: "5D/4N",
                 price: "₹18,999",
                 image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
@@ -188,9 +135,32 @@ const Index = () => {
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
+                
+                {/* Package Info Overlay */}
                 <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-secondary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
                   <div className="text-lg font-bold text-foreground group-hover:text-white">{pkg.title.toUpperCase()}</div>
+                  <div className="text-sm text-muted-foreground group-hover:text-white/80 mt-1">{pkg.subheader}</div>
+                  <div className="text-sm text-muted-foreground group-hover:text-white/80 mt-1">{pkg.duration} • {pkg.price}</div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <Button 
+                    size="sm" 
+                    className="bg-secondary hover:bg-secondary/90 text-white px-3 py-1 text-xs font-semibold rounded-lg shadow-lg"
+                    onClick={() => navigate('/contact')}
+                  >
+                    Book Now
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="bg-white hover:bg-gray-50 text-secondary border-secondary px-3 py-1 text-xs font-semibold rounded-lg shadow-lg"
+                    onClick={() => navigate('/packages/domestic')}
+                  >
+                    View Details
+                  </Button>
                 </div>
               </div>
             ))}
@@ -217,8 +187,8 @@ const Index = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">International Packages</h2>
-            <p className="text-lg text-muted-foreground">Discover our handpicked international travel packages for unforgettable experiences</p>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">International Tour Packages  Global Adventures with JJ&Tia Tours and Travels</h2>
+            <p className="text-lg text-muted-foreground">Explore Bhutan, Nepal, Vietnam, and more with our curated international travel packages. Stress-free planning, unforgettable experiences.</p>
           </div>
           <div className={`grid md:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300 ${
             internationalPackagesAnimation.isVisible 
@@ -228,26 +198,29 @@ const Index = () => {
             {[
               {
                 title: "Bhutan Family Tour",
+                subheader: "The Land of Happiness with JJ&Tia Tours and Travels",
                 duration: "5D/4N",
                 price: "₹29,999",
                 image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Explore the mystical kingdom of Bhutan with cultural heritage and natural beauty.",
+                description: "Experience Bhutan’s monasteries, valleys, and culture with our tailored travel packages. Comfort, culture, and scenic beauty in one trip.",
                 type: "INTERNATIONAL"
               },
               {
                 title: "Nepal Adventure Tour",
+                subheader: "Nepal Tour Packages Explore the Himalayas with JJ&Tia Tours and Travels.",
                 duration: "6D/5N",
                 price: "₹35,500",
                 image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Experience the majestic Himalayas and rich culture of Nepal.",
+                description: "From Everest views to cultural heritage, our Nepal packages offer unforgettable adventures. Perfectly planned for every traveller.",
                 type: "INTERNATIONAL"
               },
               {
-                title: "Bali Paradise Tour",
+                title: "Vietnam Tour Packages",
+                subheader: "Discover Southeast Asia with Traveller’s Paradise",
                 duration: "7D/6N",
                 price: "₹42,990",
                 image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-                description: "Discover the tropical paradise of Bali with pristine beaches and temples.",
+                description: "Sail Halong Bay, explore Hanoi, and taste Vietnam’s vibrant cuisine with our custom travel packages. Your journey, your way.",
                 type: "INTERNATIONAL"
               }
             ].map((pkg, index) => (
@@ -261,9 +234,32 @@ const Index = () => {
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <img src={pkg.image} alt={pkg.title} className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-700" />
+                
+                {/* Package Info Overlay */}
                 <div className="absolute bottom-4 left-4 bg-white rounded-xl px-6 py-4 shadow text-left group-hover:bg-secondary group-hover:text-white transition-all duration-300">
                   <div className="text-xs text-muted-foreground font-medium mb-1 group-hover:text-white/80">{pkg.type}</div>
                   <div className="text-lg font-bold text-foreground group-hover:text-white">{pkg.title.toUpperCase()}</div>
+                  <div className="text-sm text-muted-foreground group-hover:text-white/80 mt-1">{pkg.subheader}</div>
+                  <div className="text-sm text-muted-foreground group-hover:text-white/80 mt-1">{pkg.duration} • {pkg.price}</div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <Button 
+                    size="sm" 
+                    className="bg-secondary hover:bg-secondary/90 text-white px-3 py-1 text-xs font-semibold rounded-lg shadow-lg"
+                    onClick={() => navigate('/contact')}
+                  >
+                    Book Now
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="bg-white hover:bg-gray-50 text-secondary border-secondary px-3 py-1 text-xs font-semibold rounded-lg shadow-lg"
+                    onClick={() => navigate('/packages/international')}
+                  >
+                    View Details
+                  </Button>
                 </div>
               </div>
             ))}
@@ -299,10 +295,10 @@ const Index = () => {
               : 'opacity-0 translate-y-10'
           }`}>
             {[
-              { name: "Nepal", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Bali", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Bhutan", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
-              { name: "Goa", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Bhutan", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Nepal", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Darjeeling", type: "INTERNATIONAL", image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+              { name: "Sikkim", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
               { name: "Sikkim", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
               { name: "Andaman", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
               { name: "Darjeeling", type: "DOMESTIC", image: "https://images.unsplash.com/photo-1438565434616-3ef039228b15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
@@ -402,6 +398,83 @@ const Index = () => {
                 Read All Blogs
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4">
+          <div 
+            ref={aboutAnimation.ref}
+            className={`max-w-5xl mx-auto transition-all duration-1000 ease-out ${
+              aboutAnimation.isVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-10'
+            }`}
+          >
+            {/* Header Section */}
+            <div className="text-center mb-12">
+              <h2 className="text-5xl font-bold text-secondary mb-6">Why Choose Us as Your Travel Partner?</h2>
+              <p className="text-2xl text-secondary font-semibold mb-8">Because we don't just plan trips — we craft experiences.</p>
+              <p className="text-muted-foreground text-xl leading-relaxed mb-8 max-w-4xl mx-auto">
+                At JJ & Tia Tours and Travels, we believe that travel is personal. That's why every itinerary is thoughtfully designed with your interests, pace, and budget in mind — whether you're seeking spiritual calm in Bhutan, wildlife thrills in Chitwan, or serene sunsets in Sikkim.
+              </p>
+              <p className="text-xl font-medium text-secondary mb-12">Here's what sets us apart:</p>
+            </div>
+            
+            {/* Features Single Card */}
+            <div className="mb-12">
+              <div className={`bg-white rounded-2xl p-10 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${
+                aboutAnimation.isVisible 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-10'
+              }`}>
+                <div className="grid md:grid-cols-2 gap-8">
+                  {[
+                    {
+                      icon: "🗺️",
+                      title: "Local Expertise",
+                      description: "Our deep regional knowledge of Bhutan, Nepal, North East etc. ensures authentic, off-the-beaten-path experiences."
+                    },
+                    {
+                      icon: "✨",
+                      title: "Customized Itineraries",
+                      description: "No copy-paste tours. Every journey is tailored to you — your dreams, your pace, your story."
+                    },
+                    {
+                      icon: "🤝",
+                      title: "Reliable Support",
+                      description: "From your first inquiry to the last goodbye, our team is there — guiding, assisting, and making sure everything runs smoothly."
+                    },
+                    {
+                      icon: "🏠",
+                      title: "Handpicked Stays & Guides",
+                      description: "We choose cozy, clean accommodations and trusted local guides who speak your language and know the land."
+                    },
+                    {
+                      icon: "💎",
+                      title: "Transparent Pricing",
+                      description: "No hidden charges. No last-minute surprises. Just fair, honest travel."
+                    }
+                  ].map((feature, index) => (
+                    <div key={index} className="flex items-start space-x-4 group">
+                      <div className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">{feature.icon}</div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-secondary mb-2 flex items-center group-hover:text-primary transition-colors duration-300">
+                          <span className="text-green-500 mr-2 text-base">✅</span>
+                          {feature.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-foreground transition-colors duration-300">{feature.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            
+            
           </div>
         </div>
       </section>
@@ -506,6 +579,12 @@ const Index = () => {
           <Phone className="w-6 h-6" />
         </a>
       </div>
+
+      {/* Inquiry Form Popup */}
+      <InquiryFormPopup 
+        isOpen={showInquiryForm} 
+        onClose={() => setShowInquiryForm(false)} 
+      />
     </div>
   );
 };

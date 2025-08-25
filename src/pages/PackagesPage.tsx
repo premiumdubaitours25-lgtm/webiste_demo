@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, MapPin, Users, Eye, Phone, Filter } from "lucide-react";
+import { Clock, MapPin, Users, Eye, Phone, Filter, Plane } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import packageVideo from "@/assets/Package.mp4";
@@ -10,6 +10,10 @@ import BestPlaceSection from "@/components/BestPlaceSection";
 const PackagesPage = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<'all' | 'bhutan'>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priceRange, setPriceRange] = useState('');
+  const [durationFilter, setDurationFilter] = useState('');
+  const [destinationFilter, setDestinationFilter] = useState('');
 
   const packages = [
     {
@@ -757,11 +761,58 @@ const PackagesPage = () => {
     navigate('/contact');
   };
 
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setPriceRange('');
+    setDurationFilter('');
+    setDestinationFilter('');
+    setFilter('all');
+  };
+
   // Filter logic
-  const filteredPackages =
-    filter === 'bhutan'
-      ? packages.filter((pkg) => pkg.destination === "Bhutan")
-      : packages;
+  const filteredPackages = packages.filter((pkg) => {
+    // Basic filter for Bhutan
+    if (filter === 'bhutan' && pkg.destination !== "Bhutan") {
+      return false;
+    }
+    
+    // Search term filter
+    if (searchTerm && !pkg.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
+        !pkg.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !pkg.destination.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
+    
+    // Destination filter
+    if (destinationFilter && pkg.destination !== destinationFilter) {
+      return false;
+    }
+    
+    // Duration filter
+    if (durationFilter) {
+      const pkgDuration = pkg.duration.toLowerCase();
+      if (durationFilter === 'short' && !pkgDuration.includes('3n') && !pkgDuration.includes('4n')) {
+        return false;
+      }
+      if (durationFilter === 'medium' && !pkgDuration.includes('5n') && !pkgDuration.includes('6n')) {
+        return false;
+      }
+      if (durationFilter === 'long' && !pkgDuration.includes('7n') && !pkgDuration.includes('8n')) {
+        return false;
+      }
+    }
+    
+    // Price range filter
+    if (priceRange) {
+      const price = parseFloat(pkg.price.replace(/,/g, ''));
+      if (priceRange === 'under-20k' && price >= 20000) return false;
+      if (priceRange === '20k-50k' && (price < 20000 || price >= 50000)) return false;
+      if (priceRange === '50k-1l' && (price < 50000 || price >= 100000)) return false;
+      if (priceRange === 'above-1l' && price < 100000) return false;
+    }
+    
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-travel-light-bg">
@@ -780,38 +831,163 @@ const PackagesPage = () => {
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              Our <span className="text-primary">Packages</span>
+               <span className="text-primary">Discover, Explore, Experience</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              Discover amazing travel packages designed to create unforgettable memories
+            Carefully designed trips to match every mood, budget, and dream.
             </p>
+            
+            {/* Package Category Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+              <Link to="/packages/domestic">
+                <Button className="bg-secondary hover:bg-secondary/90 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <MapPin className="mr-3 h-5 w-5" />
+                  Domestic Packages
+                </Button>
+              </Link>
+              
+              <Link to="/packages/international">
+                <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <Plane className="mr-3 h-5 w-5" />
+                  International Packages
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Filter Buttons - Left aligned */}
-      <div className="container mx-auto px-4 mt-10 flex justify-start gap-3">
-        <Button
-          variant={filter === 'bhutan' ? "default" : "outline"}
-          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'bhutan' ? 'bg-primary text-white' : 'bg-white text-primary border-primary'}`}
-          onClick={() => setFilter('bhutan')}
-        >
-          Bhutan
-        </Button>
-        <Button
-          variant={filter === 'all' ? "default" : "outline"}
-          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'all' ? 'bg-primary text-white' : 'bg-white text-primary border-primary'}`}
-          onClick={() => setFilter('all')}
-        >
-          Show All
-        </Button>
-      </div>
+      {/* Search and Filter Section */}
+      <section className="py-8 bg-white shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-6 border border-primary/20">
+            <h2 className="text-2xl font-bold text-secondary mb-6 text-center">Find Your Perfect Package</h2>
+            
+            {/* Search Bar */}
+            <div className="mb-6">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search packages by title, description, or destination..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                />
+                <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              </div>
+            </div>
+
+            {/* Filter Options */}
+            <div className="grid md:grid-cols-4 gap-4 mb-6">
+              {/* Destination Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Destination</label>
+                <select
+                  value={destinationFilter}
+                  onChange={(e) => setDestinationFilter(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                >
+                  <option value="">All Destinations</option>
+                  <option value="Bhutan">Bhutan</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Nepal">Nepal</option>
+                  <option value="Bali">Bali</option>
+                </select>
+              </div>
+
+              {/* Duration Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+                <select
+                  value={durationFilter}
+                  onChange={(e) => setDurationFilter(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                >
+                  <option value="">All Durations</option>
+                  <option value="short">Short (3-4 Nights)</option>
+                  <option value="medium">Medium (5-6 Nights)</option>
+                  <option value="long">Long (7+ Nights)</option>
+                </select>
+              </div>
+
+              {/* Price Range Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <select
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                >
+                  <option value="">All Prices</option>
+                  <option value="under-20k">Under ₹20,000</option>
+                  <option value="20k-50k">₹20,000 - ₹50,000</option>
+                  <option value="50k-1l">₹50,000 - ₹1,00,000</option>
+                  <option value="above-1l">Above ₹1,00,000</option>
+                </select>
+              </div>
+
+              {/* Quick Filter Buttons */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Quick Filters</label>
+                <div className="flex gap-2">
+                  <Button
+                    variant={filter === 'bhutan' ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilter('bhutan')}
+                    className="text-xs"
+                  >
+                    Bhutan
+                  </Button>
+                  <Button
+                    variant={filter === 'all' ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilter('all')}
+                    className="text-xs"
+                  >
+                    All
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Results and Clear Filters */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="text-sm text-gray-600">
+                Showing <span className="font-semibold text-primary">{filteredPackages.length}</span> of <span className="font-semibold">{packages.length}</span> packages
+              </div>
+              <Button
+                variant="outline"
+                onClick={clearAllFilters}
+                className="border-primary text-primary hover:bg-primary hover:text-white transition-all"
+              >
+                Clear All Filters
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Packages Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPackages.map((pkg, index) => (
+          {filteredPackages.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">No packages found</h3>
+                <p className="text-gray-500 mb-6">
+                  Try adjusting your search criteria or filters to find more packages.
+                </p>
+                <Button onClick={clearAllFilters} className="bg-primary hover:bg-primary/90">
+                  Clear All Filters
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPackages.map((pkg, index) => (
               <Card key={pkg.id} className={`overflow-hidden hover-lift bg-white shadow-lg hover:shadow-xl transition-all duration-300 ${index % 2 === 0 ? 'slide-up' : 'scale-in'}`}>
                 <div className="relative">
                   <img 
@@ -887,7 +1063,8 @@ const PackagesPage = () => {
                 </CardFooter>
               </Card>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </section>
       

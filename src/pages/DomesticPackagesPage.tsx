@@ -6,11 +6,21 @@ import { Clock, MapPin, Users, Eye, Phone, Filter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import BestPlaceSection from "@/components/BestPlaceSection";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import PackageFilter from "@/components/PackageFilter";
 
 const DomesticPackagesPage = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<'all' | 'sikkim'>('all');
   const [isLoading, setIsLoading] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState({
+    destination: null,
+    priceRange: null,
+    tourDuration: [5, 13],
+    departBetween: { start: null, end: null },
+    departureCities: [],
+    tourType: null
+  });
   
   // Page-specific scroll animations
   const heroAnimation = useScrollAnimation(0.2, 'domestic-hero');
@@ -102,12 +112,54 @@ const DomesticPackagesPage = () => {
   };
 
   // Filter logic - memoized for better performance
-  const filteredPackages = React.useMemo(() => 
-    filter === 'sikkim'
-      ? domesticPackages.filter((pkg) => pkg.destination === "Sikkim")
-      : domesticPackages,
-    [filter]
-  );
+  const filteredPackages = React.useMemo(() => {
+    let filtered = domesticPackages;
+    
+    // Basic filter
+    if (filter === 'sikkim') {
+      filtered = filtered.filter((pkg) => pkg.destination === "Sikkim");
+    }
+    
+    // Advanced filters
+    if (advancedFilters.destination === 'india') {
+      filtered = filtered.filter((pkg) => pkg.type === "DOMESTIC");
+    }
+    
+    if (advancedFilters.priceRange) {
+      // Parse price range and filter accordingly
+      if (advancedFilters.priceRange.includes('₹35,000 - ₹1.5L')) {
+        filtered = filtered.filter((pkg) => {
+          const price = parseFloat(pkg.price.replace(/,/g, ''));
+          return price >= 35000 && price <= 150000;
+        });
+      } else if (advancedFilters.priceRange.includes('₹1.5L - ₹2.7L')) {
+        filtered = filtered.filter((pkg) => {
+          const price = parseFloat(pkg.price.replace(/,/g, ''));
+          return price >= 150000 && price <= 270000;
+        });
+      } else if (advancedFilters.priceRange.includes('₹2.7L - ₹3.9L')) {
+        filtered = filtered.filter((pkg) => {
+          const price = parseFloat(pkg.price.replace(/,/g, ''));
+          return price >= 270000 && price <= 390000;
+        });
+      } else if (advancedFilters.priceRange.includes('₹3.9L & above')) {
+        filtered = filtered.filter((pkg) => {
+          const price = parseFloat(pkg.price.replace(/,/g, ''));
+          return price >= 390000;
+        });
+      }
+    }
+    
+    if (advancedFilters.tourDuration) {
+      const [minDays, maxDays] = advancedFilters.tourDuration;
+      filtered = filtered.filter((pkg) => {
+        const duration = parseInt(pkg.duration.split('D')[0]);
+        return duration >= minDays && duration <= maxDays;
+      });
+    }
+    
+    return filtered;
+  }, [filter, advancedFilters]);
 
   return (
     <div className="min-h-screen bg-travel-light-bg">
@@ -139,26 +191,52 @@ const DomesticPackagesPage = () => {
         </div>
       </section>
 
-      {/* Filter Buttons */}
-      <div className="container mx-auto px-4 mt-10 flex justify-start gap-3">
-        <Button
-          variant={filter === 'sikkim' ? "default" : "outline"}
-          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'sikkim' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
-          onClick={() => setFilter('sikkim')}
-        >
-          Sikkim
-        </Button>
-        <Button
-          variant={filter === 'all' ? "default" : "outline"}
-          className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'all' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
-          onClick={() => setFilter('all')}
-        >
-          Show All
-        </Button>
-      </div>
+      {/* Filter Section */}
+      <div className="container mx-auto px-4 mt-10">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Filter Sidebar */}
+          <div className="lg:w-80">
+            <div className="lg:hidden mb-4">
+              <Button
+                onClick={() => setShowFilters(!showFilters)}
+                variant="outline"
+                className="w-full flex items-center gap-2"
+              >
+                <Filter className="h-4 w-4" />
+                {showFilters ? 'Hide Filters' : 'Show Filters'}
+              </Button>
+            </div>
+            
+            <div className={`lg:block ${showFilters ? 'block' : 'hidden'}`}>
+              <PackageFilter
+                onFilterChange={setAdvancedFilters}
+                className="sticky top-6"
+              />
+            </div>
+          </div>
 
-      {/* Packages Grid */}
-      <section className="py-20">
+          {/* Main Content */}
+          <div className="lg:flex-1">
+            {/* Basic Filter Buttons */}
+            <div className="flex justify-start gap-3 mb-6">
+              <Button
+                variant={filter === 'sikkim' ? "default" : "outline"}
+                className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'sikkim' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
+                onClick={() => setFilter('sikkim')}
+              >
+                Sikkim
+              </Button>
+              <Button
+                variant={filter === 'all' ? "default" : "outline"}
+                className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'all' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
+                onClick={() => setFilter('all')}
+              >
+                Show All
+              </Button>
+            </div>
+
+            {/* Packages Grid */}
+            <section className="py-20">
         <div 
           ref={packagesAnimation.ref}
           className={`container mx-auto px-4 transition-all duration-1000 ease-out ${
@@ -258,7 +336,10 @@ const DomesticPackagesPage = () => {
           </div>
           )}
         </div>
-      </section>
+            </section>
+          </div>
+        </div>
+      </div>
       
       {/* Best Place Section */}
       <BestPlaceSection 

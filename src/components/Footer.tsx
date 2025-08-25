@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/image-Photoroom.png";
 
 const Footer = () => {
@@ -16,22 +17,42 @@ const Footer = () => {
             <p className="text-white/80 leading-relaxed">
               At JJ & TIA Tours and Travels, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep understanding of what makes travel truly memorable.
             </p>
-            <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
-              Read More
-            </Button>
+            <Link to="/about">
+              <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
+                Read More
+              </Button>
+            </Link>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-white">Quick Links</h3>
             <ul className="space-y-3">
-              {["Home", "About Us", "Blogs", "Refund & Cancellation Policy", "Term & Condition"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-white/80 hover:text-white transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link to="/" className="text-white/80 hover:text-white transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-white/80 hover:text-white transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/blogs" className="text-white/80 hover:text-white transition-colors">
+                  Blogs
+                </Link>
+              </li>
+              <li>
+                <Link to="/refund-policy" className="text-white/80 hover:text-white transition-colors">
+                  Refund & Cancellation Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-white/80 hover:text-white transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -90,12 +111,24 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center space-x-4">
-              <Button className="bg-green-500 hover:bg-green-600 text-white">
-                WhatsApp
-              </Button>
-              <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
-                Call Me
-              </Button>
+              <a
+                href="https://wa.me/91970393335"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+              >
+                <Button className="bg-green-500 hover:bg-green-600 text-white">
+                  WhatsApp
+                </Button>
+              </a>
+              <a
+                href="tel:91970393335"
+                className="inline-block"
+              >
+                <Button variant="outline" className="border-background text-black hover:bg-background hover:text-foreground">
+                  Call Me
+                </Button>
+              </a>
             </div>
           </div>
           
