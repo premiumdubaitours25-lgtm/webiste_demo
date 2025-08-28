@@ -814,13 +814,12 @@ const PackageDetailPage = () => {
     price: "29,999.00",
     originalPrice: "35,000.00",
     discount: "14% OFF",
-    mainImage: "/src/assets/nepal/Chitwan National park Chitwan .jpg",
+    mainImage: "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375154/Chitwan_National_park_Chitwan_k9wg0p.jpg",
     gallery: [
-      "/src/assets/nepal/Chitwan National park Chitwan .jpg",
-      "/src/assets/nepal/Chitwan National park Chitwan 2.jpg",
-      "/src/assets/nepal/Chitwan National park Chitwan 3.jpg",
-      "/src/assets/nepal/Chitwan National park Chitwan 4.jpg",
-      "/src/assets/nepal/Terai plains Chitwan .jpg"
+      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375154/Chitwan_National_park_Chitwan_k9wg0p.jpg",
+      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375155/Chitwan_National_park_Chitwan_2_m06pam.jpg",
+      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375155/Chitwan_National_park_Chitwan_3_efn9bq.jpg",
+      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375155/Terai_plains_Chitwan_fe62ov.jpg"
     ],
     highlights: ["Pokhara & Kathmandu", "Lumbini - Birthplace of Buddha", "Chitwan National Park", "Himalayan Views", "Cultural Heritage", "Fewa Lake", "Ancient Temples"],
     itinerary: [

@@ -35,7 +35,7 @@ const InternationalPackagesPage = () => {
       price: "29,999.00",
       originalPrice: "35,000.00",
       discount: "14% OFF",
-      image: "/src/assets/nepal/Chitwan National park Chitwan .jpg",
+      image: "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375154/Chitwan_National_park_Chitwan_k9wg0p.jpg",
       highlights: ["Pokhara & Kathmandu", "Lumbini - Birthplace of Buddha", "Chitwan National Park", "Himalayan Views", "Cultural Heritage"],
       type: "INTERNATIONAL"
     },
