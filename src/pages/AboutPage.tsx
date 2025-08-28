@@ -7,22 +7,22 @@ import BestPlaceSection from "@/components/BestPlaceSection";
 const AboutPage = () => {
   const teamMembers = [
     {
-      name: "John Johnson",
+      name: "Anita Chettri",
       role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-      description: "Travel enthusiast with 15+ years of experience in the tourism industry."
-    },
-    {
-      name: "Tia Anderson",
-      role: "Travel Director",
       image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-      description: "Expert in crafting personalized travel experiences and cultural tours."
+      description: "Co-founder with a passion for creating seamless and personalized travel experiences."
     },
     {
-      name: "David Chen",
-      role: "Operations Manager",
+      name: "Sabya Chettri",
+      role: "Founder & Travel Director",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+      description: "Co-founder specializing in crafting memorable journeys with insider knowledge and personal care."
+    },
+    {
+      name: "Travel Team",
+      role: "Operations & Support",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-      description: "Ensures seamless travel operations and customer satisfaction."
+      description: "Dedicated professionals ensuring seamless travel operations and exceptional customer satisfaction."
     }
   ];
 
@@ -91,8 +91,11 @@ const AboutPage = () => {
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
               About <span className="text-secondary">JJ & TIA Tours</span>
             </h1>
+            <p className="text-2xl text-white/90 max-w-4xl mx-auto font-semibold mb-4">
+              "Travel with Heart, Explore with Us"
+            </p>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              Crafting unique and personalized travel experiences that take you beyond the ordinary
+              Founded by two sisters, JJ & Tia Tours and Travels turns your holidays into memorable journeys across Bhutan, Nepal, India, and beyond. Every trip is personal, seamless, and unforgettable.
             </p>
           </div>
         </div>
@@ -107,13 +110,16 @@ const AboutPage = () => {
                 Our Story
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Founded in 2019, JJ & TIA Tours and Travels was born from a simple yet powerful vision: to make extraordinary travel experiences accessible to everyone. What started as a passion project between two travel enthusiasts has grown into a trusted name in the travel industry.
+                JJ & Tia Tours and Travels was born out of a shared passion for exploring the world and creating unforgettable experiences. Founded 5 years ago by two sisters, Anita and Sabya Chettri, our journey began with a simple idea: to make travel seamless, personalized, and memorable for every traveler.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Our founders, John and Tia, met during a backpacking trip through Southeast Asia. Their shared love for authentic travel experiences and cultural immersion led them to create a company that would help others discover the world in meaningful ways.
+                What started as a dream has now blossomed into a trusted travel company, offering carefully crafted itineraries across Bhutan, Nepal, India, Vietnam, and beyond. Being sisters, we bring a unique blend of personal care, attention to detail, and insider knowledge, ensuring that every trip feels like a journey with family.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Today, we've helped over 500 travelers explore more than 50 destinations across the globe, each journey carefully crafted to create lasting memories and meaningful connections.
+                At JJ & Tia Tours and Travels, we believe that travel is more than sightseeing—it's about experiencing culture, connecting with nature, and creating memories that last a lifetime. For us, every traveler is part of our extended family, and every journey is a story waiting to be told.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Join us, and let's turn your holidays into lifelong memories.
               </p>
             </div>
             

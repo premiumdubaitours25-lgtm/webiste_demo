@@ -348,7 +348,7 @@ const PackageDetailPage = () => {
       }
     ],
     detailedInfo: {
-      companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+      companyDescription: "JJ & TIA Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget. \"Discover more on our official website- just a click away!\" JJ&Tia Tours and Travels | Book Your Tour Package Now.",
       services: [
         "Customized travel planning",
         "Guided tours & local experiences", 
@@ -804,8 +804,200 @@ const PackageDetailPage = () => {
     ]
   };
 
-  // Use the appropriate Bhutan package data based on ID, otherwise use mock data
-  const packageData = id === "1" ? bhutanPackage1 : id === "2" ? bhutanPackage2 : id === "3" ? bhutanPackage3 : id === "4" ? bhutanPackage4 : {
+  // Nepal Package Data for ID 1 (4N/5D)
+  const nepalPackage1 = {
+    id: 1,
+    title: "Nepal 3-Star Tour for 4 Nights / 5 Days",
+    description: "Discover the enchanting beauty of Nepal with our comprehensive 4N/5D tour covering Pokhara & Kathmandu. Experience the birthplace of Lord Buddha, stunning Himalayan views, and rich cultural heritage.",
+    duration: "4N/5D",
+    destination: "Nepal",
+    price: "29,999.00",
+    originalPrice: "35,000.00",
+    discount: "14% OFF",
+    mainImage: "/src/assets/nepal/Chitwan National park Chitwan .jpg",
+    gallery: [
+      "/src/assets/nepal/Chitwan National park Chitwan .jpg",
+      "/src/assets/nepal/Chitwan National park Chitwan 2.jpg",
+      "/src/assets/nepal/Chitwan National park Chitwan 3.jpg",
+      "/src/assets/nepal/Chitwan National park Chitwan 4.jpg",
+      "/src/assets/nepal/Terai plains Chitwan .jpg"
+    ],
+    highlights: ["Pokhara & Kathmandu", "Lumbini - Birthplace of Buddha", "Chitwan National Park", "Himalayan Views", "Cultural Heritage", "Fewa Lake", "Ancient Temples"],
+    itinerary: [
+      {
+        day: "Day 1",
+        title: "Gorakhpur to Pokhara - Transfer Enroute Sightseen Lumbini",
+        description: "Post Breakfast in the Morning, Leave By Road for Sunouli. It is An Important Border Crossing Between India and Nepal. Later, Enjoy Sightseeing At Sunouli. Later, Continue with Your Drive Towards Lumbini-the Birth Place of Lord Buddha.",
+        activities: ["Border crossing", "Lumbini sightseeing", "Bodhi Tree & Pond", "Ashoka Pillar", "Transfer to Pokhara"]
+      },
+      {
+        day: "Day 2",
+        title: "Pokhara - Full Day Sightseeing",
+        description: "Start your day with an early breakfast at your hotel, preparing yourself for an exciting day ahead. Explore the natural and cultural beauty of Pokhara.",
+        activities: ["Bindebasini Temple", "Mahendra Cave", "Gorakha Museum", "Gupteshwar Cave", "David's Waterfall", "Fewa Lake"]
+      },
+      {
+        day: "Day 3",
+        title: "Pokhara to Kathmandu - Transfer Enroute Sightseen",
+        description: "Early Morning breakfast check out hotel. You will drive to Kathmandu is 210 kms from Pokhara and is a 7 hours' drive approx.",
+        activities: ["Hotel checkout", "River rafting option", "Manakamana Temple", "Transfer to Kathmandu"]
+      },
+      {
+        day: "Day 4",
+        title: "Kathmandu - Full Day Sightseeing",
+        description: "Early morning breakfast - Guest start the sightseeing tour in few major places in Kathmandu.",
+        activities: ["Swayambhunath Stupa", "Boudhanath Stupa", "Pashupatinath Temple", "Kathmandu Durbar Square", "Hanuman Dhoka"]
+      },
+      {
+        day: "Day 5",
+        title: "Kathmandu to Gorakhpur - Transfer Enroute Sightseen",
+        description: "Early Morning after breakfast check out of the hotel. You Will Drive to Kathmandu to Gorakhpur on 365km/9-10hrs.",
+        activities: ["Hotel checkout", "River rafting option", "Manakamana Temple", "Return transfer"]
+      }
+    ],
+    inclusions: [
+      "Meal As Specified",
+      "Transfer: Arrival / Departure and Day wise Sightseeing as Mentioned",
+      "Cabs : Normal/AC",
+      "All Parking, Toll and Driver Charges",
+      "Permit Charges Nepal",
+      "Accommodation on Twin/Triple Sharing Basis",
+      "Assistance by Trip advisor during the Trip"
+    ],
+    exclusions: [
+      "Insurance Fee",
+      "Train fare/Air Fare",
+      "Monuments entrance fees as applicable & payable fee on the spot",
+      "Manakamana Cable car ticket",
+      "Boat ride fee on Fewa Lake",
+      "Personal expenses, tipping and any other services which are not mentioned in the above inclusion"
+    ],
+    reviews: [
+      {
+        name: "Anita Sharma",
+        rating: 5,
+        comment: "Incredible Nepal experience! The tour was perfectly organized with amazing sights from Lumbini to the Himalayas."
+      },
+      {
+        name: "Rajesh Kumar",
+        rating: 5,
+        comment: "Fantastic service and great value for money. Our Nepal tour was unforgettable with JJ&Tia Tours!"
+      },
+      {
+        name: "Priya Singh",
+        rating: 5,
+        comment: "Professional team with excellent attention to detail. Highly recommend for family trips to Nepal!"
+      }
+    ],
+    detailedInfo: {
+      companyDescription: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels (sister company of Travellers Paradise: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings), we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade. Whether you're looking for a serene getaway in the mountains, an exciting cultural immersion in bustling cities, or a relaxing beach vacation, our team of experienced travel experts is dedicated to curating the perfect trip tailored to your interests and desires. We handle all the details—from flights and accommodations to excursions and local experiences—so you can focus on enjoying the journey. At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget. \"Discover more on our official website- just a click away!\" JJ&Tia Tours and Travels | Book Your Tour Package Now.",
+      services: [
+        "Customized travel planning",
+        "Guided tours & local experiences",
+        "Group & family vacations",
+        "Luxury & adventure travel",
+        "Honeymoons & romantic getaways",
+        "Corporate & incentive travel"
+      ],
+      destinations: ["Pokhara", "Kathmandu", "Lumbini"],
+      transportation: {
+        inNepal: "Sedan (For Sightseeing)",
+        transfers: "Using Sedan transfers from Gorakhpur"
+      },
+      tourDetails: {
+        duration: "4N/5D",
+        travelers: "02 Adults",
+        hotelCategory: "3 Star",
+        mealPlan: "Breakfast Only",
+        month: "Aug-Dec"
+      },
+      hotels: [
+        {
+          city: "Pokhara",
+          hotel: "Hotel Muktinath or Similar",
+          rooms: "1 Room",
+          roomType: "1 Deluxe Room NAC",
+          nights: "02"
+        },
+        {
+          city: "Kathmandu",
+          hotel: "Kailash or Similar",
+          rooms: "1 Room",
+          roomType: "1 Deluxe Room NAC",
+          nights: "02"
+        }
+      ],
+      dayDetails: {
+        day1: {
+          title: "Gorakhpur to Pokhara - Transfer Enroute Sightseen Lumbini",
+          points: [
+            "Post Breakfast in the Morning, Leave By Road for Sunouli. It is An Important Border Crossing Between India and Nepal.",
+            "Later, Enjoy Sightseeing At Sunouli. Later, Continue with Your Drive Towards Lumbini-the Birth Place of Lord Buddha.",
+            "There are Several 'world Heritage Sites' Which Has Lots to Offer for Sightseeing Which Include Visiting Bodhi Tree & Pond, Ashoka Pillar, Pillar Edict for Ashoka, Eternal Peace Flame, Lumbini Garden, Burmese Lokamani Kala Pagoda and Chinese Maitreya Temple.",
+            "Finally, Head Towards Pokhara. Stay Overnight At the Hotel in Pokhara.",
+            "Approx. Distance: 350 km"
+          ]
+        },
+        day2: {
+          title: "Pokhara - Full Day Sightseeing",
+          points: [
+            "Start your day with an early breakfast at your hotel, preparing yourself for an exciting day ahead. After breakfast, get ready to explore the natural and cultural beauty of Pokhara.",
+            "Bindebasini Temple: Located around 7 kilometers (approximately 20 minutes) from Lakeside, the Vindhyasini Temple is a peaceful site perched on a hill. The temple is dedicated to Goddess Vindhyavasini and offers a serene atmosphere, making it a peaceful start to the day.",
+            "Mahendra Cave: It is just 3 km (around 10 minutes) from Vindhyasini Temple. This limestone cave is a marvel of nature. Inside, you will find fascinating stalactites and stalagmites.",
+            "Gorakha Museum: About 15 minutes from Mahendra Cave, the Gorakha Museum is located near the old Bazaar. The museum showcases the rich cultural and historical heritage of the region.",
+            "Gupteshwar Cave: A quick 10-minute drive (3 km) from the museum will bring you to Gupteshwar Cave. This cave, dedicated to Lord Shiva, is a revered site for pilgrims.",
+            "David's Waterfall: A short 5-minute drive (2 km) from Gupteshwar Cave. David's Waterfall, also known as Devi's Fall, is one of Pokhara's most famous natural sites.",
+            "Fewa Lake – Lakeside Area: Located just 5 minutes (1.5 km) from the waterfall, Fewa Lake is at the heart of Pokhara's tourist activity. Evening free to stroll around the area. Night stay at Pokhara. Approx. Distance: 40 km."
+          ]
+        },
+        day3: {
+          title: "Pokhara to Kathmandu - Transfer Enroute Sightseen",
+          points: [
+            "Early Morning breakfast check out hotel. You will drive to Kathmandu is 210 kms from Pokhara and is a 7 hours' drive approx.",
+            "In good weather there are splendid views right from the hotel. On the way you have an option of doing river rafting or visit the Manakamana Temple \"Goddess of Fulfilling Wishes\" where you are taken by a cable ride (at extra cost) of 9 mins.",
+            "Once you reach Kathmandu, check-in to your hotel and relax for some time. Overnight stay at Kathmandu.",
+            "Approx. Distance: 250 km"
+          ]
+        },
+        day4: {
+          title: "Kathmandu - Full Day Sightseeing",
+          points: [
+            "Early morning breakfast - Guest start the sightseeing tour in few major places in Kathmandu like:",
+            "Swayambhunath (Monkey Temple): One of the most iconic and ancient stupas in Kathmandu, also known as the Monkey Temple due to the large population of monkeys that roam the area. The stupa sits atop a hill, offering sweeping views of the Kathmandu Valley.",
+            "Boudhanath Stupa: This massive, ancient stupa is one of the largest in Nepal and a UNESCO World Heritage Site. It stands as a central point of Tibetan Buddhism in Nepal.",
+            "Pashupatinath Temple: One of the holiest Hindu temples in the world, this ancient temple complex is dedicated to Lord Shiva. Situated along the Bagmati River, it attracts thousands of pilgrims and tourists each year.",
+            "Kathmandu Durbar Square: Begin your exploration at the Hanuman Dhoka Palace area, which served as the royal residence for the Malla Kings. This grand structure showcases stunning traditional Nepali architecture.",
+            "As the evening light softens, take a leisurely walk around the bustling local bazaars that surround Kathmandu Durbar Square. Night stay at Kathmandu."
+          ]
+        },
+        day5: {
+          title: "Kathmandu to Gorakhpur - Transfer Enroute Sightseen",
+          points: [
+            "Early Morning after breakfast check out of the hotel. You Will Drive to Kathmandu to Gorakhpur on 365km/9-10hrs.",
+            "On the way you have an Option of doing river rafting or visit the Manakamana Temple \"Goddess of Fulfilling Wishes\" where you are taken by a cable ride (at extra cost) of 9 mins.",
+            "Once you reach Kathmandu, check-in to your hotel and relax for some time. On arrival you will be transferred to the airport/railway station to board the flight/Train back to home.",
+            "Approx. Distance: 400 km"
+          ]
+        }
+      },
+      packageCost: "XXXX/- Per Person",
+      contactInfo: {
+        address: "Nyati Estate, Mohammadwadi, Pune, 411060",
+        phone: "+91 9970393335",
+        email: "shneiur.joseph@jjtia.com"
+      },
+      importantNotes: [
+        "Standard check-in time at the hotel is normally 2:00 pm and check-out is 11:00 am. An early check-in or a late check-out is solely based on the discretion of the hotel.",
+        "A maximum of 3 adults are allowed in one room. The third occupant shall be provided a mattress/rollaway bed with extra charges.",
+        "The itinerary can be modified as per your requirement.",
+        "Please note and be informed that there will be no refund of money after the packages commences and if one cannot complete activity or get sick enroute.",
+        "The above-mentioned hotels will be confirmed as per the room availability. Otherwise, a similar category hotel will be provided. All the rooms are base category."
+      ]
+    }
+  };
+
+  // Use the appropriate package data based on ID, otherwise use mock data
+  const packageData = id === "1" ? nepalPackage1 : id === "2" ? bhutanPackage1 : id === "3" ? bhutanPackage2 : id === "4" ? bhutanPackage3 : id === "5" ? bhutanPackage4 : {
     id: 2,
     title: "4 NIGHTS 5 DAYS BHUTAN FAMILY TOUR PACKAGES",
     description: "The Bhutan Family Tour Packages offer a blend of cultural heritage, natural beauty, and adventure, perfect for families looking to explore this mystical kingdom. With stops in Paro, Thimphu, and Punakha, this comprehensive tour provides an authentic experience of Bhutan's rich culture and stunning landscapes.",
@@ -1071,15 +1263,17 @@ const PackageDetailPage = () => {
             )}
 
             {/* Transportation Details - Only for Bhutan Package */}
-            {(id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo && (
+            {(id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Transportation</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">In Bhutan</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">In {packageData.destination}</h3>
                     <div className="flex items-center text-gray-600">
                       <Car className="h-4 w-4 mr-2" />
-                      {packageData.detailedInfo.transportation.inBhutan}
+                      {'inBhutan' in packageData.detailedInfo.transportation 
+                        ? packageData.detailedInfo.transportation.inBhutan 
+                        : packageData.detailedInfo.transportation.inNepal}
                     </div>
                   </div>
                   <div>
@@ -1094,7 +1288,7 @@ const PackageDetailPage = () => {
             )}
 
             {/* Hotels Information - Only for Bhutan Package */}
-            {(id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo && (
+            {(id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Accommodation</h2>
                 <div className="overflow-x-auto">
@@ -1125,7 +1319,7 @@ const PackageDetailPage = () => {
             )}
 
             {/* Detailed Itinerary - Only for Bhutan Package */}
-            {(id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo && (
+            {(id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Detailed Itinerary</h2>
                 <div className="space-y-6">
@@ -1144,7 +1338,7 @@ const PackageDetailPage = () => {
             )}
 
             {/* Regular Itinerary for other packages */}
-            {id !== "1" && id !== "2" && id !== "3" && id !== "4" && (
+            {id !== "2" && id !== "3" && id !== "4" && id !== "5" && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Itinerary</h2>
                 <div className="space-y-6">
@@ -1168,7 +1362,7 @@ const PackageDetailPage = () => {
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Included</h2>
                 <ul className="space-y-2">
-                  {((id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.inclusions : packageData.inclusions)?.map((item, index) => (
+                  {((id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.inclusions : packageData.inclusions)?.map((item, index) => (
                     <li key={index} className="flex items-start text-gray-600">
                       <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                       <span>{item}</span>
@@ -1179,7 +1373,7 @@ const PackageDetailPage = () => {
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Not Included</h2>
                 <ul className="space-y-2">
-                  {((id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.exclusions : packageData.exclusions)?.map((item, index) => (
+                  {((id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.exclusions : packageData.exclusions)?.map((item, index) => (
                     <li key={index} className="flex items-start text-gray-600">
                       <div className="h-4 w-4 text-red-500 mr-2 mt-0.5 flex-shrink-0">×</div>
                       <span>{item}</span>
@@ -1190,7 +1384,7 @@ const PackageDetailPage = () => {
             </div>
 
             {/* Important Notes - Only for Bhutan Package */}
-            {(id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo && (
+            {(id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Important Notes</h2>
                 <ul className="space-y-2">
@@ -1205,7 +1399,7 @@ const PackageDetailPage = () => {
             )}
 
             {/* Contact Information - Only for Bhutan Package */}
-            {(id === "1" || id === "2" || id === "3" || id === "4") && 'detailedInfo' in packageData && packageData.detailedInfo && (
+            {(id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
                 <div className="grid md:grid-cols-2 gap-6">
@@ -1229,7 +1423,7 @@ const PackageDetailPage = () => {
                       <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Package Cost</h3>
                     <div className="text-2xl font-bold text-primary">{packageData.detailedInfo.packageCost}</div>
-                    <p className="text-sm text-gray-500 mt-1">Includes cost for {id === "1" ? "4 Adults" : "02 Adults + 1 Child (9 Yrs)"}</p>
+                    <p className="text-sm text-gray-500 mt-1">Includes cost for {id === "2" ? "4 Adults" : "02 Adults + 1 Child (9 Yrs)"}</p>
                   </div>
                 </div>
                             </div>

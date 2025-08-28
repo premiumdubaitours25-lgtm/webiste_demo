@@ -10,12 +10,12 @@ import PackageFilter from "@/components/PackageFilter";
 
 const InternationalPackagesPage = () => {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<'all' | 'bhutan'>('all');
+  const [filter, setFilter] = useState<'all' | 'bhutan' | 'nepal'>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [advancedFilters, setAdvancedFilters] = useState({
     destination: null,
     priceRange: null,
-    tourDuration: [5, 13],
+    tourDuration: [1, 15],
     departBetween: { start: null, end: null },
     departureCities: [],
     tourType: null
@@ -28,6 +28,19 @@ const InternationalPackagesPage = () => {
   const internationalPackages = [
     {
       id: 1,
+      title: "Nepal 3-Star Tour for 4 Nights / 5 Days",
+      description: "Discover the enchanting beauty of Nepal with our comprehensive 4N/5D tour covering Pokhara & Kathmandu. Experience the birthplace of Lord Buddha, stunning Himalayan views, and rich cultural heritage.",
+      duration: "4N/5D",
+      destination: "Nepal",
+      price: "29,999.00",
+      originalPrice: "35,000.00",
+      discount: "14% OFF",
+      image: "/src/assets/nepal/Chitwan National park Chitwan .jpg",
+      highlights: ["Pokhara & Kathmandu", "Lumbini - Birthplace of Buddha", "Chitwan National Park", "Himalayan Views", "Cultural Heritage"],
+      type: "INTERNATIONAL"
+    },
+    {
+      id: 2,
       title: "Bhutan Tour for 3 Nights / 4 Days",
       description: "Experience the mystical kingdom of Bhutan with our comprehensive 3N/4D tour covering Thimphu & Paro. This package includes guided tours, local experiences, and cultural immersion in the Land of Happiness.",
       duration: "3N/4D",
@@ -40,7 +53,7 @@ const InternationalPackagesPage = () => {
       type: "INTERNATIONAL"
     },
     {
-      id: 2,
+      id: 3,
       title: "Bhutan Tour for 4 Nights / 5 Days",
       description: "Experience the mystical kingdom of Bhutan with our comprehensive 4N/5D tour covering Phuentsholing, Thimphu & Paro. This extended package includes guided tours, local experiences, and cultural immersion in the Land of Happiness.",
       duration: "4N/5D",
@@ -53,7 +66,7 @@ const InternationalPackagesPage = () => {
       type: "INTERNATIONAL"
     },
     {
-      id: 3,
+      id: 4,
       title: "Bhutan Tour for 4 Nights / 5 Days - Budget",
       description: "Experience the mystical kingdom of Bhutan with our comprehensive 4N/5D tour covering Phuentsholing, Thimphu & Paro. This package includes guided tours, local experiences, and cultural immersion in the Land of Happiness.",
       duration: "4N/5D",
@@ -66,7 +79,7 @@ const InternationalPackagesPage = () => {
       type: "INTERNATIONAL"
     },
     {
-      id: 4,
+      id: 5,
       title: "EXPLORE THE ENCHANTING KINGDOM OF BHUTAN – 5N/6D",
       description: "Discover Bhutan – The Land of Happiness! Embark on a magical journey to Bhutan, a land where stunning landscapes, ancient monasteries, and vibrant culture come together to create an unforgettable experience.",
       duration: "6D/5N",
@@ -79,7 +92,7 @@ const InternationalPackagesPage = () => {
       type: "INTERNATIONAL"
     },
     {
-      id: 5,
+      id: 6,
       title: "50% OFF BUDGET FRIENDLY BHUTAN TOUR: DISCOVER PARO, THIMPHU, & PUNAKHA 4N/5D",
       description: "Experience an all-inclusive 5-Day Bhutan Tour, covering Thimphu, Paro, and Punakha, with rich cultural insights and stunning natural beauty. Bhutan, the last Himalayan kingdom, veiled in mystery and magic.",
       duration: "5D/4N",
@@ -87,12 +100,12 @@ const InternationalPackagesPage = () => {
       price: "22,500.00",
       originalPrice: "45,000.00",
       discount: "50% OFF",
-      image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=60",
+      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=400&q=60",
       highlights: ["Punakha Dzong", "Buddha Dordenma", "Weekend Markets", "Fortress Visits"],
       type: "INTERNATIONAL"
     },
     {
-      id: 6,
+      id: 7,
       title: "Bhutan Luxury Experience - 6 Nights",
       description: "Premium Bhutan tour with luxury accommodations, private guides, and exclusive experiences. Visit the most beautiful monasteries, enjoy traditional Bhutanese hospitality, and create memories that last a lifetime.",
       duration: "6D/5N",
@@ -100,7 +113,7 @@ const InternationalPackagesPage = () => {
       price: "75,000.00",
       originalPrice: "95,000.00",
       discount: "21% OFF",
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=400&q=60",
+      image: "https://images.unsplash.com/photo-1500673922987-e212871f0ed716?auto=format&fit=crop&w=400&q=60",
       highlights: ["Luxury Accommodations", "Private Guides", "Exclusive Experiences", "Traditional Hospitality"],
       type: "INTERNATIONAL"
     }
@@ -117,6 +130,8 @@ const InternationalPackagesPage = () => {
     // Basic filter
     if (filter === 'bhutan') {
       filtered = filtered.filter((pkg) => pkg.destination === "Bhutan");
+    } else if (filter === 'nepal') {
+      filtered = filtered.filter((pkg) => pkg.destination === "Nepal");
     }
     
     // Advanced filters
@@ -152,11 +167,19 @@ const InternationalPackagesPage = () => {
     if (advancedFilters.tourDuration) {
       const [minDays, maxDays] = advancedFilters.tourDuration;
       filtered = filtered.filter((pkg) => {
-        const duration = parseInt(pkg.duration.split('D')[0]);
+        // Handle different duration formats: "4N/5D", "5D/4N", "3N/4D"
+        let duration = 0;
+        if (pkg.duration.includes('D')) {
+          const dayMatch = pkg.duration.match(/(\d+)D/);
+          if (dayMatch) {
+            duration = parseInt(dayMatch[1]);
+          }
+        }
         return duration >= minDays && duration <= maxDays;
       });
     }
     
+    console.log('Filter:', filter, 'Filtered packages:', filtered.length, 'All packages:', internationalPackages.length);
     return filtered;
   }, [filter, advancedFilters]);
 
@@ -218,6 +241,13 @@ const InternationalPackagesPage = () => {
           <div className="lg:flex-1">
             {/* Basic Filter Buttons */}
             <div className="flex justify-start gap-3 mb-6">
+              <Button
+                variant={filter === 'nepal' ? "default" : "outline"}
+                className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'nepal' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
+                onClick={() => setFilter('nepal')}
+              >
+                Nepal
+              </Button>
               <Button
                 variant={filter === 'bhutan' ? "default" : "outline"}
                 className={`flex items-center gap-2 rounded-full px-6 py-2 text-base font-semibold shadow-md ${filter === 'bhutan' ? 'bg-secondary text-white' : 'bg-white text-secondary border-secondary'}`}
