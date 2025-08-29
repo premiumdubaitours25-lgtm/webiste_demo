@@ -1,7 +1,6 @@
 import { Users, MapPin, Award, Heart, Globe, Shield, Clock, Star, CheckCircle, Phone, Mail, MapPin as LocationPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import aboutVideo from "@/assets/About.mp4";
 import BestPlaceSection from "@/components/BestPlaceSection";
 
 const AboutPage = () => {
@@ -79,7 +78,7 @@ const AboutPage = () => {
         {/* Background Video */}
         <video
           className="absolute inset-0 w-full h-full object-cover z-0"
-          src={aboutVideo}
+          src="https://res.cloudinary.com/dflzbvz9i/video/upload/v1756455913/277097_small_mbub0k.mp4"
           autoPlay
           loop
           muted

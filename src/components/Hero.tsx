@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import homeVideo from "@/assets/home.mp4";
 
 const Hero = () => {
   return (
@@ -8,7 +7,7 @@ const Hero = () => {
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src={homeVideo}
+        src="https://res.cloudinary.com/dflzbvz9i/video/upload/v1756455931/140036-774012838_small_fduxuj.mp4"
         autoPlay
         loop
         muted
