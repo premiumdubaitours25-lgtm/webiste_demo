@@ -1361,7 +1361,7 @@ const PackageDetailPage = () => {
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Included</h2>
                 <ul className="space-y-2">
-                  {((id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.inclusions : packageData.inclusions)?.map((item, index) => (
+                  {((id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.inclusions : ('inclusions' in packageData ? packageData.inclusions : []))?.map((item, index) => (
                     <li key={index} className="flex items-start text-gray-600">
                       <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                       <span>{item}</span>
@@ -1372,7 +1372,7 @@ const PackageDetailPage = () => {
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Not Included</h2>
                 <ul className="space-y-2">
-                  {((id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.exclusions : packageData.exclusions)?.map((item, index) => (
+                  {((id === "2" || id === "3" || id === "4" || id === "5") && 'detailedInfo' in packageData && packageData.detailedInfo ? packageData.detailedInfo.exclusions : ('exclusions' in packageData ? packageData.exclusions : []))?.map((item, index) => (
                     <li key={index} className="flex items-start text-gray-600">
                       <div className="h-4 w-4 text-red-500 mr-2 mt-0.5 flex-shrink-0">×</div>
                       <span>{item}</span>
@@ -1476,10 +1476,6 @@ const PackageDetailPage = () => {
                 <Button onClick={handleBookNow} className="w-full">
                   <Phone className="h-4 w-4 mr-2" />
                   Book Now
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <Mail className="h-4 w-4 mr-2" />
-                  Get Quote
                 </Button>
                       </div>
                     </div>

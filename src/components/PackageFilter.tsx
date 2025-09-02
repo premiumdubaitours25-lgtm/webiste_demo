@@ -46,10 +46,11 @@ const PackageFilter: React.FC<PackageFilterProps> = ({ onFilterChange, className
   };
 
   const priceRanges = [
-    "₹35,000 - ₹1.5L",
-    "₹1.5L - ₹2.7L", 
-    "₹2.7L - ₹3.9L",
-    "₹3.9L & above"
+    "₹9,000 - ₹15,000",
+    "₹15,000 - ₹25,000", 
+    "₹25,000 - ₹35,000",
+    "₹35,000 - ₹50,000",
+    "₹50,000 & above"
   ];
 
   const durationRanges = [

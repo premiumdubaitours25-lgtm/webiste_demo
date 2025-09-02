@@ -127,25 +127,30 @@ const DomesticPackagesPage = () => {
     
     if (advancedFilters.priceRange) {
       // Parse price range and filter accordingly
-      if (advancedFilters.priceRange.includes('₹35,000 - ₹1.5L')) {
+      if (advancedFilters.priceRange.includes('₹9,000 - ₹15,000')) {
         filtered = filtered.filter((pkg) => {
           const price = parseFloat(pkg.price.replace(/,/g, ''));
-          return price >= 35000 && price <= 150000;
+          return price >= 9000 && price <= 15000;
         });
-      } else if (advancedFilters.priceRange.includes('₹1.5L - ₹2.7L')) {
+      } else if (advancedFilters.priceRange.includes('₹15,000 - ₹25,000')) {
         filtered = filtered.filter((pkg) => {
           const price = parseFloat(pkg.price.replace(/,/g, ''));
-          return price >= 150000 && price <= 270000;
+          return price >= 15000 && price <= 25000;
         });
-      } else if (advancedFilters.priceRange.includes('₹2.7L - ₹3.9L')) {
+      } else if (advancedFilters.priceRange.includes('₹25,000 - ₹35,000')) {
         filtered = filtered.filter((pkg) => {
           const price = parseFloat(pkg.price.replace(/,/g, ''));
-          return price >= 270000 && price <= 390000;
+          return price >= 25000 && price <= 35000;
         });
-      } else if (advancedFilters.priceRange.includes('₹3.9L & above')) {
+      } else if (advancedFilters.priceRange.includes('₹35,000 - ₹50,000')) {
         filtered = filtered.filter((pkg) => {
           const price = parseFloat(pkg.price.replace(/,/g, ''));
-          return price >= 390000;
+          return price >= 35000 && price <= 50000;
+        });
+      } else if (advancedFilters.priceRange.includes('₹50,000 & above')) {
+        filtered = filtered.filter((pkg) => {
+          const price = parseFloat(pkg.price.replace(/,/g, ''));
+          return price >= 50000;
         });
       }
     }
@@ -181,10 +186,10 @@ const DomesticPackagesPage = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h1 className="text-5xl lg:text-6xl font-bold text-white">
+            <h1 className="text-5xl lg:text-6xl font-bold text-white" style={{textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.7)'}}>
               Domestic <span className="text-secondary">Packages</span>
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+            <p className="text-xl text-white font-medium max-w-3xl mx-auto" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 25px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.7)'}}>
               Explore the incredible beauty of India with our carefully curated domestic travel packages
             </p>
           </div>

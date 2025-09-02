@@ -557,6 +557,7 @@ const Index = () => {
           title="Embark on unforgettable journeys"
           destination="the World"
           buttonText="START EXPLORING"
+          buttonLink="/packages/domestic"
         />
       </div>
 

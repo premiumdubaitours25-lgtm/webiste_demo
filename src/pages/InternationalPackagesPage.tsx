@@ -203,10 +203,10 @@ const InternationalPackagesPage = () => {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h1 className="text-5xl lg:text-6xl font-bold text-white">
+            <h1 className="text-5xl lg:text-6xl font-bold text-white" style={{textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.7)'}}>
               International <span className="text-secondary">Packages</span>
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+            <p className="text-xl text-white font-medium max-w-3xl mx-auto" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 25px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.7)'}}>
               Discover incredible destinations around the world with our carefully curated international travel packages
             </p>
           </div>
