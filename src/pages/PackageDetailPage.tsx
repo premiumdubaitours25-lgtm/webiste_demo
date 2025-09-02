@@ -804,48 +804,54 @@ const PackageDetailPage = () => {
     ]
   };
 
-  // Nepal Package Data for ID 1 (4N/5D)
+  // Nepal Package Data for ID 1 (3N/4D)
   const nepalPackage1 = {
     id: 1,
-    title: "Nepal 3-Star Tour for 4 Nights / 5 Days",
-    description: "Discover the enchanting beauty of Nepal with our comprehensive 4N/5D tour covering Pokhara & Kathmandu. Experience the birthplace of Lord Buddha, stunning Himalayan views, and rich cultural heritage.",
-    duration: "4N/5D",
+    title: "Nepal 3-Star Tour for 3 Nights / 4 Days",
+    description: "Discover the enchanting beauty of Nepal with our comprehensive 3N/4D tour covering Chandargiri & Kathmandu. Experience the birthplace of Lord Buddha, stunning Himalayan views, and rich cultural heritage including Pashupatinath Temple, Boudhanath Stupa, and Swayambhunath Monkey Temple.",
+    duration: "3N/4D",
     destination: "Nepal",
-    price: "29,999.00",
-    originalPrice: "35,000.00",
-    discount: "14% OFF",
-    mainImage: "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375154/Chitwan_National_park_Chitwan_k9wg0p.jpg",
+    price: "9,999.00",
+    originalPrice: "12,000.00",
+    discount: "17% OFF",
+    mainImage: "https://res.cloudinary.com/duh46icya/image/upload/v1756805328/Swayambhunath_or_Monkey_Temple_Kathmandu_hlcvuw.jpg",
     gallery: [
-      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375154/Chitwan_National_park_Chitwan_k9wg0p.jpg",
-      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375155/Chitwan_National_park_Chitwan_2_m06pam.jpg",
-      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375155/Chitwan_National_park_Chitwan_3_efn9bq.jpg",
-      "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375155/Terai_plains_Chitwan_fe62ov.jpg"
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805328/Swayambhunath_or_Monkey_Temple_Kathmandu_hlcvuw.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805327/Swayambhunath_or_Monkey_Temple_Kathmandu_2_wd4u0a.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805327/Pashupatinath_Temple_Kathmandu_2_ihsduk.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805324/Pashupatinath_Temple_Kathmandu_krzfnz.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805324/Palace_of_Fifty_Five_Windows_Kathmandu_j7mx4l.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805322/Palace_of_Fifty_Five_Windows_Kathmandu_2_y6i6bj.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805322/Nyatapola_Temple_Kathmandu_lk9icr.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805319/Nyatapola_Temple_Kathmandu_2_ktlwnt.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805317/Nagarkot_Kathmandu_3_hmqmrr.jpg",
+      "https://res.cloudinary.com/duh46icya/image/upload/v1756805317/Nagarkot_Kathmandu_2_jp0fhe.jpg"
     ],
-    highlights: ["Pokhara & Kathmandu", "Lumbini - Birthplace of Buddha", "Chitwan National Park", "Himalayan Views", "Cultural Heritage", "Fewa Lake", "Ancient Temples"],
+    highlights: ["Chandargiri & Kathmandu", "Pashupatinath Temple", "Boudhanath Stupa", "Swayambhunath Monkey Temple", "Kathmandu Durbar Square", "Cultural Heritage", "Bhaleshwor Mahadev Temple"],
     itinerary: [
       {
         day: "Day 1",
-        title: "Gorakhpur to Pokhara - Transfer Enroute Sightseen Lumbini",
-        description: "Post Breakfast in the Morning, Leave By Road for Sunouli. It is An Important Border Crossing Between India and Nepal. Later, Enjoy Sightseeing At Sunouli. Later, Continue with Your Drive Towards Lumbini-the Birth Place of Lord Buddha.",
-        activities: ["Border crossing", "Lumbini sightseeing", "Bodhi Tree & Pond", "Ashoka Pillar", "Transfer to Pokhara"]
+        title: "Welcome to Kathmandu - Gorakhpur to Kathmandu Transfer",
+        description: "Start your day early and begin the scenic road trip towards the enchanting city of Kathmandu, the pulsating capital of Nepal. Upon arrival, a warm welcome awaits you as a representative greets you and escorts you to your chosen haven of rest.",
+        activities: ["Airport pickup", "Transfer to Kathmandu", "Hotel check-in", "Free time for local exploration"]
       },
       {
         day: "Day 2",
-        title: "Pokhara - Full Day Sightseeing",
-        description: "Start your day with an early breakfast at your hotel, preparing yourself for an exciting day ahead. Explore the natural and cultural beauty of Pokhara.",
-        activities: ["Bindebasini Temple", "Mahendra Cave", "Gorakha Museum", "Gupteshwar Cave", "David's Waterfall", "Fewa Lake"]
+        title: "Kathmandu Full Day Sightseeing",
+        description: "Early morning breakfast - Guest start the sightseeing tour in few major places in Kathmandu including Pashupatinath Temple, Boudhanath Stupa, Swayambhunath Monkey Temple, and Kathmandu Durbar Square.",
+        activities: ["Pashupatinath Temple", "Boudhanath Stupa", "Swayambhunath Monkey Temple", "Kathmandu Durbar Square", "Hanuman Dhoka Palace"]
       },
       {
         day: "Day 3",
-        title: "Pokhara to Kathmandu - Transfer Enroute Sightseen",
-        description: "Early Morning breakfast check out hotel. You will drive to Kathmandu is 210 kms from Pokhara and is a 7 hours' drive approx.",
-        activities: ["Hotel checkout", "River rafting option", "Manakamana Temple", "Transfer to Kathmandu"]
+        title: "Kathmandu to Chandargiri - Day Trip Excursion",
+        description: "Early morning breakfast to proceed to Chandargiri 14km/35min. This is a truly amazing trip as you ride effortlessly to the top of Chandragiri Hill (Elev. 2520 m) by cable car.",
+        activities: ["Chandargiri Hill", "Cable car ride", "Bhaleshwor Mahadev Temple", "Panoramic views", "Return to Kathmandu"]
       },
       {
         day: "Day 4",
-        title: "Kathmandu - Full Day Sightseeing",
-        description: "Early morning breakfast - Guest start the sightseeing tour in few major places in Kathmandu.",
-        activities: ["Swayambhunath Stupa", "Boudhanath Stupa", "Pashupatinath Temple", "Kathmandu Durbar Square", "Hanuman Dhoka"]
+        title: "Kathmandu to Gorakhpur - Transfer Enroute Sightseeing",
+        description: "Early Morning Breakfast checks out in hotel. You Will Drive to Kathmandu to Gorakhpur on 365km/9-10hrs. On the way you have an Option of doing river rafting or visit the Manakamana Temple.",
+        activities: ["Hotel checkout", "Optional river rafting", "Manakamana Temple", "Return transfer to Gorakhpur"]
       },
       {
         day: "Day 5",

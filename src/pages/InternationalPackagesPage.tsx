@@ -28,15 +28,15 @@ const InternationalPackagesPage = () => {
   const internationalPackages = [
     {
       id: 1,
-      title: "Nepal 3-Star Tour for 4 Nights / 5 Days",
-      description: "Discover the enchanting beauty of Nepal with our comprehensive 4N/5D tour covering Pokhara & Kathmandu. Experience the birthplace of Lord Buddha, stunning Himalayan views, and rich cultural heritage.",
-      duration: "4N/5D",
+      title: "Nepal 3-Star Tour for 3 Nights / 4 Days",
+      description: "Discover the enchanting beauty of Nepal with our comprehensive 3N/4D tour covering Chandargiri & Kathmandu. Experience the birthplace of Lord Buddha, stunning Himalayan views, and rich cultural heritage including Pashupatinath Temple, Boudhanath Stupa, and Swayambhunath Monkey Temple.",
+      duration: "3N/4D",
       destination: "Nepal",
-      price: "29,999.00",
-      originalPrice: "35,000.00",
-      discount: "14% OFF",
-      image: "https://res.cloudinary.com/dflzbvz9i/image/upload/v1756375154/Chitwan_National_park_Chitwan_k9wg0p.jpg",
-      highlights: ["Pokhara & Kathmandu", "Lumbini - Birthplace of Buddha", "Chitwan National Park", "Himalayan Views", "Cultural Heritage"],
+      price: "9,999.00",
+      originalPrice: "12,000.00",
+      discount: "17% OFF",
+      image: "https://res.cloudinary.com/duh46icya/image/upload/v1756805328/Swayambhunath_or_Monkey_Temple_Kathmandu_hlcvuw.jpg",
+      highlights: ["Chandargiri & Kathmandu", "Pashupatinath Temple", "Boudhanath Stupa", "Swayambhunath Monkey Temple", "Kathmandu Durbar Square", "Cultural Heritage"],
       type: "INTERNATIONAL"
     },
     {
