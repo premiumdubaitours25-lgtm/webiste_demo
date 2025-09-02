@@ -90,10 +90,10 @@ const AboutPage = () => {
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
               About <span className="text-secondary">JJ & TIA Tours</span>
             </h1>
-            <p className="text-2xl text-white/90 max-w-4xl mx-auto font-semibold mb-4">
+            <p className="text-2xl text-white font-semibold mb-4 max-w-4xl mx-auto" style={{textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.7)'}}>
               "Travel with Heart, Explore with Us"
             </p>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+            <p className="text-xl text-white font-medium max-w-3xl mx-auto" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 25px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.7)'}}>
               Founded by two sisters, JJ & Tia Tours and Travels turns your holidays into memorable journeys across Bhutan, Nepal, India, and beyond. Every trip is personal, seamless, and unforgettable.
             </p>
           </div>
