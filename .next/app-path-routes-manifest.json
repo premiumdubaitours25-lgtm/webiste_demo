@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/destinations/page": "/destinations",
+  "/about/page": "/about",
+  "/contact/page": "/contact",
+  "/dashboard/page": "/dashboard",
+  "/login/page": "/login",
+  "/packages/page": "/packages",
+  "/blogs/page": "/blogs",
+  "/packages/international/page": "/packages/international",
+  "/packages/[id]/page": "/packages/[id]",
+  "/packages/domestic/page": "/packages/domestic",
+  "/page": "/"
+}
