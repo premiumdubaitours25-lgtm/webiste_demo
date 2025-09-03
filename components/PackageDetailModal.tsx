@@ -15,6 +15,8 @@ interface PackageData {
   duration: string;
   location: string;
   capacity: string;
+  packageType: 'domestic' | 'international';
+  place: 'bhutan' | 'nepal';
   images: Array<{
     public_id: string;
     url: string;

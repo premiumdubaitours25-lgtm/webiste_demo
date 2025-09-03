@@ -38,6 +38,8 @@ interface Package {
   duration: string;
   location: string;
   capacity: string;
+  packageType: 'domestic' | 'international';
+  place: 'bhutan' | 'nepal';
   images: Array<{
     url: string;
     alt: string;

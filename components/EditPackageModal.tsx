@@ -26,8 +26,8 @@ interface PackageData {
   duration: string;
   location: string;
   capacity: string;
-  packageType: string;
-  place: string;
+  packageType: 'domestic' | 'international';
+  place: 'bhutan' | 'nepal';
   images: Array<{
     public_id: string;
     url: string;
@@ -245,6 +245,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       duration: "",
       location: "",
       capacity: "",
+      packageType: "domestic",
+      place: "bhutan",
     });
     setItinerary([{ id: "1", day: 1, title: "", description: "" }]);
     setExistingImages([]);
