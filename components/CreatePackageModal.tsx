@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Minus, X, Upload, Image as ImageIcon } from "lucide-react";
 
 interface ItineraryDay {
@@ -46,6 +47,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     duration: "",
     location: "",
     capacity: "",
+    packageType: "",
+    place: "",
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([
@@ -195,7 +198,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       console.log('Form data before validation:', formData);
       console.log('Itinerary before validation:', itinerary);
       
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity) {
+      if (!formData.title || !formData.subtitle || !formData.about || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
         console.log('Validation failed: Missing required fields');
         alert('Please fill in all required fields');
         return;
@@ -255,6 +258,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       duration: "",
       location: "",
       capacity: "",
+      packageType: "",
+      place: "",
     });
     setItinerary([{ id: "1", day: 1, title: "", description: "" }]);
     setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
@@ -292,6 +297,34 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
               value={formData.subtitle}
               onChange={(e) => handleInputChange('subtitle', e.target.value)}
             />
+          </div>
+
+          {/* Package Type and Place Dropdowns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Package Type</label>
+              <Select value={formData.packageType} onValueChange={(value) => handleInputChange('packageType', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select package type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="domestic">Domestic</SelectItem>
+                  <SelectItem value="international">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Place</label>
+              <Select value={formData.place} onValueChange={(value) => handleInputChange('place', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select place" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bhutan">Bhutan</SelectItem>
+                  <SelectItem value="nepal">Nepal</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Package Details - Three Small Inputs */}

@@ -105,6 +105,16 @@ const PackageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  packageType: {
+    type: String,
+    required: true,
+    enum: ['domestic', 'international'],
+  },
+  place: {
+    type: String,
+    required: true,
+    enum: ['bhutan', 'nepal'],
+  },
   images: [ImageSchema],
   itinerary: [ItineraryDaySchema],
   transportation: [TransportationSchema],

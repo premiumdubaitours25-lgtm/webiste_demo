@@ -26,6 +26,8 @@ interface Package {
   duration: string;
   location: string;
   capacity: string;
+  packageType: string;
+  place: string;
   images: Array<{
     url: string;
     alt: string;
@@ -56,15 +58,9 @@ const InternationalPackagesPage = () => {
       const response = await fetch('/api/packages');
       const result = await response.json();
       if (result.success) {
-        // Filter for international packages (non-Nepal)
+        // Filter for international packages
         const internationalPackages = result.data.filter((pkg: Package) =>
-          !pkg.location.toLowerCase().includes('nepal') &&
-          !pkg.location.toLowerCase().includes('kathmandu') &&
-          !pkg.location.toLowerCase().includes('pokhara') &&
-          !pkg.location.toLowerCase().includes('chitwan') &&
-          !pkg.location.toLowerCase().includes('lumbini') &&
-          !pkg.location.toLowerCase().includes('everest') &&
-          !pkg.location.toLowerCase().includes('annapurna')
+          pkg.packageType === 'international'
         );
         setPackages(internationalPackages);
       }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import CreatePackageModal from "../../components/CreatePackageModal";
 import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
@@ -202,6 +203,8 @@ export default function DashboardPage() {
                 <thead>
                   <tr className="border-b">
                     <th className="text-left p-3">Package Title</th>
+                    <th className="text-left p-3">Type</th>
+                    <th className="text-left p-3">Place</th>
                     <th className="text-left p-3">Duration</th>
                     <th className="text-left p-3">Location</th>
                     <th className="text-left p-3">Capacity</th>
@@ -231,6 +234,16 @@ export default function DashboardPage() {
                             )}
                             <span className="font-medium">{pkg.title}</span>
                           </div>
+                        </td>
+                        <td className="p-3">
+                          <Badge variant={pkg.packageType === 'domestic' ? 'default' : 'secondary'}>
+                            {pkg.packageType === 'domestic' ? 'Domestic' : 'International'}
+                          </Badge>
+                        </td>
+                        <td className="p-3">
+                          <Badge variant="outline">
+                            {pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal'}
+                          </Badge>
                         </td>
                         <td className="p-3">{pkg.duration || "N/A"}</td>
                         <td className="p-3">{pkg.location || "N/A"}</td>
