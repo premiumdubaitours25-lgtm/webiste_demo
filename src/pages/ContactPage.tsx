@@ -111,7 +111,7 @@ const ContactPage = () => {
               <Card className="bg-white shadow-xl">
                 <CardHeader>
                   <CardTitle className="text-2xl font-bold text-center text-secondary">
-                    Book Your Trip / Get Quote
+                    Book Your Trip
                   </CardTitle>
                   <p className="text-center text-muted-foreground">
                     Fill out the form below and we'll get back to you within 24 hours

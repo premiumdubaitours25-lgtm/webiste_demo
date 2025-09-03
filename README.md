@@ -1,73 +1,133 @@
-# Welcome to your Lovable project
+# TIA Tours - Next.js Application
 
-## Project info
+A modern tour package management system built with Next.js, MongoDB, and Cloudinary.
 
-**URL**: https://lovable.dev/projects/08872af4-64e3-432e-ad5b-1ab7d09edeb2
+## Features
 
-## How can I edit this code?
+- 🏔️ Tour package management
+- 📸 Image upload with Cloudinary
+- 🗄️ MongoDB database integration
+- 📱 Responsive design
+- 🎨 Modern UI with Tailwind CSS
+- ⚡ Fast performance with Next.js
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend**: Next.js 14, React, TypeScript
+- **Styling**: Tailwind CSS, Radix UI
+- **Database**: MongoDB with Mongoose
+- **File Storage**: Cloudinary
+- **Deployment**: Vercel
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/08872af4-64e3-432e-ad5b-1ab7d09edeb2) and start prompting.
+## Environment Variables
 
-Changes made via Lovable will be committed automatically to this repo.
+Create a `.env.local` file in the root directory with the following variables:
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```env
+MONGODB_URI=mongodb+srv://toursjjtia_db_user:rLz2ZFHjsJoL13mi@cluster0.w7cd5cx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+CLOUDINARY_CLOUD_NAME=duh46icya
+CLOUDINARY_API_KEY=323563858275155
+CLOUDINARY_API_SECRET=TDgP1AOf2dYskJTPjdKC_4RRXOg
 ```
 
-**Edit a file directly in GitHub**
+## Installation
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-**Use GitHub Codespaces**
+3. Create `.env.local` file with your environment variables
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-## What technologies are used for this project?
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-This project is built with:
+## API Endpoints
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `GET /api/packages` - Get all packages
+- `POST /api/packages` - Create a new package
+- `GET /api/packages/[id]` - Get a specific package
+- `PUT /api/packages/[id]` - Update a package
+- `DELETE /api/packages/[id]` - Delete a package
+- `POST /api/upload` - Upload images to Cloudinary
 
-## How can I deploy this project?
+## Database Schema
 
-Simply open [Lovable](https://lovable.dev/projects/08872af4-64e3-432e-ad5b-1ab7d09edeb2) and click on Share -> Publish.
+### Package Model
+```javascript
+{
+  title: String,
+  subtitle: String,
+  about: String,
+  services: String,
+  tourDetails: String,
+  price: Number,
+  duration: String,
+  location: String,
+  capacity: String,
+  images: [{
+    public_id: String,
+    url: String,
+    alt: String
+  }],
+  itinerary: [{
+    day: Number,
+    title: String,
+    description: String
+  }],
+  bookings: Number,
+  rating: Number,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-## Can I connect a custom domain to my Lovable project?
+## Deployment
 
-Yes, you can!
+### Vercel Deployment
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy!
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Environment Variables for Vercel
+
+Add these in your Vercel project settings:
+- `MONGODB_URI`
+- `CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+
+## Project Structure
+
+```
+├── app/                    # Next.js 13+ app directory
+│   ├── dashboard/         # Dashboard page
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Home page
+├── components/            # React components
+├── lib/                   # Utility libraries
+│   ├── mongodb.js         # MongoDB connection
+│   └── cloudinary.js      # Cloudinary configuration
+├── models/                # Mongoose models
+├── pages/                 # API routes
+│   └── api/               # API endpoints
+└── public/                # Static assets
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
