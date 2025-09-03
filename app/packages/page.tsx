@@ -26,8 +26,6 @@ interface Package {
   duration: string;
   location: string;
   capacity: string;
-  packageType: string;
-  place: string;
   images: Array<{
     url: string;
     alt: string;

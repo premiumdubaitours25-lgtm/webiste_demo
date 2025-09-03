@@ -1,1 +1,6 @@
-{}
+{
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js",
+  "/packages/international/page": "app/packages/international/page.js",
+  "/packages/domestic/page": "app/packages/domestic/page.js"
+}

@@ -58,7 +58,7 @@ const InternationalPackagesPage = () => {
       const response = await fetch('/api/packages');
       const result = await response.json();
       if (result.success) {
-        // Filter for international packages
+        // Filter for international packages based on packageType
         const internationalPackages = result.data.filter((pkg: Package) =>
           pkg.packageType === 'international'
         );
@@ -342,7 +342,7 @@ const InternationalPackagesPage = () => {
                           {formatPrice(pkg.price)}
                         </Badge>
                         <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          International
+                          {pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal'}
                         </Badge>
                       </div>
                       

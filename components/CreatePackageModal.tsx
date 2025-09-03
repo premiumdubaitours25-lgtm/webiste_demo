@@ -200,7 +200,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       
       if (!formData.title || !formData.subtitle || !formData.about || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
         console.log('Validation failed: Missing required fields');
-        alert('Please fill in all required fields');
+        alert('Please fill in all required fields including package type and place');
         return;
       }
 
@@ -302,7 +302,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
           {/* Package Type and Place Dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Package Type</label>
+              <label className="text-sm font-medium">Package Type *</label>
               <Select value={formData.packageType} onValueChange={(value) => handleInputChange('packageType', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select package type" />
@@ -314,7 +314,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
               </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Place</label>
+              <label className="text-sm font-medium">Place *</label>
               <Select value={formData.place} onValueChange={(value) => handleInputChange('place', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select place" />

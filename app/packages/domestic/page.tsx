@@ -57,7 +57,7 @@ const DomesticPackagesPage = () => {
       const response = await fetch('/api/packages');
       const result = await response.json();
       if (result.success) {
-        // Filter for domestic packages
+        // Filter for domestic packages based on packageType
         const domesticPackages = result.data.filter((pkg: Package) =>
           pkg.packageType === 'domestic'
         );
@@ -133,10 +133,10 @@ const DomesticPackagesPage = () => {
   };
 
   const popularDestinations = [
-    { name: "Kathmandu Valley", icon: Mountain, packages: packages.filter(p => p.location.toLowerCase().includes('kathmandu')).length },
-    { name: "Pokhara", icon: Camera, packages: packages.filter(p => p.location.toLowerCase().includes('pokhara')).length },
-    { name: "Chitwan National Park", icon: Heart, packages: packages.filter(p => p.location.toLowerCase().includes('chitwan')).length },
-    { name: "Everest Region", icon: Mountain, packages: packages.filter(p => p.location.toLowerCase().includes('everest')).length },
+    { name: "Nepal Packages", icon: Mountain, packages: packages.filter(p => p.place === 'nepal').length },
+    { name: "Bhutan Packages", icon: Camera, packages: packages.filter(p => p.place === 'bhutan').length },
+    { name: "Kathmandu Valley", icon: Heart, packages: packages.filter(p => p.location.toLowerCase().includes('kathmandu')).length },
+    { name: "Pokhara", icon: Mountain, packages: packages.filter(p => p.location.toLowerCase().includes('pokhara')).length },
   ];
 
   if (loading) {
@@ -177,7 +177,7 @@ const DomesticPackagesPage = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <MapPin className="h-4 w-4 mr-2" />
-                {packages.length} Nepal Packages
+                {packages.length} Domestic Packages
               </Badge>
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <Star className="h-4 w-4 mr-2" />
@@ -316,7 +316,7 @@ const DomesticPackagesPage = () => {
                           {formatPrice(pkg.price)}
                         </Badge>
                         <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          Nepal
+                          {pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal'}
                         </Badge>
                       </div>
                       

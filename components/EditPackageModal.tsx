@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Minus, X, Upload, Image as ImageIcon } from "lucide-react";
 
 interface ItineraryDay {
@@ -25,6 +26,8 @@ interface PackageData {
   duration: string;
   location: string;
   capacity: string;
+  packageType: string;
+  place: string;
   images: Array<{
     public_id: string;
     url: string;
@@ -59,6 +62,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     duration: "",
     location: "",
     capacity: "",
+    packageType: "",
+    place: "",
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
@@ -80,6 +85,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         duration: packageData.duration || "",
         location: packageData.location || "",
         capacity: packageData.capacity || "",
+        packageType: packageData.packageType || "",
+        place: packageData.place || "",
       });
 
       setItinerary(
@@ -176,8 +183,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       }
 
       // Validate required fields
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity) {
-        alert('Please fill in all required fields');
+      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
+        alert('Please fill in all required fields including package type and place');
         return;
       }
 
@@ -276,6 +283,34 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
               value={formData.subtitle}
               onChange={(e) => handleInputChange('subtitle', e.target.value)}
             />
+          </div>
+
+          {/* Package Type and Place Dropdowns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Package Type *</label>
+              <Select value={formData.packageType} onValueChange={(value) => handleInputChange('packageType', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select package type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="domestic">Domestic</SelectItem>
+                  <SelectItem value="international">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Place *</label>
+              <Select value={formData.place} onValueChange={(value) => handleInputChange('place', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select place" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bhutan">Bhutan</SelectItem>
+                  <SelectItem value="nepal">Nepal</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Package Details - Three Small Inputs */}
