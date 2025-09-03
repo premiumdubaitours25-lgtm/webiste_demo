@@ -1495,6 +1495,9 @@ video {
 .border-2 {
   border-width: 2px;
 }
+.border-0 {
+  border-width: 0px;
+}
 .border-y {
   border-top-width: 1px;
   border-bottom-width: 1px;
@@ -1695,6 +1698,9 @@ video {
 .bg-white\/95 {
   background-color: rgb(255 255 255 / 0.95);
 }
+.bg-white\/80 {
+  background-color: rgb(255 255 255 / 0.8);
+}
 .bg-opacity-40 {
   --tw-bg-opacity: 0.4;
 }
@@ -1739,6 +1745,10 @@ video {
   --tw-gradient-to: rgb(0 0 0 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), rgb(0 0 0 / 0.2) var(--tw-gradient-via-position), var(--tw-gradient-to);
 }
+.via-white {
+  --tw-gradient-to: rgb(255 255 255 / 0)  var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
 .to-primary {
   --tw-gradient-to: hsl(var(--primary)) var(--tw-gradient-to-position);
 }
@@ -1753,6 +1763,9 @@ video {
 }
 .to-transparent {
   --tw-gradient-to: transparent var(--tw-gradient-to-position);
+}
+.to-primary\/5 {
+  --tw-gradient-to: hsl(var(--primary) / 0.05) var(--tw-gradient-to-position);
 }
 .bg-cover {
   background-size: cover;
@@ -1939,6 +1952,12 @@ video {
 }
 .pt-8 {
   padding-top: 2rem;
+}
+.pb-8 {
+  padding-bottom: 2rem;
+}
+.pr-10 {
+  padding-right: 2.5rem;
 }
 .text-left {
   text-align: left;
@@ -2746,6 +2765,11 @@ All colors MUST be HSL.
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
+.hover\:text-gray-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
@@ -2779,6 +2803,10 @@ All colors MUST be HSL.
 
 .focus\:border-transparent:focus {
   border-color: transparent;
+}
+
+.focus\:border-primary:focus {
+  border-color: hsl(var(--primary));
 }
 
 .focus\:bg-accent:focus {

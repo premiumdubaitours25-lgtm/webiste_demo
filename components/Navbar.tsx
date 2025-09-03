@@ -57,10 +57,10 @@ const Navbar = () => {
                 <MessageCircle className="h-4 w-4 mr-2" />
                 Live Chat
               </Button>
-              <Link href="/dashboard">
+              <Link href="/login">
                 <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
                   <User className="h-4 w-4 mr-2" />
-                  Dashboard
+                  Login
                 </Button>
               </Link>
             </div>

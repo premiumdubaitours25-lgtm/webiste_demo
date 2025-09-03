@@ -1,8 +1,7 @@
 {
-  "/blogs/page": "app/blogs/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
   "/page": "app/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
   "/packages/international/page": "app/packages/international/page.js",
-  "/packages/[id]/page": "app/packages/[id]/page.js"
+  "/packages/[id]/page": "app/packages/[id]/page.js",
+  "/login/page": "app/login/page.js"
 }
