@@ -42,6 +42,18 @@ interface PackageData {
     title: string;
     description: string;
   }>;
+  transportation: Array<{
+    type: string;
+    vehicle: string;
+    description: string;
+  }>;
+  accommodation: Array<{
+    city: string;
+    hotel: string;
+    rooms: string;
+    roomType: string;
+    nights: string;
+  }>;
   bookings: number;
   rating: number;
   createdAt: string;
@@ -127,8 +139,16 @@ export default function DashboardPage() {
           setPackages(prev => prev.filter(p => p._id !== pkg._id));
           alert('Package deleted successfully!');
         } else {
-          const errorResult = await response.json();
-          throw new Error(errorResult.error || 'Failed to delete package');
+          let errorMessage = 'Failed to delete package';
+          try {
+            const errorResult = await response.json();
+            errorMessage = errorResult.error || errorMessage;
+          } catch (parseError) {
+            // If response is not JSON, get the text content
+            const errorText = await response.text();
+            errorMessage = errorText || errorMessage;
+          }
+          throw new Error(errorMessage);
         }
       } catch (error) {
         console.error('Error deleting package:', error);

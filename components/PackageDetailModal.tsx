@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Users, Star, Package, X } from "lucide-react";
+import { Calendar, MapPin, Users, Star, Package, X, Car, Hotel } from "lucide-react";
 
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
@@ -38,6 +38,18 @@ interface PackageData {
     day: number;
     title: string;
     description: string;
+  }>;
+  transportation: Array<{
+    type: string;
+    vehicle: string;
+    description: string;
+  }>;
+  accommodation: Array<{
+    city: string;
+    hotel: string;
+    rooms: string;
+    roomType: string;
+    nights: string;
   }>;
   bookings: number;
   rating: number;
@@ -226,6 +238,90 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+
+          {/* Transportation Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Transportation</h3>
+            <div className="space-y-4">
+              {packageData.transportation && packageData.transportation.length > 0 ? (
+                packageData.transportation.map((transport, index) => (
+                  <Card key={index}>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Car className="h-5 w-5 text-blue-500" />
+                        {transport.type}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="flex items-center">
+                        <span className="font-medium text-gray-700">Vehicle:</span>
+                        <span className="ml-2 text-gray-600">{transport.vehicle}</span>
+                      </div>
+                      {transport.description && (
+                        <div className="flex items-start">
+                          <span className="font-medium text-gray-700">Description:</span>
+                          <span className="ml-2 text-gray-600">{transport.description}</span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-8 text-center">
+                    <Car className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500">No transportation details available</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+
+          {/* Accommodation Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Accommodation</h3>
+            <div className="space-y-4">
+              {packageData.accommodation && packageData.accommodation.length > 0 ? (
+                packageData.accommodation.map((accommodation, index) => (
+                  <Card key={index}>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Hotel className="h-5 w-5 text-green-500" />
+                        {accommodation.city}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex items-center">
+                          <span className="font-medium text-gray-700">Hotel/Resort:</span>
+                          <span className="ml-2 text-gray-600">{accommodation.hotel}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="font-medium text-gray-700">Rooms:</span>
+                          <span className="ml-2 text-gray-600">{accommodation.rooms}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="font-medium text-gray-700">Room Type:</span>
+                          <span className="ml-2 text-gray-600">{accommodation.roomType}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="font-medium text-gray-700">Nights:</span>
+                          <span className="ml-2 text-gray-600">{accommodation.nights}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-8 text-center">
+                    <Hotel className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500">No accommodation details available</p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
 

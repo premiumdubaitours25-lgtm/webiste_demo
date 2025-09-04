@@ -59,6 +59,22 @@ interface ItineraryDay {
   descriptions: string[];
 }
 
+interface TransportationItem {
+  id: string;
+  type: string;
+  vehicle: string;
+  description: string;
+}
+
+interface AccommodationItem {
+  id: string;
+  city: string;
+  hotel: string;
+  rooms: string;
+  roomType: string;
+  nights: string;
+}
+
 interface PackageData {
   _id: string;
   title: string;
@@ -81,6 +97,18 @@ interface PackageData {
     day: number;
     title: string;
     description: string;
+  }>;
+  transportation: Array<{
+    type: string;
+    vehicle: string;
+    description: string;
+  }>;
+  accommodation: Array<{
+    city: string;
+    hotel: string;
+    rooms: string;
+    roomType: string;
+    nights: string;
   }>;
   bookings: number;
   rating: number;
@@ -111,6 +139,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
+  const [transportation, setTransportation] = useState<TransportationItem[]>([]);
+  const [accommodation, setAccommodation] = useState<AccommodationItem[]>([]);
   const [existingImages, setExistingImages] = useState<Array<{public_id: string; url: string; alt: string}>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -141,6 +171,26 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           title: day.title,
           descriptions: day.description ? day.description.split('\n• ').filter(point => point.trim()) : [""],
         })) || [{ id: "1", day: 1, title: "", descriptions: [""] }]
+      );
+
+      setTransportation(
+        packageData.transportation?.map((item, index) => ({
+          id: `transport_${index}`,
+          type: item.type || "",
+          vehicle: item.vehicle || "",
+          description: item.description || "",
+        })) || [{ id: "1", type: "", vehicle: "", description: "" }]
+      );
+
+      setAccommodation(
+        packageData.accommodation?.map((item, index) => ({
+          id: `accommodation_${index}`,
+          city: item.city || "",
+          hotel: item.hotel || "",
+          rooms: item.rooms || "",
+          roomType: item.roomType || "",
+          nights: item.nights || "",
+        })) || [{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]
       );
 
       setExistingImages(packageData.images || []);
@@ -213,6 +263,48 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     ));
   };
 
+  // Transportation functions
+  const addTransportation = () => {
+    const newId = Date.now().toString();
+    setTransportation(prev => [
+      ...prev,
+      { id: newId, type: "", vehicle: "", description: "" }
+    ]);
+  };
+
+  const removeTransportation = (id: string) => {
+    if (transportation.length > 1) {
+      setTransportation(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  const updateTransportation = (id: string, field: 'type' | 'vehicle' | 'description', value: string) => {
+    setTransportation(prev => prev.map(item => 
+      item.id === id ? { ...item, [field]: value } : item
+    ));
+  };
+
+  // Accommodation functions
+  const addAccommodation = () => {
+    const newId = Date.now().toString();
+    setAccommodation(prev => [
+      ...prev,
+      { id: newId, city: "", hotel: "", rooms: "", roomType: "", nights: "" }
+    ]);
+  };
+
+  const removeAccommodation = (id: string) => {
+    if (accommodation.length > 1) {
+      setAccommodation(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  const updateAccommodation = (id: string, field: 'city' | 'hotel' | 'rooms' | 'roomType' | 'nights', value: string) => {
+    setAccommodation(prev => prev.map(item => 
+      item.id === id ? { ...item, [field]: value } : item
+    ));
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -280,12 +372,27 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           title: day.title,
           description: day.descriptions.filter(desc => desc.trim() !== "").join("\n• ")
         })),
+        transportation: transportation.map(item => ({
+          type: item.type,
+          vehicle: item.vehicle,
+          description: item.description
+        })),
+        accommodation: accommodation.map(item => ({
+          city: item.city,
+          hotel: item.hotel,
+          rooms: item.rooms,
+          roomType: item.roomType,
+          nights: item.nights
+        })),
         images: [...existingImages, ...uploadedNewImages],
         bookings: packageData?.bookings || 0,
         rating: packageData?.rating || 0
       };
       
       // Update package via API
+      console.log('Updating package with ID:', packageData?._id);
+      console.log('Sending package data:', JSON.stringify(updatedPackageData, null, 2));
+      
       const response = await fetch(`/api/packages/${packageData?._id}`, {
         method: 'PUT',
         headers: {
@@ -293,6 +400,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         },
         body: JSON.stringify(updatedPackageData),
       });
+      
+      console.log('Update response status:', response.status);
 
       if (response.ok) {
         const result = await response.json();
@@ -300,8 +409,16 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         handleClose();
         alert('Package updated successfully!');
       } else {
-        const errorResult = await response.json();
-        throw new Error(errorResult.error || 'Failed to update package');
+        let errorMessage = 'Failed to update package';
+        try {
+          const errorResult = await response.json();
+          errorMessage = errorResult.error || errorMessage;
+        } catch (parseError) {
+          // If response is not JSON, get the text content
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
     } catch (error) {
       console.error('Error updating package:', error);
@@ -326,6 +443,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       place: "bhutan",
     });
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
+    setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
+    setAccommodation([{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
     setExistingImages([]);
     setNewImages([]);
     onClose();
@@ -675,6 +794,161 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                             )}
                           </div>
                         ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Transportation Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Transportation</label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addTransportation}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Transportation
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              {transportation.map((item) => (
+                <Card key={item.id}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">Transportation Details</CardTitle>
+                      {transportation.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeTransportation(item.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-sm font-medium">Type</label>
+                        <Input
+                          placeholder="e.g., In Bhutan, Transfers"
+                          value={item.type}
+                          onChange={(e) => updateTransportation(item.id, 'type', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Vehicle</label>
+                        <Input
+                          placeholder="e.g., Ertiga, Swift Desire"
+                          value={item.vehicle}
+                          onChange={(e) => updateTransportation(item.id, 'vehicle', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Description</label>
+                      <Textarea
+                        placeholder="e.g., transfers from Airport/Station"
+                        value={item.description}
+                        onChange={(e) => updateTransportation(item.id, 'description', e.target.value)}
+                        rows={2}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Accommodation Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Accommodation</label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addAccommodation}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Accommodation
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              {accommodation.map((item) => (
+                <Card key={item.id}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">Accommodation Details</CardTitle>
+                      {accommodation.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeAccommodation(item.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-sm font-medium">City</label>
+                        <Input
+                          placeholder="e.g., Thimphu, Paro"
+                          value={item.city}
+                          onChange={(e) => updateAccommodation(item.id, 'city', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Hotel/Resort</label>
+                        <Input
+                          placeholder="e.g., Hotel Park or Similar"
+                          value={item.hotel}
+                          onChange={(e) => updateAccommodation(item.id, 'hotel', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-sm font-medium">Rooms</label>
+                        <Input
+                          placeholder="e.g., 2 Rooms"
+                          value={item.rooms}
+                          onChange={(e) => updateAccommodation(item.id, 'rooms', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Room Type</label>
+                        <Input
+                          placeholder="e.g., Double Sharing"
+                          value={item.roomType}
+                          onChange={(e) => updateAccommodation(item.id, 'roomType', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Nights</label>
+                        <Input
+                          placeholder="e.g., 01, 02"
+                          value={item.nights}
+                          onChange={(e) => updateAccommodation(item.id, 'nights', e.target.value)}
+                        />
                       </div>
                     </div>
                   </CardContent>
