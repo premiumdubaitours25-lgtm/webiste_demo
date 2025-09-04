@@ -4,6 +4,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Users, Star, Package, X } from "lucide-react";
 
+// Utility function to render text with bold formatting
+const renderBoldText = (text: string) => {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2);
+      return <strong key={index} className="font-bold">{boldText}</strong>;
+    }
+    return part;
+  });
+};
+
 interface PackageData {
   _id: string;
   title: string;
@@ -203,7 +215,14 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 whitespace-pre-wrap">{day.description}</p>
+                    <ul className="space-y-2 text-gray-700">
+                      {day.description.split('\n• ').filter(point => point.trim()).map((point, pointIndex) => (
+                        <li key={pointIndex} className="flex items-start">
+                          <span className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                          <span>{renderBoldText(point.trim())}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </CardContent>
                 </Card>
               ))}

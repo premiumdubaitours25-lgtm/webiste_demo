@@ -6,13 +6,57 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Minus, X, Upload, Image as ImageIcon } from "lucide-react";
+import { Plus, Minus, X, Upload, Image as ImageIcon, Bold } from "lucide-react";
+
+// Utility function to render text with bold formatting
+const renderBoldText = (text: string) => {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2);
+      return <strong key={index} className="font-bold">{boldText}</strong>;
+    }
+    return part;
+  });
+};
+
+// Utility function to make selected text bold
+const makeTextBold = (textareaRef: React.RefObject<HTMLTextAreaElement>, updateFunction: (value: string) => void, currentValue: string) => {
+  if (!textareaRef.current) return;
+  
+  const textarea = textareaRef.current;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  
+  if (start === end) {
+    // No text selected, insert bold markers at cursor position
+    const newValue = currentValue.slice(0, start) + '****' + currentValue.slice(start);
+    updateFunction(newValue);
+    
+    // Set cursor position between the markers
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + 2, start + 2);
+    }, 0);
+  } else {
+    // Text is selected, wrap it with bold markers
+    const selectedText = currentValue.slice(start, end);
+    const newValue = currentValue.slice(0, start) + `**${selectedText}**` + currentValue.slice(end);
+    updateFunction(newValue);
+    
+    // Restore selection to the wrapped text
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + 2, end + 2);
+    }, 0);
+  }
+};
 
 interface ItineraryDay {
   id: string;
   day: number;
   title: string;
-  description: string;
+  descriptions: string[];
 }
 
 interface PackageData {
@@ -71,6 +115,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [newImages, setNewImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
 
   // Initialize form data when packageData changes
   useEffect(() => {
@@ -94,8 +139,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           id: `existing_${index}`,
           day: day.day,
           title: day.title,
-          description: day.description,
-        })) || [{ id: "1", day: 1, title: "", description: "" }]
+          descriptions: day.description ? day.description.split('\n• ').filter(point => point.trim()) : [""],
+        })) || [{ id: "1", day: 1, title: "", descriptions: [""] }]
       );
 
       setExistingImages(packageData.images || []);
@@ -114,7 +159,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     const newDay = itinerary.length + 1;
     setItinerary(prev => [
       ...prev,
-      { id: Date.now().toString(), day: newDay, title: "", description: "" }
+      { id: Date.now().toString(), day: newDay, title: "", descriptions: [""] }
     ]);
   };
 
@@ -130,9 +175,41 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     }
   };
 
-  const updateItineraryDay = (id: string, field: 'title' | 'description', value: string) => {
+  const updateItineraryDay = (id: string, field: 'title', value: string) => {
     setItinerary(prev => prev.map(day => 
       day.id === id ? { ...day, [field]: value } : day
+    ));
+  };
+
+  const updateItineraryDescription = (dayId: string, descriptionIndex: number, value: string) => {
+    setItinerary(prev => prev.map(day => 
+      day.id === dayId 
+        ? { 
+            ...day, 
+            descriptions: day.descriptions.map((desc, index) => 
+              index === descriptionIndex ? value : desc
+            )
+          } 
+        : day
+    ));
+  };
+
+  const addItineraryDescription = (dayId: string) => {
+    setItinerary(prev => prev.map(day => 
+      day.id === dayId 
+        ? { ...day, descriptions: [...day.descriptions, ""] }
+        : day
+    ));
+  };
+
+  const removeItineraryDescription = (dayId: string, descriptionIndex: number) => {
+    setItinerary(prev => prev.map(day => 
+      day.id === dayId 
+        ? { 
+            ...day, 
+            descriptions: day.descriptions.filter((_, index) => index !== descriptionIndex)
+          }
+        : day
     ));
   };
 
@@ -201,7 +278,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         itinerary: itinerary.map(day => ({
           day: day.day,
           title: day.title,
-          description: day.description
+          description: day.descriptions.filter(desc => desc.trim() !== "").join("\n• ")
         })),
         images: [...existingImages, ...uploadedNewImages],
         bookings: packageData?.bookings || 0,
@@ -248,7 +325,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       packageType: "domestic",
       place: "bhutan",
     });
-    setItinerary([{ id: "1", day: 1, title: "", description: "" }]);
+    setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
     setExistingImages([]);
     setNewImages([]);
     onClose();
@@ -529,13 +606,76 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Day {day.day} Description</label>
-                      <Textarea
-                        placeholder={`Describe the activities for day ${day.day}...`}
-                        value={day.description}
-                        onChange={(e) => updateItineraryDay(day.id, 'description', e.target.value)}
-                        rows={3}
-                      />
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <label className="text-sm font-medium">Day {day.day} Descriptions</label>
+                          <p className="text-xs text-gray-500">Select text and click the Bold button to make it bold</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => addItineraryDescription(day.id)}
+                          className="flex items-center gap-1 h-7 px-2"
+                        >
+                          <Plus className="h-3 w-3" />
+                          Add Point
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {day.descriptions.map((description, descIndex) => (
+                          <div key={descIndex} className="flex items-start gap-2">
+                            <div className="flex items-center justify-center w-5 h-5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mt-1 flex-shrink-0">
+                              •
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex gap-2 mb-2">
+                                <Textarea
+                                  ref={(el) => {
+                                    textareaRefs.current[`${day.id}-${descIndex}`] = el;
+                                  }}
+                                  placeholder={`Description point ${descIndex + 1} for day ${day.day}...`}
+                                  value={description}
+                                  onChange={(e) => updateItineraryDescription(day.id, descIndex, e.target.value)}
+                                  rows={2}
+                                  className="flex-1"
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => makeTextBold(
+                                    { current: textareaRefs.current[`${day.id}-${descIndex}`] },
+                                    (value) => updateItineraryDescription(day.id, descIndex, value),
+                                    description
+                                  )}
+                                  className="px-3 h-auto"
+                                  title="Make selected text bold"
+                                >
+                                  <Bold className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              {description && (
+                                <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded border">
+                                  <span className="font-medium">Preview:</span>
+                                  <div className="mt-1">{renderBoldText(description)}</div>
+                                </div>
+                              )}
+                            </div>
+                            {day.descriptions.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeItineraryDescription(day.id, descIndex)}
+                                className="text-red-500 hover:text-red-700 h-8 w-8 p-0 flex-shrink-0 mt-1"
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

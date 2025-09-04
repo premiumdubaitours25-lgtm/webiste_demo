@@ -10,6 +10,18 @@ import { MapPin, Clock, Users, Star, Calendar, Phone, Mail, ArrowLeft, CheckCirc
 import Image from "next/image";
 import Link from "next/link";
 
+// Utility function to render text with bold formatting
+const renderBoldText = (text: string) => {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2);
+      return <strong key={index} className="font-bold">{boldText}</strong>;
+    }
+    return part;
+  });
+};
+
 interface Package {
   _id: string;
   title: string;
@@ -422,10 +434,10 @@ const PackageDetailPage = () => {
                               DAY {day.day}: {day.title}
                             </h4>
                             <ul className="space-y-2 text-gray-700">
-                              {day.description.split('.').filter(sentence => sentence.trim()).map((sentence, sentenceIndex) => (
-                                <li key={sentenceIndex} className="flex items-start">
+                              {day.description.split('\n• ').filter(point => point.trim()).map((point, pointIndex) => (
+                                <li key={pointIndex} className="flex items-start">
                                   <span className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                  <span>{sentence.trim()}.</span>
+                                  <span>{renderBoldText(point.trim())}</span>
                                 </li>
                               ))}
                             </ul>
