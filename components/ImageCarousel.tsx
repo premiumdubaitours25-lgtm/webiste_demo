@@ -69,35 +69,43 @@ const ImageCarousel = () => {
               alt={image.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 flex items-end justify-center pb-8 p-8 text-white">
-              <div className="flex flex-col items-center text-center max-w-2xl">
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
+            {/* Black Overlay for better text visibility */}
+            <div className="absolute inset-0 bg-black/50"></div>
+            
+            {/* Content with left alignment and vertical center */}
+            <div className="absolute inset-0 flex items-center justify-start p-8 text-white">
+              <div className="flex flex-col max-w-2xl ml-8">
+                {/* Title */}
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white">
                   {image.title}
                 </h3>
-                <div className="max-w-lg">
-                  <div className="text-base md:text-lg lg:text-xl whitespace-pre-line leading-none space-y-0 mb-6">
-                    {image.description.split('\n').map((line, index) => (
-                      <div key={index} className={line.trim() === '' ? 'h-0' : ''}>
-                        {line.trim() !== '' && (
-                          <span 
-                            className={line.includes('@') || line.includes('₹') ? 'font-semibold text-yellow-300' : 'text-white'}
-                            style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}
-                          >
-                            {line}
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <Link href="/contact">
-                    <Button 
-                      size="lg"
-                      className="bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 text-lg"
-                    >
-                      Book Now
-                    </Button>
-                  </Link>
+                
+                {/* Description with better formatting */}
+                <div className="space-y-2 mb-6">
+                  {image.description.split('\n').map((line, index) => (
+                    <div key={index} className={line.trim() === '' ? 'h-2' : ''}>
+                      {line.trim() !== '' && (
+                        <div className={`text-sm md:text-base lg:text-lg ${
+                          line.includes('@') || line.includes('₹') 
+                            ? 'font-semibold text-yellow-400' 
+                            : 'text-white'
+                        }`}>
+                          {line}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
+                
+                {/* Book Now Button */}
+                <Link href="/contact">
+                  <Button 
+                    size="lg"
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 text-lg rounded-lg shadow-lg"
+                  >
+                    Book Now
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
