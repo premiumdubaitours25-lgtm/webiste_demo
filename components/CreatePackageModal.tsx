@@ -84,8 +84,7 @@ interface CreatePackageModalProps {
 const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackageModalProps) => {
   const [formData, setFormData] = useState({
     title: "Bhutan Budgeted Tour for 3 Nights / 4 Days",
-    subtitle: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels( sister company of Travellers Paradise.: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
-    about: "At JJ&Tia Tours and Travels( sister company of Travellers Paradise.: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
+    subtitle: "Destinations Covered: Thimphu & Paro.",
     tourDetails: "Customized travel planning, Guided tours & local experiences, Group & family vacations, Luxury & adventure travel, Honeymoons & romantic getaways, Corporate & incentive travel",
     price: "28500",
     duration: "3N/4D",
@@ -336,7 +335,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       console.log('Form data before validation:', formData);
       console.log('Itinerary before validation:', itinerary);
       
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
+      if (!formData.title || !formData.subtitle || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
         console.log('Validation failed: Missing required fields');
         alert('Please fill in all required fields including package type and place');
         return;
@@ -352,6 +351,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       // Prepare package data
       const packageData = {
         ...formData,
+        about: "Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! We specialize in creating unique travel experiences that combine adventure, culture, and comfort. With over a decade of experience in the travel industry, we have been helping travelers discover the world's most beautiful destinations. As a sister company of Travellers Paradise, we bring you the best of both worlds - local expertise and global reach.\n\nAt JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
         price: price,
         itinerary: itinerary.map(day => ({
           day: day.day,
@@ -493,16 +493,6 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             </div>
           </div>
 
-          {/* About Section */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">About JJ & TIA Tours and Travels</label>
-            <Textarea
-              placeholder="Write about your company and this package..."
-              value={formData.about}
-              onChange={(e) => handleInputChange('about', e.target.value)}
-              rows={4}
-            />
-          </div>
 
 
 

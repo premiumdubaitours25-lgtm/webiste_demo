@@ -277,7 +277,7 @@ const PackageDetailPage = () => {
                     </div>
                   </div>
                   <p className="text-gray-700 leading-relaxed text-lg">
-                    {packageData.about}
+                    {packageData.subtitle}
                   </p>
                 </CardContent>
               </Card>
@@ -288,13 +288,16 @@ const PackageDetailPage = () => {
                   <CardTitle className="text-xl">About JJ & TIA Tours and Travels</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 leading-relaxed">
-                    Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! 
-                    We specialize in creating unique travel experiences that combine adventure, culture, and comfort. 
-                    With over a decade of experience in the travel industry, we have been helping travelers 
-                    discover the world's most beautiful destinations. As a sister company of Travellers Paradise, 
-                    we bring you the best of both worlds - local expertise and global reach.
-                  </p>
+                  <ul className="text-gray-700 space-y-3">
+                    <li className="flex items-start">
+                      <span className="text-primary mr-2 mt-1">•</span>
+                      <span>Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! We specialize in creating unique travel experiences that combine adventure, culture, and comfort. With over a decade of experience in the travel industry, we have been helping travelers discover the world's most beautiful destinations. As a sister company of Travellers Paradise, we bring you the best of both worlds - local expertise and global reach.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-primary mr-2 mt-1">•</span>
+                      <span>At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
+                    </li>
+                  </ul>
                 </CardContent>
               </Card>
 
@@ -322,32 +325,6 @@ const PackageDetailPage = () => {
                 </CardContent>
               </Card>
 
-              {/* Tour Details */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-xl">Tour Details</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="flex items-center">
-                      <CalendarIcon className="h-5 w-5 text-primary mr-3" />
-                      <span className="text-gray-700">Duration: {packageData.duration}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Users className="h-5 w-5 text-primary mr-3" />
-                      <span className="text-gray-700">Travelers: {packageData.capacity}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Hotel className="h-5 w-5 text-primary mr-3" />
-                      <span className="text-gray-700">Hotel Category: 3 Star</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Utensils className="h-5 w-5 text-primary mr-3" />
-                      <span className="text-gray-700">Meal Plan: Breakfast & Dinner</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
 
               {/* Transportation */}
               <Card>
@@ -463,20 +440,28 @@ const PackageDetailPage = () => {
                   <CardContent>
                     <div className="space-y-3">
                       {[
-                        "Accommodation on twin Sharing Basis",
-                        "Meals as per plan",
-                        "SDF Charges (1200/- per person per night) Mandatory",
-                        "Bhutanese guide Mandatory",
-                        "Mineral water bottle per day",
-                        "Exclusive vehicle for transfers & sightseeing",
-                        "All permit fees & hotel taxes",
-                        "Rates are valid for INDIAN NATIONALS only"
+                        "Accommodation in twin sharing",
+                        "Transportation: Exclusive vehicle for transfers & sightseeing",
+                        "Breakfast and Dinner included",
+                        "All tourists taxes",
+                        "Entry permits to Bhutan",
+                        "Pick and drop till Airport",
+                        "All sightseeing tours as per itinerary",
+                        "Experience Tour guide",
+                        "Govts SDF fee taxes Rs.1200 per night per person included",
+                        "Daily mineral water during the tour"
                       ].map((item, index) => (
                         <div key={index} className="flex items-start">
                           <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
                           <span className="text-gray-700 text-sm">{item}</span>
                         </div>
                       ))}
+                      <div className="mt-4 pt-3 border-t border-gray-200">
+                        <div className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700 text-sm font-medium">Rates are valid for INDIAN NATIONALS only</span>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

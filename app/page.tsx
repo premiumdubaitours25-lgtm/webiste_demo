@@ -9,7 +9,7 @@ import InquiryFormPopup from "../components/InquiryFormPopup";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { ArrowRight, MapPin, Package, BookOpen, Phone, MessageCircle, Plane, Calendar, User, Eye, Heart, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, MapPin, Package, Book, Phone, MessageCircle, Plane, Calendar, User, Eye, Heart, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -585,7 +585,7 @@ export default function Home() {
               onClick={() => router.push('/blogs')}
             >
               Read Our Blog
-              <BookOpen className="ml-2 h-5 w-5" />
+              <Book className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </div>
