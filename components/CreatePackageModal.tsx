@@ -390,7 +390,6 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setFormData({
       title: "",
       subtitle: "",
-      about: "",
       tourDetails: "",
       price: "",
       duration: "",
