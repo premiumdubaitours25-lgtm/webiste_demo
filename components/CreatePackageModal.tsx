@@ -83,28 +83,89 @@ interface CreatePackageModalProps {
 
 const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackageModalProps) => {
   const [formData, setFormData] = useState({
-    title: "",
-    subtitle: "",
-    about: "",
-    tourDetails: "",
-    price: "",
-    duration: "",
-    location: "",
-    capacity: "",
-    packageType: "",
-    place: "",
+    title: "Bhutan Budgeted Tour for 3 Nights / 4 Days",
+    subtitle: "JJ&Tia Tours and Travels. Your Path to Unforgettable Adventures. At JJ&Tia Tours and Travels( sister company of Travellers Paradise.: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
+    about: "At JJ&Tia Tours and Travels( sister company of Travellers Paradise.: Travellers Paradise Tours & Travels - Profile, Reviews & Ratings, we specialize in crafting unique and personalized travel experiences that take you beyond the ordinary. Founded on a passion for exploration and a deep love for cultures, our company has been helping travelers of all types—from solo explorers to family groups—discover the beauty of the world for over a decade.",
+    tourDetails: "Customized travel planning, Guided tours & local experiences, Group & family vacations, Luxury & adventure travel, Honeymoons & romantic getaways, Corporate & incentive travel",
+    price: "28500",
+    duration: "3N/4D",
+    location: "Bhutan",
+    capacity: "2 Adults",
+    packageType: "international",
+    place: "bhutan",
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([
-    { id: "1", day: 1, title: "", descriptions: [""] }
+    { 
+      id: "1", 
+      day: 1, 
+      title: "Day: 1 Welcome to Bhutan from NJP Station/ Airport - Phuentsholing to Thimphu.", 
+      descriptions: [
+        "Upon arrival, you will be greeted by our driver or tour representative at the Railway Station. On arrival in Phuentsholing, our tour representative will assist you with the Bhutan immigration process. Immigration formalities include submitting your travel permits and identification (passport or voter ID for Indian citizens).",
+        "After which you will be transferred to Thimpu. The capital of Bhutan via Gedu, which is located about 9000 ft. above the sea and on the way you can enjoy the view of Chukha Dam.",
+        "We will have a quick stopover for photo session at Wankha Waterfalls. The journey from Phuentsholing to Thimphu is a scenic drive, and there are several noteworthy stops en route where you can relax, enjoy the views, and experience Bhutan's natural beauty and culture."
+      ]
+    },
+    { 
+      id: "2", 
+      day: 2, 
+      title: "Day: 2 Thimphu Local Sightseeing to Paro Transfer.", 
+      descriptions: [
+        "**The National Memorial Chorten:** Built-in the memory of the third Druk Gyalpo (Head of Kingdom) of Bhutan, the National Memorial Chorten is devoted to World Peace. The Chorten popular amongst the localities for various major Buddhist religious festivals and it is one of the best places to see in Thimphu Bhutan.",
+        "**Buddha Dordenma Statue -** Atop a hill in Thimphu, is a massive, golden Buddha sitting atop a gilded meditation hall. Hidden inside it has 125,000 smaller Buddha's. This means that in Thimphu, there are more Buddha statues than this city's population (100000), it is also known as Budda point.",
+        "**Changangkha Lhakhang –** In Thimphu there are many monasteries and temple that you will get to see and among them. Changangkha Lhakhang is one of the most religious structures. It was built in the 12th century and its one of the oldest Lhakhang located in Thimphu .It's also known as the wish fulfilling temple, from here you can see the amazing view of Thimphu city",
+        "**The motitang Takin Preserve – **For animal lovers, Motithang Takin Preserve is one of the best places to visit in Thimphu. This attractive preserved area was built as a small zoo but later it was converted into an animal preserve center. Takin -The national animal of Bhutan, lives in the Motithang Takin Preserve in Thimphu",
+        "**Tashi Chho Dzong (It is open @ 5pm for 1 Hrs only) -** It is a monastery which is located next to bank of Wang Chhu River, It is also known as Thimphu Dzong. Annual 3 days Tsechu festival is also hosted every year at TashiChho Dzong. It was built in 1216 A.D."
+      ]
+    },
+    { 
+      id: "3", 
+      day: 3, 
+      title: "Day: 3 Paro Local Sightseeing.", 
+      descriptions: [
+        "**Simtokha Dzong :** This Dzong, was built in the year 1629 also known as Sangak Zabdhon Phodrang by Zhabdrung Ngawang Namgyal, Simtokha Dzong was built in the 17th century and it is one of the oldest Dzong built .An very important and oldest structure..",
+        "**National Museum of Bhutan:** An ancient watchtower that now displays hundreds of ancient Bhutanese artifacts and artwork including traditional costumes, armor, weaponry, and handcrafted implements for daily life. The collections represent the rich cultural traditions of the country.",
+        "**Drukgyal Dzong:** Drukgyal Dzong was a Buddhist Monastery. It is also translates as the 'Victorious Fortress'. This is the place where several victories over marauding Tibetan invaders. It is considered the most beautiful and famous archaeological site in Bhutan.",
+        "**Paro Airport View:** This is one of the most stunning airports in the World and also the country's first and only international airport. With a breathtaking view, this airport became a must-visit place in Paro",
+        "**Kyichu Lhakhang –** It is also known as Kyerchu Buddhist Temple, Kyichu Lhakhang is a pilgrimage place as it is part of 108 temples which was built by the king ,it's very old and very beautiful and most visited"
+      ]
+    },
+    { 
+      id: "4", 
+      day: 4, 
+      title: "Day: 4 Departure from Paro to Bagdogra airport / NJP Station.", 
+      descriptions: [
+        "After soaking in the beauty of Bhutan's sights, you will be greeted with a delightful breakfast. After which you'll be transferred to NJP (New Jalpaiguri Station) or Bagdogra in Siliguri, passing through the scenic Phuentsholing, as you embark on your journey back home, carrying unforgettable memories of your Bhutan adventure."
+      ]
+    }
   ]);
 
   const [transportation, setTransportation] = useState<TransportationItem[]>([
-    { id: "1", type: "", vehicle: "", description: "" }
+    { 
+      id: "1", 
+      type: "In Bhutan", 
+      vehicle: "Hyundai Creta", 
+      description: "Transportations: - Using Swift Desire transfers from Bagdogra Airport/NJP Station." 
+    }
   ]);
 
   const [accommodation, setAccommodation] = useState<AccommodationItem[]>([
-    { id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }
+    { 
+      id: "1", 
+      city: "Thimphu", 
+      hotel: "Himalayan Star Lodge or Similar", 
+      rooms: "1 Room", 
+      roomType: "Double Sharing", 
+      nights: "01" 
+    },
+    { 
+      id: "2", 
+      city: "Paro", 
+      hotel: "Himalayan Star Resort or Similar", 
+      rooms: "1 Room", 
+      roomType: "Double Sharing", 
+      nights: "02" 
+    }
   ]);
 
   const [images, setImages] = useState<File[]>([]);

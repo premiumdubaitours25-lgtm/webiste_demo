@@ -55,7 +55,7 @@ const ImageCarousel = () => {
   };
 
   return (
-    <section className="relative h-[500px] md:h-[600px] overflow-hidden rounded-lg">
+    <section className="relative h-[400px] md:h-[450px] overflow-hidden rounded-lg">
       <div className="relative h-full">
         {images.map((image, index) => (
           <div
@@ -69,18 +69,20 @@ const ImageCarousel = () => {
               alt={image.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 p-8 text-white">
-              <div className="flex flex-col items-start">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-center bg-black/40 px-6 py-3 rounded-lg">
+            <div className="absolute inset-0 flex items-end justify-center pb-8 p-8 text-white">
+              <div className="flex flex-col items-center text-center max-w-2xl">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
                   {image.title}
                 </h3>
-                <div className="bg-black/60 p-6 rounded-lg backdrop-blur-sm max-w-md">
-                  <div className="text-lg md:text-xl opacity-95 whitespace-pre-line leading-tight space-y-1 mb-4">
+                <div className="max-w-lg">
+                  <div className="text-base md:text-lg lg:text-xl whitespace-pre-line leading-none space-y-0 mb-6">
                     {image.description.split('\n').map((line, index) => (
-                      <div key={index} className={line.trim() === '' ? 'h-1' : ''}>
+                      <div key={index} className={line.trim() === '' ? 'h-0' : ''}>
                         {line.trim() !== '' && (
-                          <span className={line.includes('@') || line.includes('₹') ? 'font-semibold text-yellow-300' : 'text-white'}>
+                          <span 
+                            className={line.includes('@') || line.includes('₹') ? 'font-semibold text-yellow-300' : 'text-white'}
+                            style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}
+                          >
                             {line}
                           </span>
                         )}
@@ -89,7 +91,8 @@ const ImageCarousel = () => {
                   </div>
                   <Link href="/contact">
                     <Button 
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3"
+                      size="lg"
+                      className="bg-primary hover:bg-primary/90 text-white font-semibold py-4 px-8 text-lg"
                     >
                       Book Now
                     </Button>
