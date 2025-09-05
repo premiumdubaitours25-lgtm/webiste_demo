@@ -7,6 +7,8 @@ import { Badge } from "../../components/ui/badge";
 import CreatePackageModal from "../../components/CreatePackageModal";
 import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { 
   Package, 
   Star, 
@@ -16,7 +18,8 @@ import {
   Trash2,
   Filter,
   Search,
-  Download
+  Download,
+  Copy
 } from "lucide-react";
 
 interface PackageData {
@@ -163,6 +166,465 @@ export default function DashboardPage() {
     setIsEditPackageModalOpen(false);
   };
 
+  const handleDuplicatePackage = async (pkg: PackageData) => {
+    try {
+      // Create a duplicate package with modified title and remove _id
+      const duplicatePackage = {
+        ...pkg,
+        title: `${pkg.title} (Copy)`,
+        subtitle: `${pkg.subtitle} (Copy)`,
+        bookings: 0,
+        rating: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      // Remove the _id so it creates a new package
+      delete (duplicatePackage as any)._id;
+
+      const response = await fetch('/api/packages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(duplicatePackage),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setPackages(prev => [result.data, ...prev]);
+        alert('Package duplicated successfully!');
+      } else {
+        const errorResult = await response.json();
+        throw new Error(errorResult.error || 'Failed to duplicate package');
+      }
+    } catch (error) {
+      console.error('Error duplicating package:', error);
+      alert(`Error duplicating package: ${error.message}`);
+    }
+  };
+
+  const handleExportToPDF = () => {
+    try {
+      // Create new PDF document
+      const doc = new jsPDF();
+      
+      // Add title
+      doc.setFontSize(20);
+      doc.text('TIA Tours - Package Report', 20, 20);
+      
+      // Add date
+      doc.setFontSize(10);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
+      
+      // Prepare table data
+      const tableData = packages.map((pkg, index) => [
+        index + 1,
+        pkg.title,
+        pkg.packageType === 'domestic' ? 'Domestic' : 'International',
+        pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal',
+        pkg.duration || 'N/A',
+        pkg.location || 'N/A',
+        pkg.capacity || 'N/A',
+        `₹${pkg.price}`,
+        pkg.rating || 0,
+        pkg.bookings || 0,
+        new Date(pkg.createdAt).toLocaleDateString()
+      ]);
+
+      // Add table using the imported autoTable function
+      autoTable(doc, {
+        head: [['#', 'Title', 'Type', 'Place', 'Duration', 'Location', 'Capacity', 'Price', 'Rating', 'Bookings', 'Created']],
+        body: tableData,
+        startY: 40,
+        styles: {
+          fontSize: 8,
+          cellPadding: 3,
+        },
+        headStyles: {
+          fillColor: [41, 128, 185],
+          textColor: 255,
+          fontStyle: 'bold',
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        columnStyles: {
+          0: { cellWidth: 10 },
+          1: { cellWidth: 40 },
+          2: { cellWidth: 20 },
+          3: { cellWidth: 15 },
+          4: { cellWidth: 20 },
+          5: { cellWidth: 20 },
+          6: { cellWidth: 20 },
+          7: { cellWidth: 20 },
+          8: { cellWidth: 15 },
+          9: { cellWidth: 20 },
+          10: { cellWidth: 25 },
+        },
+      });
+
+      // Add summary
+      const finalY = (doc as any).lastAutoTable.finalY + 20;
+      doc.setFontSize(12);
+      doc.text('Summary:', 20, finalY);
+      
+      doc.setFontSize(10);
+      doc.text(`Total Packages: ${packages.length}`, 20, finalY + 10);
+      doc.text(`Domestic Packages: ${packages.filter(p => p.packageType === 'domestic').length}`, 20, finalY + 20);
+      doc.text(`International Packages: ${packages.filter(p => p.packageType === 'international').length}`, 20, finalY + 30);
+      doc.text(`Total Bookings: ${packages.reduce((sum, p) => sum + (p.bookings || 0), 0)}`, 20, finalY + 40);
+      doc.text(`Average Rating: ${(packages.reduce((sum, p) => sum + (p.rating || 0), 0) / packages.length).toFixed(1)}`, 20, finalY + 50);
+
+      // Save the PDF
+      doc.save(`tia-tours-packages-${new Date().toISOString().split('T')[0]}.pdf`);
+      
+      alert('Package data exported to PDF successfully!');
+    } catch (error) {
+      console.error('Error exporting to PDF:', error);
+      alert('Error exporting to PDF. Please try again.');
+    }
+  };
+
+  const handleExportSinglePackageToPDF = async (pkg: PackageData) => {
+    try {
+      // Create new PDF document
+      const doc = new jsPDF();
+      
+      // Add header with logo/title
+      doc.setFillColor(41, 128, 185);
+      doc.rect(0, 0, 210, 30, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.text('TIA Tours & Travels', 20, 20);
+      
+      // Reset text color
+      doc.setTextColor(0, 0, 0);
+      
+      // Add package title
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
+      doc.text(pkg.title, 20, 45);
+      
+      // Add subtitle
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'normal');
+      doc.text(pkg.subtitle || '', 20, 55);
+      
+      // Add package images section
+      let yPosition = 70;
+      if (pkg.images && pkg.images.length > 0) {
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Package Images', 20, yPosition);
+        yPosition += 10;
+        
+        // Add image count
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${pkg.images.length} Images`, 20, yPosition);
+        yPosition += 15;
+        
+        // Add images in a grid layout
+        const imagesPerRow = 2;
+        const imageWidth = 80;
+        const imageHeight = 60;
+        const spacing = 10;
+        
+        pkg.images.forEach((image, index) => {
+          const row = Math.floor(index / imagesPerRow);
+          const col = index % imagesPerRow;
+          
+          if (yPosition + (row * (imageHeight + 30)) > 250) {
+            doc.addPage();
+            yPosition = 20;
+          }
+          
+          const x = 20 + (col * (imageWidth + spacing));
+          const currentY = yPosition + (row * (imageHeight + 30));
+          
+          try {
+            // Try to add the actual image
+            doc.addImage(image.url, 'JPEG', x, currentY, imageWidth, imageHeight);
+          } catch (error) {
+            // If image fails to load, draw a placeholder
+            doc.setDrawColor(200, 200, 200);
+            doc.rect(x, currentY, imageWidth, imageHeight);
+            doc.setFontSize(8);
+            doc.text(`Image ${index + 1}`, x + 5, currentY + 30);
+            doc.text(image.alt || 'Package Image', x + 5, currentY + 40);
+          }
+          
+          // Add image filename below
+          doc.setFontSize(8);
+          const filename = image.url.split('/').pop() || `image_${index + 1}.jpg`;
+          doc.text(filename, x, currentY + imageHeight + 5);
+        });
+        
+        yPosition += Math.ceil(pkg.images.length / imagesPerRow) * (imageHeight + 30) + 10;
+      }
+      
+      // Add package details in table format
+      if (yPosition > 200) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      
+      doc.setFontSize(14);
+      doc.setFont(undefined, 'bold');
+      doc.text('Package Details', 20, yPosition);
+      yPosition += 15;
+      
+      // Create table data for package details
+      const tableData = [
+        ['Duration', pkg.duration || 'N/A'],
+        ['Location', pkg.location || 'N/A'],
+        ['Capacity', pkg.capacity || 'N/A'],
+        ['Price', `₹${pkg.price}`],
+        ['Type', pkg.packageType === 'domestic' ? 'Domestic' : 'International'],
+        ['Place', pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal']
+      ];
+      
+      // Add table using autoTable
+      autoTable(doc, {
+        head: [['Detail', 'Value']],
+        body: tableData,
+        startY: yPosition,
+        styles: {
+          fontSize: 10,
+          cellPadding: 5,
+        },
+        headStyles: {
+          fillColor: [41, 128, 185],
+          textColor: 255,
+          fontStyle: 'bold',
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        columnStyles: {
+          0: { cellWidth: 50, fontStyle: 'bold' },
+          1: { cellWidth: 120 },
+        },
+      });
+      
+      yPosition = (doc as any).lastAutoTable.finalY + 20;
+      
+      // Add About section
+      if (pkg.about) {
+        if (yPosition > 200) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('About', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        const aboutLines = doc.splitTextToSize(pkg.about, 170);
+        doc.text(aboutLines, 20, yPosition);
+        yPosition += aboutLines.length * 5 + 15;
+      }
+      
+      // Skip Our Services section as requested
+      
+      // Add Tour Details section in table format for Bhutan packages
+      if (pkg.tourDetails && pkg.place === 'bhutan') {
+        if (yPosition > 200) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Tour Details', 20, yPosition);
+        yPosition += 15;
+        
+        // Split tour details by lines and create table data
+        const tourDetailsLines = pkg.tourDetails.split('\n').filter(line => line.trim() !== '');
+        const tableData = tourDetailsLines.map(line => [line.trim()]);
+        
+        // Add tour details table
+        autoTable(doc, {
+          head: [['Details']],
+          body: tableData,
+          startY: yPosition,
+          styles: {
+            fontSize: 10,
+            cellPadding: 5,
+          },
+          headStyles: {
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontStyle: 'bold',
+          },
+          alternateRowStyles: {
+            fillColor: [245, 245, 245],
+          },
+          columnStyles: {
+            0: { cellWidth: 170 },
+          },
+        });
+        
+        yPosition = (doc as any).lastAutoTable.finalY + 20;
+      }
+      
+      // Add Itinerary section with blue background title
+      if (pkg.itinerary && pkg.itinerary.length > 0) {
+        if (yPosition > 150) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        // Add blue background for Itinerary title
+        doc.setFillColor(41, 128, 185);
+        doc.rect(20, yPosition - 5, 170, 15, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Itinerary', 25, yPosition + 5);
+        
+        // Reset text color
+        doc.setTextColor(0, 0, 0);
+        yPosition += 20;
+        
+        pkg.itinerary.forEach((day, index) => {
+          if (yPosition > 250) {
+            doc.addPage();
+            yPosition = 20;
+          }
+          
+          doc.setFontSize(12);
+          doc.setFont(undefined, 'bold');
+          doc.text(`Day ${day.day}`, 20, yPosition);
+          yPosition += 8;
+          
+          doc.setFontSize(10);
+          doc.setFont(undefined, 'bold');
+          // Remove any star emojis and show clean bold text
+          const cleanTitle = day.title.replace(/[⭐*]/g, '').trim();
+          doc.text(cleanTitle, 20, yPosition);
+          yPosition += 8;
+          
+          doc.setFont(undefined, 'normal');
+          const descLines = doc.splitTextToSize(day.description, 170);
+          doc.text(descLines, 20, yPosition);
+          yPosition += descLines.length * 5 + 10;
+        });
+      }
+      
+      // Add Transportation section in table format
+      if (pkg.transportation && pkg.transportation.length > 0) {
+        if (yPosition > 200) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Transportation', 20, yPosition);
+        yPosition += 15;
+        
+        // Create table data for transportation
+        const transportationTableData = pkg.transportation.map(transport => [
+          transport.type,
+          transport.vehicle,
+          transport.description || 'N/A'
+        ]);
+        
+        // Add transportation table
+        autoTable(doc, {
+          head: [['Type', 'Vehicle', 'Description']],
+          body: transportationTableData,
+          startY: yPosition,
+          styles: {
+            fontSize: 9,
+            cellPadding: 4,
+          },
+          headStyles: {
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontStyle: 'bold',
+          },
+          alternateRowStyles: {
+            fillColor: [245, 245, 245],
+          },
+          columnStyles: {
+            0: { cellWidth: 40 },
+            1: { cellWidth: 50 },
+            2: { cellWidth: 80 },
+          },
+        });
+        
+        yPosition = (doc as any).lastAutoTable.finalY + 20;
+      }
+      
+      // Add Accommodation section in table format
+      if (pkg.accommodation && pkg.accommodation.length > 0) {
+        if (yPosition > 200) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Accommodation', 20, yPosition);
+        yPosition += 15;
+        
+        // Create table data for accommodation
+        const accommodationTableData = pkg.accommodation.map(accommodation => [
+          accommodation.city,
+          accommodation.hotel,
+          accommodation.rooms,
+          accommodation.roomType,
+          accommodation.nights
+        ]);
+        
+        // Add accommodation table
+        autoTable(doc, {
+          head: [['City', 'Hotel/Resort', 'Rooms', 'Room Type', 'Nights']],
+          body: accommodationTableData,
+          startY: yPosition,
+          styles: {
+            fontSize: 9,
+            cellPadding: 4,
+          },
+          headStyles: {
+            fillColor: [41, 128, 185],
+            textColor: 255,
+            fontStyle: 'bold',
+          },
+          alternateRowStyles: {
+            fillColor: [245, 245, 245],
+          },
+          columnStyles: {
+            0: { cellWidth: 30 },
+            1: { cellWidth: 60 },
+            2: { cellWidth: 20 },
+            3: { cellWidth: 30 },
+            4: { cellWidth: 20 },
+          },
+        });
+        
+        yPosition = (doc as any).lastAutoTable.finalY + 20;
+      }
+      
+      // Package Statistics section removed as requested
+
+      // Save the PDF
+      const fileName = `${pkg.title.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
+      
+      alert('Package exported to PDF successfully!');
+    } catch (error) {
+      console.error('Error exporting package to PDF:', error);
+      alert('Error exporting package to PDF. Please try again.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -212,9 +674,9 @@ export default function DashboardPage() {
                   <Search className="h-4 w-4 mr-2" />
                   Search
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={handleExportToPDF}>
                   <Download className="h-4 w-4 mr-2" />
-                  Export
+                  Export PDF
                 </Button>
               </div>
             </div>
@@ -294,6 +756,24 @@ export default function DashboardPage() {
                               title="Edit Package"
                             >
                               <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleDuplicatePackage(pkg)}
+                              title="Duplicate Package"
+                              className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleExportSinglePackageToPDF(pkg)}
+                              title="Export Package to PDF"
+                              className="text-green-500 hover:text-green-700 hover:bg-green-50"
+                            >
+                              <Download className="h-4 w-4" />
                             </Button>
                             <Button 
                               variant="ghost" 
