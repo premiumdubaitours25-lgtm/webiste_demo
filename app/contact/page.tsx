@@ -64,7 +64,7 @@ Please get back to me with more information about available packages and pricing
     const encodedMessage = encodeURIComponent(whatsappMessage);
     
     // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/919321362064?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/919970393335?text=${encodedMessage}`;
     
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank');
@@ -173,46 +173,6 @@ Please get back to me with more information about available packages and pricing
         </div>
       </section>
 
-      {/* Contact Information */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Get in Touch
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                We're here to help you plan your perfect trip. Reach out to us through any of these channels.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {contactInfo.map((info, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                      <info.icon className="h-8 w-8 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                      {info.title}
-                    </h3>
-                    <div className="space-y-1 mb-3">
-                      {info.details.map((detail, idx) => (
-                        <p key={idx} className="text-gray-600 font-medium">
-                          {detail}
-                        </p>
-                      ))}
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      {info.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Contact Form and Map */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -268,7 +228,7 @@ Please get back to me with more information about available packages and pricing
                             type="tel"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            placeholder="+977-XXXXXXXXX"
+                            placeholder="+91-XXXXXXXXXX"
                           />
                         </div>
                         <div>
@@ -341,10 +301,10 @@ Please get back to me with more information about available packages and pricing
                           id="message"
                           name="message"
                           required
-                          rows={6}
                           value={formData.message}
                           onChange={handleInputChange}
                           placeholder="Tell us about your travel plans, questions, or any specific requirements..."
+                          rows={4}
                         />
                       </div>
 
@@ -373,22 +333,41 @@ Please get back to me with more information about available packages and pricing
 
               {/* Map and Team Info */}
               <div className="space-y-8">
-                {/* Map Placeholder */}
+                {/* Google Maps */}
                 <div>
                   <h2 className="text-3xl font-bold text-gray-900 mb-6">
                     Find Us
                   </h2>
                   <Card>
                     <CardContent className="p-0">
-                      <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                        <div className="text-center">
-                          <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                          <p className="text-gray-600">Interactive Map</p>
-                          <p className="text-sm text-gray-500">Nyati Estate, Mohammadwadi, Pune - 411060</p>
-                        </div>
+                      <div className="aspect-video">
+                        <iframe
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.123456789!2d73.9214695!3d18.4654402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2ea3d136a1fbf%3A0x62d0ef2a991eb2de!2sNYATI%20ESTATE%2C%20Mohammed%20Wadi%2C%20Pune%2C%20Autadwadi%20Handewadi%2C%20Maharashtra%20411060!5e0!3m2!1sen!2sin!4v1699123456789!5m2!1sen!2sin"
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title="JJ & TIA Tours Location - Nyati Estate, Mohammadwadi, Pune"
+                        ></iframe>
                       </div>
                     </CardContent>
                   </Card>
+                  <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600">
+                      <MapPin className="h-4 w-4 inline mr-1" />
+                      Nyati Estate, Mohammadwadi, Pune - 411060
+                    </p>
+                    <a 
+                      href="https://www.google.com/maps/place/NYATI+ESTATE,+Mohammed+Wadi,+Pune,+Autadwadi+Handewadi,+Maharashtra+411060/@18.4652485,73.9216976,18z/data=!3m1!4b1!4m6!3m5!1s0x3bc2ea3d136a1fbf:0x62d0ef2a991eb2de!8m2!3d18.4654402!4d73.9214695!16s%2Fg%2F11bw3x9vj6?entry=ttu&g_ep=EgoyMDI1MDkwMy4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:text-primary/80 text-sm font-medium mt-2 inline-block"
+                    >
+                      Open in Google Maps →
+                    </a>
+                  </div>
                 </div>
 
                 {/* Team Members */}
@@ -427,6 +406,48 @@ Please get back to me with more information about available packages and pricing
           </div>
         </div>
       </section>
+
+      {/* Contact Information */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Get in Touch
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                We're here to help you plan your perfect trip. Reach out to us through any of these channels.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {contactInfo.map((info, index) => (
+                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+                      <info.icon className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      {info.title}
+                    </h3>
+                    <div className="space-y-1 mb-3">
+                      {info.details.map((detail, idx) => (
+                        <p key={idx} className="text-gray-600 font-medium">
+                          {detail}
+                        </p>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      {info.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
 
       {/* FAQ Section */}
       <section className="py-16 bg-white">

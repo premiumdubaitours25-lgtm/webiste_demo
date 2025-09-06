@@ -53,7 +53,12 @@ const Navbar = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:bg-white/10"
+                onClick={() => window.open('https://wa.me/919970393335', '_blank')}
+              >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 Live Chat
               </Button>
@@ -73,7 +78,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="relative w-12 h-12">
+            <div className="relative w-16 h-16">
               <Image
                 src="/logo.png"
                 alt="JJ & TIA Tours Logo"
@@ -83,8 +88,8 @@ const Navbar = () => {
               />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">JJ & TIA Tours</h1>
-              <p className="text-xs text-gray-600">Travel & Tourism</p>
+              <h1 className="text-xl font-bold text-gray-900">JJ & TIA </h1>
+              <p className="text-xs text-gray-600">Tours and Travels</p>
             </div>
           </Link>
 

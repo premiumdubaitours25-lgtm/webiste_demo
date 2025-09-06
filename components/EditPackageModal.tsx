@@ -87,7 +87,7 @@ interface PackageData {
   location: string;
   capacity: string;
   packageType: 'domestic' | 'international';
-  place: 'bhutan' | 'nepal';
+  place: string;
   images: Array<{
     public_id: string;
     url: string;
@@ -504,6 +504,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                   <SelectValue placeholder="Select place" />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* Domestic Places */}
+                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                  <SelectItem value="sikkim">Sikkim</SelectItem>
+                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                  <SelectItem value="arunachal">Arunachal</SelectItem>
+                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                  <SelectItem value="kashmir">Kashmir</SelectItem>
+                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                  {/* International Places */}
+                  <SelectItem value="vietnam">Vietnam</SelectItem>
+                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                  <SelectItem value="bali">Bali</SelectItem>
+                  <SelectItem value="malaysia">Malaysia</SelectItem>
+                  <SelectItem value="singapore">Singapore</SelectItem>
+                  {/* Legacy Places */}
                   <SelectItem value="bhutan">Bhutan</SelectItem>
                   <SelectItem value="nepal">Nepal</SelectItem>
                 </SelectContent>

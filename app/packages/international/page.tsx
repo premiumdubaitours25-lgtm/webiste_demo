@@ -43,7 +43,7 @@ const InternationalPackagesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priceFilter, setPriceFilter] = useState("all");
   const [durationFilter, setDurationFilter] = useState("all");
-  const [countryFilter, setCountryFilter] = useState("all");
+  const [locationFilter, setLocationFilter] = useState("all");
 
   useEffect(() => {
     fetchPackages();
@@ -51,16 +51,16 @@ const InternationalPackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, priceFilter, durationFilter, countryFilter]);
+  }, [packages, searchTerm, priceFilter, durationFilter, locationFilter]);
 
   const fetchPackages = async () => {
     try {
       const response = await fetch('/api/packages');
       const result = await response.json();
       if (result.success) {
-        // Filter for international packages based on packageType
+        // Filter for international packages based on packageType and legacy destinations
         const internationalPackages = result.data.filter((pkg: Package) =>
-          pkg.packageType === 'international'
+          pkg.packageType === 'international' || pkg.place === 'nepal' || pkg.place === 'bhutan'
         );
         setPackages(internationalPackages);
       }
@@ -124,11 +124,12 @@ const InternationalPackagesPage = () => {
       });
     }
 
-    // Country filter
-    if (countryFilter !== "all") {
-      filtered = filtered.filter(pkg =>
-        pkg.location.toLowerCase().includes(countryFilter.toLowerCase())
-      );
+    // Location filter
+    if (locationFilter !== "all") {
+      filtered = filtered.filter(pkg => {
+        const place = pkg.place.toLowerCase();
+        return place === locationFilter;
+      });
     }
 
     setFilteredPackages(filtered);
@@ -143,10 +144,10 @@ const InternationalPackagesPage = () => {
   };
 
   const popularCountries = [
-    { name: "India", icon: Globe, packages: packages.filter(p => p.location.toLowerCase().includes('india')).length },
-    { name: "Bhutan", icon: Camera, packages: packages.filter(p => p.location.toLowerCase().includes('bhutan')).length },
-    { name: "Tibet", icon: Plane, packages: packages.filter(p => p.location.toLowerCase().includes('tibet')).length },
-    { name: "Thailand", icon: Globe, packages: packages.filter(p => p.location.toLowerCase().includes('thailand')).length },
+    { name: "Vietnam", icon: Globe, packages: packages.filter(p => p.place === 'vietnam').length },
+    { name: "Sri Lanka", icon: Camera, packages: packages.filter(p => p.place === 'sri-lanka').length },
+    { name: "Bali", icon: Plane, packages: packages.filter(p => p.place === 'bali').length },
+    { name: "Malaysia", icon: Globe, packages: packages.filter(p => p.place === 'malaysia').length },
   ];
 
   if (loading) {
@@ -274,17 +275,20 @@ const InternationalPackagesPage = () => {
                 </SelectContent>
               </Select>
 
-              {/* Country Filter */}
-              <Select value={countryFilter} onValueChange={setCountryFilter}>
+              {/* Location Filter */}
+              <Select value={locationFilter} onValueChange={setLocationFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Country" />
+                  <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Countries</SelectItem>
-                  <SelectItem value="india">India</SelectItem>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  <SelectItem value="vietnam">Vietnam</SelectItem>
+                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                  <SelectItem value="bali">Bali</SelectItem>
+                  <SelectItem value="malaysia">Malaysia</SelectItem>
+                  <SelectItem value="singapore">Singapore</SelectItem>
+                  <SelectItem value="nepal">Nepal</SelectItem>
                   <SelectItem value="bhutan">Bhutan</SelectItem>
-                  <SelectItem value="tibet">Tibet</SelectItem>
-                  <SelectItem value="thailand">Thailand</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -307,7 +311,7 @@ const InternationalPackagesPage = () => {
                   setSearchTerm("");
                   setPriceFilter("all");
                   setDurationFilter("all");
-                  setCountryFilter("all");
+                  setLocationFilter("all");
                 }}>
                   Clear Filters
                 </Button>
@@ -342,7 +346,11 @@ const InternationalPackagesPage = () => {
                           {formatPrice(pkg.price)}
                         </Badge>
                         <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          {pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal'}
+                          {pkg.place === 'vietnam' ? 'Vietnam' : 
+                           pkg.place === 'sri-lanka' ? 'Sri Lanka' :
+                           pkg.place === 'bali' ? 'Bali' :
+                           pkg.place === 'malaysia' ? 'Malaysia' :
+                           pkg.place === 'singapore' ? 'Singapore' : pkg.place}
                         </Badge>
                       </div>
                       

@@ -43,6 +43,7 @@ const DomesticPackagesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priceFilter, setPriceFilter] = useState("all");
   const [durationFilter, setDurationFilter] = useState("all");
+  const [locationFilter, setLocationFilter] = useState("all");
 
   useEffect(() => {
     fetchPackages();
@@ -50,7 +51,7 @@ const DomesticPackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, priceFilter, durationFilter]);
+  }, [packages, searchTerm, priceFilter, durationFilter, locationFilter]);
 
   const fetchPackages = async () => {
     try {
@@ -121,6 +122,14 @@ const DomesticPackagesPage = () => {
       });
     }
 
+    // Location filter
+    if (locationFilter !== "all") {
+      filtered = filtered.filter(pkg => {
+        const place = pkg.place.toLowerCase();
+        return place === locationFilter;
+      });
+    }
+
     setFilteredPackages(filtered);
   };
 
@@ -133,10 +142,10 @@ const DomesticPackagesPage = () => {
   };
 
   const popularDestinations = [
-    { name: "Nepal Packages", icon: Mountain, packages: packages.filter(p => p.place === 'nepal').length },
-    { name: "Bhutan Packages", icon: Camera, packages: packages.filter(p => p.place === 'bhutan').length },
-    { name: "Kathmandu Valley", icon: Heart, packages: packages.filter(p => p.location.toLowerCase().includes('kathmandu')).length },
-    { name: "Pokhara", icon: Mountain, packages: packages.filter(p => p.location.toLowerCase().includes('pokhara')).length },
+    { name: "Darjeeling", icon: Mountain, packages: packages.filter(p => p.place === 'darjeeling').length },
+    { name: "Sikkim", icon: Camera, packages: packages.filter(p => p.place === 'sikkim').length },
+    { name: "Meghalaya", icon: Heart, packages: packages.filter(p => p.place === 'meghalaya').length },
+    { name: "Himachal Pradesh", icon: Mountain, packages: packages.filter(p => p.place === 'himachal-pradesh').length },
   ];
 
   if (loading) {
@@ -172,7 +181,7 @@ const DomesticPackagesPage = () => {
               Domestic Packages
             </h1>
             <p className="text-3xl md:text-4xl lg:text-5xl mb-12 opacity-90">
-              Explore the incredible beauty of Nepal with our carefully crafted domestic tour packages
+              Explore the incredible beauty of India with our carefully crafted domestic tour packages
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Badge variant="secondary" className="text-lg px-4 py-2">
@@ -193,7 +202,7 @@ const DomesticPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-              Popular Destinations in Nepal
+              Popular Destinations in India
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {popularDestinations.map((destination, index) => (
@@ -220,7 +229,7 @@ const DomesticPackagesPage = () => {
       <section className="py-8 bg-gray-100 border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {/* Search */}
               <div className="lg:col-span-2">
                 <div className="relative">
@@ -262,6 +271,23 @@ const DomesticPackagesPage = () => {
                   <SelectItem value="long">Long (11+ days)</SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* Location Filter */}
+              <Select value={locationFilter} onValueChange={setLocationFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                  <SelectItem value="sikkim">Sikkim</SelectItem>
+                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                  <SelectItem value="arunachal">Arunachal</SelectItem>
+                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                  <SelectItem value="kashmir">Kashmir</SelectItem>
+                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -282,6 +308,7 @@ const DomesticPackagesPage = () => {
                   setSearchTerm("");
                   setPriceFilter("all");
                   setDurationFilter("all");
+                  setLocationFilter("all");
                 }}>
                   Clear Filters
                 </Button>
@@ -316,7 +343,13 @@ const DomesticPackagesPage = () => {
                           {formatPrice(pkg.price)}
                         </Badge>
                         <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          {pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal'}
+                          {pkg.place === 'darjeeling' ? 'Darjeeling' : 
+                           pkg.place === 'sikkim' ? 'Sikkim' :
+                           pkg.place === 'meghalaya' ? 'Meghalaya' :
+                           pkg.place === 'arunachal' ? 'Arunachal' :
+                           pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
+                           pkg.place === 'kashmir' ? 'Kashmir' :
+                           pkg.place === 'leh-ladakh' ? 'Leh Ladakh' : pkg.place}
                         </Badge>
                       </div>
                       
@@ -377,10 +410,10 @@ const DomesticPackagesPage = () => {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Why Choose Nepal for Your Next Adventure?
+                Why Choose India for Your Next Adventure?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Discover the unique experiences that make Nepal a must-visit destination
+                Discover the unique experiences that make India a must-visit destination
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -392,7 +425,7 @@ const DomesticPackagesPage = () => {
                   Himalayan Majesty
                 </h3>
                 <p className="text-gray-600">
-                  Home to 8 of the world's 14 highest peaks, including Mount Everest
+                  Home to the majestic Himalayas with stunning peaks and breathtaking landscapes
                 </p>
               </div>
               <div className="text-center">
@@ -427,10 +460,10 @@ const DomesticPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Explore Nepal?
+              Ready to Explore India?
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Let us create the perfect Nepal adventure for you
+              Let us create the perfect India adventure for you
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
 

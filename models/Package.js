@@ -113,7 +113,14 @@ const PackageSchema = new mongoose.Schema({
   place: {
     type: String,
     required: true,
-    enum: ['bhutan', 'nepal'],
+    enum: [
+      // Domestic destinations
+      'darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh',
+      // International destinations
+      'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore',
+      // Legacy destinations (keeping for backward compatibility)
+      'bhutan', 'nepal'
+    ],
   },
   images: [ImageSchema],
   itinerary: [ItineraryDaySchema],

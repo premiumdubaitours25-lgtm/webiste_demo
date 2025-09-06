@@ -33,15 +33,55 @@ const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Here you would typically send the data to your backend
-    console.log("Form submitted:", formData);
-    
-    setIsSubmitting(false);
-    alert("Thank you for your inquiry! We'll get back to you soon.");
-    onClose();
+    try {
+      // Create WhatsApp message with form data
+      const whatsappMessage = `🏔️ *New Travel Inquiry - JJ & TIA Tours*
+
+👤 *Name:* ${formData.name}
+📧 *Email:* ${formData.email}
+📱 *Phone:* ${formData.phone}
+✈️ *Destination:* ${formData.destination}
+📅 *Travel Date:* ${formData.travelDate}
+👥 *Number of Travelers:* ${formData.travelers}
+💰 *Budget Range:* ${formData.budget}
+
+📝 *Additional Requirements:*
+${formData.message}
+
+---
+*This inquiry was submitted through the website contact form.*`;
+
+      // WhatsApp number (with country code for India)
+      const phoneNumber = "919970393335";
+      
+      // Create WhatsApp URL
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      
+      // Open WhatsApp in new tab
+      window.open(whatsappUrl, '_blank');
+      
+      // Show success message
+      alert("Thank you for your inquiry! WhatsApp is opening with your message. Please send it to complete your inquiry.");
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        destination: "",
+        travelDate: "",
+        travelers: "",
+        budget: "",
+        message: ""
+      });
+      
+      onClose();
+    } catch (error) {
+      console.error("Error sending to WhatsApp:", error);
+      alert("There was an error opening WhatsApp. Please try again or contact us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -216,12 +256,12 @@ const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Submitting...
+                    Opening WhatsApp...
                   </div>
                 ) : (
                   <div className="flex items-center justify-center">
                     <Plane className="mr-2 h-5 w-5" />
-                    Send Inquiry
+                    Send via WhatsApp
                   </div>
                 )}
               </Button>

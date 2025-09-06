@@ -7,8 +7,9 @@ import { Badge } from "../../components/ui/badge";
 import CreatePackageModal from "../../components/CreatePackageModal";
 import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
+import { saveAs } from 'file-saver';
+import axios from 'axios';
 import { 
   Package, 
   Star, 
@@ -21,6 +22,8 @@ import {
   Download,
   Copy
 } from "lucide-react";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 
 interface PackageData {
   _id: string;
@@ -34,7 +37,7 @@ interface PackageData {
   location: string;
   capacity: string;
   packageType: 'domestic' | 'international';
-  place: 'bhutan' | 'nepal';
+  place: string;
   images: Array<{
     public_id: string;
     url: string;
@@ -69,7 +72,11 @@ export default function DashboardPage() {
   const [isEditPackageModalOpen, setIsEditPackageModalOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
+  const [filteredPackages, setFilteredPackages] = useState<PackageData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [packageTypeFilter, setPackageTypeFilter] = useState("all");
+  const [placeFilter, setPlaceFilter] = useState("all");
 
   const fetchPackages = async () => {
     try {
@@ -88,6 +95,50 @@ export default function DashboardPage() {
   useEffect(() => {
     fetchPackages();
   }, []);
+
+  useEffect(() => {
+    filterPackages();
+  }, [packages, searchTerm, packageTypeFilter, placeFilter]);
+
+  // Reset place filter when package type changes
+  useEffect(() => {
+    if (packageTypeFilter !== "all" && placeFilter !== "all") {
+      // Check if current place filter is valid for the selected package type
+      const domesticPlaces = ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'];
+      const internationalPlaces = ['vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore'];
+      
+      if (packageTypeFilter === 'domestic' && !domesticPlaces.includes(placeFilter)) {
+        setPlaceFilter("all");
+      } else if (packageTypeFilter === 'international' && !internationalPlaces.includes(placeFilter)) {
+        setPlaceFilter("all");
+      }
+    }
+  }, [packageTypeFilter, placeFilter]);
+
+  const filterPackages = () => {
+    let filtered = packages;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(pkg =>
+        pkg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pkg.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pkg.location.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Package type filter
+    if (packageTypeFilter !== "all") {
+      filtered = filtered.filter(pkg => pkg.packageType === packageTypeFilter);
+    }
+
+    // Place filter
+    if (placeFilter !== "all") {
+      filtered = filtered.filter(pkg => pkg.place === placeFilter);
+    }
+
+    setFilteredPackages(filtered);
+  };
 
   const handlePackageCreated = async (packageData: any) => {
     try {
@@ -204,424 +255,424 @@ export default function DashboardPage() {
     }
   };
 
-  const handleExportToPDF = () => {
+  const handleExportToWord = async () => {
     try {
-      // Create new PDF document
-      const doc = new jsPDF();
-      
-      // Add title
-      doc.setFontSize(20);
-      doc.text('TIA Tours - Package Report', 20, 20);
-      
-      // Add date
-      doc.setFontSize(10);
-      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
-      
-      // Prepare table data
-      const tableData = packages.map((pkg, index) => [
-        index + 1,
-        pkg.title,
-        pkg.packageType === 'domestic' ? 'Domestic' : 'International',
-        pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal',
-        pkg.duration || 'N/A',
-        pkg.location || 'N/A',
-        pkg.capacity || 'N/A',
-        `₹${pkg.price}`,
-        pkg.rating || 0,
-        pkg.bookings || 0,
-        new Date(pkg.createdAt).toLocaleDateString()
-      ]);
+      // Create table rows for packages
+      const tableRows = [
+        new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "#", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Title", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Type", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Place", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Duration", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Location", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Capacity", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Rating", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bookings", bold: true })] })] }),
+            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Created", bold: true })] })] }),
+          ],
+        }),
+        ...filteredPackages.map((pkg, index) => 
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (index + 1).toString() })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.title })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.packageType === 'domestic' ? 'Domestic' : 'International' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.duration || 'N/A' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.location || 'N/A' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.capacity || 'N/A' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `₹${pkg.price}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.rating || 0).toString() })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.bookings || 0).toString() })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: new Date(pkg.createdAt).toLocaleDateString() })] })] }),
+            ],
+          })
+        ),
+      ];
 
-      // Add table using the imported autoTable function
-      autoTable(doc, {
-        head: [['#', 'Title', 'Type', 'Place', 'Duration', 'Location', 'Capacity', 'Price', 'Rating', 'Bookings', 'Created']],
-        body: tableData,
-        startY: 40,
-        styles: {
-          fontSize: 8,
-          cellPadding: 3,
-        },
-        headStyles: {
-          fillColor: [41, 128, 185],
-          textColor: 255,
-          fontStyle: 'bold',
-        },
-        alternateRowStyles: {
-          fillColor: [245, 245, 245],
-        },
-        columnStyles: {
-          0: { cellWidth: 10 },
-          1: { cellWidth: 40 },
-          2: { cellWidth: 20 },
-          3: { cellWidth: 15 },
-          4: { cellWidth: 20 },
-          5: { cellWidth: 20 },
-          6: { cellWidth: 20 },
-          7: { cellWidth: 20 },
-          8: { cellWidth: 15 },
-          9: { cellWidth: 20 },
-          10: { cellWidth: 25 },
-        },
+      // Create Word document
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: "TIA Tours - Package Report", bold: true, size: 32 })],
+              heading: HeadingLevel.TITLE,
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `Generated on: ${new Date().toLocaleDateString()}`, size: 20 })],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+            new Table({
+              rows: tableRows,
+              width: {
+                size: 100,
+                type: WidthType.PERCENTAGE,
+              },
+            }),
+            new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+            new Paragraph({
+              children: [new TextRun({ text: "Summary:", bold: true, size: 24 })],
+              heading: HeadingLevel.HEADING_2,
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `Total Packages: ${filteredPackages.length}`, size: 20 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `Domestic Packages: ${filteredPackages.filter(p => p.packageType === 'domestic').length}`, size: 20 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `International Packages: ${filteredPackages.filter(p => p.packageType === 'international').length}`, size: 20 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `Total Bookings: ${filteredPackages.reduce((sum, p) => sum + (p.bookings || 0), 0)}`, size: 20 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `Average Rating: ${filteredPackages.length > 0 ? (filteredPackages.reduce((sum, p) => sum + (p.rating || 0), 0) / filteredPackages.length).toFixed(1) : '0.0'}`, size: 20 })],
+            }),
+          ],
+        }],
       });
 
-      // Add summary
-      const finalY = (doc as any).lastAutoTable.finalY + 20;
-      doc.setFontSize(12);
-      doc.text('Summary:', 20, finalY);
+      // Generate and save the Word document
+      const buffer = await Packer.toBuffer(doc);
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      saveAs(blob, `tia-tours-packages-${new Date().toISOString().split('T')[0]}.docx`);
       
-      doc.setFontSize(10);
-      doc.text(`Total Packages: ${packages.length}`, 20, finalY + 10);
-      doc.text(`Domestic Packages: ${packages.filter(p => p.packageType === 'domestic').length}`, 20, finalY + 20);
-      doc.text(`International Packages: ${packages.filter(p => p.packageType === 'international').length}`, 20, finalY + 30);
-      doc.text(`Total Bookings: ${packages.reduce((sum, p) => sum + (p.bookings || 0), 0)}`, 20, finalY + 40);
-      doc.text(`Average Rating: ${(packages.reduce((sum, p) => sum + (p.rating || 0), 0) / packages.length).toFixed(1)}`, 20, finalY + 50);
-
-      // Save the PDF
-      doc.save(`tia-tours-packages-${new Date().toISOString().split('T')[0]}.pdf`);
-      
-      alert('Package data exported to PDF successfully!');
+      alert('Package data exported to Word document successfully!');
     } catch (error) {
-      console.error('Error exporting to PDF:', error);
-      alert('Error exporting to PDF. Please try again.');
+      console.error('Error exporting to Word:', error);
+      alert('Error exporting to Word document. Please try again.');
     }
   };
 
-  const handleExportSinglePackageToPDF = async (pkg: PackageData) => {
+  // Helper function to download image as base64
+  const downloadImageAsBase64 = async (url: string): Promise<string | null> => {
     try {
-      // Create new PDF document
-      const doc = new jsPDF();
-      
-      // Add header with logo/title
-      doc.setFillColor(41, 128, 185);
-      doc.rect(0, 0, 210, 30, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20);
-      doc.text('TIA Tours & Travels', 20, 20);
-      
-      // Reset text color
-      doc.setTextColor(0, 0, 0);
-      
-      // Add package title
-      doc.setFontSize(18);
-      doc.setFont(undefined, 'bold');
-      doc.text(pkg.title, 20, 45);
-      
-      // Add subtitle
-      doc.setFontSize(12);
-      doc.setFont(undefined, 'normal');
-      doc.text(pkg.subtitle || '', 20, 55);
-      
-      // Add package images section
-      let yPosition = 70;
-      if (pkg.images && pkg.images.length > 0) {
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text('Package Images', 20, yPosition);
-        yPosition += 10;
-        
-        // Add image count
-        doc.setFontSize(10);
-        doc.setFont(undefined, 'normal');
-        doc.text(`${pkg.images.length} Images`, 20, yPosition);
-        yPosition += 15;
-        
-        // Add images in a grid layout
-        const imagesPerRow = 2;
-        const imageWidth = 80;
-        const imageHeight = 60;
-        const spacing = 10;
-        
-        pkg.images.forEach((image, index) => {
-          const row = Math.floor(index / imagesPerRow);
-          const col = index % imagesPerRow;
-          
-          if (yPosition + (row * (imageHeight + 30)) > 250) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          
-          const x = 20 + (col * (imageWidth + spacing));
-          const currentY = yPosition + (row * (imageHeight + 30));
-          
-          try {
-            // Try to add the actual image
-            doc.addImage(image.url, 'JPEG', x, currentY, imageWidth, imageHeight);
-          } catch (error) {
-            // If image fails to load, draw a placeholder
-            doc.setDrawColor(200, 200, 200);
-            doc.rect(x, currentY, imageWidth, imageHeight);
-            doc.setFontSize(8);
-            doc.text(`Image ${index + 1}`, x + 5, currentY + 30);
-            doc.text(image.alt || 'Package Image', x + 5, currentY + 40);
-          }
-          
-          // Add image filename below
-          doc.setFontSize(8);
-          const filename = image.url.split('/').pop() || `image_${index + 1}.jpg`;
-          doc.text(filename, x, currentY + imageHeight + 5);
-        });
-        
-        yPosition += Math.ceil(pkg.images.length / imagesPerRow) * (imageHeight + 30) + 10;
-      }
-      
-      // Add package details in table format
-      if (yPosition > 200) {
-        doc.addPage();
-        yPosition = 20;
-      }
-      
-      doc.setFontSize(14);
-      doc.setFont(undefined, 'bold');
-      doc.text('Package Details', 20, yPosition);
-      yPosition += 15;
-      
-      // Create table data for package details
-      const tableData = [
-        ['Duration', pkg.duration || 'N/A'],
-        ['Location', pkg.location || 'N/A'],
-        ['Capacity', pkg.capacity || 'N/A'],
-        ['Price', `₹${pkg.price}`],
-        ['Type', pkg.packageType === 'domestic' ? 'Domestic' : 'International'],
-        ['Place', pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal']
+      const response = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: 10000, // 10 second timeout
+      });
+      const base64 = Buffer.from(response.data, 'binary').toString('base64');
+      return `data:${response.headers['content-type'] || 'image/jpeg'};base64,${base64}`;
+    } catch (error) {
+      console.error('Error downloading image:', error);
+      return null;
+    }
+  };
+
+  const handleExportSinglePackageToWord = async (pkg: PackageData) => {
+    try {
+      // Create document children array
+      const children = [
+        new Paragraph({
+          children: [new TextRun({ text: "TIA Tours & Travels", bold: true, size: 32 })],
+          heading: HeadingLevel.TITLE,
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [new TextRun({ text: pkg.title, bold: true, size: 28 })],
+          heading: HeadingLevel.HEADING_1,
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [new TextRun({ text: pkg.subtitle || '', size: 20 })],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
       ];
-      
-      // Add table using autoTable
-      autoTable(doc, {
-        head: [['Detail', 'Value']],
-        body: tableData,
-        startY: yPosition,
-        styles: {
-          fontSize: 10,
-          cellPadding: 5,
-        },
-        headStyles: {
-          fillColor: [41, 128, 185],
-          textColor: 255,
-          fontStyle: 'bold',
-        },
-        alternateRowStyles: {
-          fillColor: [245, 245, 245],
-        },
-        columnStyles: {
-          0: { cellWidth: 50, fontStyle: 'bold' },
-          1: { cellWidth: 120 },
+
+      // Add package images section with actual images
+      if (pkg.images && pkg.images.length > 0) {
+        children.push(
+          new Paragraph({
+            children: [new TextRun({ text: "Package Images", bold: true, size: 24 })],
+            heading: HeadingLevel.HEADING_2,
+          }),
+          new Paragraph({
+            children: [new TextRun({ text: `${pkg.images.length} Images`, size: 20 })],
+          }),
+          new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+        );
+
+        // Download and add images
+        for (let i = 0; i < pkg.images.length; i++) {
+          const image = pkg.images[i];
+          const filename = image.url.split('/').pop() || `image_${i + 1}.jpg`;
+          
+          children.push(
+            new Paragraph({
+              children: [new TextRun({ text: `Image ${i + 1}: ${filename}`, bold: true, size: 18 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: `Alt: ${image.alt || 'Package Image'}`, size: 16 })],
+            }),
+          );
+
+          // Try to download and embed the image
+          const imageBase64 = await downloadImageAsBase64(image.url);
+          if (imageBase64) {
+            try {
+              // Convert base64 to buffer for docx
+              const base64Data = imageBase64.split(',')[1];
+              const imageBuffer = Buffer.from(base64Data, 'base64');
+              
+              children.push(
+                new Paragraph({
+                  children: [
+                    new ImageRun({
+                      data: imageBuffer,
+                      transformation: {
+                        width: 300,
+                        height: 200,
+                      },
+                      type: 'png',
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              );
+            } catch (imageError) {
+              console.error('Error embedding image:', imageError);
+              children.push(
+                new Paragraph({
+                  children: [new TextRun({ text: "[Image could not be loaded]", size: 14, italics: true })],
+                  alignment: AlignmentType.CENTER,
+                }),
+              );
+            }
+          } else {
+            children.push(
+              new Paragraph({
+                children: [new TextRun({ text: "[Image could not be downloaded]", size: 14, italics: true })],
+                alignment: AlignmentType.CENTER,
+              }),
+            );
+          }
+          
+          children.push(new Paragraph({ children: [new TextRun({ text: "" })] })); // Empty line
+        }
+      }
+
+      // Add package details table
+      const packageDetailsTable = new Table({
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Detail", bold: true })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Value", bold: true })] })] }),
+            ],
+          }),
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Duration" })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.duration || 'N/A' })] })] }),
+            ],
+          }),
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Location" })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.location || 'N/A' })] })] }),
+            ],
+          }),
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Capacity" })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.capacity || 'N/A' })] })] }),
+            ],
+          }),
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price" })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `₹${pkg.price}` })] })] }),
+            ],
+          }),
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Type" })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.packageType === 'domestic' ? 'Domestic' : 'International' })] })] }),
+            ],
+          }),
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Place" })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
+            ],
+          }),
+        ],
+        width: {
+          size: 100,
+          type: WidthType.PERCENTAGE,
         },
       });
-      
-      yPosition = (doc as any).lastAutoTable.finalY + 20;
-      
+
+      children.push(
+        new Paragraph({
+          children: [new TextRun({ text: "Package Details", bold: true, size: 24 })],
+          heading: HeadingLevel.HEADING_2,
+        }),
+        new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+      );
+
       // Add About section
       if (pkg.about) {
-        if (yPosition > 200) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text('About', 20, yPosition);
-        yPosition += 10;
-        
-        doc.setFontSize(10);
-        doc.setFont(undefined, 'normal');
-        const aboutLines = doc.splitTextToSize(pkg.about, 170);
-        doc.text(aboutLines, 20, yPosition);
-        yPosition += aboutLines.length * 5 + 15;
+        children.push(
+          new Paragraph({
+            children: [new TextRun({ text: "About", bold: true, size: 24 })],
+            heading: HeadingLevel.HEADING_2,
+          }),
+          new Paragraph({
+            children: [new TextRun({ text: pkg.about, size: 20 })],
+          }),
+          new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+        );
       }
-      
-      // Skip Our Services section as requested
-      
-      // Add Tour Details section in table format for Bhutan packages
-      if (pkg.tourDetails && pkg.place === 'bhutan') {
-        if (yPosition > 200) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text('Tour Details', 20, yPosition);
-        yPosition += 15;
-        
-        // Split tour details by lines and create table data
-        const tourDetailsLines = pkg.tourDetails.split('\n').filter(line => line.trim() !== '');
-        const tableData = tourDetailsLines.map(line => [line.trim()]);
-        
-        // Add tour details table
-        autoTable(doc, {
-          head: [['Details']],
-          body: tableData,
-          startY: yPosition,
-          styles: {
-            fontSize: 10,
-            cellPadding: 5,
-          },
-          headStyles: {
-            fillColor: [41, 128, 185],
-            textColor: 255,
-            fontStyle: 'bold',
-          },
-          alternateRowStyles: {
-            fillColor: [245, 245, 245],
-          },
-          columnStyles: {
-            0: { cellWidth: 170 },
-          },
-        });
-        
-        yPosition = (doc as any).lastAutoTable.finalY + 20;
-      }
-      
-      // Add Itinerary section with blue background title
-      if (pkg.itinerary && pkg.itinerary.length > 0) {
-        if (yPosition > 150) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        
-        // Add blue background for Itinerary title
-        doc.setFillColor(41, 128, 185);
-        doc.rect(20, yPosition - 5, 170, 15, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text('Itinerary', 25, yPosition + 5);
-        
-        // Reset text color
-        doc.setTextColor(0, 0, 0);
-        yPosition += 20;
-        
-        pkg.itinerary.forEach((day, index) => {
-          if (yPosition > 250) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          
-          doc.setFontSize(12);
-          doc.setFont(undefined, 'bold');
-          doc.text(`Day ${day.day}`, 20, yPosition);
-          yPosition += 8;
-          
-          doc.setFontSize(10);
-          doc.setFont(undefined, 'bold');
-          // Remove any star emojis and show clean bold text
-          const cleanTitle = day.title.replace(/[⭐*]/g, '').trim();
-          doc.text(cleanTitle, 20, yPosition);
-          yPosition += 8;
-          
-          doc.setFont(undefined, 'normal');
-          const descLines = doc.splitTextToSize(day.description, 170);
-          doc.text(descLines, 20, yPosition);
-          yPosition += descLines.length * 5 + 10;
-        });
-      }
-      
-      // Add Transportation section in table format
-      if (pkg.transportation && pkg.transportation.length > 0) {
-        if (yPosition > 200) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text('Transportation', 20, yPosition);
-        yPosition += 15;
-        
-        // Create table data for transportation
-        const transportationTableData = pkg.transportation.map(transport => [
-          transport.type,
-          transport.vehicle,
-          transport.description || 'N/A'
-        ]);
-        
-        // Add transportation table
-        autoTable(doc, {
-          head: [['Type', 'Vehicle', 'Description']],
-          body: transportationTableData,
-          startY: yPosition,
-          styles: {
-            fontSize: 9,
-            cellPadding: 4,
-          },
-          headStyles: {
-            fillColor: [41, 128, 185],
-            textColor: 255,
-            fontStyle: 'bold',
-          },
-          alternateRowStyles: {
-            fillColor: [245, 245, 245],
-          },
-          columnStyles: {
-            0: { cellWidth: 40 },
-            1: { cellWidth: 50 },
-            2: { cellWidth: 80 },
-          },
-        });
-        
-        yPosition = (doc as any).lastAutoTable.finalY + 20;
-      }
-      
-      // Add Accommodation section in table format
-      if (pkg.accommodation && pkg.accommodation.length > 0) {
-        if (yPosition > 200) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        
-        doc.setFontSize(14);
-        doc.setFont(undefined, 'bold');
-        doc.text('Accommodation', 20, yPosition);
-        yPosition += 15;
-        
-        // Create table data for accommodation
-        const accommodationTableData = pkg.accommodation.map(accommodation => [
-          accommodation.city,
-          accommodation.hotel,
-          accommodation.rooms,
-          accommodation.roomType,
-          accommodation.nights
-        ]);
-        
-        // Add accommodation table
-        autoTable(doc, {
-          head: [['City', 'Hotel/Resort', 'Rooms', 'Room Type', 'Nights']],
-          body: accommodationTableData,
-          startY: yPosition,
-          styles: {
-            fontSize: 9,
-            cellPadding: 4,
-          },
-          headStyles: {
-            fillColor: [41, 128, 185],
-            textColor: 255,
-            fontStyle: 'bold',
-          },
-          alternateRowStyles: {
-            fillColor: [245, 245, 245],
-          },
-          columnStyles: {
-            0: { cellWidth: 30 },
-            1: { cellWidth: 60 },
-            2: { cellWidth: 20 },
-            3: { cellWidth: 30 },
-            4: { cellWidth: 20 },
-          },
-        });
-        
-        yPosition = (doc as any).lastAutoTable.finalY + 20;
-      }
-      
-      // Package Statistics section removed as requested
 
-      // Save the PDF
-      const fileName = `${pkg.title.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-      doc.save(fileName);
+      // Add Itinerary section
+      if (pkg.itinerary && pkg.itinerary.length > 0) {
+        children.push(
+          new Paragraph({
+            children: [new TextRun({ text: "Itinerary", bold: true, size: 24 })],
+            heading: HeadingLevel.HEADING_2,
+          }),
+        );
+
+        pkg.itinerary.forEach((day, index) => {
+          const cleanTitle = day.title.replace(/[⭐*]/g, '').trim();
+          children.push(
+            new Paragraph({
+              children: [new TextRun({ text: `Day ${day.day}`, bold: true, size: 20 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: cleanTitle, bold: true, size: 18 })],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: day.description, size: 16 })],
+            }),
+            new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+          );
+        });
+      }
+
+      // Create Word document with all content including tables
+      const doc = new Document({
+        sections: [{
+          properties: {},
+          children: [
+            ...children,
+            packageDetailsTable,
+            new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+            ...(pkg.tourDetails && pkg.place === 'bhutan' ? [
+              new Paragraph({
+                children: [new TextRun({ text: "Tour Details", bold: true, size: 24 })],
+                heading: HeadingLevel.HEADING_2,
+              }),
+              new Table({
+                rows: [
+                  new TableRow({
+                    children: [
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Details", bold: true })] })] }),
+                    ],
+                  }),
+                  ...pkg.tourDetails.split('\n').filter(line => line.trim() !== '').map(line => 
+                    new TableRow({
+                      children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: line.trim() })] })] }),
+                      ],
+                    })
+                  ),
+                ],
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE,
+                },
+              }),
+              new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+            ] : []),
+            ...(pkg.transportation && pkg.transportation.length > 0 ? [
+              new Paragraph({
+                children: [new TextRun({ text: "Transportation", bold: true, size: 24 })],
+                heading: HeadingLevel.HEADING_2,
+              }),
+              new Table({
+                rows: [
+                  new TableRow({
+                    children: [
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Type", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Vehicle", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Description", bold: true })] })] }),
+                    ],
+                  }),
+                  ...pkg.transportation.map(transport => 
+                    new TableRow({
+                      children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: transport.type })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: transport.vehicle })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: transport.description || 'N/A' })] })] }),
+                      ],
+                    })
+                  ),
+                ],
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE,
+                },
+              }),
+              new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+            ] : []),
+            ...(pkg.accommodation && pkg.accommodation.length > 0 ? [
+              new Paragraph({
+                children: [new TextRun({ text: "Accommodation", bold: true, size: 24 })],
+                heading: HeadingLevel.HEADING_2,
+              }),
+              new Table({
+                rows: [
+                  new TableRow({
+                    children: [
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "City", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Hotel/Resort", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Rooms", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Room Type", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Nights", bold: true })] })] }),
+                    ],
+                  }),
+                  ...pkg.accommodation.map(accommodation => 
+                    new TableRow({
+                      children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.city })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.hotel })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.rooms })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.roomType })] })] }),
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.nights })] })] }),
+                      ],
+                    })
+                  ),
+                ],
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE,
+                },
+              }),
+            ] : []),
+          ],
+        }],
+      });
+
+      // Generate and save the Word document
+      const buffer = await Packer.toBuffer(doc);
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const fileName = `${pkg.title.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.docx`;
+      saveAs(blob, fileName);
       
-      alert('Package exported to PDF successfully!');
+      alert('Package exported to Word document successfully!');
     } catch (error) {
-      console.error('Error exporting package to PDF:', error);
-      alert('Error exporting package to PDF. Please try again.');
+      console.error('Error exporting package to Word:', error);
+      alert('Error exporting package to Word document. Please try again.');
     }
   };
 
@@ -666,22 +717,113 @@ export default function DashboardPage() {
                 <CardDescription>Manage and track all your tour packages</CardDescription>
               </div>
               <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Search className="h-4 w-4 mr-2" />
-                  Search
-                </Button>
-                <Button variant="outline" size="sm" onClick={handleExportToPDF}>
+                <Button variant="outline" size="sm" onClick={handleExportToWord}>
                   <Download className="h-4 w-4 mr-2" />
-                  Export PDF
+                  Export Word
                 </Button>
               </div>
             </div>
           </CardHeader>
           <CardContent>
+            {/* Filters Section */}
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Search */}
+                <div className="lg:col-span-2">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search packages..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+
+                {/* Package Type Filter */}
+                <Select value={packageTypeFilter} onValueChange={setPackageTypeFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Package Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="domestic">Domestic</SelectItem>
+                    <SelectItem value="international">International</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Place Filter */}
+                <Select value={placeFilter} onValueChange={setPlaceFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Place" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Places</SelectItem>
+                    {packageTypeFilter === 'domestic' ? (
+                      <>
+                        {/* Domestic Places */}
+                        <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                        <SelectItem value="sikkim">Sikkim</SelectItem>
+                        <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                        <SelectItem value="arunachal">Arunachal</SelectItem>
+                        <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                        <SelectItem value="kashmir">Kashmir</SelectItem>
+                        <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                      </>
+                    ) : packageTypeFilter === 'international' ? (
+                      <>
+                        {/* International Places */}
+                        <SelectItem value="vietnam">Vietnam</SelectItem>
+                        <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                        <SelectItem value="bali">Bali</SelectItem>
+                        <SelectItem value="malaysia">Malaysia</SelectItem>
+                        <SelectItem value="singapore">Singapore</SelectItem>
+                      </>
+                    ) : (
+                      <>
+                        {/* All Places when no type filter is selected */}
+                        {/* Domestic Places */}
+                        <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                        <SelectItem value="sikkim">Sikkim</SelectItem>
+                        <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                        <SelectItem value="arunachal">Arunachal</SelectItem>
+                        <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                        <SelectItem value="kashmir">Kashmir</SelectItem>
+                        <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                        {/* International Places */}
+                        <SelectItem value="vietnam">Vietnam</SelectItem>
+                        <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                        <SelectItem value="bali">Bali</SelectItem>
+                        <SelectItem value="malaysia">Malaysia</SelectItem>
+                        <SelectItem value="singapore">Singapore</SelectItem>
+                        {/* Legacy Places */}
+                        <SelectItem value="bhutan">Bhutan</SelectItem>
+                        <SelectItem value="nepal">Nepal</SelectItem>
+                      </>
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {/* Clear Filters Button */}
+              {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all") && (
+                <div className="mt-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      setSearchTerm("");
+                      setPackageTypeFilter("all");
+                      setPlaceFilter("all");
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              )}
+            </div>
+
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -698,8 +840,8 @@ export default function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {packages.length > 0 ? (
-                    packages.map((pkg) => (
+                  {filteredPackages.length > 0 ? (
+                    filteredPackages.map((pkg) => (
                       <tr key={pkg._id} className="border-b">
                         <td className="p-3">
                           <div className="flex items-center space-x-3">
@@ -726,7 +868,20 @@ export default function DashboardPage() {
                         </td>
                         <td className="p-3">
                           <Badge variant="outline">
-                            {pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal'}
+                            {pkg.place === 'darjeeling' ? 'Darjeeling' : 
+                             pkg.place === 'sikkim' ? 'Sikkim' :
+                             pkg.place === 'meghalaya' ? 'Meghalaya' :
+                             pkg.place === 'arunachal' ? 'Arunachal' :
+                             pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
+                             pkg.place === 'kashmir' ? 'Kashmir' :
+                             pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
+                             pkg.place === 'vietnam' ? 'Vietnam' :
+                             pkg.place === 'sri-lanka' ? 'Sri Lanka' :
+                             pkg.place === 'bali' ? 'Bali' :
+                             pkg.place === 'malaysia' ? 'Malaysia' :
+                             pkg.place === 'singapore' ? 'Singapore' :
+                             pkg.place === 'bhutan' ? 'Bhutan' :
+                             pkg.place === 'nepal' ? 'Nepal' : pkg.place}
                           </Badge>
                         </td>
                         <td className="p-3">{pkg.duration || "N/A"}</td>
@@ -769,8 +924,8 @@ export default function DashboardPage() {
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              onClick={() => handleExportSinglePackageToPDF(pkg)}
-                              title="Export Package to PDF"
+                              onClick={() => handleExportSinglePackageToWord(pkg)}
+                              title="Export Package to Word"
                               className="text-green-500 hover:text-green-700 hover:bg-green-50"
                             >
                               <Download className="h-4 w-4" />
@@ -790,14 +945,33 @@ export default function DashboardPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={8} className="p-8 text-center text-gray-500">
+                      <td colSpan={9} className="p-8 text-center text-gray-500">
                         <div className="flex flex-col items-center space-y-2">
                           <Package className="h-12 w-12 text-gray-300" />
-                          <p>No packages created yet</p>
-                          <Button onClick={openCreatePackageModal} size="sm">
-                            <Plus className="h-4 w-4 mr-2" />
-                            Create Your First Package
-                          </Button>
+                          {packages.length === 0 ? (
+                            <>
+                              <p>No packages created yet</p>
+                              <Button onClick={openCreatePackageModal} size="sm">
+                                <Plus className="h-4 w-4 mr-2" />
+                                Create Your First Package
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <p>No packages found matching your filters</p>
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => {
+                                  setSearchTerm("");
+                                  setPackageTypeFilter("all");
+                                  setPlaceFilter("all");
+                                }}
+                              >
+                                Clear Filters
+                              </Button>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -173,10 +173,19 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [field]: value
+      };
+      
+      // Reset place when package type changes
+      if (field === 'packageType') {
+        newData.place = '';
+      }
+      
+      return newData;
+    });
   };
 
   const addItineraryDay = () => {
@@ -457,8 +466,32 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                   <SelectValue placeholder="Select place" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bhutan">Bhutan</SelectItem>
-                  <SelectItem value="nepal">Nepal</SelectItem>
+                  {formData.packageType === 'international' ? (
+                    <>
+                      <SelectItem value="vietnam">Vietnam</SelectItem>
+                      <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
+                      <SelectItem value="bali">Bali</SelectItem>
+                      <SelectItem value="malaysia">Malaysia</SelectItem>
+                      <SelectItem value="singapore">Singapore</SelectItem>
+                      <SelectItem value="nepal">Nepal</SelectItem>
+                      <SelectItem value="bhutan">Bhutan</SelectItem>
+                    </>
+                  ) : formData.packageType === 'domestic' ? (
+                    <>
+                      <SelectItem value="darjeeling">Darjeeling</SelectItem>
+                      <SelectItem value="sikkim">Sikkim</SelectItem>
+                      <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                      <SelectItem value="arunachal">Arunachal</SelectItem>
+                      <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                      <SelectItem value="kashmir">Kashmir</SelectItem>
+                      <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
+                    </>
+                  ) : (
+                    <>
+                      <SelectItem value="bhutan">Bhutan</SelectItem>
+                      <SelectItem value="nepal">Nepal</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>

@@ -42,44 +42,38 @@ export default function Home() {
   const testimonials = [
     {
       id: 1,
-      name: "Sarah Johnson",
+      name: "Anupam Kumar",
       role: "Adventure Traveler",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       quote: "Our Nepal adventure with JJ & TIA Tours was absolutely incredible! The team was professional, knowledgeable, and made our trip unforgettable. The Everest Base Camp trek was challenging but the guides made us feel safe throughout."
     },
     {
       id: 2,
-      name: "Michael Chen",
+      name: "Himanshu Sharma",
       role: "Cultural Explorer",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       quote: "The cultural tour of Kathmandu Valley was amazing! Our guide was so knowledgeable about the history and traditions. JJ & TIA Tours really knows how to create authentic experiences. Highly recommended!"
     },
     {
       id: 3,
-      name: "David Rodriguez",
+      name: "Rushabh Nandeshwar",
       role: "Family Traveler",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       quote: "We had the most wonderful family trip to Bhutan! The team took care of everything - from visa processing to accommodation. The kids loved every moment. Thank you JJ & TIA Tours for making our dream trip come true!"
     },
     {
       id: 4,
-      name: "Emma Thompson",
+      name: "Deesha Patil",
       role: "Wildlife Enthusiast",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       quote: "The wildlife safari in Chitwan National Park was incredible! We saw rhinos, elephants, and so many birds. The guides were experts and made sure we had the best experience. Will definitely book with JJ & TIA Tours again!"
     },
     {
       id: 5,
-      name: "James & Lisa Wilson",
+      name: "Abhijjetn Jaiswal",
       role: "Honeymooners",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       quote: "Our honeymoon trip to Nepal was perfect! JJ & TIA Tours arranged everything beautifully - from romantic dinners to scenic helicopter rides. The attention to detail was outstanding. Thank you for making our special trip unforgettable!"
     },
     {
       id: 6,
-      name: "Alex Kumar",
+      name: "Rajesh Dubey",
       role: "Trekking Enthusiast",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       quote: "The Annapurna Circuit trek was the adventure of a lifetime! JJ & TIA Tours provided excellent support, quality equipment, and experienced guides. The views were breathtaking and the experience was worth every penny!"
     }
   ];
@@ -102,7 +96,7 @@ export default function Home() {
       <Hero />
       
       {/* Image Carousel Section */}
-      <section className="py-20">
+      <section className="pt-8 pb-20">
         <div className="container mx-auto px-4">
           <div 
             ref={carouselAnimation.ref}
@@ -112,9 +106,9 @@ export default function Home() {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">Wanderlust in Frames</h2>
+            <h2 className="text-4xl font-bold mb-4 text-secondary">JJ&Tia Tours and Travels offers All Inclusive tour packages</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Capture the essence of Nepal through our curated collection of breathtaking moments
+            No matter where you are in India or around the World, Choose from a wide range of tours, conveniently departing from your city.
             </p>
           </div>
           <ImageCarousel />
@@ -124,7 +118,7 @@ export default function Home() {
 
 
       {/* Domestic Packages Section */}
-      <section className="py-20 bg-white">
+      <section className="pt-8 pb-20 bg-white">
         <div className="container mx-auto px-4">
           <div 
             ref={domesticPackagesAnimation.ref}
@@ -631,15 +625,6 @@ export default function Home() {
                           "{testimonial.quote}"
                         </blockquote>
                         <div className="flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
-                            <Image
-                              src={testimonial.image}
-                              alt={testimonial.name}
-                              width={64}
-                              height={64}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
                           <div className="text-center">
                             <h4 className="font-semibold text-gray-900 text-lg">{testimonial.name}</h4>
                             <p className="text-gray-600">{testimonial.role}</p>

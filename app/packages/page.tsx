@@ -45,6 +45,13 @@ const PackagesPage = () => {
 
   useEffect(() => {
     fetchPackages();
+    
+    // Check for URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const locationParam = urlParams.get('location');
+    if (locationParam) {
+      setLocationFilter(locationParam);
+    }
   }, []);
 
   useEffect(() => {
