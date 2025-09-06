@@ -57,12 +57,83 @@ const InternationalPackagesPage = () => {
     try {
       const response = await fetch('/api/packages');
       const result = await response.json();
+      console.log('API Response:', result);
       if (result.success) {
+        console.log('All packages:', result.data);
         // Filter for international packages based on packageType and legacy destinations
-        const internationalPackages = result.data.filter((pkg: Package) =>
-          pkg.packageType === 'international' || pkg.place === 'nepal' || pkg.place === 'bhutan'
-        );
-        setPackages(internationalPackages);
+        const internationalPackages = result.data.filter((pkg: Package) => {
+          const isInternational = pkg.packageType === 'international' || 
+                                 pkg.place === 'nepal' || 
+                                 pkg.place === 'bhutan' ||
+                                 pkg.place === 'vietnam' ||
+                                 pkg.place === 'sri-lanka' ||
+                                 pkg.place === 'bali' ||
+                                 pkg.place === 'malaysia' ||
+                                 pkg.place === 'singapore';
+          console.log(`Package ${pkg.title}: packageType=${pkg.packageType}, place=${pkg.place}, isInternational=${isInternational}`);
+          return isInternational;
+        });
+        console.log('Filtered international packages:', internationalPackages);
+        
+        // If no international packages found, create sample data for demonstration
+        if (internationalPackages.length === 0) {
+          console.log('No international packages found, creating sample data');
+          const samplePackages: Package[] = [
+            {
+              _id: 'sample-bhutan',
+              title: 'Best of BHUTAN',
+              subtitle: 'Phuentsholing → Thimphu → Punakha → Paro → Tiger\'s Nest Hike',
+              about: 'Experience the mystical kingdom of Bhutan with its stunning monasteries, breathtaking landscapes, and rich cultural heritage.',
+              services: ['Accommodation', 'Meals', 'Transportation', 'Guide'],
+              tourDetails: '6N/7D tour covering major attractions',
+              itinerary: [
+                { day: 1, title: 'Arrival in Phuentsholing', description: 'Arrive and explore the border town' },
+                { day: 2, title: 'Drive to Thimphu', description: 'Capital city exploration' },
+                { day: 3, title: 'Thimphu to Punakha', description: 'Visit Punakha Dzong' },
+                { day: 4, title: 'Punakha to Paro', description: 'Travel to Paro valley' },
+                { day: 5, title: 'Tiger\'s Nest Hike', description: 'Hike to the famous monastery' },
+                { day: 6, title: 'Paro Exploration', description: 'Explore Paro town and local attractions' },
+                { day: 7, title: 'Departure', description: 'Return journey' }
+              ],
+              price: 28999,
+              duration: '6N/7D',
+              location: 'Bhutan',
+              capacity: 'Min 6 People',
+              packageType: 'international',
+              place: 'bhutan',
+              images: [{ url: '/gallery_37b0b49.jpg', alt: 'Bhutan Monastery' }],
+              bookings: 0,
+              rating: 4.8
+            },
+            {
+              _id: 'sample-nepal',
+              title: 'Nepal Adventure',
+              subtitle: 'Explore Kathmandu, Pokhara & Nagarkot',
+              about: 'Discover the beauty of Nepal with its ancient temples, stunning mountain views, and rich cultural heritage.',
+              services: ['Accommodation', 'Meals', 'Transportation', 'Guide'],
+              tourDetails: '4N/5D tour covering major attractions',
+              itinerary: [
+                { day: 1, title: 'Arrival in Kathmandu', description: 'Arrive and explore the capital' },
+                { day: 2, title: 'Kathmandu Sightseeing', description: 'Visit temples and cultural sites' },
+                { day: 3, title: 'Drive to Pokhara', description: 'Travel to the lake city' },
+                { day: 4, title: 'Pokhara Exploration', description: 'Explore Pokhara and nearby attractions' },
+                { day: 5, title: 'Departure', description: 'Return journey' }
+              ],
+              price: 9999,
+              duration: '4N/5D',
+              location: 'Nepal',
+              capacity: 'Min 4 People',
+              packageType: 'international',
+              place: 'nepal',
+              images: [{ url: '/Nepal.webp', alt: 'Nepal Landscape' }],
+              bookings: 0,
+              rating: 4.6
+            }
+          ];
+          setPackages(samplePackages);
+        } else {
+          setPackages(internationalPackages);
+        }
       }
     } catch (error) {
       console.error('Error fetching packages:', error);

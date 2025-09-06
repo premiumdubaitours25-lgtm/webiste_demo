@@ -10,32 +10,27 @@ const ImageCarousel = () => {
     {
       url: "/gallery_37b0b49.jpg",
       title: "Best of BHUTAN",
-      description: "Phuentsholing → Thimphu → Punakha → Paro → Tiger's Nest Hike\n\n6N/7D\nGroup Tour (Min 6 People) @ 28,999/person\nPrivate Tour @35,999/person",
-      redirectUrl: "/packages/international"
+      description: "Phuentsholing → Thimphu → Punakha → Paro → Tiger's Nest Hike\n\n6N/7D\nGroup Tour (Min 6 People) @ 28,999/person\nPrivate Tour @35,999/person"
     },
     {
       url: "/Nepal.webp",
       title: "Nepal",
-      description: "Explore Kathmandu, Pokhara & Nagarkot\n\n4 Nights / 5 Days Tour Package\n\n₹9,999/person",
-      redirectUrl: "/packages/international"
+      description: "Explore Kathmandu, Pokhara & Nagarkot\n\n4 Nights / 5 Days Tour Package\n\n₹9,999/person"
     },
     {
       url: "/Cherrapunji-2.webp",
       title: "Meghalaya",
-      description: "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee\n\n4 Nights / 5 Days Tour Package\n\n₹19,900/person",
-      redirectUrl: "/packages/domestic"
+      description: "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee\n\n4 Nights / 5 Days Tour Package\n\n₹19,900/person"
     },
     {
       url: "/tea-garden-in-darjeeling-india.webp",
       title: "Darjeeling Budgeted Tour",
-      description: "4 Nights / 5 Days\n\nDarjeeling, Kalimpong & Mirik\n\n₹16,500/person",
-      redirectUrl: "/packages/domestic"
+      description: "4 Nights / 5 Days\n\nDarjeeling, Kalimpong & Mirik\n\n₹16,500/person"
     },
     {
       url: "/photo-1573398643956-2b9e6ade3456.webp",
       title: "Sikkim",
-      description: "Gangtok, Tsangmo Lake & Pelling\n\n4N/5D\n\n₹18,500/person",
-      redirectUrl: "/packages/domestic"
+      description: "Gangtok, Tsangmo Lake & Pelling\n\n4N/5D\n\n₹18,500/person"
     }
   ];
 
@@ -111,14 +106,10 @@ const ImageCarousel = () => {
                 </div>
                 
                 {/* Book Now Button */}
-                <Link href={image.redirectUrl}>
+                <Link href="/packages/international">
                   <Button 
                     size="lg"
                     className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 text-lg rounded-lg shadow-lg"
-                    onClick={() => {
-                      console.log('Button clicked for:', image.title);
-                      console.log('Redirecting to:', image.redirectUrl);
-                    }}
                   >
                     Book Now
                   </Button>
