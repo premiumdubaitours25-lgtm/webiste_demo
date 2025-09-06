@@ -341,7 +341,7 @@ export default function DashboardPage() {
 
       // Generate and save the Word document
       const buffer = await Packer.toBuffer(doc);
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const blob = new Blob([buffer.buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
       saveAs(blob, `tia-tours-packages-${new Date().toISOString().split('T')[0]}.docx`);
       
       alert('Package data exported to Word document successfully!');
@@ -665,7 +665,7 @@ export default function DashboardPage() {
 
       // Generate and save the Word document
       const buffer = await Packer.toBuffer(doc);
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const blob = new Blob([buffer.buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
       const fileName = `${pkg.title.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.docx`;
       saveAs(blob, fileName);
       
