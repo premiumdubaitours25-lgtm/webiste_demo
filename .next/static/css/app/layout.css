@@ -992,11 +992,11 @@ video {
 .h-\[1px\] {
   height: 1px;
 }
+.h-\[350px\] {
+  height: 350px;
+}
 .h-\[400px\] {
   height: 400px;
-}
-.h-\[500px\] {
-  height: 500px;
 }
 .h-\[var\(--radix-navigation-menu-viewport-height\)\] {
   height: var(--radix-navigation-menu-viewport-height);
@@ -1015,9 +1015,6 @@ video {
 }
 .h-svh {
   height: 100svh;
-}
-.h-\[350px\] {
-  height: 350px;
 }
 .max-h-48 {
   max-height: 12rem;
@@ -3794,10 +3791,6 @@ All colors MUST be HSL.
 
   .md\:h-\[450px\] {
     height: 450px;
-  }
-
-  .md\:h-\[600px\] {
-    height: 600px;
   }
 
   .md\:w-1\/2 {

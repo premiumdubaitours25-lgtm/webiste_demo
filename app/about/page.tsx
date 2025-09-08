@@ -41,13 +41,13 @@ const AboutPage = () => {
     {
       name: "Shneiur Joseph",
       role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      image: "/shoenir.jpeg",
       description: "15+ years in tourism industry"
     },
     {
-      name: "Priya Thapa",
+      name: "Sabya Chettri",
       role: "Operations Manager",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
       description: "Expert in adventure tourism"
     },
     {

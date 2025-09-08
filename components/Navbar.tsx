@@ -45,7 +45,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+91 9970393335</span>
+                <span>+91 9970393335,+91 9834771258</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
@@ -87,10 +87,7 @@ const Navbar = () => {
                 priority
               />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">JJ & TIA </h1>
-              <p className="text-xs text-gray-600">Tours and Travels</p>
-            </div>
+            
           </Link>
 
           {/* Desktop Navigation */}
