@@ -8,30 +8,39 @@ const ImageCarousel = () => {
 
   const images = [
     {
-      url: "/gallery_37b0b49.jpg",
+      url: "/Thimphu-scaled (1).webp",
       title: "Best of BHUTAN",
-      description: "Phuentsholing → Thimphu → Punakha → Paro → Tiger's Nest Hike\n\n6N/7D\nGroup Tour (Min 6 People) @ 28,999/person\nPrivate Tour @35,999/person"
+      description:
+        "Phuentsholing → Thimphu → Punakha → Paro → Tiger's Nest Hike\n\n6N/7D\nGroup Tour (Min 10 People) @ ₹27,500/person\nPrivate Tour @35,999/person",
+      link: "/packages/international", // Default
     },
     {
-      url: "/Nepal.webp",
+      url: "/1400__1502124997_Kathmandu6.webp",
       title: "Nepal",
-      description: "Explore Kathmandu, Pokhara & Nagarkot\n\n4 Nights / 5 Days Tour Package\n\n₹9,999/person"
+      description:
+        "Explore Kathmandu, Pokhara & Nagarkot\n\n4 Nights / 5 Days Tour Package\n\n₹9,999/person",
+      link: "/packages/international", // Nepal
     },
     {
       url: "/Cherrapunji-2.webp",
       title: "Meghalaya",
-      description: "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee\n\n4 Nights / 5 Days Tour Package\n\n₹19,900/person"
+      description:
+        "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee\n\n4 Nights / 5 Days Tour Package\n\n₹19,900/person",
+      link: "/packages/domestic", // Meghalaya
     },
     {
-      url: "/tea-garden-in-darjeeling-india.webp",
+      url: "/Darjeeling1_Pranav-Bhasin.avif",
       title: "Darjeeling Budgeted Tour",
-      description: "4 Nights / 5 Days\n\nDarjeeling, Kalimpong & Mirik\n\n₹16,500/person"
+      description:
+        "4 Nights / 5 Days\n\nDarjeeling, Kalimpong & Mirik\n\n₹16,500/person",
+      link: "/packages/68be80a25a2c1b909c974b1f",
     },
     {
       url: "/photo-1573398643956-2b9e6ade3456.webp",
       title: "Sikkim",
-      description: "Gangtok, Tsangmo Lake & Pelling\n\n4N/5D\n\n₹18,500/person"
-    }
+      description: "Gangtok, Tsangmo Lake & Pelling\n\n4N/5D\n\n₹18,500/person",
+      link: "/packages/68be80a25a2c1b909c974b1f",
+    },
   ];
 
   useEffect(() => {
@@ -43,7 +52,9 @@ const ImageCarousel = () => {
   }, [images.length]);
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    );
   };
 
   const goToNext = () => {
@@ -55,7 +66,10 @@ const ImageCarousel = () => {
   };
 
   return (
-    <section className="relative h-[400px] md:h-[450px] overflow-hidden rounded-lg" style={{ imageRendering: 'crisp-edges' }}>
+    <section
+      className="relative h-[400px] md:h-[450px] overflow-hidden rounded-lg"
+      style={{ imageRendering: "crisp-edges" }}
+    >
       <div className="relative h-full">
         {images.map((image, index) => (
           <div
@@ -64,50 +78,50 @@ const ImageCarousel = () => {
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}
           >
-              <img
-                src={image.url}
-                alt={image.title}
-                className="w-full h-full object-cover"
-                style={{
-                  imageRendering: 'crisp-edges',
-                  transform: 'translateZ(0)',
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden'
-                }}
-                loading="eager"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-              />
-            {/* Black Overlay for better text visibility */}
+            <img
+              src={image.url}
+              alt={image.title}
+              className="w-full h-full object-cover"
+              style={{
+                imageRendering: "crisp-edges",
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+              }}
+              loading="eager"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+            />
+            {/* Black Overlay */}
             <div className="absolute inset-0 bg-black/50"></div>
-            
-            {/* Content with left alignment and positioned higher */}
+
+            {/* Content */}
             <div className="absolute inset-0 flex items-center justify-start p-8 pt-20 text-white">
               <div className="flex flex-col max-w-2xl ml-8">
-                {/* Title */}
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-white">
                   {image.title}
                 </h3>
-                
-                {/* Description with better formatting */}
+
                 <div className="space-y-1 mb-3">
-                  {image.description.split('\n').map((line, index) => (
-                    <div key={index} className={line.trim() === '' ? 'h-1' : ''}>
-                      {line.trim() !== '' && (
-                        <div className={`text-sm md:text-base lg:text-lg ${
-                          line.includes('@') || line.includes('₹') 
-                            ? 'font-semibold text-yellow-400' 
-                            : 'text-white'
-                        }`}>
+                  {image.description.split("\n").map((line, idx) => (
+                    <div key={idx} className={line.trim() === "" ? "h-1" : ""}>
+                      {line.trim() !== "" && (
+                        <div
+                          className={`text-sm md:text-base lg:text-lg ${
+                            line.includes("@") || line.includes("₹")
+                              ? "font-semibold text-yellow-400"
+                              : "text-white"
+                          }`}
+                        >
                           {line}
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Book Now Button */}
-                <Link href="/packages/international">
-                  <Button 
+                <Link href={image.link}>
+                  <Button
                     size="lg"
                     className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 text-lg rounded-lg shadow-lg"
                   >
@@ -120,7 +134,7 @@ const ImageCarousel = () => {
         ))}
       </div>
 
-      {/* Navigation Buttons */}
+      {/* Navigation */}
       <Button
         onClick={goToPrevious}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-white/30"
@@ -136,7 +150,7 @@ const ImageCarousel = () => {
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      {/* Dots Indicator */}
+      {/* Dots */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <button
@@ -152,4 +166,4 @@ const ImageCarousel = () => {
   );
 };
 
-export default ImageCarousel; 
+export default ImageCarousel;

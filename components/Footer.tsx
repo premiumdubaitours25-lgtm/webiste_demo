@@ -95,22 +95,24 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Contact Info</h4>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <MapPin className="h-5 w-5 text-primary" />
-                <span className="text-gray-300 text-sm">
-                  Thamel, Kathmandu, Nepal
-                </span>
+              <div className="flex items-start space-x-3">
+                <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                <div className="text-gray-300 text-sm">
+                  <div>Nyati Estate, Mohammadwadi</div>
+                  <div>Pune - 411060</div>
+                  <div className="text-gray-400 text-xs mt-1">Located in the heart of Pune</div>
+                </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary" />
                 <span className="text-gray-300 text-sm">
-                  +977-1-1234567
+                  +91 9970393335
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary" />
                 <span className="text-gray-300 text-sm">
-                  info@tiatours.com
+                  shneiur.joseph@jjtia.com
                 </span>
               </div>
             </div>

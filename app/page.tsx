@@ -2,7 +2,7 @@
 
 import Hero from "../components/Hero";
 import ImageCarousel from "../components/ImageCarousel";
-
+import TourPackagesSlider from "../components/TourPackagesSlider";
 import MasonryGallery from "../components/MasonryGallery";
 import BestPlaceSection from "../components/BestPlaceSection";
 import InquiryFormPopup from "../components/InquiryFormPopup";
@@ -95,27 +95,10 @@ export default function Home() {
     <div className="min-h-screen">
       <Hero />
       
-      {/* Image Carousel Section */}
-      <section className="pt-8 pb-20">
-        <div className="container mx-auto px-4">
-          <div 
-            ref={carouselAnimation.ref}
-            className={`text-center mb-12 transition-all duration-1000 ease-out ${
-              carouselAnimation.isVisible 
-                ? 'opacity-100 translate-y-0' 
-                : 'opacity-0 translate-y-10'
-            }`}
-          >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">JJ&Tia Tours and Travels offers All Inclusive tour packages</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            No matter where you are in India or around the World, Choose from a wide range of tours, conveniently departing from your city.
-            </p>
-          </div>
-          <ImageCarousel />
-        </div>
-      </section>
+    
 
-
+      {/* Tour Packages Slider Section */}
+      <TourPackagesSlider />
 
       {/* Domestic Packages Section */}
       <section className="pt-8 pb-20 bg-white">

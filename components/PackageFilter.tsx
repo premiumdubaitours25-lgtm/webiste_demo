@@ -1,334 +1,417 @@
-import React, { useState } from "react";
+'use client'
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Calendar, Filter, X, ChevronUp, ChevronDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Search, Filter, X, ChevronDown, ChevronUp, MapPin, Calendar, Plane } from "lucide-react";
 
 interface FilterState {
-  destination: 'india' | 'world' | null;
-  priceRange: string | null;
-  tourDuration: [number, number];
-  departBetween: { start: Date | null; end: Date | null };
-  departureCities: string[];
-  tourType: string | null;
+  searchTerm: string;
+  priceRange: [number, number];
+  durationRange: [number, number];
+  location: string;
+  departureCity: string[];
+  tourType: string[];
+  departBetween: {
+    startDate: string;
+    endDate: string;
+  };
 }
 
 interface PackageFilterProps {
   onFilterChange: (filters: FilterState) => void;
-  className?: string;
+  packageType: 'domestic' | 'international';
+  availableCities?: string[];
 }
 
-const PackageFilter: React.FC<PackageFilterProps> = ({ onFilterChange, className = "" }) => {
+const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: PackageFilterProps) => {
   const [filters, setFilters] = useState<FilterState>({
-    destination: null,
-    priceRange: null,
-    tourDuration: [5, 13],
-    departBetween: { start: null, end: null },
-    departureCities: [],
-    tourType: null
+    searchTerm: "",
+    priceRange: [0, 50000],
+    durationRange: [1, 30],
+    location: "all",
+    departureCity: [],
+    tourType: [],
+    departBetween: {
+      startDate: "",
+      endDate: ""
+    }
   });
 
-  // Individual open states for each filter section
-  const [openSections, setOpenSections] = useState({
-    destination: true,
-    priceRange: true,
-    tourDuration: true,
-    departBetween: true,
-    departureCity: true
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [expandedSections, setExpandedSections] = useState({
+    price: true,
+    duration: true,
+    departure: true,
+    tourType: true,
+    departBetween: true
   });
-
-  const toggleSection = (section: keyof typeof openSections) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
 
   const priceRanges = [
-    "₹9,000 - ₹15,000",
-    "₹15,000 - ₹25,000", 
-    "₹25,000 - ₹35,000",
-    "₹35,000 - ₹50,000",
-    "₹50,000 & above"
+    { label: "₹9,000 - ₹15,000", min: 9000, max: 15000 },
+    { label: "₹15,000 - ₹25,000", min: 15000, max: 25000 },
+    { label: "₹25,000 - ₹35,000", min: 25000, max: 35000 },
+    { label: "₹35,000 - ₹50,000", min: 35000, max: 50000 }
   ];
 
   const durationRanges = [
-    "5 - 7 days",
-    "7 - 9 days", 
-    "9 - 11 days",
-    "11 - 13 days"
+    { label: "4 - 7 days", min: 4, max: 7 },
+    { label: "7 - 10 days", min: 7, max: 10 },
+    { label: "10 - 13 days", min: 10, max: 13 },
+    { label: "13+ days", min: 13, max: 30 }
   ];
 
-  const departureCities = [
-    { name: "Joining / Leaving", count: 25 },
-    { name: "Pune", count: 4 },
-    { name: "Nagpur", count: 8 },
-    { name: "Goa", count: 8 },
-    { name: "Indore", count: 9 },
-    { name: "Cochin", count: 11 },
-    { name: "Chennai", count: 11 },
-    { name: "Hyderabad", count: 14 },
-    { name: "New Delhi", count: 15 },
-    { name: "Bangalore", count: 15 },
-    { name: "Ahmedabad", count: 15 },
-    { name: "Kolkata", count: 16 },
-    { name: "Mumbai", count: 49 }
+  const tourTypes = [
+    "Group Tour",
+    "Private Tour",
+    "Adventure Tour",
+    "Cultural Tour",
+    "Honeymoon Tour",
+    "Family Tour"
   ];
 
-  const joiningLeavingCities = [
-    { name: "Amritsar", count: 1 },
-    { name: "Udaipur", count: 2 },
-    { name: "Lucknow", count: 2 },
-    { name: "Jaipur", count: 2 },
-    { name: "Guwahati", count: 2 },
-    { name: "Delhi", count: 3 },
-    { name: "Cochin", count: 3 },
-    { name: "Ahmedabad", count: 5 }
+  const defaultCities = [
+    "Mumbai", "New Delhi", "Kolkata", "Hyderabad", "Ahmedabad", "Bangalore",
+    "Chennai", "Cochin", "Coimbatore", "Goa", "Nagpur", "Pune", "Indore",
+    "Bengaluru", "Joining / Leaving"
   ];
+
+  const cities = availableCities.length > 0 ? availableCities : defaultCities;
 
   const updateFilters = (newFilters: Partial<FilterState>) => {
     const updatedFilters = { ...filters, ...newFilters };
     setFilters(updatedFilters);
     onFilterChange(updatedFilters);
+    updateActiveFilters(updatedFilters);
+  };
+
+  const updateActiveFilters = (currentFilters: FilterState) => {
+    const active: string[] = [];
+    
+    if (currentFilters.searchTerm) active.push(`Search: ${currentFilters.searchTerm}`);
+    if (currentFilters.location !== "all") active.push(`Location: ${currentFilters.location}`);
+    if (currentFilters.departureCity.length > 0) active.push(`Cities: ${currentFilters.departureCity.length}`);
+    if (currentFilters.tourType.length > 0) active.push(`Types: ${currentFilters.tourType.length}`);
+    if (currentFilters.priceRange[0] > 0 || currentFilters.priceRange[1] < 500000) {
+      active.push(`Price: ₹${currentFilters.priceRange[0].toLocaleString()} - ₹${currentFilters.priceRange[1].toLocaleString()}`);
+    }
+    if (currentFilters.durationRange[0] > 1 || currentFilters.durationRange[1] < 30) {
+      active.push(`Duration: ${currentFilters.durationRange[0]} - ${currentFilters.durationRange[1]} days`);
+    }
+    if (currentFilters.departBetween.startDate || currentFilters.departBetween.endDate) {
+      active.push("Date Range");
+    }
+
+    setActiveFilters(active);
   };
 
   const clearAllFilters = () => {
     const clearedFilters: FilterState = {
-      destination: null,
-      priceRange: null,
-      tourDuration: [5, 13],
-      departBetween: { start: null, end: null },
-      departureCities: [],
-      tourType: null
+      searchTerm: "",
+      priceRange: [0, 50000],
+      durationRange: [1, 30],
+      location: "all",
+      departureCity: [],
+      tourType: [],
+      departBetween: {
+        startDate: "",
+        endDate: ""
+      }
     };
     setFilters(clearedFilters);
+    setActiveFilters([]);
     onFilterChange(clearedFilters);
   };
 
-  const removeFilter = (filterType: keyof FilterState, value?: string) => {
-    if (filterType === 'tourType') {
-      updateFilters({ tourType: null });
-    } else if (filterType === 'departureCities' && value) {
-      updateFilters({ 
-        departureCities: filters.departureCities.filter(city => city !== value) 
-      });
+  const removeActiveFilter = (filterToRemove: string) => {
+    const filterParts = filterToRemove.split(": ");
+    const filterType = filterParts[0];
+    
+    let updatedFilters = { ...filters };
+    
+    switch (filterType) {
+      case "Search":
+        updatedFilters.searchTerm = "";
+        break;
+      case "Location":
+        updatedFilters.location = "all";
+        break;
+      case "Cities":
+        updatedFilters.departureCity = [];
+        break;
+      case "Types":
+        updatedFilters.tourType = [];
+        break;
+      case "Price":
+        updatedFilters.priceRange = [0, 50000];
+        break;
+      case "Duration":
+        updatedFilters.durationRange = [1, 30];
+        break;
+      case "Date Range":
+        updatedFilters.departBetween = { startDate: "", endDate: "" };
+        break;
     }
+    
+    setFilters(updatedFilters);
+    onFilterChange(updatedFilters);
+    updateActiveFilters(updatedFilters);
   };
 
-  const toggleCity = (cityName: string) => {
-    const isSelected = filters.departureCities.includes(cityName);
-    if (isSelected) {
-      updateFilters({ 
-        departureCities: filters.departureCities.filter(city => city !== cityName) 
-      });
-    } else {
-      updateFilters({ 
-        departureCities: [...filters.departureCities, cityName] 
-      });
-    }
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
-  const hasActiveFilters = filters.tourType || filters.departureCities.length > 0;
+  const handleCityChange = (city: string, checked: boolean) => {
+    const updatedCities = checked 
+      ? [...filters.departureCity, city]
+      : filters.departureCity.filter(c => c !== city);
+    updateFilters({ departureCity: updatedCities });
+  };
+
+  const handleTourTypeChange = (type: string, checked: boolean) => {
+    const updatedTypes = checked 
+      ? [...filters.tourType, type]
+      : filters.tourType.filter(t => t !== type);
+    updateFilters({ tourType: updatedTypes });
+  };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg p-6 ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <Filter className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold text-gray-900">Filter Your Tour</h3>
-        </div>
-        <div className="flex gap-3">
-          <button
+    <Card className="w-full">
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Filter className="h-5 w-5" />
+            <CardTitle className="text-lg">Filter Your Tour</CardTitle>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
             onClick={clearAllFilters}
-            className="text-sm text-primary hover:text-primary/80 font-medium"
+            className="text-sm text-gray-600 hover:text-gray-900"
           >
             Clear All
-          </button>
+          </Button>
         </div>
-      </div>
-
-      {/* Active Filters */}
-      {hasActiveFilters && (
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div className="flex flex-wrap gap-2">
-            {filters.tourType && (
-              <Badge variant="secondary" className="flex items-center gap-1">
-                {filters.tourType}
-                <button
-                  onClick={() => removeFilter('tourType')}
-                  className="ml-1 hover:text-destructive"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            )}
-            {filters.departureCities.map((city) => (
-              <Badge key={city} variant="secondary" className="flex items-center gap-1">
-                {city}
-                <button
-                  onClick={() => removeFilter('departureCities', city)}
-                  className="ml-1 hover:text-destructive"
-                >
-                  <X className="h-3 w-3" />
-                </button>
+        
+        {/* Active Filters */}
+        {activeFilters.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {activeFilters.map((filter, index) => (
+              <Badge key={index} variant="secondary" className="flex items-center space-x-1">
+                <span className="text-xs">{filter}</span>
+                <X 
+                  className="h-3 w-3 cursor-pointer hover:text-red-500" 
+                  onClick={() => removeActiveFilter(filter)}
+                />
               </Badge>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </CardHeader>
 
-      {/* Destination Selection */}
-      <Collapsible open={openSections.destination} onOpenChange={() => toggleSection('destination')}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-left border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer group">
-          <span className="font-medium text-gray-900 group-hover:text-gray-700">Destination</span>
-          {openSections.destination ? <ChevronUp className="h-4 w-4 text-gray-500 group-hover:text-gray-700" /> : <ChevronDown className="h-4 w-4 text-gray-500 group-hover:text-gray-700" />}
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 transition-all duration-200 ease-in-out">
-          <div className="grid grid-cols-2 gap-3">
+      <CardContent className="space-y-6">
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            placeholder="Search packages..."
+            value={filters.searchTerm}
+            onChange={(e) => updateFilters({ searchTerm: e.target.value })}
+            className="pl-10"
+          />
+        </div>
+
+        {/* Location Filter */}
+        <div className="space-y-3">
+          <h4 className="font-medium text-gray-900">Location</h4>
+          <div className="flex space-x-2">
             <Button
-              variant={filters.destination === 'india' ? 'default' : 'outline'}
-              className="w-full"
-              onClick={() => updateFilters({ destination: filters.destination === 'india' ? null : 'india' })}
+              variant={packageType === 'domestic' ? "default" : "outline"}
+              size="sm"
+              onClick={() => updateFilters({ location: 'domestic' })}
+              className="flex-1"
             >
+              <MapPin className="h-4 w-4 mr-2" />
               India
             </Button>
             <Button
-              variant={filters.destination === 'world' ? 'default' : 'outline'}
-              className="w-full"
-              onClick={() => updateFilters({ destination: filters.destination === 'world' ? null : 'world' })}
+              variant={packageType === 'international' ? "default" : "outline"}
+              size="sm"
+              onClick={() => updateFilters({ location: 'international' })}
+              className="flex-1"
             >
+              <MapPin className="h-4 w-4 mr-2" />
               World
             </Button>
           </div>
-        </CollapsibleContent>
-      </Collapsible>
+        </div>
 
-      {/* Price Range */}
-      <Collapsible open={openSections.priceRange} onOpenChange={() => toggleSection('priceRange')}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-left border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer group">
-          <span className="font-medium text-gray-900 group-hover:text-gray-700">Price Range</span>
-          {openSections.priceRange ? <ChevronUp className="h-4 w-4 text-gray-500 group-hover:text-gray-700" /> : <ChevronDown className="h-4 w-4 text-gray-500 group-hover:text-gray-700" />}
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 transition-all duration-200 ease-in-out">
-          <div className="grid grid-cols-2 gap-3">
-            {priceRanges.map((range) => (
-              <Button
-                key={range}
-                variant={filters.priceRange === range ? 'default' : 'outline'}
-                className="w-full text-sm"
-                onClick={() => updateFilters({ priceRange: filters.priceRange === range ? null : range })}
-              >
-                {range}
-              </Button>
-            ))}
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Tour Duration */}
-      <Collapsible open={openSections.tourDuration} onOpenChange={() => toggleSection('tourDuration')}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-left border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer group">
-          <span className="font-medium text-gray-900 group-hover:text-gray-700">Tour Duration</span>
-          {openSections.tourDuration ? <ChevronUp className="h-4 w-4 text-gray-500 group-hover:text-gray-700" /> : <ChevronDown className="h-4 w-4 text-gray-500 group-hover:text-gray-700" />}
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 transition-all duration-200 ease-in-out">
-          <div className="space-y-4">
-            <div className="px-2">
+        {/* Price Range */}
+        <Collapsible open={expandedSections.price} onOpenChange={() => toggleSection('price')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h4 className="font-medium text-gray-900">Price Range</h4>
+            {expandedSections.price ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 mt-3">
+            <div className="space-y-2">
+              {priceRanges.map((range, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => updateFilters({ priceRange: [range.min, range.max] })}
+                >
+                  {range.label}
+                </Button>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>₹{filters.priceRange[0].toLocaleString()}</span>
+                <span>₹{filters.priceRange[1].toLocaleString()}</span>
+              </div>
               <Slider
-                value={filters.tourDuration}
-                onValueChange={(value) => updateFilters({ tourDuration: value as [number, number] })}
-                max={13}
-                min={5}
+                value={filters.priceRange}
+                onValueChange={(value) => updateFilters({ priceRange: value as [number, number] })}
+                max={50000}
+                min={0}
+                step={1000}
+                className="w-full"
+              />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Tour Duration */}
+        <Collapsible open={expandedSections.duration} onOpenChange={() => toggleSection('duration')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h4 className="font-medium text-gray-900">Tour Duration</h4>
+            {expandedSections.duration ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 mt-3">
+            <div className="space-y-2">
+              {durationRanges.map((range, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => updateFilters({ durationRange: [range.min, range.max] })}
+                >
+                  {range.label}
+                </Button>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Min. {filters.durationRange[0]} days</span>
+                <span>Max. {filters.durationRange[1]} days</span>
+              </div>
+              <Slider
+                value={filters.durationRange}
+                onValueChange={(value) => updateFilters({ durationRange: value as [number, number] })}
+                max={30}
+                min={1}
                 step={1}
                 className="w-full"
               />
-              <div className="flex justify-between text-sm text-gray-600 mt-2">
-                <span>Min. {filters.tourDuration[0]} days</span>
-                <span>Max. {filters.tourDuration[1]} days</span>
-              </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {durationRanges.map((range) => (
-                <Button
-                  key={range}
-                  variant="outline"
-                  className="w-full text-sm"
-                >
-                  {range}
-              </Button>
-              ))}
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Depart Between */}
+        <Collapsible open={expandedSections.departBetween} onOpenChange={() => toggleSection('departBetween')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h4 className="font-medium text-gray-900">Depart Between</h4>
+            {expandedSections.departBetween ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 mt-3">
+            <div className="space-y-2">
+              <Input
+                type="date"
+                placeholder="Start Date"
+                value={filters.departBetween.startDate}
+                onChange={(e) => updateFilters({ 
+                  departBetween: { ...filters.departBetween, startDate: e.target.value }
+                })}
+              />
+              <Input
+                type="date"
+                placeholder="End Date"
+                value={filters.departBetween.endDate}
+                onChange={(e) => updateFilters({ 
+                  departBetween: { ...filters.departBetween, endDate: e.target.value }
+                })}
+              />
             </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+          </CollapsibleContent>
+        </Collapsible>
 
-      {/* Depart Between */}
-      <Collapsible open={openSections.departBetween} onOpenChange={() => toggleSection('departBetween')}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-left border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer group">
-          <span className="font-medium text-gray-900 group-hover:text-gray-700">Depart Between</span>
-          {openSections.departBetween ? <ChevronUp className="h-4 w-4 text-gray-500 group-hover:text-gray-700" /> : <ChevronDown className="h-4 w-4 text-gray-500 group-hover:text-gray-700" />}
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 transition-all duration-200 ease-in-out">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Start Date - End Date"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-            <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Departure City */}
-      <Collapsible open={openSections.departureCity} onOpenChange={() => toggleSection('departureCity')}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-left border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer group">
-          <span className="font-medium text-gray-900 group-hover:text-gray-700">Departure City</span>
-          {openSections.departureCity ? <ChevronUp className="h-4 w-4 text-gray-500 group-hover:text-gray-700" /> : <ChevronDown className="h-4 w-4 text-gray-500 group-hover:text-gray-700" />}
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 transition-all duration-200 ease-in-out">
-          <div className="space-y-4">
-            {departureCities.map((city) => (
-              <label key={city.name} className="flex items-center justify-between cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={filters.departureCities.includes(city.name)}
-                    onChange={() => toggleCity(city.name)}
-                    className="rounded border-gray-300 text-primary focus:ring-primary"
+        {/* Departure City */}
+        <Collapsible open={expandedSections.departure} onOpenChange={() => toggleSection('departure')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h4 className="font-medium text-gray-900">Departure City</h4>
+            {expandedSections.departure ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 mt-3">
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {cities.map((city, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`city-${index}`}
+                    checked={filters.departureCity.includes(city)}
+                    onCheckedChange={(checked) => handleCityChange(city, checked as boolean)}
                   />
-                  <span className="text-sm text-gray-700">{city.name}</span>
+                  <label htmlFor={`city-${index}`} className="text-sm flex-1 flex justify-between">
+                    <span>{city}</span>
+                    <span className="text-gray-500">({Math.floor(Math.random() * 50) + 1})</span>
+                  </label>
                 </div>
-                <span className="text-xs text-gray-500">({city.count})</span>
-              </label>
-            ))}
-            
-            <div className="pt-4 border-t border-gray-200">
-              <h4 className="font-medium text-gray-900 mb-2">Joining & Leaving</h4>
-              <p className="text-xs text-gray-600 mb-3">
-                Can't find tours from your city? Check our Joining & leaving option. Book your own flights and join directly at the first destination of the tour.
-              </p>
-              {joiningLeavingCities.map((city) => (
-                <label key={city.name} className="flex items-center justify-between cursor-pointer mb-2">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={filters.departureCities.includes(city.name)}
-                      onChange={() => toggleCity(city.name)}
-                      className="rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm text-gray-700">{city.name}</span>
-                  </div>
-                  <span className="text-xs text-gray-500">({city.count})</span>
-                </label>
               ))}
             </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-    </div>
+            <div className="text-xs text-gray-500 pt-2 border-t">
+              <p>Joining & Leaving</p>
+              <p>Can't find tours from your city? Check our joining & leaving options.</p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Tour Type */}
+        <Collapsible open={expandedSections.tourType} onOpenChange={() => toggleSection('tourType')}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h4 className="font-medium text-gray-900">Tour Type</h4>
+            {expandedSections.tourType ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-3 mt-3">
+            <div className="space-y-2">
+              {tourTypes.map((type, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`type-${index}`}
+                    checked={filters.tourType.includes(type)}
+                    onCheckedChange={(checked) => handleTourTypeChange(type, checked as boolean)}
+                  />
+                  <label htmlFor={`type-${index}`} className="text-sm">
+                    {type}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </CardContent>
+    </Card>
   );
 };
 

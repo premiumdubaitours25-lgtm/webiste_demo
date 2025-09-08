@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import PackageFilter from "@/components/PackageFilter";
 
 interface Package {
   _id: string;
@@ -36,14 +37,35 @@ interface Package {
   rating: number;
 }
 
+interface FilterState {
+  searchTerm: string;
+  priceRange: [number, number];
+  durationRange: [number, number];
+  location: string;
+  departureCity: string[];
+  tourType: string[];
+  departBetween: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
 const DomesticPackagesPage = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [priceFilter, setPriceFilter] = useState("all");
-  const [durationFilter, setDurationFilter] = useState("all");
-  const [locationFilter, setLocationFilter] = useState("all");
+  const [filters, setFilters] = useState<FilterState>({
+    searchTerm: "",
+    priceRange: [0, 50000],
+    durationRange: [1, 30],
+    location: "domestic",
+    departureCity: [],
+    tourType: [],
+    departBetween: {
+      startDate: "",
+      endDate: ""
+    }
+  });
 
   useEffect(() => {
     fetchPackages();
@@ -51,7 +73,11 @@ const DomesticPackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, priceFilter, durationFilter, locationFilter]);
+  }, [packages, filters]);
+
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters(newFilters);
+  };
 
   const fetchPackages = async () => {
     try {
@@ -75,58 +101,64 @@ const DomesticPackagesPage = () => {
     let filtered = packages;
 
     // Search filter
-    if (searchTerm) {
+    if (filters.searchTerm) {
       filtered = filtered.filter(pkg =>
-        pkg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.location.toLowerCase().includes(searchTerm.toLowerCase())
+        pkg.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        pkg.subtitle.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        pkg.location.toLowerCase().includes(filters.searchTerm.toLowerCase())
       );
     }
 
-    // Price filter
-    if (priceFilter !== "all") {
-      filtered = filtered.filter(pkg => {
-        switch (priceFilter) {
-          case "under-10k":
-            return pkg.price < 10000;
-          case "10k-20k":
-            return pkg.price >= 10000 && pkg.price < 20000;
-          case "20k-30k":
-            return pkg.price >= 20000 && pkg.price < 30000;
-          case "30k-50k":
-            return pkg.price >= 30000 && pkg.price < 50000;
-          case "50k-100k":
-            return pkg.price >= 50000 && pkg.price < 100000;
-          case "over-100k":
-            return pkg.price >= 100000;
-          default:
-            return true;
-        }
-      });
-    }
+    // Price range filter
+    filtered = filtered.filter(pkg => 
+      pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
+    );
 
-    // Duration filter
-    if (durationFilter !== "all") {
-      filtered = filtered.filter(pkg => {
-        const duration = pkg.duration.toLowerCase();
-        switch (durationFilter) {
-          case "short":
-            return duration.includes("3") || duration.includes("4") || duration.includes("5");
-          case "medium":
-            return duration.includes("6") || duration.includes("7") || duration.includes("8") || duration.includes("9") || duration.includes("10");
-          case "long":
-            return duration.includes("11") || duration.includes("12") || duration.includes("14") || duration.includes("15");
-          default:
-            return true;
-        }
-      });
-    }
+    // Duration range filter
+    filtered = filtered.filter(pkg => {
+      const durationMatch = pkg.duration.match(/(\d+)/);
+      if (durationMatch) {
+        const duration = parseInt(durationMatch[1]);
+        return duration >= filters.durationRange[0] && duration <= filters.durationRange[1];
+      }
+      return true;
+    });
 
     // Location filter
-    if (locationFilter !== "all") {
+    if (filters.location !== "all") {
       filtered = filtered.filter(pkg => {
-        const place = pkg.place.toLowerCase();
-        return place === locationFilter;
+        if (filters.location === "domestic") {
+          return pkg.packageType === 'domestic' || 
+                 ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'].includes(pkg.place);
+        }
+        return pkg.place === filters.location;
+      });
+    }
+
+    // Tour type filter (if we had tour type data)
+    if (filters.tourType.length > 0) {
+      filtered = filtered.filter(pkg => {
+        // This would need to be implemented based on your data structure
+        // For now, we'll skip this filter
+        return true;
+      });
+    }
+
+    // Departure city filter (if we had departure city data)
+    if (filters.departureCity.length > 0) {
+      filtered = filtered.filter(pkg => {
+        // This would need to be implemented based on your data structure
+        // For now, we'll skip this filter
+        return true;
+      });
+    }
+
+    // Date range filter (if we had departure date data)
+    if (filters.departBetween.startDate || filters.departBetween.endDate) {
+      filtered = filtered.filter(pkg => {
+        // This would need to be implemented based on your data structure
+        // For now, we'll skip this filter
+        return true;
       });
     }
 
@@ -229,74 +261,17 @@ const DomesticPackagesPage = () => {
       <section className="py-8 bg-gray-100 border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              {/* Search */}
-              <div className="lg:col-span-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search domestic packages..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Filter Sidebar */}
+              <div className="lg:col-span-1">
+                <PackageFilter 
+                  onFilterChange={handleFilterChange}
+                  packageType="domestic"
+                />
               </div>
-
-              {/* Price Filter */}
-              <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Price Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Prices</SelectItem>
-                  <SelectItem value="under-10k">Under ₹10,000</SelectItem>
-                  <SelectItem value="10k-20k">₹10,000 - ₹20,000</SelectItem>
-                  <SelectItem value="20k-30k">₹20,000 - ₹30,000</SelectItem>
-                  <SelectItem value="30k-50k">₹30,000 - ₹50,000</SelectItem>
-                  <SelectItem value="50k-100k">₹50,000 - ₹1,00,000</SelectItem>
-                  <SelectItem value="over-100k">Over ₹1,00,000</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Duration Filter */}
-              <Select value={durationFilter} onValueChange={setDurationFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Duration" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Durations</SelectItem>
-                  <SelectItem value="short">Short (3-5 days)</SelectItem>
-                  <SelectItem value="medium">Medium (6-10 days)</SelectItem>
-                  <SelectItem value="long">Long (11+ days)</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Location Filter */}
-              <Select value={locationFilter} onValueChange={setLocationFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                  <SelectItem value="sikkim">Sikkim</SelectItem>
-                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                  <SelectItem value="arunachal">Arunachal</SelectItem>
-                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                  <SelectItem value="kashmir">Kashmir</SelectItem>
-                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Packages Grid */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+              
+              {/* Packages Grid */}
+              <div className="lg:col-span-3">
             {filteredPackages.length === 0 ? (
               <div className="text-center py-12">
                 <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
@@ -305,10 +280,18 @@ const DomesticPackagesPage = () => {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No domestic packages found</h3>
                 <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
                 <Button onClick={() => {
-                  setSearchTerm("");
-                  setPriceFilter("all");
-                  setDurationFilter("all");
-                  setLocationFilter("all");
+                  setFilters({
+                    searchTerm: "",
+                    priceRange: [0, 50000],
+                    durationRange: [1, 30],
+                    location: "domestic",
+                    departureCity: [],
+                    tourType: [],
+                    departBetween: {
+                      startDate: "",
+                      endDate: ""
+                    }
+                  });
                 }}>
                   Clear Filters
                 </Button>
@@ -400,6 +383,8 @@ const DomesticPackagesPage = () => {
                 </div>
               </>
             )}
+              </div>
+            </div>
           </div>
         </div>
       </section>

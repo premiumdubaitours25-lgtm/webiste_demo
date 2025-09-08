@@ -149,10 +149,10 @@ Please get back to me with more information about available packages and pricing
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-10">
               Contact Us
             </h1>
-            <p className="text-3xl md:text-4xl lg:text-5xl mb-12 opacity-90">
+            <p className="text-xl md:text-2xl lg:text-3xl mb-12 opacity-90">
               Get in touch with us for any questions, custom packages, or travel assistance
             </p>
             <div className="flex flex-wrap justify-center gap-6">

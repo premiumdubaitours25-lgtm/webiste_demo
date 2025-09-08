@@ -853,6 +853,9 @@ video {
 .mt-24 {
   margin-top: 6rem;
 }
+.mt-3 {
+  margin-top: 0.75rem;
+}
 .mt-4 {
   margin-top: 1rem;
 }
@@ -992,6 +995,9 @@ video {
 .h-\[400px\] {
   height: 400px;
 }
+.h-\[500px\] {
+  height: 500px;
+}
 .h-\[var\(--radix-navigation-menu-viewport-height\)\] {
   height: var(--radix-navigation-menu-viewport-height);
 }
@@ -1009,6 +1015,12 @@ video {
 }
 .h-svh {
   height: 100svh;
+}
+.h-\[350px\] {
+  height: 350px;
+}
+.max-h-48 {
+  max-height: 12rem;
 }
 .max-h-96 {
   max-height: 24rem;
@@ -1245,6 +1257,11 @@ video {
 }
 .rotate-90 {
   --tw-rotate: 90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.scale-125 {
+  --tw-scale-x: 1.25;
+  --tw-scale-y: 1.25;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .transform {
@@ -1695,6 +1712,10 @@ video {
 .bg-white\/95 {
   background-color: rgb(255 255 255 / 0.95);
 }
+.bg-yellow-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1));
+}
 .bg-yellow-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity, 1));
@@ -1946,6 +1967,9 @@ video {
 .pt-1 {
   padding-top: 0.25rem;
 }
+.pt-2 {
+  padding-top: 0.5rem;
+}
 .pt-20 {
   padding-top: 5rem;
 }
@@ -2173,6 +2197,10 @@ video {
 }
 .text-white\/90 {
   color: rgb(255 255 255 / 0.9);
+}
+.text-yellow-300 {
+  --tw-text-opacity: 1;
+  color: rgb(253 224 71 / var(--tw-text-opacity, 1));
 }
 .text-yellow-400 {
   --tw-text-opacity: 1;
@@ -2633,11 +2661,6 @@ All colors MUST be HSL.
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
 
-.hover\:bg-gray-50:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
-}
-
 .hover\:bg-green-50:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1));
@@ -2715,6 +2738,10 @@ All colors MUST be HSL.
   background-color: rgb(255 255 255 / 0.3);
 }
 
+.hover\:bg-white\/70:hover {
+  background-color: rgb(255 255 255 / 0.7);
+}
+
 .hover\:bg-yellow-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(202 138 4 / var(--tw-bg-opacity, 1));
@@ -2729,10 +2756,6 @@ All colors MUST be HSL.
   color: rgb(29 78 216 / var(--tw-text-opacity, 1));
 }
 
-.hover\:text-destructive:hover {
-  color: hsl(var(--destructive));
-}
-
 .hover\:text-foreground:hover {
   color: hsl(var(--foreground));
 }
@@ -2745,6 +2768,11 @@ All colors MUST be HSL.
 .hover\:text-gray-600:hover {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-gray-900:hover {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-green-400:hover {
@@ -2771,6 +2799,11 @@ All colors MUST be HSL.
 
 .hover\:text-primary\/80:hover {
   color: hsl(var(--primary) / 0.8);
+}
+
+.hover\:text-red-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-red-700:hover {
@@ -2948,11 +2981,6 @@ All colors MUST be HSL.
 
 .group:hover .group-hover\:bg-opacity-50 {
   --tw-bg-opacity: 0.5;
-}
-
-.group:hover .group-hover\:text-gray-700 {
-  --tw-text-opacity: 1;
-  color: rgb(55 65 81 / var(--tw-text-opacity, 1));
 }
 
 .group\/menu-item:hover .group-hover\/menu-item\:opacity-100 {
@@ -3768,6 +3796,10 @@ All colors MUST be HSL.
     height: 450px;
   }
 
+  .md\:h-\[600px\] {
+    height: 600px;
+  }
+
   .md\:w-1\/2 {
     width: 50%;
   }
@@ -3869,6 +3901,11 @@ All colors MUST be HSL.
     line-height: 1.25rem;
   }
 
+  .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
   .md\:opacity-0 {
     opacity: 0;
   }
@@ -3903,8 +3940,16 @@ All colors MUST be HSL.
 
 @media (min-width: 1024px) {
 
+  .lg\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .lg\:col-span-3 {
+    grid-column: span 3 / span 3;
   }
 
   .lg\:mb-0 {

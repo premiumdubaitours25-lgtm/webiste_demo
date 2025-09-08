@@ -117,7 +117,7 @@ const PackageSchema = new mongoose.Schema({
       // Domestic destinations
       'darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh',
       // International destinations
-      'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore',
+      'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore', 'dubai',
       // Legacy destinations (keeping for backward compatibility)
       'bhutan', 'nepal'
     ],

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Clock, Users, Star, Search, Globe, Plane, Camera } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import PackageFilter from "@/components/PackageFilter";
 
 interface Package {
   _id: string;
@@ -36,14 +37,35 @@ interface Package {
   rating: number;
 }
 
+interface FilterState {
+  searchTerm: string;
+  priceRange: [number, number];
+  durationRange: [number, number];
+  location: string;
+  departureCity: string[];
+  tourType: string[];
+  departBetween: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
 const InternationalPackagesPage = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [priceFilter, setPriceFilter] = useState("all");
-  const [durationFilter, setDurationFilter] = useState("all");
-  const [locationFilter, setLocationFilter] = useState("all");
+  const [filters, setFilters] = useState<FilterState>({
+    searchTerm: "",
+    priceRange: [0, 50000],
+    durationRange: [1, 30],
+    location: "international",
+    departureCity: [],
+    tourType: [],
+    departBetween: {
+      startDate: "",
+      endDate: ""
+    }
+  });
 
   useEffect(() => {
     fetchPackages();
@@ -51,7 +73,7 @@ const InternationalPackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, priceFilter, durationFilter, locationFilter]);
+  }, [packages, filters]);
 
   const fetchPackages = async () => {
     try {
@@ -65,6 +87,7 @@ const InternationalPackagesPage = () => {
           const isInternational = pkg.packageType === 'international' || 
                                  pkg.place === 'nepal' || 
                                  pkg.place === 'bhutan' ||
+                                 pkg.place === 'dubai' ||
                                  pkg.place === 'vietnam' ||
                                  pkg.place === 'sri-lanka' ||
                                  pkg.place === 'bali' ||
@@ -146,64 +169,72 @@ const InternationalPackagesPage = () => {
     let filtered = packages;
 
     // Search filter
-    if (searchTerm) {
+    if (filters.searchTerm) {
       filtered = filtered.filter(pkg =>
-        pkg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.location.toLowerCase().includes(searchTerm.toLowerCase())
+        pkg.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        pkg.subtitle.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        pkg.location.toLowerCase().includes(filters.searchTerm.toLowerCase())
       );
     }
 
-    // Price filter
-    if (priceFilter !== "all") {
-      filtered = filtered.filter(pkg => {
-        switch (priceFilter) {
-          case "under-10k":
-            return pkg.price < 10000;
-          case "10k-25k":
-            return pkg.price >= 10000 && pkg.price < 25000;
-          case "25k-50k":
-            return pkg.price >= 25000 && pkg.price < 50000;
-          case "50k-100k":
-            return pkg.price >= 50000 && pkg.price < 100000;
-          case "100k-200k":
-            return pkg.price >= 100000 && pkg.price < 200000;
-          case "200k-500k":
-            return pkg.price >= 200000 && pkg.price < 500000;
-          case "over-500k":
-            return pkg.price >= 500000;
-          default:
-            return true;
-        }
-      });
-    }
+    // Price range filter
+    filtered = filtered.filter(pkg => 
+      pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
+    );
 
-    // Duration filter
-    if (durationFilter !== "all") {
-      filtered = filtered.filter(pkg => {
-        const duration = pkg.duration.toLowerCase();
-        switch (durationFilter) {
-          case "short":
-            return duration.includes("3") || duration.includes("4") || duration.includes("5");
-          case "medium":
-            return duration.includes("6") || duration.includes("7") || duration.includes("8") || duration.includes("9") || duration.includes("10");
-          case "long":
-            return duration.includes("11") || duration.includes("12") || duration.includes("14") || duration.includes("15");
-          default:
-            return true;
-        }
-      });
-    }
+    // Duration range filter
+    filtered = filtered.filter(pkg => {
+      const durationMatch = pkg.duration.match(/(\d+)/);
+      if (durationMatch) {
+        const duration = parseInt(durationMatch[1]);
+        return duration >= filters.durationRange[0] && duration <= filters.durationRange[1];
+      }
+      return true;
+    });
 
     // Location filter
-    if (locationFilter !== "all") {
+    if (filters.location !== "all") {
       filtered = filtered.filter(pkg => {
-        const place = pkg.place.toLowerCase();
-        return place === locationFilter;
+        if (filters.location === "international") {
+          return pkg.packageType === 'international' || 
+                 ['nepal', 'bhutan', 'dubai', 'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore'].includes(pkg.place);
+        }
+        return pkg.place === filters.location;
+      });
+    }
+
+    // Tour type filter (if we had tour type data)
+    if (filters.tourType.length > 0) {
+      filtered = filtered.filter(pkg => {
+        // This would need to be implemented based on your data structure
+        // For now, we'll skip this filter
+        return true;
+      });
+    }
+
+    // Departure city filter (if we had departure city data)
+    if (filters.departureCity.length > 0) {
+      filtered = filtered.filter(pkg => {
+        // This would need to be implemented based on your data structure
+        // For now, we'll skip this filter
+        return true;
+      });
+    }
+
+    // Date range filter (if we had departure date data)
+    if (filters.departBetween.startDate || filters.departBetween.endDate) {
+      filtered = filtered.filter(pkg => {
+        // This would need to be implemented based on your data structure
+        // For now, we'll skip this filter
+        return true;
       });
     }
 
     setFilteredPackages(filtered);
+  };
+
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters(newFilters);
   };
 
   const formatPrice = (price: number) => {
@@ -215,10 +246,10 @@ const InternationalPackagesPage = () => {
   };
 
   const popularCountries = [
+    { name: "Bhutan", icon: Globe, packages: packages.filter(p => p.place === 'bhutan').length },
+    { name: "Nepal", icon: Camera, packages: packages.filter(p => p.place === 'nepal').length },
+    { name: "Dubai", icon: Plane, packages: packages.filter(p => p.place === 'dubai').length },
     { name: "Vietnam", icon: Globe, packages: packages.filter(p => p.place === 'vietnam').length },
-    { name: "Sri Lanka", icon: Camera, packages: packages.filter(p => p.place === 'sri-lanka').length },
-    { name: "Bali", icon: Plane, packages: packages.filter(p => p.place === 'bali').length },
-    { name: "Malaysia", icon: Globe, packages: packages.filter(p => p.place === 'malaysia').length },
   ];
 
   if (loading) {
@@ -302,91 +333,41 @@ const InternationalPackagesPage = () => {
       <section className="py-8 bg-gray-100 border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              {/* Search */}
-              <div className="lg:col-span-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search international packages..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Filter Sidebar */}
+              <div className="lg:col-span-1">
+                <PackageFilter 
+                  onFilterChange={handleFilterChange}
+                  packageType="international"
+                />
               </div>
-
-              {/* Price Filter */}
-              <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Price Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Prices</SelectItem>
-                  <SelectItem value="under-10k">Under ₹10,000</SelectItem>
-                  <SelectItem value="10k-25k">₹10,000 - ₹25,000</SelectItem>
-                  <SelectItem value="25k-50k">₹25,000 - ₹50,000</SelectItem>
-                  <SelectItem value="50k-100k">₹50,000 - ₹1,00,000</SelectItem>
-                  <SelectItem value="100k-200k">₹1,00,000 - ₹2,00,000</SelectItem>
-                  <SelectItem value="200k-500k">₹2,00,000 - ₹5,00,000</SelectItem>
-                  <SelectItem value="over-500k">Over ₹5,00,000</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Duration Filter */}
-              <Select value={durationFilter} onValueChange={setDurationFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Duration" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Durations</SelectItem>
-                  <SelectItem value="short">Short (3-5 days)</SelectItem>
-                  <SelectItem value="medium">Medium (6-10 days)</SelectItem>
-                  <SelectItem value="long">Long (11+ days)</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Location Filter */}
-              <Select value={locationFilter} onValueChange={setLocationFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="vietnam">Vietnam</SelectItem>
-                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                  <SelectItem value="bali">Bali</SelectItem>
-                  <SelectItem value="malaysia">Malaysia</SelectItem>
-                  <SelectItem value="singapore">Singapore</SelectItem>
-                  <SelectItem value="nepal">Nepal</SelectItem>
-                  <SelectItem value="bhutan">Bhutan</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Packages Grid */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            {filteredPackages.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                  <Search className="h-12 w-12 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No international packages found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
-                <Button onClick={() => {
-                  setSearchTerm("");
-                  setPriceFilter("all");
-                  setDurationFilter("all");
-                  setLocationFilter("all");
-                }}>
-                  Clear Filters
-                </Button>
-              </div>
+              
+              {/* Packages Grid */}
+              <div className="lg:col-span-3">
+                {filteredPackages.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
+                      <Search className="h-12 w-12 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No international packages found</h3>
+                    <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
+                    <Button onClick={() => {
+                      setFilters({
+                        searchTerm: "",
+                        priceRange: [0, 50000],
+                        durationRange: [1, 30],
+                        location: "international",
+                        departureCity: [],
+                        tourType: [],
+                        departBetween: {
+                          startDate: "",
+                          endDate: ""
+                        }
+                      });
+                    }}>
+                      Clear Filters
+                    </Button>
+                  </div>
             ) : (
               <>
                 <div className="flex justify-between items-center mb-8">
@@ -417,7 +398,10 @@ const InternationalPackagesPage = () => {
                           {formatPrice(pkg.price)}
                         </Badge>
                         <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          {pkg.place === 'vietnam' ? 'Vietnam' : 
+                          {pkg.place === 'bhutan' ? 'Bhutan' :
+                           pkg.place === 'nepal' ? 'Nepal' :
+                           pkg.place === 'dubai' ? 'Dubai' :
+                           pkg.place === 'vietnam' ? 'Vietnam' : 
                            pkg.place === 'sri-lanka' ? 'Sri Lanka' :
                            pkg.place === 'bali' ? 'Bali' :
                            pkg.place === 'malaysia' ? 'Malaysia' :
@@ -472,6 +456,8 @@ const InternationalPackagesPage = () => {
                 </div>
               </>
             )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
