@@ -294,7 +294,7 @@ ${formData.message}
               <div className="flex flex-col items-center">
                 <MapPin className="w-6 h-6 text-secondary mb-2" />
                 <p className="text-sm text-gray-600">Visit us</p>
-                <p className="font-semibold text-secondary">Guwahati, Assam</p>
+                <p className="font-semibold text-secondary">Nyati Estate, Mohammadwadi,Pune - 411060</p>
               </div>
             </div>
           </div>
