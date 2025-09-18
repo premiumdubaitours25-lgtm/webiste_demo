@@ -196,7 +196,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2 mt-1">•</span>
-                    <span>At JJ&Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
+                    <span>At JJ & Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
                   </li>
                 </ul>
               </CardContent>

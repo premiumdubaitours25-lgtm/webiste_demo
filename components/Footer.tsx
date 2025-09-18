@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -10,13 +11,21 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">T</span>
-              </div>
+             <div className="flex items-center space-x-3">
+               <div className="relative w-24 h-24 bg-white rounded-lg p-4 shadow-md flex items-center justify-center">
+                 <div className="relative w-16 h-16">
+                   <Image
+                     src="/logo.png"
+                     alt="JJ & TIA Tours Logo"
+                     fill
+                     className="object-contain"
+                     priority
+                   />
+                 </div>
+               </div>
               <div>
-                <h3 className="text-xl font-bold">TIA Tours</h3>
-                <p className="text-sm text-gray-400">Travel & Tourism</p>
+                <h3 className="text-xl font-bold">JJ & Tia</h3>
+                <p className="text-sm text-gray-400">Tours & Travels</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm">
@@ -24,15 +33,13 @@ const Footer = () => {
               We create memories that last a lifetime.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="h-5 w-5" />
-              </Link>
+                <Link href="https://www.facebook.com/share/1EkLqFyM9F/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <Facebook className="h-5 w-5" />
+                </Link>
+                <Link href="https://www.instagram.com/jj_tia_travels" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                  <Instagram className="h-5 w-5" />
+                </Link>
+          
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Youtube className="h-5 w-5" />
               </Link>

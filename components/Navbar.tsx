@@ -78,7 +78,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="relative w-16 h-16">
+            <div className="relative w-20 h-20">
               <Image
                 src="/logo.png"
                 alt="JJ & TIA Tours Logo"
@@ -99,7 +99,7 @@ const Navbar = () => {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className={`flex items-center space-x-1 ${
+                        className={`flex items-center space-x-1 text-lg ${
                           isActive(item.href) 
                             ? 'text-primary font-semibold' 
                             : 'text-gray-700 hover:text-primary'
@@ -129,7 +129,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`font-medium transition-colors ${
+                    className={`font-medium text-lg transition-colors ${
                       isActive(item.href) 
                         ? 'text-primary font-semibold' 
                         : 'text-gray-700 hover:text-primary'
@@ -170,13 +170,13 @@ const Navbar = () => {
                 <div key={item.name}>
                   {item.submenu ? (
                     <div>
-                      <div className="font-medium text-gray-900 mb-2">{item.name}</div>
+                      <div className="font-medium text-lg text-gray-900 mb-2">{item.name}</div>
                       <div className="pl-4 space-y-2">
                         {item.submenu.map((subItem) => (
                           <Link
                             key={subItem.name}
                             href={subItem.href}
-                            className={`block py-2 text-sm transition-colors ${
+                            className={`block py-2 text-lg transition-colors ${
                               isActive(subItem.href) 
                                 ? 'text-primary font-semibold' 
                                 : 'text-gray-600 hover:text-primary'
@@ -191,7 +191,7 @@ const Navbar = () => {
                   ) : (
                     <Link
                       href={item.href}
-                      className={`block py-2 font-medium transition-colors ${
+                      className={`block py-2 font-medium text-lg transition-colors ${
                         isActive(item.href) 
                           ? 'text-primary font-semibold' 
                           : 'text-gray-700 hover:text-primary'

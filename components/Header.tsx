@@ -90,7 +90,7 @@ const Header = () => {
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-2">
             <span className="flex items-center justify-center bg-white rounded-full shadow" style={{width: '88px', height: '88px'}}>
-              <img src="/logo.png" alt="JJ&Tia Tours" className="h-16 w-16 object-contain" style={{maxHeight: '64px', maxWidth: '64px'}} />
+              <img src="/logo.png" alt="JJ & Tia Tours" className="h-16 w-16 object-contain" style={{maxHeight: '64px', maxWidth: '64px'}} />
             </span>
           </Link>
 
