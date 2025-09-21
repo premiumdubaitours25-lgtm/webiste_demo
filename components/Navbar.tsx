@@ -39,20 +39,20 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       {/* Top Bar */}
-      <div className="bg-primary text-white py-2">
+      <div className="bg-primary text-white py-1">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center text-sm">
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+91 9970393335,+91 9834771258</span>
+                <span>+ 9970393335, 9834771258</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
                 <span>shneiur.joseph@jjtia.com</span>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -75,7 +75,7 @@ const Navbar = () => {
 
       {/* Main Navigation */}
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-2">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative w-20 h-20">
@@ -91,7 +91,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6">
             {navigation.map((item) => (
               <div key={item.name} className="relative">
                 {item.submenu ? (
@@ -143,7 +143,7 @@ const Navbar = () => {
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-3">
             <Link href="/contact">
               <Button size="sm" className="bg-primary hover:bg-primary/90">
                 Book Now
@@ -164,7 +164,7 @@ const Navbar = () => {
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="lg:hidden bg-white border-t">
-          <div className="container mx-auto px-4 py-4">
+          <div className="container mx-auto px-4 py-3">
             <div className="space-y-4">
               {navigation.map((item) => (
                 <div key={item.name}>

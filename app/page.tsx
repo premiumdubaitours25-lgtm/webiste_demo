@@ -112,35 +112,35 @@ export default function Home() {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Featured Domestic Packages</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-900 px-4">Featured Domestic Packages</h2>
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-4">
               Explore our most popular domestic tour packages featuring Meghalaya, Sikkim, and Darjeeling. Carefully crafted itineraries for an unforgettable Northeast India experience.
             </p>
           </div>
           
           {/* Package Type Selection */}
-          <div className="flex justify-center mb-12">
-            <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex justify-center mb-8 sm:mb-12 px-4">
+            <div className="flex flex-col sm:flex-row bg-gray-100 rounded-lg p-1 w-full max-w-md sm:max-w-none">
               <Button 
-                className="bg-primary text-white hover:bg-primary/90 rounded-md px-6 py-3"
+                className="bg-primary text-white hover:bg-primary/90 rounded-md px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base mb-2 sm:mb-0"
                 onClick={() => router.push('/packages/domestic')}
               >
-                <MapPin className="mr-2 h-4 w-4" />
+                <MapPin className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 Domestic Packages
               </Button>
               <Button 
                 variant="outline"
-                className="ml-2 rounded-md px-6 py-3 border-primary text-primary hover:bg-primary hover:text-white"
+                className="sm:ml-2 rounded-md px-4 sm:px-6 py-2 sm:py-3 border-primary text-primary hover:bg-primary hover:text-white text-sm sm:text-base"
                 onClick={() => router.push('/packages/international')}
               >
-                <Plane className="mr-2 h-4 w-4" />
+                <Plane className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 International Packages
               </Button>
             </div>
           </div>
 
           {/* Package Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 px-4">
             {/* Meghalaya Deluxe Tour Package */}
             <div 
               className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
@@ -156,13 +156,13 @@ export default function Home() {
                 <div className="text-xs uppercase text-gray-500 font-medium mb-1">
                   DOMESTIC
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1 uppercase">
+                <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1 uppercase leading-tight">
                   4 NIGHTS / 5 DAYS MEGHALAYA DELUXE TOUR
                 </h3>
-                <p className="text-xs text-gray-600 mb-2">
+                <p className="text-xs sm:text-sm text-gray-600 mb-2">
                   Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee
                 </p>
-                <div className="text-xs text-gray-700 font-medium">
+                <div className="text-sm sm:text-base text-gray-700 font-medium">
                   4N/5D • ₹19,900
                 </div>
               </div>
@@ -183,13 +183,13 @@ export default function Home() {
                 <div className="text-xs uppercase text-gray-500 font-medium mb-1">
                   DOMESTIC
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1 uppercase">
+                <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1 uppercase leading-tight">
                   5 NIGHTS 6 DAYS SIKKIM HOLIDAY PACKAGE WITH 3★ HOTELS
                 </h3>
-                <p className="text-xs text-gray-600 mb-2">
+                <p className="text-xs sm:text-sm text-gray-600 mb-2">
                   Gangtok, Tsangmo Lake & Pelling
                 </p>
-                <div className="text-xs text-gray-700 font-medium">
+                <div className="text-sm sm:text-base text-gray-700 font-medium">
                   5N/6D • ₹18,500
                 </div>
               </div>
@@ -210,13 +210,13 @@ export default function Home() {
                 <div className="text-xs uppercase text-gray-500 font-medium mb-1">
                   DOMESTIC
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1 uppercase">
+                <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1 uppercase leading-tight">
                   BUDGET-FRIENDLY 4 NIGHTS 5 DAYS DARJEELING KALIMPONG MIRIK GROUP PACKAGE
                 </h3>
-                <p className="text-xs text-gray-600 mb-2">
+                <p className="text-xs sm:text-sm text-gray-600 mb-2">
                   Darjeeling, Kalimpong & Mirik
                 </p>
-                <div className="text-xs text-gray-700 font-medium">
+                <div className="text-sm sm:text-base text-gray-700 font-medium">
                   4N/5D • ₹16,500
                 </div>
               </div>
@@ -580,8 +580,8 @@ export default function Home() {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-secondary">What Our Travelers Say</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-secondary px-4">What Our Travelers Say</h2>
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
               Hear from our satisfied customers about their amazing experiences with JJ & TIA Tours
             </p>
           </div>
@@ -595,23 +595,23 @@ export default function Home() {
                 style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
               >
                 {testimonials.map((testimonial) => (
-                  <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
-                    <Card className="p-8 hover:shadow-lg transition-shadow">
+                  <div key={testimonial.id} className="w-full flex-shrink-0 px-2 sm:px-4">
+                    <Card className="p-4 sm:p-6 md:p-8 hover:shadow-lg transition-shadow">
                       <CardContent className="p-0">
-                        <div className="flex items-center justify-center mb-6">
+                        <div className="flex items-center justify-center mb-4 sm:mb-6">
                           <div className="flex text-yellow-400">
                             {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="h-6 w-6 fill-current" />
+                              <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 fill-current" />
                             ))}
                           </div>
                         </div>
-                        <blockquote className="text-gray-700 mb-8 italic text-center text-lg leading-relaxed">
+                        <blockquote className="text-gray-700 mb-4 sm:mb-6 md:mb-8 italic text-center text-sm sm:text-base md:text-lg leading-relaxed">
                           "{testimonial.quote}"
                         </blockquote>
                         <div className="flex items-center justify-center">
                           <div className="text-center">
-                            <h4 className="font-semibold text-gray-900 text-lg">{testimonial.name}</h4>
-                            <p className="text-gray-600">{testimonial.role}</p>
+                            <h4 className="font-semibold text-gray-900 text-base sm:text-lg">{testimonial.name}</h4>
+                            <p className="text-gray-600 text-sm sm:text-base">{testimonial.role}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -624,17 +624,17 @@ export default function Home() {
             {/* Navigation Buttons */}
             <Button
               onClick={prevTestimonial}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 sm:-translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10"
               size="icon"
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
             </Button>
             <Button
               onClick={nextTestimonial}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 sm:translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10"
               size="icon"
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
             </Button>
 
             {/* Dots Indicator */}

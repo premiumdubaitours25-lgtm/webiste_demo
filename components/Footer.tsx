@@ -8,12 +8,12 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Company Info */}
           <div className="space-y-4">
              <div className="flex items-center space-x-3">
-               <div className="relative w-24 h-24 bg-white rounded-lg p-4 shadow-md flex items-center justify-center">
-                 <div className="relative w-16 h-16">
+               <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white rounded-lg p-2 sm:p-3 md:p-4 shadow-md flex items-center justify-center">
+                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
                    <Image
                      src="/logo.png"
                      alt="JJ & TIA Tours Logo"
@@ -24,8 +24,8 @@ const Footer = () => {
                  </div>
                </div>
               <div>
-                <h3 className="text-xl font-bold">JJ & Tia</h3>
-                <p className="text-sm text-gray-400">Tours & Travels</p>
+                <h3 className="text-lg sm:text-xl font-bold">JJ & Tia</h3>
+                <p className="text-xs sm:text-sm text-gray-400">Tours & Travels</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm">
@@ -130,12 +130,12 @@ const Footer = () => {
               <p className="text-gray-300 text-sm">
                 Subscribe to get updates on new packages and offers.
               </p>
-              <div className="flex space-x-2">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                 <Input 
                   placeholder="Your email" 
-                  className="bg-gray-800 border-gray-700 text-white placeholder-gray-400"
+                  className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 text-sm"
                 />
-                <Button size="sm" className="bg-primary hover:bg-primary/90">
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-sm">
                   Subscribe
                 </Button>
               </div>

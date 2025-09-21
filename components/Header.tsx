@@ -31,7 +31,7 @@ const Header = () => {
 
   // WhatsApp contact function
   const handleWhatsAppClick = () => {
-    const phoneNumber = "919970393335"; // Remove the + and add 91 for India
+    const phoneNumber = "9970393335"; // Remove the + and add 91 for India
     const message = "Hi! I'm interested in your tour packages. Can you please provide more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');

@@ -151,7 +151,7 @@ const PackagesPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary/80 text-white py-24 md:py-32">
+      <section className="bg-gradient-to-r from-primary to-primary/80 text-white py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8">

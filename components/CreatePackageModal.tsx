@@ -167,6 +167,30 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     }
   ]);
 
+  const [inclusions, setInclusions] = useState<string[]>([
+    "Accommodation in twin sharing",
+    "Transportation: Exclusive vehicle for transfers & sightseeing",
+    "Breakfast and Dinner included",
+    "All tourists taxes",
+    "Entry permits to Bhutan",
+    "Pick and drop till Airport",
+    "All sightseeing tours as per itinerary",
+    "Experience Tour guide",
+    "Govts SDF fee taxes Rs.1200 per night per person included",
+    "Daily mineral water during the tour",
+    "Rates are valid for INDIAN NATIONALS only"
+  ]);
+
+  const [exclusions, setExclusions] = useState<string[]>([
+    "Air Fare / Train fare",
+    "Personal expenses such as laundry, telephone calls, tips & gratuity",
+    "Entrance Fees, (Monument fee)",
+    "Additional sightseeing or extra usage of vehicles",
+    "Any cost arising due to natural calamities",
+    "Any increase in taxes or fuel price",
+    "Anything which is not included in the inclusion"
+  ]);
+
   const [images, setImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -175,8 +199,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => {
       const newData = {
-        ...prev,
-        [field]: value
+      ...prev,
+      [field]: value
       };
       
       // Reset place when package type changes
@@ -283,6 +307,35 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     }
   };
 
+  // Inclusions and Exclusions handlers
+  const addInclusion = () => {
+    setInclusions(prev => [...prev, ""]);
+  };
+
+  const removeInclusion = (index: number) => {
+    if (inclusions.length > 1) {
+      setInclusions(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateInclusion = (index: number, value: string) => {
+    setInclusions(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
+  const addExclusion = () => {
+    setExclusions(prev => [...prev, ""]);
+  };
+
+  const removeExclusion = (index: number) => {
+    if (exclusions.length > 1) {
+      setExclusions(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateExclusion = (index: number, value: string) => {
+    setExclusions(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
   const updateAccommodation = (id: string, field: 'city' | 'hotel' | 'rooms' | 'roomType' | 'nights', value: string) => {
     setAccommodation(prev => prev.map(item => 
       item.id === id ? { ...item, [field]: value } : item
@@ -379,6 +432,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
           roomType: item.roomType,
           nights: item.nights
         })),
+        inclusions: inclusions.filter(item => item.trim() !== ""),
+        exclusions: exclusions.filter(item => item.trim() !== ""),
         images: uploadedImages.filter(img => img.url && img.public_id), // Only include properly uploaded images
         bookings: 0,
         rating: 0
@@ -488,8 +543,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                     </>
                   ) : (
                     <>
-                      <SelectItem value="bhutan">Bhutan</SelectItem>
-                      <SelectItem value="nepal">Nepal</SelectItem>
+                  <SelectItem value="bhutan">Bhutan</SelectItem>
+                  <SelectItem value="nepal">Nepal</SelectItem>
                     </>
                   )}
                 </SelectContent>
@@ -548,6 +603,95 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
               value={formData.price}
               onChange={(e) => handleInputChange('price', e.target.value)}
             />
+          </div>
+
+          {/* Inclusions and Exclusions */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Inclusions */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-green-700">What's Included</label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addInclusion}
+                  className="text-green-600 border-green-300 hover:bg-green-50"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Item
+                </Button>
+              </div>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {inclusions.map((item, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-xs">✓</span>
+                    </div>
+                    <Input
+                      value={item}
+                      onChange={(e) => updateInclusion(index, e.target.value)}
+                      placeholder="Enter inclusion item..."
+                      className="flex-1"
+                    />
+                    {inclusions.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeInclusion(index)}
+                        className="text-red-500 hover:text-red-700 p-1"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Exclusions */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-red-700">What's Not Included</label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addExclusion}
+                  className="text-red-600 border-red-300 hover:bg-red-50"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Item
+                </Button>
+              </div>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {exclusions.map((item, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <div className="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center">
+                      <span className="text-red-600 text-xs">✗</span>
+                    </div>
+                    <Input
+                      value={item}
+                      onChange={(e) => updateExclusion(index, e.target.value)}
+                      placeholder="Enter exclusion item..."
+                      className="flex-1"
+                    />
+                    {exclusions.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeExclusion(index)}
+                        className="text-red-500 hover:text-red-700 p-1"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Image Upload Section */}

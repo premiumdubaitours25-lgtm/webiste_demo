@@ -67,7 +67,7 @@ const ImageCarousel = () => {
 
   return (
     <section
-      className="relative h-[400px] md:h-[450px] overflow-hidden rounded-lg"
+      className="relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden rounded-lg"
       style={{ imageRendering: "crisp-edges" }}
     >
       <div className="relative h-full">
@@ -95,9 +95,9 @@ const ImageCarousel = () => {
             <div className="absolute inset-0 bg-black/50"></div>
 
             {/* Content */}
-            <div className="absolute inset-0 flex items-center justify-start p-8 pt-20 text-white">
-              <div className="flex flex-col max-w-2xl ml-8">
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-white">
+            <div className="absolute inset-0 flex items-center justify-start p-4 sm:p-6 md:p-8 pt-16 sm:pt-20 text-white">
+              <div className="flex flex-col max-w-2xl ml-2 sm:ml-4 md:ml-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 text-white">
                   {image.title}
                 </h3>
 
@@ -106,7 +106,7 @@ const ImageCarousel = () => {
                     <div key={idx} className={line.trim() === "" ? "h-1" : ""}>
                       {line.trim() !== "" && (
                         <div
-                          className={`text-sm md:text-base lg:text-lg ${
+                          className={`text-xs sm:text-sm md:text-base lg:text-lg ${
                             line.includes("@") || line.includes("₹")
                               ? "font-semibold text-yellow-400"
                               : "text-white"
@@ -122,8 +122,8 @@ const ImageCarousel = () => {
                 {/* Book Now Button */}
                 <Link href={image.link}>
                   <Button
-                    size="lg"
-                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 text-lg rounded-lg shadow-lg"
+                    size="sm"
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 sm:py-3 sm:px-6 md:py-3 md:px-8 text-sm sm:text-base md:text-lg rounded-lg shadow-lg"
                   >
                     Book Now
                   </Button>

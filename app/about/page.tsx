@@ -67,7 +67,7 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative text-white py-32 md:py-40">
+      <section className="relative text-white py-16 md:py-20">
                  <div 
            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
            style={{

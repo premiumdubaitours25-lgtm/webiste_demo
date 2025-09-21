@@ -134,7 +134,7 @@ Please get back to me with more information about available packages and pricing
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative text-white py-32 md:py-40 lg:py-48 overflow-hidden">
+      <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"

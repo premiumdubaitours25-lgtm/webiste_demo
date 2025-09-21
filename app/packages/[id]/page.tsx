@@ -46,6 +46,8 @@ interface Package {
     roomType: string;
     nights: string;
   }> | [];
+  inclusions?: string[];
+  exclusions?: string[];
   price: number;
   duration: string;
   location: string;
@@ -432,64 +434,47 @@ const PackageDetailPage = () => {
               </Card>
 
               {/* What's Included & Not Included */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl text-green-600">What's Included</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {[
-                        "Accommodation in twin sharing",
-                        "Transportation: Exclusive vehicle for transfers & sightseeing",
-                        "Breakfast and Dinner included",
-                        "All tourists taxes",
-                        "Entry permits to Bhutan",
-                        "Pick and drop till Airport",
-                        "All sightseeing tours as per itinerary",
-                        "Experience Tour guide",
-                        "Govts SDF fee taxes Rs.1200 per night per person included",
-                        "Daily mineral water during the tour"
-                      ].map((item, index) => (
-                        <div key={index} className="flex items-start">
-                          <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{item}</span>
+              {(packageData.inclusions && packageData.inclusions.length > 0) || (packageData.exclusions && packageData.exclusions.length > 0) ? (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Inclusions */}
+                  {packageData.inclusions && packageData.inclusions.length > 0 && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-xl text-green-600">What's Included</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {packageData.inclusions.map((item, index) => (
+                            <div key={index} className="flex items-start">
+                              <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 text-sm">{item}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                      <div className="mt-4 pt-3 border-t border-gray-200">
-                        <div className="flex items-start">
-                          <CheckCircle className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm font-medium">Rates are valid for INDIAN NATIONALS only</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                      </CardContent>
+                    </Card>
+                  )}
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl text-red-600">What's Not Included</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {[
-                        "Air Fare / Train fare",
-                        "Personal expenses such as laundry, telephone calls, tips & gratuity",
-                        "Entrance Fees, (Monument fee)",
-                        "Additional sightseeing or extra usage of vehicles",
-                        "Any cost arising due to natural calamities",
-                        "Any increase in taxes or fuel price",
-                        "Anything which is not included in the inclusion"
-                      ].map((item, index) => (
-                        <div key={index} className="flex items-start">
-                          <X className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{item}</span>
+                  {/* Exclusions */}
+                  {packageData.exclusions && packageData.exclusions.length > 0 && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-xl text-red-600">What's Not Included</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {packageData.exclusions.map((item, index) => (
+                            <div key={index} className="flex items-start">
+                              <X className="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 text-sm">{item}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              ) : null}
 
               {/* Important Notes */}
               <Card>

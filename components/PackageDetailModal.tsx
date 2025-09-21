@@ -51,6 +51,8 @@ interface PackageData {
     roomType: string;
     nights: string;
   }>;
+  inclusions?: string[];
+  exclusions?: string[];
   bookings: number;
   rating: number;
   createdAt: string;
@@ -333,6 +335,53 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
               )}
             </div>
           </div>
+
+          {/* Inclusions and Exclusions Section */}
+          {(packageData.inclusions && packageData.inclusions.length > 0) || (packageData.exclusions && packageData.exclusions.length > 0) ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Inclusions */}
+              {packageData.inclusions && packageData.inclusions.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-green-700">What's Included</h3>
+                  <Card>
+                    <CardContent className="p-4">
+                      <ul className="space-y-2">
+                        {packageData.inclusions.map((item, index) => (
+                          <li key={index} className="flex items-start space-x-3">
+                            <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                              <span className="text-green-600 text-xs">✓</span>
+                            </div>
+                            <span className="text-gray-700 text-sm">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Exclusions */}
+              {packageData.exclusions && packageData.exclusions.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-red-700">What's Not Included</h3>
+                  <Card>
+                    <CardContent className="p-4">
+                      <ul className="space-y-2">
+                        {packageData.exclusions.map((item, index) => (
+                          <li key={index} className="flex items-start space-x-3">
+                            <div className="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center mt-0.5">
+                              <span className="text-red-600 text-xs">✗</span>
+                            </div>
+                            <span className="text-gray-700 text-sm">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+            </div>
+          ) : null}
 
           {/* Package Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
