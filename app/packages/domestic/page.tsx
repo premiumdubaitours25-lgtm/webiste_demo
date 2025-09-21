@@ -297,7 +297,7 @@ const DomesticPackagesPage = () => {
               <>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900">
-                    {filteredPackages.length} Domestic Package{filteredPackages.length !== 1 ? 's' : ''} Found
+                    Domestic Packages
                   </h2>
                 </div>
 
