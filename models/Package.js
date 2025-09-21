@@ -126,6 +126,12 @@ const PackageSchema = new mongoose.Schema({
   itinerary: [ItineraryDaySchema],
   transportation: [TransportationSchema],
   accommodation: [AccommodationSchema],
+  inclusions: [{
+    type: String,
+  }],
+  exclusions: [{
+    type: String,
+  }],
   bookings: {
     type: Number,
     default: 0,

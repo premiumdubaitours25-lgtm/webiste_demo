@@ -110,6 +110,8 @@ interface PackageData {
     roomType: string;
     nights: string;
   }>;
+  inclusions?: string[];
+  exclusions?: string[];
   bookings: number;
   rating: number;
   createdAt: string;
@@ -141,6 +143,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
   const [transportation, setTransportation] = useState<TransportationItem[]>([]);
   const [accommodation, setAccommodation] = useState<AccommodationItem[]>([]);
+  const [inclusions, setInclusions] = useState<string[]>([]);
+  const [exclusions, setExclusions] = useState<string[]>([]);
   const [existingImages, setExistingImages] = useState<Array<{public_id: string; url: string; alt: string}>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -192,6 +196,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           nights: item.nights || "",
         })) || [{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]
       );
+
+      setInclusions(packageData.inclusions || []);
+      setExclusions(packageData.exclusions || []);
 
       setExistingImages(packageData.images || []);
       setNewImages([]);
@@ -305,6 +312,36 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     ));
   };
 
+  // Inclusions functions
+  const addInclusion = () => {
+    setInclusions(prev => [...prev, ""]);
+  };
+
+  const removeInclusion = (index: number) => {
+    if (inclusions.length > 1) {
+      setInclusions(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateInclusion = (index: number, value: string) => {
+    setInclusions(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
+  // Exclusions functions
+  const addExclusion = () => {
+    setExclusions(prev => [...prev, ""]);
+  };
+
+  const removeExclusion = (index: number) => {
+    if (exclusions.length > 1) {
+      setExclusions(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateExclusion = (index: number, value: string) => {
+    setExclusions(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -384,6 +421,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           roomType: item.roomType,
           nights: item.nights
         })),
+        inclusions: inclusions.filter(item => item.trim() !== ""),
+        exclusions: exclusions.filter(item => item.trim() !== ""),
         images: [...existingImages, ...uploadedNewImages],
         bookings: packageData?.bookings || 0,
         rating: packageData?.rating || 0
@@ -445,6 +484,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
     setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
     setAccommodation([{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
+    setInclusions([""]);
+    setExclusions([""]);
     setExistingImages([]);
     setNewImages([]);
     onClose();
@@ -969,6 +1010,97 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+
+          {/* Inclusions and Exclusions Section */}
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Inclusions */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-green-700">What's Included</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addInclusion}
+                    className="text-green-600 border-green-300 hover:bg-green-50"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Inclusion
+                  </Button>
+                </div>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {inclusions.map((item, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-green-600 text-xs">✓</span>
+                      </div>
+                      <Input
+                        value={item}
+                        onChange={(e) => updateInclusion(index, e.target.value)}
+                        placeholder="Enter inclusion item..."
+                        className="flex-1"
+                      />
+                      {inclusions.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeInclusion(index)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Exclusions */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-red-700">What's Not Included</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addExclusion}
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add Exclusion
+                  </Button>
+                </div>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {exclusions.map((item, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center">
+                        <span className="text-red-600 text-xs">✗</span>
+                      </div>
+                      <Input
+                        value={item}
+                        onChange={(e) => updateExclusion(index, e.target.value)}
+                        placeholder="Enter exclusion item..."
+                        className="flex-1"
+                      />
+                      {exclusions.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeExclusion(index)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
