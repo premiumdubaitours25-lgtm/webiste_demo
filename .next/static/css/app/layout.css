@@ -1043,6 +1043,9 @@ video {
 .min-h-0 {
   min-height: 0px;
 }
+.min-h-\[100px\] {
+  min-height: 100px;
+}
 .min-h-\[120px\] {
   min-height: 120px;
 }
@@ -1054,9 +1057,6 @@ video {
 }
 .min-h-svh {
   min-height: 100svh;
-}
-.min-h-\[100px\] {
-  min-height: 100px;
 }
 .w-10 {
   width: 2.5rem;
@@ -4202,6 +4202,10 @@ All colors MUST be HSL.
 
   .md\:flex-row {
     flex-direction: row;
+  }
+
+  .md\:justify-center {
+    justify-content: center;
   }
 
   .md\:gap-8 {

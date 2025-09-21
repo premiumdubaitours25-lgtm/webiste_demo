@@ -120,7 +120,7 @@ export default function Home() {
           
           {/* Package Type Selection */}
           <div className="flex justify-center mb-8 sm:mb-12 px-4">
-            <div className="flex flex-col sm:flex-row bg-gray-100 rounded-lg p-1 w-full max-w-md sm:max-w-none">
+            <div className="flex flex-col sm:flex-row md:justify-center bg-gray-100 rounded-lg p-1 w-full max-w-md sm:max-w-none">
               <Button 
                 className="bg-primary text-white hover:bg-primary/90 rounded-md px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base mb-2 sm:mb-0"
                 onClick={() => router.push('/packages/domestic')}
