@@ -14,7 +14,7 @@ const TourPackagesSlider = () => {
       id: 1,
       image: "/Thimphu-scaled (1).webp",
       title: "Best of BHUTAN",
-      description: "Phuentsholing → Thimphu → Punakha → Paro → Tiger's Nest Hike",
+      description: "Phuentsholing → Thimphu → Punakha → Paro → Tiger's Nest Hike.",
       price: "₹27,500/person",
       duration: "6N/7D",
       redirectUrl: "/packages/68be80a25a2c1b909c974b1f"
@@ -23,7 +23,7 @@ const TourPackagesSlider = () => {
       id: 2,
       image: "/1400__1502124997_Kathmandu6.webp",
       title: "Nepal",
-      description: "Explore Kathmandu, Pokhara & Nagarkot",
+      description: "Explore Kathmandu, Pokhara & Nagarkot.",
       price: "₹9,999/person",
       duration: "4N/5D",
       redirectUrl: "/packages/68caaac3788b30a797183ac3"
@@ -32,7 +32,7 @@ const TourPackagesSlider = () => {
       id: 3,
       image: "/Cherrapunji-2.webp",
       title: "Meghalaya",
-      description: "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee",
+      description: "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee.",
       price: "₹19,900/person",
       duration: "4N/5D",
       redirectUrl: "/packages/68c7d4efaefe5f51c70cb46e"
@@ -41,7 +41,7 @@ const TourPackagesSlider = () => {
       id: 4,
       image: "/Darjeeling1_Pranav-Bhasin.avif",
       title: "Darjeeling Budgeted Tour",
-      description: "Darjeeling, Kalimpong & Mirik",
+      description: "Darjeeling, Kalimpong & Mirik.",
       price: "₹16,500/person",
       duration: "4N/5D",
       redirectUrl: "/packages/68c3d699db2b6c7c9996ba45"
