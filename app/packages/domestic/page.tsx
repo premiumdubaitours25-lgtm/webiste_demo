@@ -174,10 +174,10 @@ const DomesticPackagesPage = () => {
   };
 
   const popularDestinations = [
-    { name: "Darjeeling", icon: Mountain, packages: packages.filter(p => p.place === 'darjeeling').length },
-    { name: "Sikkim", icon: Camera, packages: packages.filter(p => p.place === 'sikkim').length },
-    { name: "Meghalaya", icon: Heart, packages: packages.filter(p => p.place === 'meghalaya').length },
-    { name: "Himachal Pradesh", icon: Mountain, packages: packages.filter(p => p.place === 'himachal-pradesh').length },
+    { name: "Darjeeling", icon: Mountain },
+    { name: "Sikkim", icon: Camera },
+    { name: "Meghalaya", icon: Heart },
+    { name: "Himachal Pradesh", icon: Mountain },
   ];
 
   if (loading) {
@@ -218,7 +218,7 @@ const DomesticPackagesPage = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <MapPin className="h-4 w-4 mr-2" />
-                {packages.length} Domestic Packages
+                Domestic Packages
               </Badge>
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <Star className="h-4 w-4 mr-2" />
@@ -246,9 +246,6 @@ const DomesticPackagesPage = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       {destination.name}
                     </h3>
-                    <p className="text-primary font-medium">
-                      {destination.packages} Package{destination.packages !== 1 ? 's' : ''}
-                    </p>
                   </CardContent>
                 </Card>
               ))}
