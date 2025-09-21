@@ -87,28 +87,28 @@ ${formData.message}
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start sm:items-center justify-start sm:justify-center p-2 sm:p-4 pt-8 sm:pt-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto ml-2 sm:ml-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-secondary to-primary text-white p-6 rounded-t-2xl relative">
+        <div className="bg-gradient-to-r from-secondary to-primary text-white p-4 sm:p-6 rounded-t-2xl relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white hover:text-gray-200 transition-colors p-1"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
-          <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2">Plan Your Dream Trip</h2>
-            <p className="text-lg opacity-90">Get personalized travel recommendations from our experts</p>
+          <div className="text-center pr-8 sm:pr-0">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2">Plan Your Dream Trip</h2>
+            <p className="text-sm sm:text-base md:text-lg opacity-90">Get personalized travel recommendations from our experts</p>
           </div>
         </div>
 
         {/* Form */}
-        <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-4">
+        <div className="p-4 sm:p-6">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-6">
+            <div className="grid md:grid-cols-2 gap-2 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Full Name *
                 </label>
                 <input
@@ -117,13 +117,13 @@ ${formData.message}
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                  className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                   placeholder="Enter your full name"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Email *
                 </label>
                 <input
@@ -132,15 +132,15 @@ ${formData.message}
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                  className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                   placeholder="Enter your email"
                 />
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-2 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Phone Number *
                 </label>
                 <input
@@ -149,13 +149,13 @@ ${formData.message}
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                  className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                   placeholder="Enter your phone number"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Destination *
                 </label>
                 <select
@@ -163,7 +163,7 @@ ${formData.message}
                   value={formData.destination}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                  className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                 >
                   <option value="">Select destination</option>
                   <option value="bhutan">Bhutan</option>
@@ -179,9 +179,9 @@ ${formData.message}
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-2 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Travel Date *
                 </label>
                 <input
@@ -190,12 +190,12 @@ ${formData.message}
                   value={formData.travelDate}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                  className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Number of Travelers *
                 </label>
                 <select
@@ -203,7 +203,7 @@ ${formData.message}
                   value={formData.travelers}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                  className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
                 >
                   <option value="">Select travelers</option>
                   <option value="1">1 Person</option>
@@ -223,7 +223,7 @@ ${formData.message}
                 name="budget"
                 value={formData.budget}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                className="w-full max-w-xs sm:max-w-none px-2 sm:px-4 py-1.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-xs sm:text-base"
               >
                 <option value="">Select budget range</option>
                 <option value="under-20k">Under ₹20,000</option>
@@ -241,17 +241,17 @@ ${formData.message}
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all"
+                rows={3}
+                className="w-full max-w-xs sm:max-w-none px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent transition-all text-sm sm:text-base"
                 placeholder="Tell us about your travel preferences, special requirements, or any questions you have..."
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 bg-secondary hover:bg-secondary/90 text-white py-3 px-6 rounded-lg font-semibold transition-all disabled:opacity-50"
+                className="flex-1 bg-secondary hover:bg-secondary/90 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold transition-all disabled:opacity-50 text-sm sm:text-base"
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
@@ -270,7 +270,7 @@ ${formData.message}
                 type="button"
                 onClick={onClose}
                 variant="outline"
-                className="flex-1 border-secondary text-secondary hover:bg-secondary hover:text-white py-3 px-6 rounded-lg font-semibold transition-all"
+                className="flex-1 border-secondary text-secondary hover:bg-secondary hover:text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold transition-all text-sm sm:text-base"
               >
                 Cancel
               </Button>
@@ -278,23 +278,23 @@ ${formData.message}
           </form>
 
           {/* Contact Info */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Need immediate assistance?</h3>
-            <div className="grid md:grid-cols-3 gap-4 text-center">
+          <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4 text-center">Need immediate assistance?</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
               <div className="flex flex-col items-center">
-                <Phone className="w-6 h-6 text-secondary mb-2" />
-                <p className="text-sm text-gray-600">Call us</p>
-                <p className="font-semibold text-secondary">+91 970393335</p>
+                <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
+                <p className="text-xs sm:text-sm text-gray-600">Call us</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">+91 970393335</p>
               </div>
               <div className="flex flex-col items-center">
-                <Mail className="w-6 h-6 text-secondary mb-2" />
-                <p className="text-sm text-gray-600">Email us</p>
-                <p className="font-semibold text-secondary">info@jjtia.com</p>
+                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
+                <p className="text-xs sm:text-sm text-gray-600">Email us</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">info@jjtia.com</p>
               </div>
               <div className="flex flex-col items-center">
-                <MapPin className="w-6 h-6 text-secondary mb-2" />
-                <p className="text-sm text-gray-600">Visit us</p>
-                <p className="font-semibold text-secondary">Nyati Estate, Mohammadwadi,Pune - 411060</p>
+                <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
+                <p className="text-xs sm:text-sm text-gray-600">Visit us</p>
+                <p className="font-semibold text-secondary text-xs sm:text-sm">Nyati Estate, Mohammadwadi,Pune - 411060</p>
               </div>
             </div>
           </div>
