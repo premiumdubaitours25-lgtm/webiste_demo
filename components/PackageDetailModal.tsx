@@ -53,6 +53,12 @@ interface PackageData {
   }>;
   inclusions?: string[];
   exclusions?: string[];
+  reviews?: Array<{
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
   bookings: number;
   rating: number;
   createdAt: string;

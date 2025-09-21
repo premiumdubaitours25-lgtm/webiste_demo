@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Minus, X, Upload, Image as ImageIcon, Bold } from "lucide-react";
+import { Plus, Minus, X, Upload, Image as ImageIcon, Bold, Star } from "lucide-react";
 
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
@@ -75,6 +75,14 @@ interface AccommodationItem {
   nights: string;
 }
 
+interface Review {
+  _id?: string;
+  name: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
 interface PackageData {
   _id: string;
   title: string;
@@ -112,6 +120,7 @@ interface PackageData {
   }>;
   inclusions?: string[];
   exclusions?: string[];
+  reviews?: Review[];
   bookings: number;
   rating: number;
   createdAt: string;
@@ -145,6 +154,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [accommodation, setAccommodation] = useState<AccommodationItem[]>([]);
   const [inclusions, setInclusions] = useState<string[]>([]);
   const [exclusions, setExclusions] = useState<string[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [existingImages, setExistingImages] = useState<Array<{public_id: string; url: string; alt: string}>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -199,6 +209,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
       setInclusions(packageData.inclusions || []);
       setExclusions(packageData.exclusions || []);
+      setReviews(packageData.reviews || []);
 
       setExistingImages(packageData.images || []);
       setNewImages([]);
@@ -342,6 +353,27 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setExclusions(prev => prev.map((item, i) => i === index ? value : item));
   };
 
+  // Reviews functions
+  const addReview = () => {
+    const newReview: Review = {
+      name: "",
+      rating: 5,
+      comment: "",
+      date: new Date().toISOString()
+    };
+    setReviews(prev => [...prev, newReview]);
+  };
+
+  const removeReview = (index: number) => {
+    setReviews(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateReview = (index: number, field: keyof Review, value: string | number) => {
+    setReviews(prev => prev.map((review, i) => 
+      i === index ? { ...review, [field]: value } : review
+    ));
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -423,6 +455,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         })),
         inclusions: inclusions.filter(item => item.trim() !== ""),
         exclusions: exclusions.filter(item => item.trim() !== ""),
+        reviews: reviews.filter(review => review.name.trim() !== "" && review.comment.trim() !== ""),
         images: [...existingImages, ...uploadedNewImages],
         bookings: packageData?.bookings || 0,
         rating: packageData?.rating || 0
@@ -486,6 +519,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setAccommodation([{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
     setInclusions([""]);
     setExclusions([""]);
+    setReviews([]);
     setExistingImages([]);
     setNewImages([]);
     onClose();
@@ -1101,6 +1135,100 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Reviews Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-700">Customer Reviews</h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addReview}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Review
+              </Button>
+            </div>
+            <div className="space-y-4 max-h-80 overflow-y-auto">
+              {reviews.map((review, index) => (
+                <Card key={index}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base">Review {index + 1}</CardTitle>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeReview(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-sm font-medium">Customer Name</label>
+                        <Input
+                          placeholder="Enter customer name..."
+                          value={review.name}
+                          onChange={(e) => updateReview(index, 'name', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Rating (1-5)</label>
+                        <Select 
+                          value={review.rating.toString()} 
+                          onValueChange={(value) => updateReview(index, 'rating', parseInt(value))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select rating" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1 Star</SelectItem>
+                            <SelectItem value="2">2 Stars</SelectItem>
+                            <SelectItem value="3">3 Stars</SelectItem>
+                            <SelectItem value="4">4 Stars</SelectItem>
+                            <SelectItem value="5">5 Stars</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Review Comment</label>
+                      <Textarea
+                        placeholder="Enter customer review..."
+                        value={review.comment}
+                        onChange={(e) => updateReview(index, 'comment', e.target.value)}
+                        rows={3}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <span>Date: {new Date(review.date).toLocaleDateString()}</span>
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`h-3 w-3 ${
+                              i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                            }`} 
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {reviews.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No reviews added yet. Click "Add Review" to add customer reviews.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

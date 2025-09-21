@@ -33,6 +33,12 @@ interface Package {
     url: string;
     alt: string;
   }>;
+  reviews?: Array<{
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
   bookings: number;
   rating: number;
 }

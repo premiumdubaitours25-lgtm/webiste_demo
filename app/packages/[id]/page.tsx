@@ -48,6 +48,12 @@ interface Package {
   }> | [];
   inclusions?: string[];
   exclusions?: string[];
+  reviews?: Array<{
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
   price: number;
   duration: string;
   location: string;
@@ -536,20 +542,41 @@ const PackageDetailPage = () => {
                   <CardTitle className="text-xl">Customer Reviews</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                        ))}
-                      </div>
-                      <span className="font-semibold">Sarah Johnson</span>
+                  {packageData.reviews && packageData.reviews.length > 0 ? (
+                    <div className="space-y-6">
+                      {packageData.reviews.map((review, index) => (
+                        <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <Star 
+                                  key={i} 
+                                  className={`h-4 w-4 ${
+                                    i < review.rating 
+                                      ? 'text-yellow-400 fill-current' 
+                                      : 'text-gray-300'
+                                  }`} 
+                                />
+                              ))}
+                            </div>
+                            <span className="font-semibold text-gray-900">{review.name}</span>
+                            <span className="text-sm text-gray-500">
+                              {new Date(review.date).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p className="text-gray-700 text-sm leading-relaxed">
+                            "{review.comment}"
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    <p className="text-gray-700">
-                      "Amazing experience! The tour was well organized and our guide was fantastic. 
-                      Highly recommend this package for anyone looking to explore Bhutan."
-                    </p>
-                  </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Star className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-500">No reviews yet</p>
+                      <p className="text-sm text-gray-400">Be the first to review this package!</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

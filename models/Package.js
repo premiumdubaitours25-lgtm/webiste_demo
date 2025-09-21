@@ -68,6 +68,27 @@ const AccommodationSchema = new mongoose.Schema({
   },
 });
 
+const ReviewSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 const PackageSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -132,6 +153,7 @@ const PackageSchema = new mongoose.Schema({
   exclusions: [{
     type: String,
   }],
+  reviews: [ReviewSchema],
   bookings: {
     type: Number,
     default: 0,
