@@ -246,10 +246,10 @@ const InternationalPackagesPage = () => {
   };
 
   const popularCountries = [
-    { name: "Bhutan", icon: Globe, packages: packages.filter(p => p.place === 'bhutan').length },
-    { name: "Nepal", icon: Camera, packages: packages.filter(p => p.place === 'nepal').length },
-    { name: "Dubai", icon: Plane, packages: packages.filter(p => p.place === 'dubai').length },
-    { name: "Vietnam", icon: Globe, packages: packages.filter(p => p.place === 'vietnam').length },
+    { name: "Bhutan", icon: Globe },
+    { name: "Nepal", icon: Camera },
+    { name: "Dubai", icon: Plane },
+    { name: "Vietnam", icon: Globe },
   ];
 
   if (loading) {
@@ -290,7 +290,7 @@ const InternationalPackagesPage = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <Globe className="h-4 w-4 mr-2" />
-                {packages.length} International Packages
+                International Packages
               </Badge>
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <Star className="h-4 w-4 mr-2" />
@@ -318,9 +318,6 @@ const InternationalPackagesPage = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                       {country.name}
                     </h3>
-                    <p className="text-primary font-medium">
-                      {country.packages} Package{country.packages !== 1 ? 's' : ''}
-                    </p>
                   </CardContent>
                 </Card>
               ))}
@@ -372,7 +369,7 @@ const InternationalPackagesPage = () => {
               <>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900">
-                    {filteredPackages.length} International Package{filteredPackages.length !== 1 ? 's' : ''} Found
+                    International Packages
                   </h2>
                 </div>
 
