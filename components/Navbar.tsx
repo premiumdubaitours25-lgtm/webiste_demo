@@ -213,35 +213,72 @@ const Navbar = () => {
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       {/* Top Bar */}
       <div className="bg-primary text-white py-1">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center text-sm">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4" />
-                <span>+91 9970393335, +91 9834771258</span>
+        {/* Desktop Layout */}
+        <div className="hidden md:block">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4" />
+                  <span>+91 9970393335, +91 9834771258</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Mail className="h-4 w-4" />
+                  <span>shneiur.joseph@jjtia.com</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4" />
-                <span>shneiur.joseph@jjtia.com</span>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-white hover:bg-white/10"
-                onClick={() => window.open('https://wa.me/919970393335', '_blank')}
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Live Chat
-              </Button>
-              <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  <User className="h-4 w-4 mr-2" />
-                  Login
+              <div className="flex items-center space-x-3">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-white hover:bg-white/10"
+                  onClick={() => window.open('https://wa.me/919970393335', '_blank')}
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  Live Chat
                 </Button>
-              </Link>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
+                    <User className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </Link>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout - Full Width */}
+        <div className="md:hidden px-4 space-y-1">
+          {/* Row 1: Phone Numbers */}
+          <div className="flex items-center justify-center space-x-2 text-sm">
+            <Phone className="h-4 w-4" />
+            <span>+91 9970393335, +91 9834771258</span>
+          </div>
+          
+          {/* Row 2: Email */}
+          <div className="flex items-center justify-center space-x-2 text-base mt-2">
+            <Mail className="h-4 w-4" />
+            <span>shneiur.joseph@jjtia.com</span>
+          </div>
+          
+          {/* Row 3: Live Chat & Login */}
+          <div className="flex items-center justify-center -space-x-2" style={{marginTop: '-6px'}}>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-white hover:bg-white/10 text-base px-4 py-2"
+              onClick={() => window.open('https://wa.me/919970393335', '_blank')}
+            >
+              <MessageCircle className="h-5 w-5 mr-2" />
+              Live Chat
+            </Button>
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 text-base px-4 py-2">
+                <User className="h-5 w-5 mr-2" />
+                Login
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -88,9 +88,9 @@ ${formData.message}
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-secondary to-primary text-white p-4 sm:p-6 rounded-t-2xl relative">
+        <div className="bg-gradient-to-r from-secondary to-primary text-white p-3 sm:p-6 rounded-t-2xl relative">
           <button
             onClick={onClose}
             className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white hover:text-gray-200 transition-colors p-1"
@@ -104,9 +104,9 @@ ${formData.message}
         </div>
 
         {/* Form */}
-        <div className="p-4 sm:p-6">
-          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-6">
-            <div className="grid md:grid-cols-2 gap-2 sm:gap-4">
+        <div className="p-3 sm:p-6">
+          <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-6">
+            <div className="grid md:grid-cols-2 gap-1 sm:gap-4">
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Full Name *
@@ -138,7 +138,7 @@ ${formData.message}
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-2 sm:gap-4">
+            <div className="grid md:grid-cols-2 gap-1 sm:gap-4">
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Phone Number *
@@ -179,7 +179,7 @@ ${formData.message}
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-2 sm:gap-4">
+            <div className="grid md:grid-cols-2 gap-1 sm:gap-4">
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                   Travel Date *
@@ -247,7 +247,7 @@ ${formData.message}
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
               <Button
                 type="submit"
                 disabled={isSubmitting}
