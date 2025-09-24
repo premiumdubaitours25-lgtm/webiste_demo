@@ -1,16 +1,45 @@
 'use client'
 
-import { useState } from "react";
-import { Menu, X, Phone, Mail, ChevronDown, MessageCircle, User, LogOut } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, Phone, Mail, ChevronDown, MessageCircle, User, LogOut, Search, MapPin, Clock, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+interface SearchPackage {
+  _id: string;
+  title: string;
+  subtitle: string;
+  location: string;
+  price: number;
+  duration: string;
+  images: Array<{ url: string; alt: string }>;
+  rating: number;
+}
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchPackage[]>([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Initialize search term from URL on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchParam = urlParams.get('search');
+      if (searchParam) {
+        setSearchTerm(searchParam);
+      }
+    }
+  }, []);
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -36,6 +65,150 @@ const Navbar = () => {
     return pathname?.startsWith(href) || false;
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Navigate to packages page with search query
+      router.push(`/packages?search=${encodeURIComponent(searchTerm.trim())}`);
+      // Don't clear the search term - keep it visible
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setIsSearchOpen(value.trim().length > 0);
+  };
+
+  // Search for packages
+  const searchPackages = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      setIsSearchOpen(false);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(`/api/packages/search?q=${encodeURIComponent(query)}&limit=5`);
+      const result = await response.json();
+      if (result.success) {
+        setSearchResults(result.data);
+        setIsSearchOpen(true);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Debounced search
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      searchPackages(searchTerm);
+    }, 300); // 300ms delay for live search
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
+  // Click outside to close search dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Destination mapping for smart routing
+  const getDestinationCategory = (searchTerm: string): 'international' | 'domestic' | 'general' => {
+    const term = searchTerm.toLowerCase();
+    
+    // International destinations
+    const internationalDestinations = [
+      'nepal', 'bhutan', 'dubai', 'vietnam', 'sri lanka', 'srilanka', 'bali', 
+      'malaysia', 'singapore', 'thailand', 'indonesia', 'philippines', 'japan',
+      'china', 'south korea', 'taiwan', 'hong kong', 'macau', 'myanmar',
+      'cambodia', 'laos', 'bangladesh', 'pakistan', 'afghanistan', 'iran',
+      'turkey', 'egypt', 'morocco', 'south africa', 'kenya', 'tanzania',
+      'mauritius', 'seychelles', 'maldives', 'fiji', 'australia', 'new zealand',
+      'europe', 'france', 'italy', 'spain', 'germany', 'switzerland', 'austria',
+      'netherlands', 'belgium', 'greece', 'portugal', 'norway', 'sweden',
+      'denmark', 'finland', 'iceland', 'ireland', 'uk', 'england', 'scotland',
+      'wales', 'canada', 'usa', 'america', 'brazil', 'argentina', 'chile',
+      'peru', 'colombia', 'mexico', 'cuba', 'jamaica', 'costa rica'
+    ];
+    
+    // Domestic destinations
+    const domesticDestinations = [
+      'india', 'kashmir', 'leh', 'ladakh', 'himachal', 'manali', 'shimla',
+      'dharamshala', 'mcleodganj', 'uttarakhand', 'rishikesh', 'haridwar',
+      'dehradun', 'mussoorie', 'nainital', 'rajasthan', 'jaipur', 'udaipur',
+      'jodhpur', 'jaisalmer', 'bikaner', 'mount abu', 'goa', 'kerala',
+      'munnar', 'alleppey', 'kochi', 'trivandrum', 'karnataka', 'bangalore',
+      'mysore', 'coorg', 'ooty', 'tamil nadu', 'chennai', 'madurai',
+      'pondicherry', 'mahabalipuram', 'andhra pradesh', 'hyderabad', 'visakhapatnam',
+      'telangana', 'maharashtra', 'mumbai', 'pune', 'nashik', 'aurangabad',
+      'gujarat', 'ahmedabad', 'surat', 'vadodara', 'rajkot', 'bhavnagar',
+      'madhya pradesh', 'bhopal', 'indore', 'gwalior', 'ujjain', 'khajuraho',
+      'west bengal', 'kolkata', 'darjeeling', 'kalimpong', 'gangtok', 'sikkim',
+      'assam', 'guwahati', 'kaziranga', 'manipur', 'imphal', 'meghalaya',
+      'shillong', 'cherrapunji', 'mizoram', 'aizawl', 'nagaland', 'kohima',
+      'tripura', 'agartala', 'arunachal pradesh', 'itanagar', 'tawang',
+      'odisha', 'bhubaneswar', 'puri', 'konark', 'jharkhand', 'ranchi',
+      'bihar', 'patna', 'bodh gaya', 'nalanda', 'chhattisgarh', 'raipur',
+      'jagdalpur', 'punjab', 'chandigarh', 'amritsar', 'haryana', 'gurgaon',
+      'faridabad', 'himachal pradesh', 'uttar pradesh', 'lucknow', 'agra',
+      'varanasi', 'allahabad', 'kanpur', 'jhansi', 'mathura', 'vrindavan'
+    ];
+    
+    // Check if search term matches any destination
+    for (const dest of internationalDestinations) {
+      if (term.includes(dest) || dest.includes(term)) {
+        return 'international';
+      }
+    }
+    
+    for (const dest of domesticDestinations) {
+      if (term.includes(dest) || dest.includes(term)) {
+        return 'domestic';
+      }
+    }
+    
+    return 'general';
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      const category = getDestinationCategory(searchTerm.trim());
+      
+      // Force page refresh to ensure search works correctly
+      if (category === 'international') {
+        window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm.trim())}`;
+      } else if (category === 'domestic') {
+        window.location.href = `/packages/domestic?search=${encodeURIComponent(searchTerm.trim())}`;
+      } else {
+        window.location.href = `/packages?search=${encodeURIComponent(searchTerm.trim())}`;
+      }
+      
+      setIsSearchOpen(false);
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       {/* Top Bar */}
@@ -45,7 +218,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+ 9970393335, 9834771258</span>
+                <span>+91 9970393335, +91 9834771258</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
@@ -87,8 +260,114 @@ const Navbar = () => {
                 priority
               />
             </div>
-            
           </Link>
+
+          {/* Search Bar */}
+          <div className="hidden lg:flex items-center flex-1 max-w-md mx-8">
+            <div ref={searchRef} className="relative w-full">
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    type="text"
+                    placeholder="Search packages..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="pl-10 pr-4 py-2 w-full border-gray-300 focus:border-primary focus:ring-primary"
+                  />
+                  {isSearching && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                    </div>
+                  )}
+                </div>
+              </form>
+
+              {/* Search Results Dropdown */}
+              {isSearchOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                  {searchResults.length > 0 ? (
+                    <div className="p-2">
+                      <div className="text-xs text-gray-500 mb-2 px-2">
+                        {searchResults.length} package{searchResults.length !== 1 ? 's' : ''} found
+                      </div>
+                      {searchResults.map((pkg) => (
+                        <Link
+                          key={pkg._id}
+                          href={`/packages/${pkg._id}`}
+                          className="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                          onClick={() => setIsSearchOpen(false)}
+                        >
+                          <div className="flex items-start space-x-3">
+                            {pkg.images && pkg.images.length > 0 ? (
+                              <div className="w-16 h-12 relative flex-shrink-0">
+                                <Image
+                                  src={pkg.images[0].url}
+                                  alt={pkg.images[0].alt || pkg.title}
+                                  fill
+                                  className="object-cover rounded"
+                                />
+                              </div>
+                            ) : (
+                              <div className="w-16 h-12 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                                <MapPin className="h-6 w-6 text-gray-400" />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-gray-900 truncate">{pkg.title}</h4>
+                              <p className="text-sm text-gray-600 truncate">{pkg.subtitle}</p>
+                              <div className="flex items-center space-x-4 mt-1">
+                                <div className="flex items-center text-xs text-gray-500">
+                                  <MapPin className="h-3 w-3 mr-1" />
+                                  {pkg.location}
+                                </div>
+                                <div className="flex items-center text-xs text-gray-500">
+                                  <Clock className="h-3 w-3 mr-1" />
+                                  {pkg.duration}
+                                </div>
+                                <div className="flex items-center text-xs text-gray-500">
+                                  <Star className="h-3 w-3 mr-1" />
+                                  {pkg.rating}/5
+                                </div>
+                              </div>
+                              <div className="text-sm font-semibold text-primary mt-1">
+                                {formatPrice(pkg.price)}
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                      <div className="border-t pt-2 mt-2">
+                        <button
+                          onClick={() => {
+                            const category = getDestinationCategory(searchTerm);
+                            setIsSearchOpen(false);
+                            
+                            // Force page refresh to ensure search works correctly
+                            if (category === 'international') {
+                              window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm)}`;
+                            } else if (category === 'domestic') {
+                              window.location.href = `/packages/domestic?search=${encodeURIComponent(searchTerm)}`;
+                            } else {
+                              window.location.href = `/packages?search=${encodeURIComponent(searchTerm)}`;
+                            }
+                          }}
+                          className="block w-full text-center text-sm text-primary hover:text-primary/80 py-2"
+                        >
+                          View all results for "{searchTerm}"
+                        </button>
+                      </div>
+                    </div>
+                  ) : searchTerm.trim() && !isSearching ? (
+                    <div className="p-4 text-center text-gray-500">
+                      <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                      <p className="text-sm">No packages found for "{searchTerm}"</p>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6">
@@ -165,6 +444,109 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="lg:hidden bg-white border-t">
           <div className="container mx-auto px-4 py-3">
+            {/* Mobile Search Bar */}
+            <div className="mb-4">
+              <div className="relative">
+                <form onSubmit={handleSearchSubmit} className="relative">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      type="text"
+                      placeholder="Search packages..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      className="pl-10 pr-4 py-2 w-full border-gray-300 focus:border-primary focus:ring-primary"
+                    />
+                    {isSearching && (
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                      </div>
+                    )}
+                  </div>
+                </form>
+
+                {/* Mobile Search Results */}
+                {isSearchOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+                    {searchResults.length > 0 ? (
+                      <div className="p-2">
+                        <div className="text-xs text-gray-500 mb-2 px-2">
+                          {searchResults.length} package{searchResults.length !== 1 ? 's' : ''} found
+                        </div>
+                        {searchResults.map((pkg) => (
+                          <Link
+                            key={pkg._id}
+                            href={`/packages/${pkg._id}`}
+                            className="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                            onClick={() => {
+                              setIsSearchOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            <div className="flex items-start space-x-3">
+                              {pkg.images && pkg.images.length > 0 ? (
+                                <div className="w-12 h-10 relative flex-shrink-0">
+                                  <Image
+                                    src={pkg.images[0].url}
+                                    alt={pkg.images[0].alt || pkg.title}
+                                    fill
+                                    className="object-cover rounded"
+                                  />
+                                </div>
+                              ) : (
+                                <div className="w-12 h-10 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                                  <MapPin className="h-5 w-5 text-gray-400" />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-gray-900 text-sm truncate">{pkg.title}</h4>
+                                <p className="text-xs text-gray-600 truncate">{pkg.subtitle}</p>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <div className="flex items-center text-xs text-gray-500">
+                                    <MapPin className="h-3 w-3 mr-1" />
+                                    {pkg.location}
+                                  </div>
+                                  <div className="text-xs font-semibold text-primary">
+                                    {formatPrice(pkg.price)}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                        <div className="border-t pt-2 mt-2">
+                          <button
+                            onClick={() => {
+                              const category = getDestinationCategory(searchTerm);
+                              setIsSearchOpen(false);
+                              setIsMenuOpen(false);
+                              
+                              // Force page refresh to ensure search works correctly
+                              if (category === 'international') {
+                                window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm)}`;
+                              } else if (category === 'domestic') {
+                                window.location.href = `/packages/domestic?search=${encodeURIComponent(searchTerm)}`;
+                              } else {
+                                window.location.href = `/packages?search=${encodeURIComponent(searchTerm)}`;
+                              }
+                            }}
+                            className="block w-full text-center text-sm text-primary hover:text-primary/80 py-2"
+                          >
+                            View all results for "{searchTerm}"
+                          </button>
+                        </div>
+                      </div>
+                    ) : searchTerm.trim() && !isSearching ? (
+                      <div className="p-4 text-center text-gray-500">
+                        <Search className="h-6 w-6 mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">No packages found for "{searchTerm}"</p>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            </div>
+            
             <div className="space-y-4">
               {navigation.map((item) => (
                 <div key={item.name}>

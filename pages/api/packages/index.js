@@ -6,7 +6,23 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const packages = await Package.find({}).sort({ createdAt: -1 });
+      const { search } = req.query;
+      let query = {};
+      
+      // If search parameter is provided, create a search query
+      if (search) {
+        query = {
+          $or: [
+            { title: { $regex: search, $options: 'i' } },
+            { subtitle: { $regex: search, $options: 'i' } },
+            { location: { $regex: search, $options: 'i' } },
+            { about: { $regex: search, $options: 'i' } },
+            { tourDetails: { $regex: search, $options: 'i' } }
+          ]
+        };
+      }
+      
+      const packages = await Package.find(query).sort({ createdAt: -1 });
       res.status(200).json({ success: true, data: packages });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });

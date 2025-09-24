@@ -12,7 +12,7 @@ interface BestPlaceSectionProps {
 const BestPlaceSection = ({ 
   subtitle = "Best Place",
   title = "Discover amazing places",
-  destination = "NortheEast",
+  destination = "North East",
   buttonText = "BOOK NOW",
   buttonLink = "/contact"
 }: BestPlaceSectionProps) => {

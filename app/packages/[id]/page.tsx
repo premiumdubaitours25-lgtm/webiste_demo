@@ -146,29 +146,9 @@ const PackageDetailPage = () => {
 
     return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" onClick={() => router.back()}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-            <div className="flex items-center gap-2">
-              <Badge variant={isInternational ? "default" : "secondary"}>
-                {isInternational ? "International" : "Domestic"}
-              </Badge>
-              <Badge variant="outline">
-                {packageData.rating}/5 ⭐
-              </Badge>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <div className="relative">
-        <div className="aspect-[16/9] relative bg-gray-800">
+        <div className="aspect-[3/1] relative bg-gray-800">
           {Array.isArray(packageData.images) && packageData.images.length > 0 ? (
             <Image
               src={packageData.images[selectedImageIndex].url}
@@ -182,6 +162,14 @@ const PackageDetailPage = () => {
             </div>
           )}
           
+          {/* Back Button */}
+          <div className="absolute top-6 left-6">
+            <Button variant="secondary" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.back()}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+          </div>
+          
           {/* Action Buttons */}
           <div className="absolute top-6 right-6 flex gap-3">
             <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white">
@@ -190,6 +178,16 @@ const PackageDetailPage = () => {
             <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white">
               <Share className="h-4 w-4" />
             </Button>
+          </div>
+          
+          {/* Package Type Badges */}
+          <div className="absolute top-6 left-1/2 transform -translate-x-1/2 flex gap-2">
+            <Badge variant={isInternational ? "default" : "secondary"} className="bg-white/90 text-gray-900">
+              {isInternational ? "International" : "Domestic"}
+            </Badge>
+            <Badge variant="outline" className="bg-white/90 text-gray-900 border-gray-300">
+              {packageData.rating}/5 ⭐
+            </Badge>
           </div>
         </div>
 

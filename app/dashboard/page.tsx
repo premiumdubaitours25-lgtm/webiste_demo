@@ -60,6 +60,8 @@ interface PackageData {
     roomType: string;
     nights: string;
   }>;
+  inclusions: string[];
+  exclusions: string[];
   bookings: number;
   rating: number;
   createdAt: string;
@@ -369,6 +371,194 @@ export default function DashboardPage() {
     }
   };
 
+  // Helper function to get formatted place name
+  const getFormattedPlace = (place: string) => {
+    const placeMap: { [key: string]: string } = {
+      'bhutan': 'Bhutan',
+      'nepal': 'Nepal',
+      'vietnam': 'Vietnam',
+      'sri-lanka': 'Sri Lanka',
+      'bali': 'Bali',
+      'malaysia': 'Malaysia',
+      'singapore': 'Singapore',
+      'dubai': 'Dubai',
+      'thailand': 'Thailand',
+      'indonesia': 'Indonesia',
+      'philippines': 'Philippines',
+      'japan': 'Japan',
+      'china': 'China',
+      'south-korea': 'South Korea',
+      'taiwan': 'Taiwan',
+      'hong-kong': 'Hong Kong',
+      'macau': 'Macau',
+      'myanmar': 'Myanmar',
+      'cambodia': 'Cambodia',
+      'laos': 'Laos',
+      'bangladesh': 'Bangladesh',
+      'pakistan': 'Pakistan',
+      'afghanistan': 'Afghanistan',
+      'iran': 'Iran',
+      'turkey': 'Turkey',
+      'egypt': 'Egypt',
+      'morocco': 'Morocco',
+      'south-africa': 'South Africa',
+      'kenya': 'Kenya',
+      'tanzania': 'Tanzania',
+      'mauritius': 'Mauritius',
+      'seychelles': 'Seychelles',
+      'maldives': 'Maldives',
+      'fiji': 'Fiji',
+      'australia': 'Australia',
+      'new-zealand': 'New Zealand',
+      'europe': 'Europe',
+      'france': 'France',
+      'italy': 'Italy',
+      'spain': 'Spain',
+      'germany': 'Germany',
+      'switzerland': 'Switzerland',
+      'austria': 'Austria',
+      'netherlands': 'Netherlands',
+      'belgium': 'Belgium',
+      'greece': 'Greece',
+      'portugal': 'Portugal',
+      'norway': 'Norway',
+      'sweden': 'Sweden',
+      'denmark': 'Denmark',
+      'finland': 'Finland',
+      'iceland': 'Iceland',
+      'ireland': 'Ireland',
+      'uk': 'United Kingdom',
+      'england': 'England',
+      'scotland': 'Scotland',
+      'wales': 'Wales',
+      'canada': 'Canada',
+      'usa': 'United States',
+      'america': 'America',
+      'brazil': 'Brazil',
+      'argentina': 'Argentina',
+      'chile': 'Chile',
+      'peru': 'Peru',
+      'colombia': 'Colombia',
+      'mexico': 'Mexico',
+      'cuba': 'Cuba',
+      'jamaica': 'Jamaica',
+      'costa-rica': 'Costa Rica',
+      'india': 'India',
+      'kashmir': 'Kashmir',
+      'leh': 'Leh',
+      'ladakh': 'Ladakh',
+      'himachal': 'Himachal Pradesh',
+      'manali': 'Manali',
+      'shimla': 'Shimla',
+      'dharamshala': 'Dharamshala',
+      'mcleodganj': 'McLeodganj',
+      'uttarakhand': 'Uttarakhand',
+      'rishikesh': 'Rishikesh',
+      'haridwar': 'Haridwar',
+      'dehradun': 'Dehradun',
+      'mussoorie': 'Mussoorie',
+      'nainital': 'Nainital',
+      'rajasthan': 'Rajasthan',
+      'jaipur': 'Jaipur',
+      'udaipur': 'Udaipur',
+      'jodhpur': 'Jodhpur',
+      'jaisalmer': 'Jaisalmer',
+      'bikaner': 'Bikaner',
+      'mount-abu': 'Mount Abu',
+      'goa': 'Goa',
+      'kerala': 'Kerala',
+      'munnar': 'Munnar',
+      'alleppey': 'Alleppey',
+      'kochi': 'Kochi',
+      'trivandrum': 'Trivandrum',
+      'karnataka': 'Karnataka',
+      'bangalore': 'Bangalore',
+      'mysore': 'Mysore',
+      'coorg': 'Coorg',
+      'ooty': 'Ooty',
+      'tamil-nadu': 'Tamil Nadu',
+      'chennai': 'Chennai',
+      'madurai': 'Madurai',
+      'pondicherry': 'Pondicherry',
+      'mahabalipuram': 'Mahabalipuram',
+      'andhra-pradesh': 'Andhra Pradesh',
+      'hyderabad': 'Hyderabad',
+      'visakhapatnam': 'Visakhapatnam',
+      'telangana': 'Telangana',
+      'maharashtra': 'Maharashtra',
+      'mumbai': 'Mumbai',
+      'pune': 'Pune',
+      'nashik': 'Nashik',
+      'aurangabad': 'Aurangabad',
+      'gujarat': 'Gujarat',
+      'ahmedabad': 'Ahmedabad',
+      'surat': 'Surat',
+      'vadodara': 'Vadodara',
+      'rajkot': 'Rajkot',
+      'bhavnagar': 'Bhavnagar',
+      'madhya-pradesh': 'Madhya Pradesh',
+      'bhopal': 'Bhopal',
+      'indore': 'Indore',
+      'gwalior': 'Gwalior',
+      'ujjain': 'Ujjain',
+      'khajuraho': 'Khajuraho',
+      'west-bengal': 'West Bengal',
+      'kolkata': 'Kolkata',
+      'darjeeling': 'Darjeeling',
+      'kalimpong': 'Kalimpong',
+      'gangtok': 'Gangtok',
+      'sikkim': 'Sikkim',
+      'assam': 'Assam',
+      'guwahati': 'Guwahati',
+      'kaziranga': 'Kaziranga',
+      'manipur': 'Manipur',
+      'imphal': 'Imphal',
+      'meghalaya': 'Meghalaya',
+      'shillong': 'Shillong',
+      'cherrapunji': 'Cherrapunji',
+      'mizoram': 'Mizoram',
+      'aizawl': 'Aizawl',
+      'nagaland': 'Nagaland',
+      'kohima': 'Kohima',
+      'tripura': 'Tripura',
+      'agartala': 'Agartala',
+      'arunachal-pradesh': 'Arunachal Pradesh',
+      'itanagar': 'Itanagar',
+      'tawang': 'Tawang',
+      'odisha': 'Odisha',
+      'bhubaneswar': 'Bhubaneswar',
+      'puri': 'Puri',
+      'konark': 'Konark',
+      'jharkhand': 'Jharkhand',
+      'ranchi': 'Ranchi',
+      'bihar': 'Bihar',
+      'patna': 'Patna',
+      'bodh-gaya': 'Bodh Gaya',
+      'nalanda': 'Nalanda',
+      'chhattisgarh': 'Chhattisgarh',
+      'raipur': 'Raipur',
+      'jagdalpur': 'Jagdalpur',
+      'punjab': 'Punjab',
+      'chandigarh': 'Chandigarh',
+      'amritsar': 'Amritsar',
+      'haryana': 'Haryana',
+      'gurgaon': 'Gurgaon',
+      'faridabad': 'Faridabad',
+      'himachal-pradesh': 'Himachal Pradesh',
+      'uttar-pradesh': 'Uttar Pradesh',
+      'lucknow': 'Lucknow',
+      'agra': 'Agra',
+      'varanasi': 'Varanasi',
+      'allahabad': 'Allahabad',
+      'kanpur': 'Kanpur',
+      'jhansi': 'Jhansi',
+      'mathura': 'Mathura',
+      'vrindavan': 'Vrindavan'
+    };
+    
+    return placeMap[place] || place || 'N/A';
+  };
+
   const handleExportSinglePackageToWord = async (pkg: PackageData) => {
     try {
       // Create document children array
@@ -504,7 +694,7 @@ export default function DashboardPage() {
           new TableRow({
             children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Place" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: getFormattedPlace(pkg.place) })] })] }),
             ],
           }),
         ],
@@ -652,6 +842,61 @@ export default function DashboardPage() {
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.rooms })] })] }),
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.roomType })] })] }),
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.nights })] })] }),
+                      ],
+                    })
+                  ),
+                ],
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE,
+                },
+              }),
+            ] : []),
+            // Add Inclusions section
+            ...(pkg.inclusions && pkg.inclusions.length > 0 ? [
+              new Paragraph({
+                children: [new TextRun({ text: "What's Included", bold: true, size: 24 })],
+                heading: HeadingLevel.HEADING_2,
+              }),
+              new Table({
+                rows: [
+                  new TableRow({
+                    children: [
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Inclusions", bold: true })] })] }),
+                    ],
+                  }),
+                  ...pkg.inclusions.map(inclusion => 
+                    new TableRow({
+                      children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `• ${inclusion}` })] })] }),
+                      ],
+                    })
+                  ),
+                ],
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE,
+                },
+              }),
+              new Paragraph({ children: [new TextRun({ text: "" })] }), // Empty line
+            ] : []),
+            // Add Exclusions section
+            ...(pkg.exclusions && pkg.exclusions.length > 0 ? [
+              new Paragraph({
+                children: [new TextRun({ text: "What's Not Included", bold: true, size: 24 })],
+                heading: HeadingLevel.HEADING_2,
+              }),
+              new Table({
+                rows: [
+                  new TableRow({
+                    children: [
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Exclusions", bold: true })] })] }),
+                    ],
+                  }),
+                  ...pkg.exclusions.map(exclusion => 
+                    new TableRow({
+                      children: [
+                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `• ${exclusion}` })] })] }),
                       ],
                     })
                   ),

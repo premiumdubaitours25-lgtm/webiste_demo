@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import PackageFilter from "@/components/PackageFilter";
 
 interface Package {
@@ -60,9 +61,10 @@ const DomesticPackagesPage = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 50000],
+    priceRange: [0, 100000],
     durationRange: [1, 30],
     location: "domestic",
     departureCity: [],
@@ -74,6 +76,21 @@ const DomesticPackagesPage = () => {
   });
 
   useEffect(() => {
+    // Check for URL query parameters first
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    
+    console.log('Initial mount, search param:', searchParam);
+    
+    if (searchParam) {
+      console.log('Setting initial search term:', searchParam);
+      setFilters(prev => ({
+        ...prev,
+        searchTerm: searchParam
+      }));
+    }
+    
+    // Fetch packages after setting search term
     fetchPackages();
   }, []);
 
@@ -81,13 +98,38 @@ const DomesticPackagesPage = () => {
     filterPackages();
   }, [packages, filters]);
 
+  // Refetch packages when searchTerm changes
+  useEffect(() => {
+    if (filters.searchTerm !== undefined) { // Only fetch if searchTerm has been initialized
+      fetchPackages();
+    }
+  }, [filters.searchTerm]);
+
+  // Simple URL parameter check on mount (since we use force refresh now)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    
+    if (searchParam && searchParam !== filters.searchTerm) {
+      setFilters(prev => ({
+        ...prev,
+        searchTerm: searchParam
+      }));
+    }
+  }, []); // Run only on mount
+
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters);
   };
 
   const fetchPackages = async () => {
     try {
-      const response = await fetch('/api/packages');
+      // Build URL with search parameter if searchTerm exists
+      const baseUrl = '/api/packages';
+      const searchParam = filters.searchTerm ? `?search=${encodeURIComponent(filters.searchTerm)}` : '';
+      const url = `${baseUrl}${searchParam}`;
+      
+      const response = await fetch(url);
       const result = await response.json();
       if (result.success) {
         // Filter for domestic packages based on packageType
@@ -111,7 +153,8 @@ const DomesticPackagesPage = () => {
       filtered = filtered.filter(pkg =>
         pkg.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
         pkg.subtitle.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        pkg.location.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        pkg.location.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        pkg.about.toLowerCase().includes(filters.searchTerm.toLowerCase())
       );
     }
 
@@ -120,50 +163,58 @@ const DomesticPackagesPage = () => {
       pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
     );
 
-    // Duration range filter
+    // Duration range filter - improved parsing
     filtered = filtered.filter(pkg => {
-      const durationMatch = pkg.duration.match(/(\d+)/);
+      const durationText = pkg.duration.toLowerCase();
+      const durationMatch = durationText.match(/(\d+)\s*(?:days?|nights?|day|night)/);
       if (durationMatch) {
         const duration = parseInt(durationMatch[1]);
+        return duration >= filters.durationRange[0] && duration <= filters.durationRange[1];
+      }
+      // Fallback: look for any number in duration
+      const fallbackMatch = durationText.match(/(\d+)/);
+      if (fallbackMatch) {
+        const duration = parseInt(fallbackMatch[1]);
         return duration >= filters.durationRange[0] && duration <= filters.durationRange[1];
       }
       return true;
     });
 
-    // Location filter
+    // Location filter - improved
     if (filters.location !== "all") {
       filtered = filtered.filter(pkg => {
         if (filters.location === "domestic") {
           return pkg.packageType === 'domestic' || 
-                 ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'].includes(pkg.place);
+                 ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'].includes(pkg.place?.toLowerCase());
         }
-        return pkg.place === filters.location;
+        return pkg.place?.toLowerCase() === filters.location.toLowerCase();
       });
     }
 
-    // Tour type filter (if we had tour type data)
+    // Tour type filter - basic implementation
     if (filters.tourType.length > 0) {
       filtered = filtered.filter(pkg => {
-        // This would need to be implemented based on your data structure
-        // For now, we'll skip this filter
-        return true;
+        const packageText = (pkg.title + ' ' + pkg.subtitle + ' ' + pkg.about).toLowerCase();
+        return filters.tourType.some(type => 
+          packageText.includes(type.toLowerCase())
+        );
       });
     }
 
-    // Departure city filter (if we had departure city data)
+    // Departure city filter - basic implementation
     if (filters.departureCity.length > 0) {
       filtered = filtered.filter(pkg => {
-        // This would need to be implemented based on your data structure
-        // For now, we'll skip this filter
+        // For now, we'll assume all packages are available from all cities
+        // This can be enhanced when departure city data is available
         return true;
       });
     }
 
-    // Date range filter (if we had departure date data)
+    // Date range filter - basic implementation
     if (filters.departBetween.startDate || filters.departBetween.endDate) {
       filtered = filtered.filter(pkg => {
-        // This would need to be implemented based on your data structure
-        // For now, we'll skip this filter
+        // For now, we'll assume all packages are available for all dates
+        // This can be enhanced when departure date data is available
         return true;
       });
     }
@@ -181,8 +232,8 @@ const DomesticPackagesPage = () => {
 
   const popularDestinations = [
     { name: "Darjeeling", icon: Mountain },
-    { name: "Sikkim", icon: Camera },
-    { name: "Meghalaya", icon: Heart },
+    { name: "Sikkim", icon: Mountain },
+    { name: "Meghalaya", icon: Mountain },
     { name: "Himachal Pradesh", icon: Mountain },
   ];
 
@@ -215,10 +266,10 @@ const DomesticPackagesPage = () => {
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
               Domestic Packages
             </h1>
-            <p className="text-3xl md:text-4xl lg:text-5xl mb-12 opacity-90">
+            <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-90">
               Explore the incredible beauty of India with our carefully crafted domestic tour packages
             </p>
             <div className="flex flex-wrap justify-center gap-4">

@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Users, Award, Heart, Globe, Mountain, Camera, Star } from "lucide-react";
+import { MapPin, Users, Award, Heart, Globe, Mountain, Camera, Star, Calendar } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const AboutPage = () => {
   const stats = [
@@ -274,11 +275,12 @@ const AboutPage = () => {
               Let us create an unforgettable travel experience tailored just for you
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
-                <Camera className="h-5 w-5 mr-2" />
-                View Our Gallery
-              </Button>
-
+              <Link href="/contact">
+                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
+                  <Calendar className="h-5 w-5 mr-2" />
+                  Book Now
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

@@ -23,9 +23,9 @@ const TourPackagesSlider = () => {
       id: 2,
       image: "/1400__1502124997_Kathmandu6.webp",
       title: "Nepal",
-      description: "Explore Kathmandu, Pokhara & Nagarkot.",
-      price: "₹9,999/person",
-      duration: "4N/5D",
+      description: "Explore Kathmandu, Chitwan & Jomsom.",
+      price: "₹22,500/person",
+      duration: "6N/7D",
       redirectUrl: "/packages/68caaac3788b30a797183ac3"
     },
     {
@@ -33,8 +33,8 @@ const TourPackagesSlider = () => {
       image: "/Cherrapunji-2.webp",
       title: "Meghalaya",
       description: "Guwahati, Shillong, Amlarem Dawki, Mawlynnong & Cherrapunjee.",
-      price: "₹19,900/person",
-      duration: "4N/5D",
+      price: "₹30,500/person",
+      duration: "7N/8D",
       redirectUrl: "/packages/68c7d4efaefe5f51c70cb46e"
     },
     {
@@ -42,7 +42,7 @@ const TourPackagesSlider = () => {
       image: "/Darjeeling1_Pranav-Bhasin.avif",
       title: "Darjeeling Budgeted Tour",
       description: "Darjeeling, Kalimpong & Mirik.",
-      price: "₹16,500/person",
+      price: "₹9,500/person",
       duration: "4N/5D",
       redirectUrl: "/packages/68c3d699db2b6c7c9996ba45"
     },
@@ -52,7 +52,7 @@ const TourPackagesSlider = () => {
       title: "Sikkim",
       description: "Gangtok, Tsangmo Lake & Pelling",
       price: "₹18,500/person",
-      duration: "4N/5D",
+      duration: "5N/6D",
       redirectUrl: "/packages/68c4024bd5fd43494c1e03d0"
     }
   ];

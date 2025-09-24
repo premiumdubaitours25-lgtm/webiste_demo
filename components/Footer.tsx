@@ -29,7 +29,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-gray-300 text-sm">
-              Your trusted partner for unforgettable travel experiences in Nepal and beyond. 
+              Your trusted partner for unforgettable travel experiences in around the world.               
               We create memories that last a lifetime.
             </p>
             <div className="flex space-x-4">

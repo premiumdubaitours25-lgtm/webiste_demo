@@ -33,7 +33,7 @@ interface PackageFilterProps {
 const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: PackageFilterProps) => {
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 50000],
+    priceRange: [0, 100000],
     durationRange: [1, 30],
     location: "all",
     departureCity: [],
@@ -57,7 +57,9 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
     { label: "₹9,000 - ₹15,000", min: 9000, max: 15000 },
     { label: "₹15,000 - ₹25,000", min: 15000, max: 25000 },
     { label: "₹25,000 - ₹35,000", min: 25000, max: 35000 },
-    { label: "₹35,000 - ₹50,000", min: 35000, max: 50000 }
+    { label: "₹35,000 - ₹50,000", min: 35000, max: 50000 },
+    { label: "₹50,000 - ₹75,000", min: 50000, max: 75000 },
+    { label: "₹75,000+", min: 75000, max: 100000 }
   ];
 
   const durationRanges = [
@@ -98,7 +100,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
     if (currentFilters.location !== "all") active.push(`Location: ${currentFilters.location}`);
     if (currentFilters.departureCity.length > 0) active.push(`Cities: ${currentFilters.departureCity.length}`);
     if (currentFilters.tourType.length > 0) active.push(`Types: ${currentFilters.tourType.length}`);
-    if (currentFilters.priceRange[0] > 0 || currentFilters.priceRange[1] < 500000) {
+    if (currentFilters.priceRange[0] > 0 || currentFilters.priceRange[1] < 100000) {
       active.push(`Price: ₹${currentFilters.priceRange[0].toLocaleString()} - ₹${currentFilters.priceRange[1].toLocaleString()}`);
     }
     if (currentFilters.durationRange[0] > 1 || currentFilters.durationRange[1] < 30) {
@@ -114,7 +116,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
   const clearAllFilters = () => {
     const clearedFilters: FilterState = {
       searchTerm: "",
-      priceRange: [0, 50000],
+      priceRange: [0, 100000],
       durationRange: [1, 30],
       location: "all",
       departureCity: [],
@@ -149,7 +151,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
         updatedFilters.tourType = [];
         break;
       case "Price":
-        updatedFilters.priceRange = [0, 50000];
+        updatedFilters.priceRange = [0, 100000];
         break;
       case "Duration":
         updatedFilters.durationRange = [1, 30];
@@ -284,7 +286,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
               <Slider
                 value={filters.priceRange}
                 onValueChange={(value) => updateFilters({ priceRange: value as [number, number] })}
-                max={50000}
+                max={100000}
                 min={0}
                 step={1000}
                 className="w-full"

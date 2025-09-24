@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Clock, Users, Star, Search, Filter, Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Package {
   _id: string;
@@ -42,17 +43,56 @@ const PackagesPage = () => {
   const [priceFilter, setPriceFilter] = useState("all");
   const [durationFilter, setDurationFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("all");
+  const router = useRouter();
 
   useEffect(() => {
-    fetchPackages();
-    
-    // Check for URL query parameters
+    // Check for URL query parameters first
     const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
     const locationParam = urlParams.get('location');
+    
+    if (searchParam) {
+      setSearchTerm(searchParam);
+    }
     if (locationParam) {
       setLocationFilter(locationParam);
     }
+    
+    // Fetch packages with the search parameter from URL
+    const fetchInitialPackages = async () => {
+      try {
+        const url = searchParam ? `/api/packages?search=${encodeURIComponent(searchParam)}` : '/api/packages';
+        const response = await fetch(url);
+        const result = await response.json();
+        if (result.success) {
+          setPackages(result.data);
+        }
+      } catch (error) {
+        console.error('Error fetching packages:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchInitialPackages();
   }, []);
+
+  // Refetch packages when searchTerm changes
+  useEffect(() => {
+    if (searchTerm !== undefined) { // Only fetch if searchTerm has been initialized
+      fetchPackages();
+    }
+  }, [searchTerm]);
+
+  // Simple URL parameter check on mount (since we use force refresh now)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    
+    if (searchParam && searchParam !== searchTerm) {
+      setSearchTerm(searchParam);
+    }
+  }, []); // Run only on mount
 
   useEffect(() => {
     filterPackages();
@@ -60,7 +100,9 @@ const PackagesPage = () => {
 
   const fetchPackages = async () => {
     try {
-      const response = await fetch('/api/packages');
+      // Build URL with search parameter if searchTerm exists
+      const url = searchTerm ? `/api/packages?search=${encodeURIComponent(searchTerm)}` : '/api/packages';
+      const response = await fetch(url);
       const result = await response.json();
       if (result.success) {
         setPackages(result.data);
@@ -74,15 +116,6 @@ const PackagesPage = () => {
 
   const filterPackages = () => {
     let filtered = packages;
-
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(pkg =>
-        pkg.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.location.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
 
     // Price filter
     if (priceFilter !== "all") {
