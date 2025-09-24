@@ -38,7 +38,7 @@ const About = () => {
                 "Travel with Heart, Explore with Us"
               </p>
               <p className="text-lg text-blue-600 leading-relaxed">
-                Founded by two sisters, JJ & Tia Tours and Travels turns your holidays into memorable journeys across Bhutan, Nepal, India, and beyond. Every trip is personal, seamless, and unforgettable.
+                Founded by two sisters, JJ & TIA Tours and Travels turns your holidays into memorable journeys across Bhutan, Nepal, India, and beyond. Every trip is personal, seamless, and unforgettable.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Whether you're seeking adventure in the mountains of Bhutan, relaxation on the beaches of Goa, or cultural immersion in the mystical lands of Nepal, our expert team is here to guide you every step of the way.

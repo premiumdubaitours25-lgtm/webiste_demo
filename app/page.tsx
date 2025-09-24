@@ -247,7 +247,7 @@ export default function Home() {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">International Tour Packages Global Adventures with JJ & Tia Tours and Travels</h2>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">International Tour Packages Global Adventures with JJ & TIA Tours and Travels</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Explore Bhutan, Nepal, Vietnam, and more with our curated international travel packages. Stress-free planning, unforgettable experiences.
             </p>
@@ -274,7 +274,7 @@ export default function Home() {
                   BHUTAN FAMILY TOUR
                 </h3>
                 <p className="text-xs text-gray-600 mb-2">
-                  The Land of Happiness with JJ & Tia Tours and Travels
+                  The Land of Happiness with JJ & TIA Tours and Travels
                 </p>
                 <div className="text-xs text-gray-700 font-medium">
                   5D/4N • ₹29,999
@@ -301,7 +301,7 @@ export default function Home() {
                   NEPAL ADVENTURE TOUR
                 </h3>
                 <p className="text-xs text-gray-600 mb-2">
-                  Nepal Tour Packages Explore the Himalayas with JJ & Tia Tours and Travels
+                  Nepal Tour Packages Explore the Himalayas with JJ & TIA Tours and Travels
                 </p>
                 <div className="text-xs text-gray-700 font-medium">
                   6D/5N • ₹35,500

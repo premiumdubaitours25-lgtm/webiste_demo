@@ -11,8 +11,8 @@ import FloatingButtons from "../components/FloatingButtons"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'TIA Tours - Your Gateway to Nepal',
-  description: 'Discover amazing tour packages in Nepal with TIA Tours and Travels',
+  title: 'JJ & TIA Tours - Your Gateway to Nepal',
+  description: 'Discover amazing tour packages in Nepal with JJ & TIA Tours and Travels',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 }
 

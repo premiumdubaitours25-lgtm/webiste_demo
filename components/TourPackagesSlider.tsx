@@ -84,7 +84,7 @@ const TourPackagesSlider = () => {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            JJ & Tia Tours and Travels offers All Inclusive tour packages.
+            JJ & TIA Tours and Travels offers All Inclusive tour packages.
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             No matter where you are in India or around the World, Choose from a wide range of tours, conveniently departing from your city.

@@ -7,7 +7,7 @@ const Testimonials = () => {
       name: "Priya Sharma",
       location: "Mumbai",
       rating: 5,
-      text: "JJ&Tia Tours made our Bhutan trip absolutely magical! The attention to detail and personalized service was exceptional. Highly recommended!",
+      text: "JJ & TIA Tours made our Bhutan trip absolutely magical! The attention to detail and personalized service was exceptional. Highly recommended!",
       image: "https://images.unsplash.com/photo-1494790108755-2616b612b647?w=100&h=100&fit=crop&crop=face"
     },
     {

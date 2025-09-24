@@ -453,7 +453,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       // Prepare package data
       const packageData = {
         ...formData,
-        about: "Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! We specialize in creating unique travel experiences that combine adventure, culture, and comfort. With over a decade of experience in the travel industry, we have been helping travelers discover the world's most beautiful destinations. As a sister company of Travellers Paradise, we bring you the best of both worlds - local expertise and global reach.\n\nAt JJ & Tia Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
+        about: "Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! We specialize in creating unique travel experiences that combine adventure, culture, and comfort. With over a decade of experience in the travel industry, we have been helping travelers discover the world's most beautiful destinations. As a sister company of Travellers Paradise, we bring you the best of both worlds - local expertise and global reach.\n\nAt JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.",
         price: price,
         itinerary: itinerary.map(day => ({
           day: day.day,
