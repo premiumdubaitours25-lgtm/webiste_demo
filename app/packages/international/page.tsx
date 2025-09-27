@@ -74,6 +74,7 @@ const InternationalPackagesPage = () => {
       endDate: ""
     }
   });
+  const [selectedDestination, setSelectedDestination] = useState("");
 
   useEffect(() => {
     // Check for URL query parameters first
@@ -96,7 +97,7 @@ const InternationalPackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, filters]);
+  }, [packages, filters, selectedDestination]);
 
   // Refetch packages when searchTerm changes
   useEffect(() => {
@@ -291,6 +292,13 @@ const InternationalPackagesPage = () => {
       });
     }
 
+    // Destination filter
+    if (selectedDestination) {
+      filtered = filtered.filter(pkg => 
+        pkg.place?.toLowerCase() === selectedDestination.toLowerCase()
+      );
+    }
+
     setFilteredPackages(filtered);
   };
 
@@ -367,18 +375,49 @@ const InternationalPackagesPage = () => {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {popularCountries.map((country, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+                <Card 
+                  key={index} 
+                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${
+                    selectedDestination === country.name.toLowerCase() 
+                      ? 'ring-2 ring-primary bg-primary/5' 
+                      : 'hover:bg-gray-50'
+                  }`}
+                  onClick={() => setSelectedDestination(
+                    selectedDestination === country.name.toLowerCase() ? "" : country.name.toLowerCase()
+                  )}
+                >
                   <CardContent className="p-6">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                      <country.icon className="h-8 w-8 text-primary" />
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
+                      selectedDestination === country.name.toLowerCase() 
+                        ? 'bg-primary text-white' 
+                        : 'bg-primary/10 text-primary'
+                    }`}>
+                      <country.icon className="h-8 w-8" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className={`text-lg font-semibold mb-2 ${
+                      selectedDestination === country.name.toLowerCase() 
+                        ? 'text-primary' 
+                        : 'text-gray-900'
+                    }`}>
                       {country.name}
                     </h3>
                   </CardContent>
                 </Card>
               ))}
             </div>
+            
+            {/* Clear Filter Button */}
+            {selectedDestination && (
+              <div className="text-center mt-6">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSelectedDestination("")}
+                  className="text-primary border-primary hover:bg-primary hover:text-white"
+                >
+                  Clear Filter
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -418,6 +457,7 @@ const InternationalPackagesPage = () => {
                           endDate: ""
                         }
                       });
+                      setSelectedDestination("");
                     }}>
                       Clear Filters
                     </Button>
@@ -426,8 +466,14 @@ const InternationalPackagesPage = () => {
               <>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900">
-                    International Packages
+                    {selectedDestination 
+                      ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1)} Packages`
+                      : 'International Packages'
+                    }
                   </h2>
+                  <div className="text-sm text-gray-600">
+                    {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
+                  </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

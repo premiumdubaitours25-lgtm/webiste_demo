@@ -74,6 +74,7 @@ const DomesticPackagesPage = () => {
       endDate: ""
     }
   });
+  const [selectedDestination, setSelectedDestination] = useState("");
 
   useEffect(() => {
     // Check for URL query parameters first
@@ -96,7 +97,7 @@ const DomesticPackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, filters]);
+  }, [packages, filters, selectedDestination]);
 
   // Refetch packages when searchTerm changes
   useEffect(() => {
@@ -219,6 +220,13 @@ const DomesticPackagesPage = () => {
       });
     }
 
+    // Destination filter
+    if (selectedDestination) {
+      filtered = filtered.filter(pkg => 
+        pkg.place?.toLowerCase() === selectedDestination.toLowerCase()
+      );
+    }
+
     setFilteredPackages(filtered);
   };
 
@@ -231,10 +239,10 @@ const DomesticPackagesPage = () => {
   };
 
   const popularDestinations = [
-    { name: "Darjeeling", icon: Mountain },
-    { name: "Sikkim", icon: Mountain },
-    { name: "Meghalaya", icon: Mountain },
-    { name: "Himachal Pradesh", icon: Mountain },
+    { name: "Darjeeling", icon: Mountain, place: "darjeeling" },
+    { name: "Sikkim", icon: Mountain, place: "sikkim" },
+    { name: "Meghalaya", icon: Mountain, place: "meghalaya" },
+    { name: "Himachal Pradesh", icon: Mountain, place: "himachal-pradesh" },
   ];
 
   if (loading) {
@@ -295,18 +303,49 @@ const DomesticPackagesPage = () => {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {popularDestinations.map((destination, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+                <Card 
+                  key={index} 
+                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${
+                    selectedDestination === destination.place 
+                      ? 'ring-2 ring-primary bg-primary/5' 
+                      : 'hover:bg-gray-50'
+                  }`}
+                  onClick={() => setSelectedDestination(
+                    selectedDestination === destination.place ? "" : destination.place
+                  )}
+                >
                   <CardContent className="p-6">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                      <destination.icon className="h-8 w-8 text-primary" />
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
+                      selectedDestination === destination.place 
+                        ? 'bg-primary text-white' 
+                        : 'bg-primary/10 text-primary'
+                    }`}>
+                      <destination.icon className="h-8 w-8" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className={`text-lg font-semibold mb-2 ${
+                      selectedDestination === destination.place 
+                        ? 'text-primary' 
+                        : 'text-gray-900'
+                    }`}>
                       {destination.name}
                     </h3>
                   </CardContent>
                 </Card>
               ))}
             </div>
+            
+            {/* Clear Filter Button */}
+            {selectedDestination && (
+              <div className="text-center mt-6">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSelectedDestination("")}
+                  className="text-primary border-primary hover:bg-primary hover:text-white"
+                >
+                  Clear Filter
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -346,6 +385,7 @@ const DomesticPackagesPage = () => {
                       endDate: ""
                     }
                   });
+                  setSelectedDestination("");
                 }}>
                   Clear Filters
                 </Button>
@@ -354,8 +394,14 @@ const DomesticPackagesPage = () => {
               <>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900">
-                    Domestic Packages
+                    {selectedDestination 
+                      ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1).replace('-', ' ')} Packages`
+                      : 'Domestic Packages'
+                    }
                   </h2>
+                  <div className="text-sm text-gray-600">
+                    {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
+                  </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
