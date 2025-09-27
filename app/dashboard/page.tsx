@@ -38,6 +38,7 @@ interface PackageData {
   capacity: string;
   packageType: 'domestic' | 'international';
   place: string;
+  packageCategory: string;
   images: Array<{
     public_id: string;
     url: string;
@@ -79,6 +80,7 @@ export default function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [packageTypeFilter, setPackageTypeFilter] = useState("all");
   const [placeFilter, setPlaceFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const fetchPackages = async () => {
     try {
@@ -100,7 +102,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, packageTypeFilter, placeFilter]);
+  }, [packages, searchTerm, packageTypeFilter, placeFilter, categoryFilter]);
 
   // Reset place filter when package type changes
   useEffect(() => {
@@ -137,6 +139,11 @@ export default function DashboardPage() {
     // Place filter
     if (placeFilter !== "all") {
       filtered = filtered.filter(pkg => pkg.place === placeFilter);
+    }
+
+    // Category filter
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter(pkg => pkg.packageCategory === categoryFilter);
     }
 
     setFilteredPackages(filtered);
@@ -978,7 +985,7 @@ export default function DashboardPage() {
           <CardContent>
             {/* Filters Section */}
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {/* Search */}
                 <div className="lg:col-span-2">
                   <div className="relative">
@@ -1001,6 +1008,22 @@ export default function DashboardPage() {
                     <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="domestic">Domestic</SelectItem>
                     <SelectItem value="international">International</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* Category Filter */}
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="Cultural">Cultural</SelectItem>
+                    <SelectItem value="Adventure">Adventure</SelectItem>
+                    <SelectItem value="Wildlife">Wildlife</SelectItem>
+                    <SelectItem value="Trekking">Trekking</SelectItem>
+                    <SelectItem value="Spiritual">Spiritual</SelectItem>
+                    <SelectItem value="Beach">Beach</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -1058,7 +1081,7 @@ export default function DashboardPage() {
               </div>
               
               {/* Clear Filters Button */}
-              {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all") && (
+              {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all" || categoryFilter !== "all") && (
                 <div className="mt-4">
                   <Button 
                     variant="outline" 
@@ -1067,6 +1090,7 @@ export default function DashboardPage() {
                       setSearchTerm("");
                       setPackageTypeFilter("all");
                       setPlaceFilter("all");
+                      setCategoryFilter("all");
                     }}
                   >
                     Clear Filters
@@ -1081,6 +1105,7 @@ export default function DashboardPage() {
                   <tr className="border-b">
                     <th className="text-left p-3">Package Title</th>
                     <th className="text-left p-3">Type</th>
+                    <th className="text-left p-3">Category</th>
                     <th className="text-left p-3">Place</th>
                     <th className="text-left p-3">Duration</th>
                     <th className="text-left p-3">Location</th>
@@ -1115,6 +1140,11 @@ export default function DashboardPage() {
                         <td className="p-3">
                           <Badge variant={pkg.packageType === 'domestic' ? 'default' : 'secondary'}>
                             {pkg.packageType === 'domestic' ? 'Domestic' : 'International'}
+                          </Badge>
+                        </td>
+                        <td className="p-3">
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            {pkg.packageCategory || 'Cultural'}
                           </Badge>
                         </td>
                         <td className="p-3">
@@ -1196,7 +1226,7 @@ export default function DashboardPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={9} className="p-8 text-center text-gray-500">
+                      <td colSpan={10} className="p-8 text-center text-gray-500">
                         <div className="flex flex-col items-center space-y-2">
                           <Package className="h-12 w-12 text-gray-300" />
                           {packages.length === 0 ? (
@@ -1217,6 +1247,7 @@ export default function DashboardPage() {
                                   setSearchTerm("");
                                   setPackageTypeFilter("all");
                                   setPlaceFilter("all");
+                                  setCategoryFilter("all");
                                 }}
                               >
                                 Clear Filters

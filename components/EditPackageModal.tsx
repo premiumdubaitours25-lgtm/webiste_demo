@@ -96,6 +96,7 @@ interface PackageData {
   capacity: string;
   packageType: 'domestic' | 'international';
   place: string;
+  packageCategory: string;
   images: Array<{
     public_id: string;
     url: string;
@@ -147,6 +148,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     capacity: "",
     packageType: "",
     place: "",
+    packageCategory: "",
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
@@ -176,6 +178,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         capacity: packageData.capacity || "",
         packageType: packageData.packageType || "",
         place: packageData.place || "",
+        packageCategory: packageData.packageCategory || "Cultural",
       });
 
       setItinerary(
@@ -421,8 +424,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       }
 
       // Validate required fields
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
-        alert('Please fill in all required fields including package type and place');
+      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place || !formData.packageCategory) {
+        alert('Please fill in all required fields including package type, category and place');
         return;
       }
 
@@ -513,6 +516,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       capacity: "",
       packageType: "domestic",
       place: "bhutan",
+      packageCategory: "Cultural",
     });
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
     setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
@@ -558,8 +562,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             />
           </div>
 
-          {/* Package Type and Place Dropdowns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Package Type, Category and Place Dropdowns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Package Type *</label>
               <Select value={formData.packageType} onValueChange={(value) => handleInputChange('packageType', value)}>
@@ -569,6 +573,22 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                 <SelectContent>
                   <SelectItem value="domestic">Domestic</SelectItem>
                   <SelectItem value="international">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Package Category *</label>
+              <Select value={formData.packageCategory} onValueChange={(value) => handleInputChange('packageCategory', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Adventure">Adventure</SelectItem>
+                  <SelectItem value="Wildlife">Wildlife</SelectItem>
+                  <SelectItem value="Trekking">Trekking</SelectItem>
+                  <SelectItem value="Spiritual">Spiritual</SelectItem>
+                  <SelectItem value="Beach">Beach</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -143,6 +143,12 @@ const PackageSchema = new mongoose.Schema({
       'bhutan', 'nepal'
     ],
   },
+  packageCategory: {
+    type: String,
+    required: true,
+    enum: ['Cultural', 'Adventure', 'Wildlife', 'Trekking', 'Spiritual', 'Beach'],
+    default: 'Cultural',
+  },
   images: [ImageSchema],
   itinerary: [ItineraryDaySchema],
   transportation: [TransportationSchema],

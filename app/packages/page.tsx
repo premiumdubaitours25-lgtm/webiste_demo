@@ -27,6 +27,7 @@ interface Package {
   duration: string;
   location: string;
   capacity: string;
+  packageCategory: string;
   images: Array<{
     url: string;
     alt: string;
@@ -43,6 +44,7 @@ const PackagesPage = () => {
   const [priceFilter, setPriceFilter] = useState("all");
   const [durationFilter, setDurationFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const router = useRouter();
 
   useEffect(() => {
@@ -50,12 +52,16 @@ const PackagesPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
     const locationParam = urlParams.get('location');
+    const categoryParam = urlParams.get('category');
     
     if (searchParam) {
       setSearchTerm(searchParam);
     }
     if (locationParam) {
       setLocationFilter(locationParam);
+    }
+    if (categoryParam) {
+      setCategoryFilter(categoryParam);
     }
     
     // Fetch packages with the search parameter from URL
@@ -96,7 +102,7 @@ const PackagesPage = () => {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, priceFilter, durationFilter, locationFilter]);
+  }, [packages, searchTerm, priceFilter, durationFilter, locationFilter, categoryFilter]);
 
   const fetchPackages = async () => {
     try {
@@ -159,6 +165,11 @@ const PackagesPage = () => {
       );
     }
 
+    // Category filter
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter(pkg => pkg.packageCategory === categoryFilter);
+    }
+
     setFilteredPackages(filtered);
   };
 
@@ -211,7 +222,7 @@ const PackagesPage = () => {
       <section className="py-8 bg-white border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
               {/* Search */}
               <div className="lg:col-span-2">
                 <div className="relative">
@@ -224,6 +235,22 @@ const PackagesPage = () => {
                   />
                 </div>
               </div>
+
+              {/* Category Filter */}
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Adventure">Adventure</SelectItem>
+                  <SelectItem value="Wildlife">Wildlife</SelectItem>
+                  <SelectItem value="Trekking">Trekking</SelectItem>
+                  <SelectItem value="Spiritual">Spiritual</SelectItem>
+                  <SelectItem value="Beach">Beach</SelectItem>
+                </SelectContent>
+              </Select>
 
               {/* Price Filter */}
               <Select value={priceFilter} onValueChange={setPriceFilter}>
@@ -286,6 +313,7 @@ const PackagesPage = () => {
                   setPriceFilter("all");
                   setDurationFilter("all");
                   setLocationFilter("all");
+                  setCategoryFilter("all");
                 }}>
                   Clear Filters
                 </Button>
@@ -320,9 +348,14 @@ const PackagesPage = () => {
                             <MapPin className="h-12 w-12 text-gray-400" />
                           </div>
                         )}
-                        <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                          {formatPrice(pkg.price)}
-                        </Badge>
+                        <div className="absolute top-4 right-4 space-y-2">
+                          <Badge className="bg-white text-gray-900 block">
+                            {formatPrice(pkg.price)}
+                          </Badge>
+                          <Badge variant="outline" className="bg-primary/10 text-primary border-primary block">
+                            {pkg.packageCategory || 'Cultural'}
+                          </Badge>
+                        </div>
                       </div>
                       
                       <CardHeader>

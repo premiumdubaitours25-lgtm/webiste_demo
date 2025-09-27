@@ -99,6 +99,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     capacity: "2 Adults",
     packageType: "international",
     place: "bhutan",
+    packageCategory: "Cultural",
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([
@@ -437,9 +438,9 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       console.log('Form data before validation:', formData);
       console.log('Itinerary before validation:', itinerary);
       
-      if (!formData.title || !formData.subtitle || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place) {
+      if (!formData.title || !formData.subtitle || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place || !formData.packageCategory) {
         console.log('Validation failed: Missing required fields');
-        alert('Please fill in all required fields including package type and place');
+        alert('Please fill in all required fields including package type, category and place');
         return;
       }
 
@@ -502,6 +503,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       capacity: "",
       packageType: "",
       place: "",
+      packageCategory: "",
     });
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
     setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
@@ -555,8 +557,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             />
           </div>
 
-          {/* Package Type and Place Dropdowns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Package Type, Category and Place Dropdowns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Package Type *</label>
               <Select value={formData.packageType} onValueChange={(value) => handleInputChange('packageType', value)}>
@@ -566,6 +568,22 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                 <SelectContent>
                   <SelectItem value="domestic">Domestic</SelectItem>
                   <SelectItem value="international">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Package Category *</label>
+              <Select value={formData.packageCategory} onValueChange={(value) => handleInputChange('packageCategory', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Adventure">Adventure</SelectItem>
+                  <SelectItem value="Wildlife">Wildlife</SelectItem>
+                  <SelectItem value="Trekking">Trekking</SelectItem>
+                  <SelectItem value="Spiritual">Spiritual</SelectItem>
+                  <SelectItem value="Beach">Beach</SelectItem>
                 </SelectContent>
               </Select>
             </div>
