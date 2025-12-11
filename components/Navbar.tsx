@@ -297,6 +297,14 @@ const Navbar = () => {
                 priority
               />
             </div>
+            <div className="flex flex-col">
+              <h1 className="text-lg sm:text-xl font-bold uppercase leading-tight" style={{ color: '#000000', textShadow: 'none', fontWeight: 700 }}>
+                PREMIUM DUBAI TOURS
+              </h1>
+              <p className="text-xs sm:text-sm font-normal uppercase tracking-wide" style={{ color: '#000000' }}>
+                LUXURY TRAVEL EXPERIENCES
+              </p>
+            </div>
           </Link>
 
           {/* Search Bar */}
