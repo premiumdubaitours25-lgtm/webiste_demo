@@ -75,7 +75,7 @@ const Header = () => {
               </div>
               <div className="flex items-center space-x-1">
                 <Mail className="h-3 w-3" />
-                <span className="truncate">shneiur.joseph@jjtia.com</span>
+                <span className="truncate">support@premiumdubaitours.com</span>
               </div>
             </div>
             <div className="flex justify-center">
@@ -103,7 +103,7 @@ const Header = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>shneiur.joseph@jjtia.com</span>
+                <span>support@premiumdubaitours.com</span>
               </div>
               <a
                 href="https://wa.me/91970393335"
@@ -127,7 +127,7 @@ const Header = () => {
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-2">
             <span className="flex items-center justify-center bg-white rounded-full shadow w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
-              <img src="/logo.png" alt="JJ & TIA Tours" className="h-10 w-10 md:h-12 md:w-12 lg:h-16 lg:w-16 object-contain" />
+              <img src="/pdt_logo_whitebg.jpeg" alt="Premium Dubai Tours" className="h-10 w-10 md:h-12 md:w-12 lg:h-16 lg:w-16 object-contain" />
             </span>
           </Link>
 

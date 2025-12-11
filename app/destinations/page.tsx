@@ -136,7 +136,7 @@ const DestinationsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
         {/* Background Image */}

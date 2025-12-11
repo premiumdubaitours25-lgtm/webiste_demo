@@ -308,7 +308,7 @@ export default function DashboardPage() {
           properties: {},
           children: [
             new Paragraph({
-              children: [new TextRun({ text: "JJ & TIA Tours - Package Report", bold: true, size: 32 })],
+              children: [new TextRun({ text: "Premium Dubai Tours - Package Report", bold: true, size: 32 })],
               heading: HeadingLevel.TITLE,
               alignment: AlignmentType.CENTER,
             }),
@@ -571,7 +571,7 @@ export default function DashboardPage() {
       // Create document children array
       const children = [
         new Paragraph({
-          children: [new TextRun({ text: "JJ & TIA Tours & Travels", bold: true, size: 32 })],
+          children: [new TextRun({ text: "Premium Dubai Tours", bold: true, size: 32 })],
           heading: HeadingLevel.TITLE,
           alignment: AlignmentType.CENTER,
         }),

@@ -116,7 +116,7 @@ const LoginPage = () => {
         
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600">
-            © 2024 JJ & TIA Tours. All rights reserved.
+            © 2025 Premium Dubai Tours. All rights reserved.
           </p>
         </div>
       </div>

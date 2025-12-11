@@ -11,8 +11,8 @@ import FloatingButtons from "../components/FloatingButtons"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'JJ & TIA Tours - Your Gateway to Nepal',
-  description: 'Discover amazing tour packages in Nepal with JJ & TIA Tours and Travels',
+  title: 'Premium Dubai Tours - Your Gateway to Dubai',
+  description: 'Discover amazing tour packages in Dubai with Premium Dubai Tours',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 }
 
@@ -23,10 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-white`}>
         <TooltipProvider>
           <Navbar />
-          <main className="min-h-screen">
+          <main className="min-h-screen bg-white">
             {children}
           </main>
           <Footer />

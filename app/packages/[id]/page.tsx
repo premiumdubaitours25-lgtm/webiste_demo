@@ -112,7 +112,7 @@ const PackageDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading package details...</p>
@@ -123,7 +123,7 @@ const PackageDetailPage = () => {
 
   if (error || !packageData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
             <Globe className="h-12 w-12 text-gray-400" />
@@ -145,7 +145,7 @@ const PackageDetailPage = () => {
   }
 
     return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="relative">
         <div className="aspect-[3/1] relative bg-gray-800">
@@ -164,7 +164,7 @@ const PackageDetailPage = () => {
           
           {/* Back Button */}
           <div className="absolute top-6 left-6">
-            <Button variant="secondary" className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.back()}>
+            <Button variant="secondary" className="bg-black hover:bg-gray-800 text-white" onClick={() => router.back()}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
@@ -288,20 +288,20 @@ const PackageDetailPage = () => {
                 </CardContent>
               </Card>
 
-              {/* About JJ & TIA Tours and Travels */}
+              {/* About Premium Dubai Tours */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">About JJ & TIA Tours and Travels</CardTitle>
+                  <CardTitle className="text-xl">About Premium Dubai Tours</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="text-gray-700 space-y-3">
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-1">•</span>
-                      <span>Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! We specialize in creating unique travel experiences that combine adventure, culture, and comfort. With over a decade of experience in the travel industry, we have been helping travelers discover the world's most beautiful destinations. As a sister company of Travellers Paradise, we bring you the best of both worlds - local expertise and global reach.</span>
+                      <span>Welcome to Premium Dubai Tours - Your Gateway to Unforgettable Dubai Adventures! We specialize in creating unique travel experiences that combine luxury, culture, and comfort. With extensive experience in the travel industry, we have been helping travelers discover the wonders of Dubai and the UAE.</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-1">•</span>
-                      <span>At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
+                      <span>At Premium Dubai Tours, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing Dubai in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -511,7 +511,7 @@ const PackageDetailPage = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900">JJ & TIA Tours and Travels</h4>
+                    <h4 className="font-semibold text-gray-900">Premium Dubai Tours</h4>
                     <div className="space-y-3">
                       <div className="flex items-center">
                         <MapPin className="h-5 w-5 text-primary mr-3" />
@@ -527,7 +527,7 @@ const PackageDetailPage = () => {
                       </div>
                       <div className="flex items-center">
                         <Mail className="h-5 w-5 text-primary mr-3" />
-                        <span className="text-gray-700">shneiur.joseph@jjtia.com</span>
+                        <span className="text-gray-700">support@premiumdubaitours.com</span>
                       </div>
                     </div>
                   </div>

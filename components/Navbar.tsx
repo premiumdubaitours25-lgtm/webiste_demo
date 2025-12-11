@@ -210,9 +210,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-300">
       {/* Top Bar */}
-      <div className="bg-primary text-white py-1">
+      <div className="bg-black text-white py-1">
         {/* Desktop Layout */}
         <div className="hidden md:block">
           <div className="container mx-auto px-4">
@@ -224,21 +224,21 @@ const Navbar = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>shneiur.joseph@jjtia.com</span>
+                  <span>support@premiumdubaitours.com</span>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-white hover:bg-white/10"
+                  className="text-white hover:bg-gray-800"
                   onClick={() => window.open('https://wa.me/919970393335', '_blank')}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Live Chat
                 </Button>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
                     <User className="h-4 w-4 mr-2" />
                     Login
                   </Button>
@@ -259,7 +259,7 @@ const Navbar = () => {
           {/* Row 2: Email */}
           <div className="flex items-center justify-center space-x-2 text-base mt-2">
             <Mail className="h-4 w-4" />
-            <span>shneiur.joseph@jjtia.com</span>
+            <span>support@premiumdubaitours.com</span>
           </div>
           
           {/* Row 3: Live Chat & Login */}
@@ -267,14 +267,14 @@ const Navbar = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white hover:bg-white/10 text-base px-4 py-2"
+              className="text-white hover:bg-gray-800 text-base px-4 py-2"
               onClick={() => window.open('https://wa.me/919970393335', '_blank')}
             >
               <MessageCircle className="h-5 w-5 mr-2" />
               Live Chat
             </Button>
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 text-base px-4 py-2">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 text-base px-4 py-2">
                 <User className="h-5 w-5 mr-2" />
                 Login
               </Button>
@@ -290,8 +290,8 @@ const Navbar = () => {
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative w-20 h-20">
               <Image
-                src="/logo.png"
-                alt="JJ & TIA Tours Logo"
+                src="/pdt_logo_whitebg.jpeg"
+                alt="Premium Dubai Tours Logo"
                 fill
                 className="object-contain"
                 priority
@@ -367,7 +367,7 @@ const Navbar = () => {
                                   {pkg.rating}/5
                                 </div>
                               </div>
-                              <div className="text-sm font-semibold text-primary mt-1">
+                              <div className="text-sm font-semibold text-black mt-1">
                                 {formatPrice(pkg.price)}
                               </div>
                             </div>
@@ -417,8 +417,8 @@ const Navbar = () => {
                         variant="ghost"
                         className={`flex items-center space-x-1 text-lg ${
                           isActive(item.href) 
-                            ? 'text-primary font-semibold' 
-                            : 'text-gray-700 hover:text-primary'
+                            ? 'text-black font-semibold' 
+                            : 'text-gray-800 hover:text-black'
                         }`}
                       >
                         <span>{item.name}</span>
@@ -432,8 +432,8 @@ const Navbar = () => {
                             href={subItem.href}
                             className={`w-full ${
                               isActive(subItem.href) 
-                                ? 'text-primary font-semibold' 
-                                : 'text-gray-700'
+                                ? 'text-black font-semibold' 
+                                : 'text-gray-800'
                             }`}
                           >
                             {subItem.name}
@@ -447,8 +447,8 @@ const Navbar = () => {
                     href={item.href}
                     className={`font-medium text-lg transition-colors ${
                       isActive(item.href) 
-                        ? 'text-primary font-semibold' 
-                        : 'text-gray-700 hover:text-primary'
+                        ? 'text-black font-semibold' 
+                        : 'text-gray-800 hover:text-black'
                     }`}
                   >
                     {item.name}
@@ -461,7 +461,7 @@ const Navbar = () => {
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <Link href="/contact">
-              <Button size="sm" className="bg-primary hover:bg-primary/90">
+              <Button size="sm" className="bg-black hover:bg-gray-800 text-white">
                 Book Now
               </Button>
             </Link>
@@ -470,7 +470,7 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
+            className="lg:hidden p-2 rounded-md text-gray-800 hover:text-black hover:bg-gray-100"
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -496,7 +496,7 @@ const Navbar = () => {
                     />
                     {isSearching && (
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
                       </div>
                     )}
                   </div>
@@ -597,8 +597,8 @@ const Navbar = () => {
                             href={subItem.href}
                             className={`block py-2 text-lg transition-colors ${
                               isActive(subItem.href) 
-                                ? 'text-primary font-semibold' 
-                                : 'text-gray-600 hover:text-primary'
+                                ? 'text-black font-semibold' 
+                                : 'text-gray-800 hover:text-black'
                             }`}
                             onClick={() => setIsMenuOpen(false)}
                           >
@@ -612,8 +612,8 @@ const Navbar = () => {
                       href={item.href}
                       className={`block py-2 font-medium text-lg transition-colors ${
                         isActive(item.href) 
-                          ? 'text-primary font-semibold' 
-                          : 'text-gray-700 hover:text-primary'
+                          ? 'text-black font-semibold' 
+                          : 'text-gray-800 hover:text-black'
                       }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -626,7 +626,7 @@ const Navbar = () => {
               {/* Mobile CTA Buttons */}
               <div className="pt-4 border-t space-y-2">
                 <Link href="/contact" className="block">
-                  <Button size="sm" className="w-full bg-primary hover:bg-primary/90">
+                  <Button size="sm" className="w-full bg-black hover:bg-gray-800 text-white">
                     Book Now
                   </Button>
                 </Link>

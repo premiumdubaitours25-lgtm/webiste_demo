@@ -15,8 +15,8 @@ const Footer = () => {
                <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white rounded-lg p-2 sm:p-3 md:p-4 shadow-md flex items-center justify-center">
                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16">
                    <Image
-                     src="/logo.png"
-                     alt="JJ & TIA Tours Logo"
+                     src="/pdt_logo_whitebg.jpeg"
+                     alt="Premium Dubai Tours Logo"
                      fill
                      className="object-contain"
                      priority
@@ -24,7 +24,7 @@ const Footer = () => {
                  </div>
                </div>
               <div>
-                <h3 className="text-lg sm:text-xl font-bold">JJ & Tia</h3>
+                <h3 className="text-lg sm:text-xl font-bold">Premium Dubai Tours</h3>
                 <p className="text-xs sm:text-sm text-gray-400">Tours & Travels</p>
               </div>
             </div>
@@ -105,9 +105,9 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary mt-0.5" />
                 <div className="text-gray-300 text-sm">
-                  <div>Nyati Estate, Mohammadwadi</div>
-                  <div>Pune - 411060</div>
-                  <div className="text-gray-400 text-xs mt-1">Located in the heart of Pune</div>
+                  <div>Dubai Marina, Building 15</div>
+                  <div>Dubai - 12345, UAE</div>
+                  <div className="text-gray-400 text-xs mt-1">Located in the heart of Dubai</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
@@ -119,7 +119,7 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary" />
                 <span className="text-gray-300 text-sm">
-                  shneiur.joseph@jjtia.com
+                  support@premiumdubaitours.com
                 </span>
               </div>
             </div>
@@ -147,7 +147,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © 2024 JJ & TIA Tours & Travels. All rights reserved.
+              © 2025 Premium Dubai Tours. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">

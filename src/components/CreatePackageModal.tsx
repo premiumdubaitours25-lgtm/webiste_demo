@@ -185,7 +185,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
 
           {/* About Section */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">About JJ & TIA Tours and Travels</label>
+            <label className="text-sm font-medium">About Premium Dubai Tours</label>
             <Textarea
               placeholder="Write about your company and this package..."
               value={formData.about}

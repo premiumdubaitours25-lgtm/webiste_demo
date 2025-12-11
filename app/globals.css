@@ -8,39 +8,39 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 0%; /* Black */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 96%; /* Light grey for cards */
+    --card-foreground: 0 0% 0%; /* Black text on cards */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 0%; /* Black */
 
-    --primary: 200 80% 50%; /* Teal from logo */
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 0%; /* Black as primary */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
 
-    --secondary: 220 100% 25%; /* Navy from logo */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 50%; /* Medium grey */
+    --secondary-foreground: 0 0% 100%; /* White text */
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 96%; /* Light grey */
+    --muted-foreground: 0 0% 45%; /* Dark grey text */
 
-    --accent: 200 80% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 90%; /* Light grey accent */
+    --accent-foreground: 0 0% 0%; /* Black text */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 200 80% 50%;
+    --border: 0 0% 85%; /* Light grey border */
+    --input: 0 0% 96%; /* Light grey input */
+    --ring: 0 0% 0%; /* Black ring */
 
-    /* Travel website specific colors */
-    --travel-teal: 200 80% 50%;
-    --travel-navy: 220 100% 25%;
-    --travel-light-teal: 180 40% 85%;
-    --travel-light-bg: 200 20% 98%;
+    /* Travel website specific colors - updated to grey scale */
+    --travel-teal: 0 0% 50%; /* Medium grey */
+    --travel-navy: 0 0% 20%; /* Dark grey */
+    --travel-light-teal: 0 0% 95%; /* Very light grey */
+    --travel-light-bg: 0 0% 98%; /* Almost white grey */
 
     /* Animation variables */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -48,21 +48,21 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 0 0% 98%; /* Light grey */
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-foreground: 0 0% 0%; /* Black */
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 0 0% 0%; /* Black */
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent: 0 0% 95%; /* Light grey */
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent-foreground: 0 0% 0%; /* Black */
 
-    --sidebar-border: 220 13% 91%;
+    --sidebar-border: 0 0% 85%; /* Light grey */
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 0 0% 0%; /* Black */
   }
 
   .dark {
@@ -116,7 +116,17 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-foreground;
+  }
+  
+  /* Ensure sections use white background */
+  section {
+    @apply bg-white;
+  }
+  
+  /* Main content areas */
+  main {
+    @apply bg-white;
   }
 }
 

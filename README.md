@@ -1,4 +1,4 @@
-# JJ & TIA Tours - Next.js Application
+# Premium Dubai Tours - Next.js Application
 
 A modern tour package management system built with Next.js, MongoDB, and Cloudinary.
 

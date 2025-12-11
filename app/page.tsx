@@ -45,37 +45,37 @@ export default function Home() {
       id: 1,
       name: "Anupam Kumar",
       role: "Adventure Traveler",
-      quote: "Our Nepal adventure with JJ & TIA Tours was absolutely incredible! The team was professional, knowledgeable, and made our trip unforgettable. The Everest Base Camp trek was challenging but the guides made us feel safe throughout."
+      quote: "Our Dubai adventure with Premium Dubai Tours was absolutely incredible! The team was professional, knowledgeable, and made our trip unforgettable. The city tour and desert safari were perfectly organized."
     },
     {
       id: 2,
       name: "Himanshu Sharma",
       role: "Cultural Explorer",
-      quote: "The cultural tour of Kathmandu Valley was amazing! Our guide was so knowledgeable about the history and traditions. JJ & TIA Tours really knows how to create authentic experiences. Highly recommended!"
+      quote: "The Dubai city tour was amazing! Our guide was so knowledgeable about the history and culture. Premium Dubai Tours really knows how to create authentic experiences. Highly recommended!"
     },
     {
       id: 3,
       name: "Rushabh Nandeshwar",
       role: "Family Traveler",
-      quote: "We had the most wonderful family trip to Bhutan! The team took care of everything - from visa processing to accommodation. The kids loved every moment. Thank you JJ & TIA Tours for making our dream trip come true!"
+      quote: "We had the most wonderful family trip to Dubai! The team took care of everything - from hotel bookings to tours. The kids loved every moment. Thank you Premium Dubai Tours for making our dream trip come true!"
     },
     {
       id: 4,
       name: "Deesha Patil",
       role: "Wildlife Enthusiast",
-      quote: "The wildlife safari in Chitwan National Park was incredible! We saw rhinos, elephants, and so many birds. The guides were experts and made sure we had the best experience. Will definitely book with JJ & TIA Tours again!"
+      quote: "The desert safari experience was incredible! The dune bashing, camel rides, and traditional entertainment were amazing. The guides were experts and made sure we had the best experience. Will definitely book with Premium Dubai Tours again!"
     },
     {
       id: 5,
       name: "Abhijjetn Jaiswal",
       role: "Honeymooners",
-      quote: "Our honeymoon trip to Nepal was perfect! JJ & TIA Tours arranged everything beautifully - from romantic dinners to scenic helicopter rides. The attention to detail was outstanding. Thank you for making our special trip unforgettable!"
+      quote: "Our honeymoon trip to Dubai was perfect! Premium Dubai Tours arranged everything beautifully - from romantic dinners to luxury experiences. The attention to detail was outstanding. Thank you for making our special trip unforgettable!"
     },
     {
       id: 6,
       name: "Rajesh Dubey",
       role: "Trekking Enthusiast",
-      quote: "The Annapurna Circuit trek was the adventure of a lifetime! JJ & TIA Tours provided excellent support, quality equipment, and experienced guides. The views were breathtaking and the experience was worth every penny!"
+      quote: "The Abu Dhabi cultural tour was the experience of a lifetime! Premium Dubai Tours provided excellent support, quality service, and experienced guides. The Sheikh Zayed Mosque and Louvre Abu Dhabi were breathtaking and the experience was worth every penny!"
     }
   ];
 
@@ -247,7 +247,7 @@ export default function Home() {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">International Tour Packages Global Adventures with JJ & TIA Tours and Travels</h2>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Dubai Tour Packages - Premium Experiences with Premium Dubai Tours</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Explore Bhutan, Nepal, Vietnam, and more with our curated international travel packages. Stress-free planning, unforgettable experiences.
             </p>
@@ -274,7 +274,7 @@ export default function Home() {
                 Bhutan 7 Day Travel Package with Thimphu , Punakha & Tigers Nest- Budget Friendly Group Tour Bhutan.
                 </h3>
                 <p className="text-xs text-gray-600 mb-2">
-                  The Land of Happiness with JJ & TIA Tours and Travels
+                  Explore Dubai with Premium Dubai Tours
                 </p>
                 <div className="text-xs text-gray-700 font-medium">
                   7D/6N • ₹25,500
@@ -301,7 +301,7 @@ export default function Home() {
                 Best of Nepal - 6 Nights / 7 Days - Three Star
                 </h3>
                 <p className="text-xs text-gray-600 mb-2">
-                  Nepal Tour Packages Explore the Himalayas with JJ & TIA Tours and Travels
+                  Dubai Tour Packages - Discover the Magic with Premium Dubai Tours
                 </p>
                 <div className="text-xs text-gray-700 font-medium">
                   6D/5N • ₹22,500
@@ -582,7 +582,7 @@ export default function Home() {
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-secondary px-4">What Our Travelers Say</h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-              Hear from our satisfied customers about their amazing experiences with JJ & TIA Tours
+              Hear from our satisfied customers about their amazing experiences with Premium Dubai Tours
             </p>
           </div>
           

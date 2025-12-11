@@ -35,7 +35,7 @@ const InquiryFormPopup = ({ isOpen, onClose }: InquiryFormPopupProps) => {
     
     try {
       // Create WhatsApp message with form data
-      const whatsappMessage = `🏔️ *New Travel Inquiry - JJ & TIA Tours*
+      const whatsappMessage = `🌴 *New Travel Inquiry - Premium Dubai Tours*
 
 👤 *Name:* ${formData.name}
 📧 *Email:* ${formData.email}
@@ -289,7 +289,7 @@ ${formData.message}
               <div className="flex flex-col items-center">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Email us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">info@jjtia.com</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">support@premiumdubaitours.com</p>
               </div>
               <div className="flex flex-col items-center">
                 <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />

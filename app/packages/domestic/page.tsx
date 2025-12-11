@@ -247,7 +247,7 @@ const DomesticPackagesPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading domestic packages...</p>
@@ -257,7 +257,7 @@ const DomesticPackagesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
         {/* Background Image */}

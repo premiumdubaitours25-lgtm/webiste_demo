@@ -19,12 +19,12 @@ const Hero = () => {
           <div className="space-y-6 fade-in">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight px-4" style={{textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.7)'}}>
               Turning Holidays into Lifelong 
-              <span className="text-primary block slide-up" style={{textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.7)'}}>
+              <span className="text-gray-100 block slide-up" style={{textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.7)'}}>
                 Memories
               </span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white font-bold max-w-3xl mx-auto scale-in px-4" style={{textShadow: '3px 3px 6px rgba(0,0,0,0.9), 0 0 25px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.7)'}}>
-              At JJ & TIA Tours and Travels, we specialize in crafting Curated tours, seamless planning, and unforgettable experiences Because every holiday should be a story worth telling.
+              At Premium Dubai Tours, we specialize in crafting curated tours, seamless planning, and unforgettable experiences. Because every holiday should be a story worth telling.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-6 scale-in">
@@ -34,7 +34,11 @@ const Hero = () => {
               </Button>
             </Link>
             <Link href="/contact">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-4 text-black">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-4 bg-white text-black border border-white hover:bg-gray-100 hover:text-black"
+              >
                 Book Now
               </Button>
             </Link>

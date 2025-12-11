@@ -33,12 +33,12 @@ const About = () => {
           {/* Left content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-4xl font-bold text-blue-600">About JJ & TIA Tours</h2>
+              <h2 className="text-4xl font-bold text-blue-600">About Premium Dubai Tours</h2>
               <p className="text-lg text-blue-500 leading-relaxed font-medium">
                 "Travel with Heart, Explore with Us"
               </p>
               <p className="text-lg text-blue-600 leading-relaxed">
-                Founded by two sisters, JJ & TIA Tours and Travels turns your holidays into memorable journeys across Bhutan, Nepal, India, and beyond. Every trip is personal, seamless, and unforgettable.
+                Premium Dubai Tours turns your holidays into memorable journeys across Dubai and the UAE. Every trip is personal, seamless, and unforgettable.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Whether you're seeking adventure in the mountains of Bhutan, relaxation on the beaches of Goa, or cultural immersion in the mystical lands of Nepal, our expert team is here to guide you every step of the way.

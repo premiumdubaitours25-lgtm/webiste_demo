@@ -42,7 +42,7 @@ const ContactPage = () => {
     setIsSubmitting(true);
     
     // Create WhatsApp message with form data
-    const whatsappMessage = `Hello! I'm interested in booking a trip with JJ & TIA Tours.
+    const whatsappMessage = `Hello! I'm interested in booking a trip with Premium Dubai Tours.
 
 *Contact Information:*
 • Name: ${formData.name}
@@ -87,8 +87,8 @@ Please get back to me with more information about available packages and pricing
     {
       icon: MapPin,
       title: "Address Location",
-      details: ["Nyati Estate, Mohammadwadi", "Pune - 411060"],
-      description: "Located in the heart of Pune"
+      details: ["Dubai Marina, Building 15", "Dubai - 12345, UAE"],
+      description: "Located in the heart of Dubai"
     },
     {
       icon: Phone,
@@ -99,7 +99,7 @@ Please get back to me with more information about available packages and pricing
     {
       icon: Mail,
       title: "Email Address",
-      details: ["shneiur.joseph@jjtia.com"],
+      details: ["support@premiumdubaitours.com"],
       description: "We respond within 24 hours"
     },
     {
@@ -112,27 +112,27 @@ Please get back to me with more information about available packages and pricing
 
   const teamMembers = [
     {
-      name: "Shneiur Joseph",
+      name: "Ahmed Al Maktoum",
       role: "General Manager",
-      email: "shneiur.joseph@jjtia.com",
-      phone: "+91 9970393335"
+      email: "support@premiumdubaitours.com",
+      phone: "+971 50 123 4567"
     },
     {
       name: "Customer Support",
       role: "Tour Operations",
-      email: "shneiur.joseph@jjtia.com",
+      email: "support@premiumdubaitours.com",
       phone: "+91 9104862909"
     },
     {
-      name: "JJ & TIA Tours",
+      name: "Premium Dubai Tours",
       role: "Customer Relations",
-      email: "shneiur.joseph@jjtia.com",
+      email: "support@premiumdubaitours.com",
       phone: "+91 9970393335"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
         {/* Background Image */}
@@ -174,7 +174,7 @@ Please get back to me with more information about available packages and pricing
       </section>
 
       {/* Contact Form and Map */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12">
@@ -342,14 +342,14 @@ Please get back to me with more information about available packages and pricing
                     <CardContent className="p-0">
                       <div className="aspect-video">
                         <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.123456789!2d73.9214695!3d18.4654402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2ea3d136a1fbf%3A0x62d0ef2a991eb2de!2sNYATI%20ESTATE%2C%20Mohammed%20Wadi%2C%20Pune%2C%20Autadwadi%20Handewadi%2C%20Maharashtra%20411060!5e0!3m2!1sen!2sin!4v1699123456789!5m2!1sen!2sin"
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1755227303955!2d55.1366222!3d25.076385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6b5c5c5c5c5d%3A0x5c5c5c5c5c5c5c5c!2sDubai%20Marina!5e0!3m2!1sen!2sae!4v1699123456789!5m2!1sen!2sae"
                           width="100%"
                           height="100%"
                           style={{ border: 0 }}
                           allowFullScreen
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
-                          title="JJ & TIA Tours Location - Nyati Estate, Mohammadwadi, Pune"
+                          title="Premium Dubai Tours Location - Dubai Marina, Dubai, UAE"
                         ></iframe>
                       </div>
                     </CardContent>
@@ -357,10 +357,10 @@ Please get back to me with more information about available packages and pricing
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      Nyati Estate, Mohammadwadi, Pune - 411060
+                      Dubai Marina, Building 15, Dubai - 12345, UAE
                     </p>
                     <a 
-                      href="https://www.google.com/maps/place/NYATI+ESTATE,+Mohammed+Wadi,+Pune,+Autadwadi+Handewadi,+Maharashtra+411060/@18.4652485,73.9216976,18z/data=!3m1!4b1!4m6!3m5!1s0x3bc2ea3d136a1fbf:0x62d0ef2a991eb2de!8m2!3d18.4654402!4d73.9214695!16s%2Fg%2F11bw3x9vj6?entry=ttu&g_ep=EgoyMDI1MDkwMy4wIKXMDSoASAFQAw%3D%3D"
+                      href="https://www.google.com/maps/place/Dubai+Marina/@25.076385,55.1366222,15z/data=!3m1!4b1!4m6!3m5!1s0x3e5f6b5c5c5c5c5d:0x5c5c5c5c5c5c5c5c!8m2!3d25.076385!4d55.1366222!16s%2Fm%2F0jwpq3v"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:text-primary/80 text-sm font-medium mt-2 inline-block"
@@ -524,7 +524,7 @@ Please get back to me with more information about available packages and pricing
                   Call Us Now
                 </Button>
               </a>
-              <a href="mailto:shneiur.joseph@jjtia.com">
+              <a href="mailto:support@premiumdubaitours.com">
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
                   <MessageCircle className="h-5 w-5 mr-2" />
                   Send Email

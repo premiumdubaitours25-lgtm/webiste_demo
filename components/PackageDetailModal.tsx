@@ -200,11 +200,11 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 <ul className="text-gray-700 space-y-3">
                   <li className="flex items-start">
                     <span className="text-primary mr-2 mt-1">•</span>
-                    <span>Welcome to JJ & TIA Tours and Travels - Your Path to Unforgettable Adventures! We specialize in creating unique travel experiences that combine adventure, culture, and comfort. With over a decade of experience in the travel industry, we have been helping travelers discover the world's most beautiful destinations. As a sister company of Travellers Paradise, we bring you the best of both worlds - local expertise and global reach.</span>
+                    <span>Welcome to Premium Dubai Tours - Your Gateway to Unforgettable Dubai Adventures! We specialize in creating unique travel experiences that combine luxury, culture, and comfort. With extensive experience in the travel industry, we have been helping travelers discover the wonders of Dubai and the UAE.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2 mt-1">•</span>
-                    <span>At JJ & TIA Tours and Travels, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing the world in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
+                    <span>At Premium Dubai Tours, we believe that travel is about more than just sightseeing; it's about creating memories, fostering meaningful connections, and experiencing Dubai in a way that enriches your life. Let us take you on a journey you'll never forget.</span>
                   </li>
                 </ul>
               </CardContent>

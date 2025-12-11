@@ -18,7 +18,7 @@ const ContactPage = () => {
     {
       icon: Mail,
       title: "Email Address",
-      details: ["shneiur.joseph@jjtia.com"],
+      details: ["support@premiumdubaitours.com"],
       description: "Send us your queries and we'll respond within 24 hours"
     },
     {
@@ -50,7 +50,7 @@ const ContactPage = () => {
         <div className="container mx-auto px-4 relative z-20">
           <div className="text-center space-y-6 fade-in">
             <h1 className="text-5xl lg:text-6xl font-bold text-white">
-              Contact <span className="text-secondary">JJ & TIA Tours</span>
+              Contact <span className="text-secondary">Premium Dubai Tours</span>
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
               We're here to help you plan your next adventure. Get in touch with us!

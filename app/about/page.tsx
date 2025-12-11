@@ -40,33 +40,33 @@ const AboutPage = () => {
 
   const team = [
     {
-      name: "Shneiur Joseph",
+      name: "Ahmed Al Maktoum",
       role: "Founder & CEO",
-      image: "/shoenir.jpeg",
-      description: "15+ years in tourism industry"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      description: "15+ years in luxury tourism"
     },
     {
-      name: "Sabya Chettri",
+      name: "Fatima Hassan",
       role: "Operations Manager",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-      description: "Expert in adventure tourism"
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      description: "Expert in premium travel experiences"
     },
     {
-      name: "Amit Gurung",
+      name: "Mohammed Al Rashid",
       role: "Travel Consultant",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-      description: "Specialist in cultural tours"
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      description: "Specialist in Dubai city tours"
     },
     {
-      name: "Sunita Lama",
+      name: "Sarah Al Zahra",
       role: "Customer Relations",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       description: "Ensuring exceptional service"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-20">
                  <div 
@@ -79,15 +79,15 @@ const AboutPage = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-              About JJ & TIA Tours
+              About Premium Dubai Tours
             </h1>
             <p className="text-2xl md:text-3xl lg:text-4xl mb-12 opacity-90 leading-relaxed">
-              Your trusted partner for unforgettable travel experiences in Nepal and beyond
+              Your trusted partner for unforgettable travel experiences in Dubai and beyond
             </p>
             <div className="flex flex-wrap justify-center gap-6 mb-12">
               <Badge variant="secondary" className="text-xl px-6 py-3">
                 <MapPin className="h-5 w-5 mr-3" />
-                Based in Pune, India
+                Based in Dubai, UAE
               </Badge>
               <Badge variant="secondary" className="text-xl px-6 py-3">
                 <Award className="h-5 w-5 mr-3" />
@@ -144,12 +144,12 @@ const AboutPage = () => {
                 </h2>
                 <div className="space-y-4 text-gray-600">
                   <p>
-                    Founded in 2008, JJ & TIA Tours & Travels began as a small family business with a simple mission: 
-                    to share the incredible beauty and rich culture of India and Nepal with travelers from around the world.
+                    Founded with a passion for travel, Premium Dubai Tours began with a simple mission: 
+                    to share the incredible beauty and rich culture of Dubai and the UAE with travelers from around the world.
                   </p>
                   <p>
-                    What started as local tours in Pune has grown into a comprehensive travel company offering 
-                    domestic and international packages, adventure sports, cultural experiences, and luxury travel options.
+                    What started as local tours in Dubai has grown into a comprehensive travel company offering 
+                    city tours, desert safaris, luxury experiences, cultural experiences, and premium travel options throughout the UAE.
                   </p>
                   <p>
                     Today, we're proud to have served over 10,000 satisfied customers and continue to expand our 
@@ -166,7 +166,7 @@ const AboutPage = () => {
                 <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
                   <Image
                     src="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="JJ & TIA Tours Team"
+                    alt="Premium Dubai Tours Team"
                     width={600}
                     height={400}
                     className="w-full h-full object-cover"

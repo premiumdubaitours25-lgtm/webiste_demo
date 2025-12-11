@@ -183,7 +183,7 @@ const PackagesPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading packages...</p>
@@ -193,7 +193,7 @@ const PackagesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary/80 text-white py-12 md:py-16">
         <div className="container mx-auto px-4">
