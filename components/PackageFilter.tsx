@@ -54,12 +54,11 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
   });
 
   const priceRanges = [
-    { label: "₹9,000 - ₹15,000", min: 9000, max: 15000 },
-    { label: "₹15,000 - ₹25,000", min: 15000, max: 25000 },
-    { label: "₹25,000 - ₹35,000", min: 25000, max: 35000 },
-    { label: "₹35,000 - ₹50,000", min: 35000, max: 50000 },
-    { label: "₹50,000 - ₹75,000", min: 50000, max: 75000 },
-    { label: "₹75,000+", min: 75000, max: 100000 }
+    { label: "Under AED 500", min: 0, max: 500 },
+    { label: "AED 500 - AED 1,000", min: 500, max: 1000 },
+    { label: "AED 1,000 - AED 2,000", min: 1000, max: 2000 },
+    { label: "AED 2,000 - AED 5,000", min: 2000, max: 5000 },
+    { label: "Over AED 5,000", min: 5000, max: 20000 }
   ];
 
   const durationRanges = [
@@ -70,12 +69,9 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
   ];
 
   const tourTypes = [
-    "Group Tour",
-    "Private Tour",
-    "Adventure Tour",
-    "Cultural Tour",
-    "Honeymoon Tour",
-    "Family Tour"
+    "Deluxe Tour",
+    "Premium Tour",
+    "Luxury Tour"
   ];
 
   const defaultCities = [
@@ -95,7 +91,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
 
   const updateActiveFilters = (currentFilters: FilterState) => {
     const active: string[] = [];
-    
+
     if (currentFilters.searchTerm) active.push(`Search: ${currentFilters.searchTerm}`);
     if (currentFilters.location !== "all") active.push(`Location: ${currentFilters.location}`);
     if (currentFilters.departureCity.length > 0) active.push(`Cities: ${currentFilters.departureCity.length}`);
@@ -134,9 +130,9 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
   const removeActiveFilter = (filterToRemove: string) => {
     const filterParts = filterToRemove.split(": ");
     const filterType = filterParts[0];
-    
+
     let updatedFilters = { ...filters };
-    
+
     switch (filterType) {
       case "Search":
         updatedFilters.searchTerm = "";
@@ -160,7 +156,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
         updatedFilters.departBetween = { startDate: "", endDate: "" };
         break;
     }
-    
+
     setFilters(updatedFilters);
     onFilterChange(updatedFilters);
     updateActiveFilters(updatedFilters);
@@ -174,14 +170,14 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
   };
 
   const handleCityChange = (city: string, checked: boolean) => {
-    const updatedCities = checked 
+    const updatedCities = checked
       ? [...filters.departureCity, city]
       : filters.departureCity.filter(c => c !== city);
     updateFilters({ departureCity: updatedCities });
   };
 
   const handleTourTypeChange = (type: string, checked: boolean) => {
-    const updatedTypes = checked 
+    const updatedTypes = checked
       ? [...filters.tourType, type]
       : filters.tourType.filter(t => t !== type);
     updateFilters({ tourType: updatedTypes });
@@ -195,24 +191,24 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
             <Filter className="h-5 w-5" />
             <CardTitle className="text-lg">Filter Your Tour</CardTitle>
           </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={clearAllFilters}
             className="text-sm text-gray-600 hover:text-gray-900"
           >
             Clear All
           </Button>
         </div>
-        
+
         {/* Active Filters */}
         {activeFilters.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
             {activeFilters.map((filter, index) => (
               <Badge key={index} variant="secondary" className="flex items-center space-x-1">
                 <span className="text-xs">{filter}</span>
-                <X 
-                  className="h-3 w-3 cursor-pointer hover:text-red-500" 
+                <X
+                  className="h-3 w-3 cursor-pointer hover:text-red-500"
                   onClick={() => removeActiveFilter(filter)}
                 />
               </Badge>
@@ -344,7 +340,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
                 type="date"
                 placeholder="Start Date"
                 value={filters.departBetween.startDate}
-                onChange={(e) => updateFilters({ 
+                onChange={(e) => updateFilters({
                   departBetween: { ...filters.departBetween, startDate: e.target.value }
                 })}
               />
@@ -352,7 +348,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
                 type="date"
                 placeholder="End Date"
                 value={filters.departBetween.endDate}
-                onChange={(e) => updateFilters({ 
+                onChange={(e) => updateFilters({
                   departBetween: { ...filters.departBetween, endDate: e.target.value }
                 })}
               />

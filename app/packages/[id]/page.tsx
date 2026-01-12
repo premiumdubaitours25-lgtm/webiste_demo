@@ -86,7 +86,7 @@ const PackageDetailPage = () => {
     try {
       const response = await fetch(`/api/packages/${id}`);
       const result = await response.json();
-      
+
       if (result.success) {
         setPackageData(result.data);
       } else {
@@ -144,7 +144,7 @@ const PackageDetailPage = () => {
     );
   }
 
-    return (
+  return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="relative">
@@ -161,7 +161,7 @@ const PackageDetailPage = () => {
               <Globe className="h-24 w-24 text-gray-400" />
             </div>
           )}
-          
+
           {/* Back Button */}
           <div className="absolute top-6 left-6">
             <Button variant="secondary" className="bg-black hover:bg-gray-800 text-white" onClick={() => router.back()}>
@@ -169,7 +169,7 @@ const PackageDetailPage = () => {
               Back
             </Button>
           </div>
-          
+
           {/* Action Buttons */}
           <div className="absolute top-6 right-6 flex gap-3">
             <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white">
@@ -179,7 +179,7 @@ const PackageDetailPage = () => {
               <Share className="h-4 w-4" />
             </Button>
           </div>
-          
+
           {/* Package Type Badges */}
           <div className="absolute top-6 left-1/2 transform -translate-x-1/2 flex gap-2">
             <Badge variant={isInternational ? "default" : "secondary"} className="bg-white/90 text-gray-900">
@@ -224,11 +224,10 @@ const PackageDetailPage = () => {
                 <button
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
-                  className={`flex-shrink-0 w-24 h-16 rounded-lg border-2 overflow-hidden ${
-                    index === selectedImageIndex 
-                      ? 'border-primary' 
+                  className={`flex-shrink-0 w-24 h-16 rounded-lg border-2 overflow-hidden ${index === selectedImageIndex
+                      ? 'border-primary'
                       : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <Image
                     src={image.url}
@@ -316,7 +315,7 @@ const PackageDetailPage = () => {
                   <div className="grid md:grid-cols-2 gap-4">
                     {[
                       "Customized travel planning",
-                      "Guided tours & local experiences", 
+                      "Guided tours & local experiences",
                       "Group & family vacations",
                       "Luxury & adventure travel",
                       "Honeymoons & romantic getaways",
@@ -341,23 +340,23 @@ const PackageDetailPage = () => {
                   <div className="space-y-4">
                     {Array.isArray(packageData.transportation) && packageData.transportation.length > 0
                       ? packageData.transportation.map((transport, index) => (
-                          <div key={index}>
-                            <h4 className="font-semibold text-gray-900 mb-2">{transport.type}</h4>
-                            <div className="flex items-center">
-                              <CarIcon className="h-5 w-5 text-primary mr-3" />
-                              <span className="text-gray-700">{transport.vehicle}</span>
-                            </div>
-                            {transport.description && (
-                              <p className="text-gray-600 text-sm mt-1 ml-8">{transport.description}</p>
-                            )}
+                        <div key={index}>
+                          <h4 className="font-semibold text-gray-900 mb-2">{transport.type}</h4>
+                          <div className="flex items-center">
+                            <CarIcon className="h-5 w-5 text-primary mr-3" />
+                            <span className="text-gray-700">{transport.vehicle}</span>
                           </div>
-                        ))
+                          {transport.description && (
+                            <p className="text-gray-600 text-sm mt-1 ml-8">{transport.description}</p>
+                          )}
+                        </div>
+                      ))
                       : (
-                          <div className="text-center py-8 text-gray-500">
-                            <CarIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                            <p>No transportation details available for this package.</p>
-                          </div>
-                        )
+                        <div className="text-center py-8 text-gray-500">
+                          <CarIcon className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p>No transportation details available for this package.</p>
+                        </div>
+                      )
                     }
                   </div>
                 </CardContent>
@@ -412,26 +411,26 @@ const PackageDetailPage = () => {
                   <div className="space-y-6">
                     {Array.isArray(packageData.itinerary) && packageData.itinerary.length > 0
                       ? packageData.itinerary.map((day, index) => (
-                          <div key={index}>
-                            <h4 className="font-semibold text-lg text-gray-900 mb-3">
-                              DAY {day.day}: {day.title}
-                            </h4>
-                            <ul className="space-y-2 text-gray-700">
-                              {day.description.split('\n• ').filter(point => point.trim()).map((point, pointIndex) => (
-                                <li key={pointIndex} className="flex items-start">
-                                  <span className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                  <span>{renderBoldText(point.trim())}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))
+                        <div key={index}>
+                          <h4 className="font-semibold text-lg text-gray-900 mb-3">
+                            DAY {day.day}: {day.title}
+                          </h4>
+                          <ul className="space-y-2 text-gray-700">
+                            {day.description.split('\n• ').filter(point => point.trim()).map((point, pointIndex) => (
+                              <li key={pointIndex} className="flex items-start">
+                                <span className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                <span>{renderBoldText(point.trim())}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))
                       : (
-                          <div className="text-center py-8 text-gray-500">
-                            <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                            <p>No detailed itinerary available for this package.</p>
-                          </div>
-                        )
+                        <div className="text-center py-8 text-gray-500">
+                          <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p>No detailed itinerary available for this package.</p>
+                        </div>
+                      )
                     }
                   </div>
                 </CardContent>
@@ -534,6 +533,67 @@ const PackageDetailPage = () => {
                 </CardContent>
               </Card>
 
+              {/* Traveller Trust Section */}
+              <div className="bg-[#fff9f9] border border-[#ffe4e4] rounded-xl p-6 mb-6">
+                <div className="flex flex-wrap items-center justify-between gap-6">
+                  <div className="flex items-center gap-8 flex-wrap">
+                    {/* Tripadvisor */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-[#00af87] rounded-full flex items-center justify-center">
+                        <Star className="h-6 w-6 text-white fill-current" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 leading-none">Tripadvisor</div>
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="text-sm font-bold">5.0</span>
+                          <div className="flex gap-0.5">
+                            {[...Array(5)].map((_, i) => (
+                              <div key={i} className="w-2.5 h-2.5 rounded-full bg-[#00af87]"></div>
+                            ))}
+                          </div>
+                          <span className="text-xs text-blue-600 underline ml-1 cursor-pointer">928 reviews</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Google */}
+                    <div className="flex items-center gap-3 border-l border-gray-200 pl-8 hidden md:flex">
+                      <div className="w-10 h-10 bg-white border border-gray-100 rounded-full flex items-center justify-center shadow-sm">
+                        <Image src="https://www.google.com/favicon.ico" alt="Google" width={20} height={20} />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 leading-none">Google</div>
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="text-sm font-bold">4.8</span>
+                          <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                          <span className="text-xs text-blue-600 underline ml-1 cursor-pointer">114 reviews</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Facebook */}
+                    <div className="flex items-center gap-3 border-l border-gray-200 pl-8 hidden lg:flex">
+                      <div className="w-10 h-10 bg-[#1877f2] rounded-full flex items-center justify-center">
+                        <span className="text-white font-black text-xl leading-none">f</span>
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 leading-none">Facebook</div>
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="text-sm font-bold">4.1</span>
+                          <span className="text-xs text-secondary-foreground font-medium">recommend</span>
+                          <span className="text-xs text-blue-600 underline ml-1 cursor-pointer">44 Reviews</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-right border-l border-gray-200 pl-8 hidden xl:block">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider font-medium">Trusted by</div>
+                    <div className="text-xl font-bold text-[#0a2357] whitespace-nowrap">50K Plus Traveller</div>
+                  </div>
+                </div>
+              </div>
+
               {/* Customer Reviews */}
               <Card>
                 <CardHeader>
@@ -547,13 +607,12 @@ const PackageDetailPage = () => {
                           <div className="flex items-center gap-2 mb-2">
                             <div className="flex">
                               {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={`h-4 w-4 ${
-                                    i < review.rating 
-                                      ? 'text-yellow-400 fill-current' 
+                                <Star
+                                  key={i}
+                                  className={`h-4 w-4 ${i < review.rating
+                                      ? 'text-yellow-400 fill-current'
                                       : 'text-gray-300'
-                                  }`} 
+                                    }`}
                                 />
                               ))}
                             </div>
@@ -597,9 +656,9 @@ const PackageDetailPage = () => {
                     </div>
                     <Badge className="bg-green-500 text-white">16% OFF</Badge>
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <Link href="/contact">
                     <Button className="w-full" size="lg">
                       <Phone className="h-4 w-4 mr-2" />

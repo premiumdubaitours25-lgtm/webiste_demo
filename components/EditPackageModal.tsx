@@ -23,16 +23,16 @@ const renderBoldText = (text: string) => {
 // Utility function to make selected text bold
 const makeTextBold = (textareaRef: React.RefObject<HTMLTextAreaElement>, updateFunction: (value: string) => void, currentValue: string) => {
   if (!textareaRef.current) return;
-  
+
   const textarea = textareaRef.current;
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
-  
+
   if (start === end) {
     // No text selected, insert bold markers at cursor position
     const newValue = currentValue.slice(0, start) + '****' + currentValue.slice(start);
     updateFunction(newValue);
-    
+
     // Set cursor position between the markers
     setTimeout(() => {
       textarea.focus();
@@ -43,7 +43,7 @@ const makeTextBold = (textareaRef: React.RefObject<HTMLTextAreaElement>, updateF
     const selectedText = currentValue.slice(start, end);
     const newValue = currentValue.slice(0, start) + `**${selectedText}**` + currentValue.slice(end);
     updateFunction(newValue);
-    
+
     // Restore selection to the wrapped text
     setTimeout(() => {
       textarea.focus();
@@ -157,7 +157,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [inclusions, setInclusions] = useState<string[]>([]);
   const [exclusions, setExclusions] = useState<string[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [existingImages, setExistingImages] = useState<Array<{public_id: string; url: string; alt: string}>>([]);
+  const [existingImages, setExistingImages] = useState<Array<{ public_id: string; url: string; alt: string }>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -247,39 +247,39 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   };
 
   const updateItineraryDay = (id: string, field: 'title', value: string) => {
-    setItinerary(prev => prev.map(day => 
+    setItinerary(prev => prev.map(day =>
       day.id === id ? { ...day, [field]: value } : day
     ));
   };
 
   const updateItineraryDescription = (dayId: string, descriptionIndex: number, value: string) => {
-    setItinerary(prev => prev.map(day => 
-      day.id === dayId 
-        ? { 
-            ...day, 
-            descriptions: day.descriptions.map((desc, index) => 
-              index === descriptionIndex ? value : desc
-            )
-          } 
+    setItinerary(prev => prev.map(day =>
+      day.id === dayId
+        ? {
+          ...day,
+          descriptions: day.descriptions.map((desc, index) =>
+            index === descriptionIndex ? value : desc
+          )
+        }
         : day
     ));
   };
 
   const addItineraryDescription = (dayId: string) => {
-    setItinerary(prev => prev.map(day => 
-      day.id === dayId 
+    setItinerary(prev => prev.map(day =>
+      day.id === dayId
         ? { ...day, descriptions: [...day.descriptions, ""] }
         : day
     ));
   };
 
   const removeItineraryDescription = (dayId: string, descriptionIndex: number) => {
-    setItinerary(prev => prev.map(day => 
-      day.id === dayId 
-        ? { 
-            ...day, 
-            descriptions: day.descriptions.filter((_, index) => index !== descriptionIndex)
-          }
+    setItinerary(prev => prev.map(day =>
+      day.id === dayId
+        ? {
+          ...day,
+          descriptions: day.descriptions.filter((_, index) => index !== descriptionIndex)
+        }
         : day
     ));
   };
@@ -300,7 +300,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   };
 
   const updateTransportation = (id: string, field: 'type' | 'vehicle' | 'description', value: string) => {
-    setTransportation(prev => prev.map(item => 
+    setTransportation(prev => prev.map(item =>
       item.id === id ? { ...item, [field]: value } : item
     ));
   };
@@ -321,7 +321,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   };
 
   const updateAccommodation = (id: string, field: 'city' | 'hotel' | 'rooms' | 'roomType' | 'nights', value: string) => {
-    setAccommodation(prev => prev.map(item => 
+    setAccommodation(prev => prev.map(item =>
       item.id === id ? { ...item, [field]: value } : item
     ));
   };
@@ -372,7 +372,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   };
 
   const updateReview = (index: number, field: keyof Review, value: string | number) => {
-    setReviews(prev => prev.map((review, i) => 
+    setReviews(prev => prev.map((review, i) =>
       i === index ? { ...review, [field]: value } : review
     ));
   };
@@ -400,7 +400,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const handleSubmit = async () => {
     try {
       setUploading(true);
-      
+
       // Upload new images first if any
       let uploadedNewImages = [];
       if (newImages.length > 0) {
@@ -463,11 +463,11 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         bookings: packageData?.bookings || 0,
         rating: packageData?.rating || 0
       };
-      
+
       // Update package via API
       console.log('Updating package with ID:', packageData?._id);
       console.log('Sending package data:', JSON.stringify(updatedPackageData, null, 2));
-      
+
       const response = await fetch(`/api/packages/${packageData?._id}`, {
         method: 'PUT',
         headers: {
@@ -475,7 +475,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         },
         body: JSON.stringify(updatedPackageData),
       });
-      
+
       console.log('Update response status:', response.status);
 
       if (response.ok) {
@@ -699,7 +699,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
               <label className="text-sm font-medium">Package Images</label>
               <span className="text-xs text-gray-500">Max 5 images total</span>
             </div>
-            
+
             {/* Hidden file input */}
             <input
               ref={fileInputRef}
@@ -1202,8 +1202,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                       </div>
                       <div>
                         <label className="text-sm font-medium">Rating (1-5)</label>
-                        <Select 
-                          value={review.rating.toString()} 
+                        <Select
+                          value={review.rating.toString()}
                           onValueChange={(value) => updateReview(index, 'rating', parseInt(value))}
                         >
                           <SelectTrigger>
@@ -1232,11 +1232,10 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                       <span>Date: {new Date(review.date).toLocaleDateString()}</span>
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-3 w-3 ${
-                              i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                            }`} 
+                          <Star
+                            key={i}
+                            className={`h-3 w-3 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                              }`}
                           />
                         ))}
                       </div>

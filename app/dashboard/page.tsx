@@ -10,9 +10,9 @@ import EditPackageModal from "../../components/EditPackageModal";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
-import { 
-  Package, 
-  Star, 
+import {
+  Package,
+  Star,
   Eye,
   Plus,
   Edit,
@@ -110,7 +110,7 @@ export default function DashboardPage() {
       // Check if current place filter is valid for the selected package type
       const domesticPlaces = ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'];
       const internationalPlaces = ['vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore'];
-      
+
       if (packageTypeFilter === 'domestic' && !domesticPlaces.includes(placeFilter)) {
         setPlaceFilter("all");
       } else if (packageTypeFilter === 'international' && !internationalPlaces.includes(placeFilter)) {
@@ -152,7 +152,7 @@ export default function DashboardPage() {
   const handlePackageCreated = async (packageData: any) => {
     try {
       console.log('Sending package data to API:', JSON.stringify(packageData, null, 2));
-      
+
       const response = await fetch('/api/packages', {
         method: 'POST',
         headers: {
@@ -160,11 +160,11 @@ export default function DashboardPage() {
         },
         body: JSON.stringify(packageData),
       });
-      
+
       console.log('API response status:', response.status);
       const result = await response.json();
       console.log('API response data:', result);
-      
+
       if (result.success) {
         setPackages(prev => [result.data, ...prev]);
         alert('Package created successfully!');
@@ -238,7 +238,7 @@ export default function DashboardPage() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      
+
       // Remove the _id so it creates a new package
       delete (duplicatePackage as any)._id;
 
@@ -283,7 +283,7 @@ export default function DashboardPage() {
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Created", bold: true })] })] }),
           ],
         }),
-        ...filteredPackages.map((pkg, index) => 
+        ...filteredPackages.map((pkg, index) =>
           new TableRow({
             children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (index + 1).toString() })] })] }),
@@ -355,7 +355,7 @@ export default function DashboardPage() {
       view.set(new Uint8Array(buffer));
       const blob = new Blob([arrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
       saveAs(blob, `tia-tours-packages-${new Date().toISOString().split('T')[0]}.docx`);
-      
+
       alert('Package data exported to Word document successfully!');
     } catch (error) {
       console.error('Error exporting to Word:', error);
@@ -562,7 +562,7 @@ export default function DashboardPage() {
       'mathura': 'Mathura',
       'vrindavan': 'Vrindavan'
     };
-    
+
     return placeMap[place] || place || 'N/A';
   };
 
@@ -604,7 +604,7 @@ export default function DashboardPage() {
         for (let i = 0; i < pkg.images.length; i++) {
           const image = pkg.images[i];
           const filename = image.url.split('/').pop() || `image_${i + 1}.jpg`;
-          
+
           children.push(
             new Paragraph({
               children: [new TextRun({ text: `Image ${i + 1}: ${filename}`, bold: true, size: 18 })],
@@ -621,7 +621,7 @@ export default function DashboardPage() {
               // Convert base64 to buffer for docx
               const base64Data = imageBase64.split(',')[1];
               const imageBuffer = Buffer.from(base64Data, 'base64');
-              
+
               children.push(
                 new Paragraph({
                   children: [
@@ -654,7 +654,7 @@ export default function DashboardPage() {
               }),
             );
           }
-          
+
           children.push(new Paragraph({ children: [new TextRun({ text: "" })] })); // Empty line
         }
       }
@@ -779,7 +779,7 @@ export default function DashboardPage() {
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Details", bold: true })] })] }),
                     ],
                   }),
-                  ...pkg.tourDetails.split('\n').filter(line => line.trim() !== '').map(line => 
+                  ...pkg.tourDetails.split('\n').filter(line => line.trim() !== '').map(line =>
                     new TableRow({
                       children: [
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: line.trim() })] })] }),
@@ -808,7 +808,7 @@ export default function DashboardPage() {
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Description", bold: true })] })] }),
                     ],
                   }),
-                  ...pkg.transportation.map(transport => 
+                  ...pkg.transportation.map(transport =>
                     new TableRow({
                       children: [
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: transport.type })] })] }),
@@ -841,7 +841,7 @@ export default function DashboardPage() {
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Nights", bold: true })] })] }),
                     ],
                   }),
-                  ...pkg.accommodation.map(accommodation => 
+                  ...pkg.accommodation.map(accommodation =>
                     new TableRow({
                       children: [
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: accommodation.city })] })] }),
@@ -872,7 +872,7 @@ export default function DashboardPage() {
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Inclusions", bold: true })] })] }),
                     ],
                   }),
-                  ...pkg.inclusions.map(inclusion => 
+                  ...pkg.inclusions.map(inclusion =>
                     new TableRow({
                       children: [
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `• ${inclusion}` })] })] }),
@@ -900,7 +900,7 @@ export default function DashboardPage() {
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Exclusions", bold: true })] })] }),
                     ],
                   }),
-                  ...pkg.exclusions.map(exclusion => 
+                  ...pkg.exclusions.map(exclusion =>
                     new TableRow({
                       children: [
                         new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `• ${exclusion}` })] })] }),
@@ -926,7 +926,7 @@ export default function DashboardPage() {
       const blob = new Blob([arrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
       const fileName = `${pkg.title.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.docx`;
       saveAs(blob, fileName);
-      
+
       alert('Package exported to Word document successfully!');
     } catch (error) {
       console.error('Error exporting package to Word:', error);
@@ -1079,13 +1079,13 @@ export default function DashboardPage() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               {/* Clear Filters Button */}
               {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all" || categoryFilter !== "all") && (
                 <div className="mt-4">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => {
                       setSearchTerm("");
                       setPackageTypeFilter("all");
@@ -1149,20 +1149,20 @@ export default function DashboardPage() {
                         </td>
                         <td className="p-3">
                           <Badge variant="outline">
-                            {pkg.place === 'darjeeling' ? 'Darjeeling' : 
-                             pkg.place === 'sikkim' ? 'Sikkim' :
-                             pkg.place === 'meghalaya' ? 'Meghalaya' :
-                             pkg.place === 'arunachal' ? 'Arunachal' :
-                             pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                             pkg.place === 'kashmir' ? 'Kashmir' :
-                             pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
-                             pkg.place === 'vietnam' ? 'Vietnam' :
-                             pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                             pkg.place === 'bali' ? 'Bali' :
-                             pkg.place === 'malaysia' ? 'Malaysia' :
-                             pkg.place === 'singapore' ? 'Singapore' :
-                             pkg.place === 'bhutan' ? 'Bhutan' :
-                             pkg.place === 'nepal' ? 'Nepal' : pkg.place}
+                            {pkg.place === 'darjeeling' ? 'Darjeeling' :
+                              pkg.place === 'sikkim' ? 'Sikkim' :
+                                pkg.place === 'meghalaya' ? 'Meghalaya' :
+                                  pkg.place === 'arunachal' ? 'Arunachal' :
+                                    pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
+                                      pkg.place === 'kashmir' ? 'Kashmir' :
+                                        pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
+                                          pkg.place === 'vietnam' ? 'Vietnam' :
+                                            pkg.place === 'sri-lanka' ? 'Sri Lanka' :
+                                              pkg.place === 'bali' ? 'Bali' :
+                                                pkg.place === 'malaysia' ? 'Malaysia' :
+                                                  pkg.place === 'singapore' ? 'Singapore' :
+                                                    pkg.place === 'bhutan' ? 'Bhutan' :
+                                                      pkg.place === 'nepal' ? 'Nepal' : pkg.place}
                           </Badge>
                         </td>
                         <td className="p-3">{pkg.duration || "N/A"}</td>
@@ -1177,24 +1177,24 @@ export default function DashboardPage() {
                         </td>
                         <td className="p-3">
                           <div className="flex items-center space-x-2">
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleViewPackage(pkg)}
                               title="View Package"
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleEditPackage(pkg)}
                               title="Edit Package"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleDuplicatePackage(pkg)}
                               title="Duplicate Package"
@@ -1202,8 +1202,8 @@ export default function DashboardPage() {
                             >
                               <Copy className="h-4 w-4" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleExportSinglePackageToWord(pkg)}
                               title="Export Package to Word"
@@ -1211,8 +1211,8 @@ export default function DashboardPage() {
                             >
                               <Download className="h-4 w-4" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleDeletePackage(pkg)}
                               title="Delete Package"
@@ -1240,9 +1240,9 @@ export default function DashboardPage() {
                           ) : (
                             <>
                               <p>No packages found matching your filters</p>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => {
                                   setSearchTerm("");
                                   setPackageTypeFilter("all");

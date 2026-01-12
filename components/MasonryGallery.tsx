@@ -109,13 +109,13 @@ const MasonryGallery = () => {
                 alt={image.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              
+
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                   <h3 className="font-semibold text-lg mb-2">{image.title}</h3>
                 </div>
-                
+
                 {/* Action Buttons */}
                 <div className="absolute top-4 right-4 flex space-x-2">
                   <Button
@@ -124,8 +124,8 @@ const MasonryGallery = () => {
                     className="bg-white/20 hover:bg-white/30 text-white"
                     onClick={() => toggleLike(image.id)}
                   >
-                    <Heart 
-                      className={`h-4 w-4 ${likedImages.has(image.id) ? 'fill-red-500 text-red-500' : ''}`} 
+                    <Heart
+                      className={`h-4 w-4 ${likedImages.has(image.id) ? 'fill-red-500 text-red-500' : ''}`}
                     />
                   </Button>
                   <Button

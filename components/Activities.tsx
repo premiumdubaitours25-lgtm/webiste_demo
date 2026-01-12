@@ -38,8 +38,8 @@ const Activities = () => {
           {activities.map((activity, index) => (
             <Card key={index} className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
               <div className="relative overflow-hidden">
-                <img 
-                  src={activity.image} 
+                <img
+                  src={activity.image}
                   alt={activity.title}
                   className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -47,7 +47,7 @@ const Activities = () => {
                   {activity.category}
                 </div>
               </div>
-              
+
               <CardHeader className="pb-2">
                 <h3 className="font-semibold text-lg leading-tight line-clamp-3">{activity.title}</h3>
               </CardHeader>

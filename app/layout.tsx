@@ -14,7 +14,12 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Premium Dubai Tours - Your Gateway to Dubai',
   description: 'Discover amazing tour packages in Dubai with Premium Dubai Tours',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({
@@ -24,7 +29,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-white`}>
+      <body className={`${inter.className} bg-white`} suppressHydrationWarning>
         <TooltipProvider>
           <InquiryFormProvider>
             <Navbar />

@@ -53,7 +53,7 @@ const PackagesPage = () => {
     const searchParam = urlParams.get('search');
     const locationParam = urlParams.get('location');
     const categoryParam = urlParams.get('category');
-    
+
     if (searchParam) {
       setSearchTerm(searchParam);
     }
@@ -63,7 +63,7 @@ const PackagesPage = () => {
     if (categoryParam) {
       setCategoryFilter(categoryParam);
     }
-    
+
     // Fetch packages with the search parameter from URL
     const fetchInitialPackages = async () => {
       try {
@@ -79,7 +79,7 @@ const PackagesPage = () => {
         setLoading(false);
       }
     };
-    
+
     fetchInitialPackages();
   }, []);
 
@@ -94,7 +94,7 @@ const PackagesPage = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    
+
     if (searchParam && searchParam !== searchTerm) {
       setSearchTerm(searchParam);
     }
@@ -243,12 +243,9 @@ const PackagesPage = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="Cultural">Cultural</SelectItem>
-                  <SelectItem value="Adventure">Adventure</SelectItem>
-                  <SelectItem value="Wildlife">Wildlife</SelectItem>
-                  <SelectItem value="Trekking">Trekking</SelectItem>
-                  <SelectItem value="Spiritual">Spiritual</SelectItem>
-                  <SelectItem value="Beach">Beach</SelectItem>
+                  <SelectItem value="Deluxe">Deluxe</SelectItem>
+                  <SelectItem value="Premium">Premium</SelectItem>
+                  <SelectItem value="Luxury">Luxury</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -357,12 +354,12 @@ const PackagesPage = () => {
                           </Badge>
                         </div>
                       </div>
-                      
+
                       <CardHeader>
                         <CardTitle className="text-xl">{pkg.title}</CardTitle>
                         <p className="text-gray-600">{pkg.subtitle}</p>
                       </CardHeader>
-                      
+
                       <CardContent>
                         <div className="space-y-3">
                           <div className="flex items-center text-sm text-gray-600">
@@ -382,11 +379,11 @@ const PackagesPage = () => {
                             {pkg.rating}/5 ({pkg.bookings} bookings)
                           </div>
                         </div>
-                        
+
                         <p className="text-gray-600 text-sm mt-4 line-clamp-3">
                           {pkg.about}
                         </p>
-                        
+
                         <div className="mt-6 flex space-x-2">
                           <Link href={`/packages/${pkg._id}`} className="flex-1">
                             <Button className="w-full">

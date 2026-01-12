@@ -74,9 +74,8 @@ const ImageCarousel = () => {
         {images.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? "opacity-100" : "opacity-0"
+              }`}
           >
             <img
               src={image.url}
@@ -106,11 +105,10 @@ const ImageCarousel = () => {
                     <div key={idx} className={line.trim() === "" ? "h-1" : ""}>
                       {line.trim() !== "" && (
                         <div
-                          className={`text-xs sm:text-sm md:text-base lg:text-lg ${
-                            line.includes("@") || line.includes("₹")
+                          className={`text-xs sm:text-sm md:text-base lg:text-lg ${line.includes("@") || line.includes("₹")
                               ? "font-semibold text-yellow-400"
                               : "text-white"
-                          }`}
+                            }`}
                         >
                           {line}
                         </div>
@@ -156,9 +154,8 @@ const ImageCarousel = () => {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentIndex ? "bg-white" : "bg-white/50"
-            }`}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-white" : "bg-white/50"
+              }`}
           />
         ))}
       </div>

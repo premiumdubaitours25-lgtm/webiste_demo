@@ -114,15 +114,15 @@ const DestinationsPage = () => {
     }).format(price);
   };
 
-  const groupedPackages = selectedCategory 
+  const groupedPackages = selectedCategory
     ? { [selectedCategory]: filteredPackages }
     : categories.reduce((acc, category) => {
-        const categoryPackages = filteredPackages.filter(pkg => pkg.packageCategory === category.name);
-        if (categoryPackages.length > 0) {
-          acc[category.name] = categoryPackages;
-        }
-        return acc;
-      }, {} as Record<string, Package[]>);
+      const categoryPackages = filteredPackages.filter(pkg => pkg.packageCategory === category.name);
+      if (categoryPackages.length > 0) {
+        acc[category.name] = categoryPackages;
+      }
+      return acc;
+    }, {} as Record<string, Package[]>);
 
   if (loading) {
     return (
@@ -149,7 +149,7 @@ const DestinationsPage = () => {
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
-        
+
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -202,31 +202,27 @@ const DestinationsPage = () => {
                 const IconComponent = category.icon;
                 const count = getCategoryCount(category.name);
                 return (
-                  <Card 
-                    key={index} 
-                    className={`text-center hover:shadow-lg transition-all cursor-pointer ${
-                      selectedCategory === category.name 
-                        ? 'ring-2 ring-primary bg-primary/5' 
+                  <Card
+                    key={index}
+                    className={`text-center hover:shadow-lg transition-all cursor-pointer ${selectedCategory === category.name
+                        ? 'ring-2 ring-primary bg-primary/5'
                         : 'hover:bg-gray-50'
-                    }`}
+                      }`}
                     onClick={() => setSelectedCategory(selectedCategory === category.name ? "" : category.name)}
                   >
                     <CardContent className="p-4">
-                      <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-3 ${
-                        selectedCategory === category.name 
-                          ? 'bg-primary text-white' 
+                      <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-3 ${selectedCategory === category.name
+                          ? 'bg-primary text-white'
                           : `${category.color} text-white`
-                      }`}>
+                        }`}>
                         <IconComponent className="h-6 w-6" />
                       </div>
-                      <h3 className={`text-sm font-semibold mb-1 ${
-                        selectedCategory === category.name ? 'text-primary' : 'text-gray-900'
-                      }`}>
+                      <h3 className={`text-sm font-semibold mb-1 ${selectedCategory === category.name ? 'text-primary' : 'text-gray-900'
+                        }`}>
                         {category.name}
                       </h3>
-                      <p className={`text-xs font-medium ${
-                        selectedCategory === category.name ? 'text-primary' : 'text-primary'
-                      }`}>
+                      <p className={`text-xs font-medium ${selectedCategory === category.name ? 'text-primary' : 'text-primary'
+                        }`}>
                         {count} Package{count !== 1 ? 's' : ''}
                       </p>
                     </CardContent>
@@ -234,12 +230,12 @@ const DestinationsPage = () => {
                 );
               })}
             </div>
-            
+
             {/* Clear Filter Button */}
             {selectedCategory && (
               <div className="text-center mt-6">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setSelectedCategory("")}
                   className="text-primary border-primary hover:bg-primary hover:text-white"
                 >
@@ -312,12 +308,12 @@ const DestinationsPage = () => {
                                 </Badge>
                               </div>
                             </div>
-                            
+
                             <CardHeader>
                               <CardTitle className="text-xl">{pkg.title}</CardTitle>
                               <p className="text-gray-600">{pkg.subtitle}</p>
                             </CardHeader>
-                            
+
                             <CardContent>
                               <div className="space-y-3">
                                 <div className="flex items-center text-sm text-gray-600">
@@ -337,11 +333,11 @@ const DestinationsPage = () => {
                                   {pkg.rating}/5 ({pkg.bookings} bookings)
                                 </div>
                               </div>
-                              
+
                               <p className="text-gray-600 text-sm mt-4 line-clamp-3">
                                 {pkg.about}
                               </p>
-                              
+
                               <div className="mt-6 flex space-x-2">
                                 <Link href={`/packages/${pkg._id}`} className="flex-1">
                                   <Button className="w-full">

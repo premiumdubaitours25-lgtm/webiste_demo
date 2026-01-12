@@ -64,7 +64,7 @@ const InternationalPackagesPage = () => {
   const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 100000],
+    priceRange: [0, 20000],
     durationRange: [1, 30],
     location: "international",
     departureCity: [],
@@ -80,9 +80,9 @@ const InternationalPackagesPage = () => {
     // Check for URL query parameters first
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    
+
     console.log('Initial mount, search param:', searchParam);
-    
+
     if (searchParam) {
       console.log('Setting initial search term:', searchParam);
       setFilters(prev => ({
@@ -90,7 +90,7 @@ const InternationalPackagesPage = () => {
         searchTerm: searchParam
       }));
     }
-    
+
     // Fetch packages after setting search term
     fetchPackages();
   }, []);
@@ -110,7 +110,7 @@ const InternationalPackagesPage = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    
+
     if (searchParam && searchParam !== filters.searchTerm) {
       setFilters(prev => ({
         ...prev,
@@ -129,7 +129,7 @@ const InternationalPackagesPage = () => {
       const baseUrl = '/api/packages';
       const searchParam = filters.searchTerm ? `?search=${encodeURIComponent(filters.searchTerm)}` : '';
       const url = `${baseUrl}${searchParam}`;
-      
+
       const response = await fetch(url);
       const result = await response.json();
       console.log('API Response:', result);
@@ -137,20 +137,20 @@ const InternationalPackagesPage = () => {
         console.log('All packages:', result.data);
         // Filter for international packages based on packageType and legacy destinations
         const internationalPackages = result.data.filter((pkg: Package) => {
-          const isInternational = pkg.packageType === 'international' || 
-                                 pkg.place === 'nepal' || 
-                                 pkg.place === 'bhutan' ||
-                                 pkg.place === 'dubai' ||
-                                 pkg.place === 'vietnam' ||
-                                 pkg.place === 'sri-lanka' ||
-                                 pkg.place === 'bali' ||
-                                 pkg.place === 'malaysia' ||
-                                 pkg.place === 'singapore';
+          const isInternational = pkg.packageType === 'international' ||
+            pkg.place === 'nepal' ||
+            pkg.place === 'bhutan' ||
+            pkg.place === 'dubai' ||
+            pkg.place === 'vietnam' ||
+            pkg.place === 'sri-lanka' ||
+            pkg.place === 'bali' ||
+            pkg.place === 'malaysia' ||
+            pkg.place === 'singapore';
           console.log(`Package ${pkg.title}: packageType=${pkg.packageType}, place=${pkg.place}, isInternational=${isInternational}`);
           return isInternational;
         });
         console.log('Filtered international packages:', internationalPackages);
-        
+
         // If no international packages found, create sample data for demonstration
         if (internationalPackages.length === 0) {
           console.log('No international packages found, creating sample data');
@@ -232,7 +232,7 @@ const InternationalPackagesPage = () => {
     }
 
     // Price range filter
-    filtered = filtered.filter(pkg => 
+    filtered = filtered.filter(pkg =>
       pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
     );
 
@@ -257,8 +257,8 @@ const InternationalPackagesPage = () => {
     if (filters.location !== "all") {
       filtered = filtered.filter(pkg => {
         if (filters.location === "international") {
-          return pkg.packageType === 'international' || 
-                 ['nepal', 'bhutan', 'dubai', 'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore'].includes(pkg.place?.toLowerCase());
+          return pkg.packageType === 'international' ||
+            ['nepal', 'bhutan', 'dubai', 'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore'].includes(pkg.place?.toLowerCase());
         }
         return pkg.place?.toLowerCase() === filters.location.toLowerCase();
       });
@@ -268,7 +268,7 @@ const InternationalPackagesPage = () => {
     if (filters.tourType.length > 0) {
       filtered = filtered.filter(pkg => {
         const packageText = (pkg.title + ' ' + pkg.subtitle + ' ' + pkg.about).toLowerCase();
-        return filters.tourType.some(type => 
+        return filters.tourType.some(type =>
           packageText.includes(type.toLowerCase())
         );
       });
@@ -294,7 +294,7 @@ const InternationalPackagesPage = () => {
 
     // Destination filter
     if (selectedDestination) {
-      filtered = filtered.filter(pkg => 
+      filtered = filtered.filter(pkg =>
         pkg.place?.toLowerCase() === selectedDestination.toLowerCase()
       );
     }
@@ -342,7 +342,7 @@ const InternationalPackagesPage = () => {
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
-        
+
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -375,42 +375,39 @@ const InternationalPackagesPage = () => {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {popularCountries.map((country, index) => (
-                <Card 
-                  key={index} 
-                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${
-                    selectedDestination === country.name.toLowerCase() 
-                      ? 'ring-2 ring-primary bg-primary/5' 
-                      : 'hover:bg-gray-50'
-                  }`}
+                <Card
+                  key={index}
+                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${selectedDestination === country.name.toLowerCase()
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'hover:bg-gray-50'
+                    }`}
                   onClick={() => setSelectedDestination(
                     selectedDestination === country.name.toLowerCase() ? "" : country.name.toLowerCase()
                   )}
                 >
                   <CardContent className="p-6">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
-                      selectedDestination === country.name.toLowerCase() 
-                        ? 'bg-primary text-white' 
-                        : 'bg-primary/10 text-primary'
-                    }`}>
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${selectedDestination === country.name.toLowerCase()
+                      ? 'bg-primary text-white'
+                      : 'bg-primary/10 text-primary'
+                      }`}>
                       <country.icon className="h-8 w-8" />
                     </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${
-                      selectedDestination === country.name.toLowerCase() 
-                        ? 'text-primary' 
-                        : 'text-gray-900'
-                    }`}>
+                    <h3 className={`text-lg font-semibold mb-2 ${selectedDestination === country.name.toLowerCase()
+                      ? 'text-primary'
+                      : 'text-gray-900'
+                      }`}>
                       {country.name}
                     </h3>
                   </CardContent>
                 </Card>
               ))}
             </div>
-            
+
             {/* Clear Filter Button */}
             {selectedDestination && (
               <div className="text-center mt-6">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setSelectedDestination("")}
                   className="text-primary border-primary hover:bg-primary hover:text-white"
                 >
@@ -429,12 +426,12 @@ const InternationalPackagesPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               {/* Filter Sidebar */}
               <div className="lg:col-span-1">
-                <PackageFilter 
+                <PackageFilter
                   onFilterChange={handleFilterChange}
                   packageType="international"
                 />
               </div>
-              
+
               {/* Packages Grid */}
               <div className="lg:col-span-3">
                 {filteredPackages.length === 0 ? (
@@ -462,100 +459,100 @@ const InternationalPackagesPage = () => {
                       Clear Filters
                     </Button>
                   </div>
-            ) : (
-              <>
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {selectedDestination 
-                      ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1)} Packages`
-                      : 'International Packages'
-                    }
-                  </h2>
-                  <div className="text-sm text-gray-600">
-                    {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredPackages.map((pkg) => (
-                    <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="relative">
-                        {pkg.images && pkg.images.length > 0 ? (
-                          <div className="aspect-video relative">
-                            <Image
-                              src={pkg.images[0].url}
-                              alt={pkg.images[0].alt || pkg.title}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                            <Globe className="h-12 w-12 text-gray-400" />
-                          </div>
-                        )}
-                        <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                          {formatPrice(pkg.price)}
-                        </Badge>
-                        <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          {pkg.place === 'bhutan' ? 'Bhutan' :
-                           pkg.place === 'nepal' ? 'Nepal' :
-                           pkg.place === 'dubai' ? 'Dubai' :
-                           pkg.place === 'vietnam' ? 'Vietnam' : 
-                           pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                           pkg.place === 'bali' ? 'Bali' :
-                           pkg.place === 'malaysia' ? 'Malaysia' :
-                           pkg.place === 'singapore' ? 'Singapore' : pkg.place}
-                        </Badge>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center mb-8">
+                      <h2 className="text-2xl font-bold text-gray-900">
+                        {selectedDestination
+                          ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1)} Packages`
+                          : 'International Packages'
+                        }
+                      </h2>
+                      <div className="text-sm text-gray-600">
+                        {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                       </div>
-                      
-                      <CardHeader>
-                        <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                        <p className="text-gray-600">{pkg.subtitle}</p>
-                      </CardHeader>
-                      
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <MapPin className="h-4 w-4 mr-2" />
-                            {pkg.location}
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {filteredPackages.map((pkg) => (
+                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                          <div className="relative">
+                            {pkg.images && pkg.images.length > 0 ? (
+                              <div className="aspect-video relative">
+                                <Image
+                                  src={pkg.images[0].url}
+                                  alt={pkg.images[0].alt || pkg.title}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                                <Globe className="h-12 w-12 text-gray-400" />
+                              </div>
+                            )}
+                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
+                              {formatPrice(pkg.price)}
+                            </Badge>
+                            <Badge className="absolute top-4 left-4 bg-primary text-white">
+                              {pkg.place === 'bhutan' ? 'Bhutan' :
+                                pkg.place === 'nepal' ? 'Nepal' :
+                                  pkg.place === 'dubai' ? 'Dubai' :
+                                    pkg.place === 'vietnam' ? 'Vietnam' :
+                                      pkg.place === 'sri-lanka' ? 'Sri Lanka' :
+                                        pkg.place === 'bali' ? 'Bali' :
+                                          pkg.place === 'malaysia' ? 'Malaysia' :
+                                            pkg.place === 'singapore' ? 'Singapore' : pkg.place}
+                            </Badge>
                           </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Clock className="h-4 w-4 mr-2" />
-                            {pkg.duration}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Users className="h-4 w-4 mr-2" />
-                            {pkg.capacity}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Star className="h-4 w-4 mr-2" />
-                            {pkg.rating}/5
-                          </div>
-                        </div>
-                        
-                        <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                          {pkg.about}
-                        </p>
-                        
-                        <div className="mt-6 flex space-x-2">
-                          <Link href={`/packages/${pkg._id}`} className="flex-1">
-                            <Button className="w-full">
-                              View Details
-                            </Button>
-                          </Link>
-                          <Link href="/contact" className="flex-1">
-                            <Button variant="outline" className="w-full">
-                              Book Now
-                            </Button>
-                          </Link>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </>
-            )}
+
+                          <CardHeader>
+                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
+                            <p className="text-gray-600">{pkg.subtitle}</p>
+                          </CardHeader>
+
+                          <CardContent>
+                            <div className="space-y-3">
+                              <div className="flex items-center text-sm text-gray-600">
+                                <MapPin className="h-4 w-4 mr-2" />
+                                {pkg.location}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Clock className="h-4 w-4 mr-2" />
+                                {pkg.duration}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Users className="h-4 w-4 mr-2" />
+                                {pkg.capacity}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Star className="h-4 w-4 mr-2" />
+                                {pkg.rating}/5
+                              </div>
+                            </div>
+
+                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
+                              {pkg.about}
+                            </p>
+
+                            <div className="mt-6 flex space-x-2">
+                              <Link href={`/packages/${pkg._id}`} className="flex-1">
+                                <Button className="w-full">
+                                  View Details
+                                </Button>
+                              </Link>
+                              <Link href="/contact" className="flex-1">
+                                <Button variant="outline" className="w-full">
+                                  Book Now
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

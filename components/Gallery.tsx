@@ -28,8 +28,8 @@ const Gallery = () => {
           {images.map((image, index) => (
             <Card key={index} className="overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300">
               <div className="relative overflow-hidden">
-                <img 
-                  src={image} 
+                <img
+                  src={image}
                   alt={`Gallery ${index + 1}`}
                   className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
                 />

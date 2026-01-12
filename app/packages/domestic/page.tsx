@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart } from "lucide-react";
+import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, ShieldCheck, Crown, Gem } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -64,7 +64,7 @@ const DomesticPackagesPage = () => {
   const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 100000],
+    priceRange: [0, 20000],
     durationRange: [1, 30],
     location: "domestic",
     departureCity: [],
@@ -74,15 +74,15 @@ const DomesticPackagesPage = () => {
       endDate: ""
     }
   });
-  const [selectedDestination, setSelectedDestination] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     // Check for URL query parameters first
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    
+
     console.log('Initial mount, search param:', searchParam);
-    
+
     if (searchParam) {
       console.log('Setting initial search term:', searchParam);
       setFilters(prev => ({
@@ -90,14 +90,14 @@ const DomesticPackagesPage = () => {
         searchTerm: searchParam
       }));
     }
-    
+
     // Fetch packages after setting search term
     fetchPackages();
   }, []);
 
   useEffect(() => {
     filterPackages();
-  }, [packages, filters, selectedDestination]);
+  }, [packages, filters, selectedCategory]);
 
   // Refetch packages when searchTerm changes
   useEffect(() => {
@@ -110,7 +110,7 @@ const DomesticPackagesPage = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    
+
     if (searchParam && searchParam !== filters.searchTerm) {
       setFilters(prev => ({
         ...prev,
@@ -129,7 +129,7 @@ const DomesticPackagesPage = () => {
       const baseUrl = '/api/packages';
       const searchParam = filters.searchTerm ? `?search=${encodeURIComponent(filters.searchTerm)}` : '';
       const url = `${baseUrl}${searchParam}`;
-      
+
       const response = await fetch(url);
       const result = await response.json();
       if (result.success) {
@@ -160,7 +160,7 @@ const DomesticPackagesPage = () => {
     }
 
     // Price range filter
-    filtered = filtered.filter(pkg => 
+    filtered = filtered.filter(pkg =>
       pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
     );
 
@@ -185,8 +185,8 @@ const DomesticPackagesPage = () => {
     if (filters.location !== "all") {
       filtered = filtered.filter(pkg => {
         if (filters.location === "domestic") {
-          return pkg.packageType === 'domestic' || 
-                 ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'].includes(pkg.place?.toLowerCase());
+          return pkg.packageType === 'domestic' ||
+            ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'].includes(pkg.place?.toLowerCase());
         }
         return pkg.place?.toLowerCase() === filters.location.toLowerCase();
       });
@@ -196,7 +196,7 @@ const DomesticPackagesPage = () => {
     if (filters.tourType.length > 0) {
       filtered = filtered.filter(pkg => {
         const packageText = (pkg.title + ' ' + pkg.subtitle + ' ' + pkg.about).toLowerCase();
-        return filters.tourType.some(type => 
+        return filters.tourType.some(type =>
           packageText.includes(type.toLowerCase())
         );
       });
@@ -220,10 +220,10 @@ const DomesticPackagesPage = () => {
       });
     }
 
-    // Destination filter
-    if (selectedDestination) {
-      filtered = filtered.filter(pkg => 
-        pkg.place?.toLowerCase() === selectedDestination.toLowerCase()
+    // Category filter (Experience Tiers)
+    if (selectedCategory) {
+      filtered = filtered.filter(pkg =>
+        pkg.packageCategory?.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
 
@@ -238,11 +238,10 @@ const DomesticPackagesPage = () => {
     }).format(price);
   };
 
-  const popularDestinations = [
-    { name: "Burj Khalifa", icon: Camera, place: "burj-khalifa" },
-    { name: "Palm Jumeirah", icon: Camera, place: "palm-jumeirah" },
-    { name: "Dubai Marina", icon: Camera, place: "dubai-marina" },
-    { name: "Dubai Mall", icon: Camera, place: "dubai-mall" },
+  const experienceTiers = [
+    { name: "Deluxe Tour", icon: ShieldCheck, category: "Deluxe" },
+    { name: "Premium Tour", icon: Crown, category: "Premium" },
+    { name: "Luxury Tour", icon: Gem, category: "Luxury" },
   ];
 
   if (loading) {
@@ -270,7 +269,7 @@ const DomesticPackagesPage = () => {
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
-        
+
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -294,52 +293,49 @@ const DomesticPackagesPage = () => {
         </div>
       </section>
 
-      {/* Popular Destinations */}
+      {/* Experience Tiers */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-              Popular Destinations in Dubai
+              Choose Your Experience
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {popularDestinations.map((destination, index) => (
-                <Card 
-                  key={index} 
-                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${
-                    selectedDestination === destination.place 
-                      ? 'ring-2 ring-primary bg-primary/5' 
-                      : 'hover:bg-gray-50'
-                  }`}
-                  onClick={() => setSelectedDestination(
-                    selectedDestination === destination.place ? "" : destination.place
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {experienceTiers.map((tier, index) => (
+                <Card
+                  key={index}
+                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${selectedCategory === tier.category
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'hover:bg-gray-50'
+                    }`}
+                  onClick={() => setSelectedCategory(
+                    selectedCategory === tier.category ? "" : tier.category
                   )}
                 >
                   <CardContent className="p-6">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
-                      selectedDestination === destination.place 
-                        ? 'bg-primary text-white' 
-                        : 'bg-primary/10 text-primary'
-                    }`}>
-                      <destination.icon className="h-8 w-8" />
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${selectedCategory === tier.category
+                      ? 'bg-primary text-white'
+                      : 'bg-primary/10 text-primary'
+                      }`}>
+                      <tier.icon className="h-8 w-8" />
                     </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${
-                      selectedDestination === destination.place 
-                        ? 'text-primary' 
-                        : 'text-gray-900'
-                    }`}>
-                      {destination.name}
+                    <h3 className={`text-lg font-semibold mb-2 ${selectedCategory === tier.category
+                      ? 'text-primary'
+                      : 'text-gray-900'
+                      }`}>
+                      {tier.name}
                     </h3>
                   </CardContent>
                 </Card>
               ))}
             </div>
-            
+
             {/* Clear Filter Button */}
-            {selectedDestination && (
+            {selectedCategory && (
               <div className="text-center mt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setSelectedDestination("")}
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedCategory("")}
                   className="text-primary border-primary hover:bg-primary hover:text-white"
                 >
                   Clear Filter
@@ -357,132 +353,132 @@ const DomesticPackagesPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               {/* Filter Sidebar */}
               <div className="lg:col-span-1">
-                <PackageFilter 
+                <PackageFilter
                   onFilterChange={handleFilterChange}
                   packageType="domestic"
                 />
               </div>
-              
+
               {/* Packages Grid */}
               <div className="lg:col-span-3">
-            {filteredPackages.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                  <Search className="h-12 w-12 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No domestic packages found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
-                <Button onClick={() => {
-                  setFilters({
-                    searchTerm: "",
-                    priceRange: [0, 50000],
-                    durationRange: [1, 30],
-                    location: "domestic",
-                    departureCity: [],
-                    tourType: [],
-                    departBetween: {
-                      startDate: "",
-                      endDate: ""
-                    }
-                  });
-                  setSelectedDestination("");
-                }}>
-                  Clear Filters
-                </Button>
-              </div>
-            ) : (
-              <>
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {selectedDestination 
-                      ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1).replace('-', ' ')} Packages`
-                      : 'Domestic Packages'
-                    }
-                  </h2>
-                  <div className="text-sm text-gray-600">
-                    {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
+                {filteredPackages.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
+                      <Search className="h-12 w-12 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No domestic packages found</h3>
+                    <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
+                    <Button onClick={() => {
+                      setFilters({
+                        searchTerm: "",
+                        priceRange: [0, 50000],
+                        durationRange: [1, 30],
+                        location: "domestic",
+                        departureCity: [],
+                        tourType: [],
+                        departBetween: {
+                          startDate: "",
+                          endDate: ""
+                        }
+                      });
+                      setSelectedCategory("");
+                    }}>
+                      Clear Filters
+                    </Button>
                   </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredPackages.map((pkg) => (
-                    <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="relative">
-                        {pkg.images && pkg.images.length > 0 ? (
-                          <div className="aspect-video relative">
-                            <Image
-                              src={pkg.images[0].url}
-                              alt={pkg.images[0].alt || pkg.title}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                            <Mountain className="h-12 w-12 text-gray-400" />
-                          </div>
-                        )}
-                        <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                          {formatPrice(pkg.price)}
-                        </Badge>
-                        <Badge className="absolute top-4 left-4 bg-primary text-white">
-                          {pkg.place === 'darjeeling' ? 'Darjeeling' : 
-                           pkg.place === 'sikkim' ? 'Sikkim' :
-                           pkg.place === 'meghalaya' ? 'Meghalaya' :
-                           pkg.place === 'arunachal' ? 'Arunachal' :
-                           pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                           pkg.place === 'kashmir' ? 'Kashmir' :
-                           pkg.place === 'leh-ladakh' ? 'Leh Ladakh' : pkg.place}
-                        </Badge>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center mb-8">
+                      <h2 className="text-2xl font-bold text-gray-900">
+                        {selectedCategory
+                          ? `${selectedCategory} Experience Packages`
+                          : 'Domestic Packages'
+                        }
+                      </h2>
+                      <div className="text-sm text-gray-600">
+                        {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
                       </div>
-                      
-                      <CardHeader>
-                        <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                        <p className="text-gray-600">{pkg.subtitle}</p>
-                      </CardHeader>
-                      
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <MapPin className="h-4 w-4 mr-2" />
-                            {pkg.location}
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {filteredPackages.map((pkg) => (
+                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                          <div className="relative">
+                            {pkg.images && pkg.images.length > 0 ? (
+                              <div className="aspect-video relative">
+                                <Image
+                                  src={pkg.images[0].url}
+                                  alt={pkg.images[0].alt || pkg.title}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                                <Mountain className="h-12 w-12 text-gray-400" />
+                              </div>
+                            )}
+                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
+                              {formatPrice(pkg.price)}
+                            </Badge>
+                            <Badge className="absolute top-4 left-4 bg-primary text-white">
+                              {pkg.place === 'darjeeling' ? 'Darjeeling' :
+                                pkg.place === 'sikkim' ? 'Sikkim' :
+                                  pkg.place === 'meghalaya' ? 'Meghalaya' :
+                                    pkg.place === 'arunachal' ? 'Arunachal' :
+                                      pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
+                                        pkg.place === 'kashmir' ? 'Kashmir' :
+                                          pkg.place === 'leh-ladakh' ? 'Leh Ladakh' : pkg.place}
+                            </Badge>
                           </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Clock className="h-4 w-4 mr-2" />
-                            {pkg.duration}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Users className="h-4 w-4 mr-2" />
-                            {pkg.capacity}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Star className="h-4 w-4 mr-2" />
-                            {pkg.rating}/5
-                          </div>
-                        </div>
-                        
-                        <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                          {pkg.about}
-                        </p>
-                        
-                        <div className="mt-6 flex space-x-2">
-                          <Link href={`/packages/${pkg._id}`} className="flex-1">
-                            <Button className="w-full">
-                              View Details
-                            </Button>
-                          </Link>
-                          <Link href="/contact" className="flex-1">
-                            <Button variant="outline" className="w-full">
-                              Book Now
-                            </Button>
-                          </Link>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </>
-            )}
+
+                          <CardHeader>
+                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
+                            <p className="text-gray-600">{pkg.subtitle}</p>
+                          </CardHeader>
+
+                          <CardContent>
+                            <div className="space-y-3">
+                              <div className="flex items-center text-sm text-gray-600">
+                                <MapPin className="h-4 w-4 mr-2" />
+                                {pkg.location}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Clock className="h-4 w-4 mr-2" />
+                                {pkg.duration}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Users className="h-4 w-4 mr-2" />
+                                {pkg.capacity}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Star className="h-4 w-4 mr-2" />
+                                {pkg.rating}/5
+                              </div>
+                            </div>
+
+                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
+                              {pkg.about}
+                            </p>
+
+                            <div className="mt-6 flex space-x-2">
+                              <Link href={`/packages/${pkg._id}`} className="flex-1">
+                                <Button className="w-full">
+                                  View Details
+                                </Button>
+                              </Link>
+                              <Link href="/contact" className="flex-1">
+                                <Button variant="outline" className="w-full">
+                                  Book Now
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

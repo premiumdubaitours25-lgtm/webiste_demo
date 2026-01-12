@@ -146,8 +146,8 @@ const PackageSchema = new mongoose.Schema({
   packageCategory: {
     type: String,
     required: true,
-    enum: ['Cultural', 'Adventure', 'Wildlife', 'Trekking', 'Spiritual', 'Beach'],
-    default: 'Cultural',
+    enum: ['Deluxe', 'Premium', 'Luxury', 'Cultural', 'Adventure', 'Wildlife', 'Trekking', 'Spiritual', 'Beach'],
+    default: 'Deluxe',
   },
   images: [ImageSchema],
   itinerary: [ItineraryDaySchema],
@@ -178,7 +178,7 @@ const PackageSchema = new mongoose.Schema({
   },
 });
 
-PackageSchema.pre('save', function(next) {
+PackageSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });

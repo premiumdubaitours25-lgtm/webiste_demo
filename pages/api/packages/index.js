@@ -18,7 +18,7 @@ const getDemoPackages = () => {
       capacity: '2-10 persons',
       packageType: 'international',
       place: 'dubai',
-      packageCategory: 'Cultural',
+      packageCategory: 'Deluxe',
       images: [
         {
           public_id: 'demo-dubai-1',
@@ -56,7 +56,7 @@ const getDemoPackages = () => {
       capacity: '2-15 persons',
       packageType: 'international',
       place: 'dubai',
-      packageCategory: 'Cultural',
+      packageCategory: 'Deluxe',
       images: [
         {
           public_id: 'demo-abu-dhabi-1',
@@ -94,7 +94,7 @@ const getDemoPackages = () => {
       capacity: '1-20 persons',
       packageType: 'international',
       place: 'dubai',
-      packageCategory: 'Adventure',
+      packageCategory: 'Luxury',
       images: [
         {
           public_id: 'demo-desert-1',
@@ -127,7 +127,7 @@ export default async function handler(req, res) {
   const dbConnection = await connectDB();
   const connected = isConnected();
   const useDemoData = !dbConnection || !connected;
-  
+
   // Log connection status for debugging
   if (req.method === 'POST') {
     console.log('POST Request - Connection Status:', {
@@ -143,12 +143,12 @@ export default async function handler(req, res) {
       if (useDemoData) {
         console.log('Using demo data for packages');
         let packages = getDemoPackages();
-        
+
         // Apply search filter if provided
         const { search } = req.query;
         if (search) {
           const searchLower = search.toLowerCase();
-          packages = packages.filter(pkg => 
+          packages = packages.filter(pkg =>
             pkg.title.toLowerCase().includes(searchLower) ||
             pkg.subtitle.toLowerCase().includes(searchLower) ||
             pkg.location.toLowerCase().includes(searchLower) ||
@@ -156,13 +156,13 @@ export default async function handler(req, res) {
             pkg.tourDetails.toLowerCase().includes(searchLower)
           );
         }
-        
+
         return res.status(200).json({ success: true, data: packages, demo: true });
       }
 
       const { search } = req.query;
       let query = {};
-      
+
       // If search parameter is provided, create a search query
       if (search) {
         query = {
@@ -175,15 +175,15 @@ export default async function handler(req, res) {
           ]
         };
       }
-      
+
       const packages = await Package.find(query).sort({ createdAt: -1 });
-      
+
       // If no packages found, return demo data
       if (packages.length === 0) {
         console.log('No packages found in database, using demo data');
         return res.status(200).json({ success: true, data: getDemoPackages(), demo: true });
       }
-      
+
       res.status(200).json({ success: true, data: packages });
     } catch (error) {
       console.error('Error fetching packages, using demo data:', error.message);
@@ -192,12 +192,12 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'POST') {
     if (useDemoData) {
-      return res.status(503).json({ 
-        success: false, 
-        error: 'Database not available. Cannot save package in demo mode.' 
+      return res.status(503).json({
+        success: false,
+        error: 'Database not available. Cannot save package in demo mode.'
       });
     }
-    
+
     try {
       console.log('Received package data:', JSON.stringify(req.body, null, 2));
       const packageData = req.body;

@@ -59,20 +59,20 @@ const Packages = () => {
           {packages.map((pkg, index) => (
             <Card key={index} className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
               <div className="relative overflow-hidden">
-                <img 
-                  src={pkg.image} 
+                <img
+                  src={pkg.image}
                   alt={pkg.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
-              
+
               <CardHeader className="pb-2">
                 <h3 className="font-semibold text-lg leading-tight line-clamp-2">{pkg.title}</h3>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground text-sm line-clamp-3">{pkg.description}</p>
-                
+
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center space-x-1">
                     <CalendarDays className="h-4 w-4 text-primary" />
@@ -83,7 +83,7 @@ const Packages = () => {
                     <span>{pkg.destination}</span>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-2xl font-bold text-primary">

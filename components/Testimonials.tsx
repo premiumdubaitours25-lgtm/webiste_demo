@@ -46,8 +46,8 @@ const Testimonials = () => {
             <Card key={index} className="p-6 hover:shadow-lg transition-shadow duration-300">
               <CardContent className="p-0 space-y-4">
                 <div className="flex items-center space-x-4">
-                  <img 
-                    src={testimonial.image} 
+                  <img
+                    src={testimonial.image}
                     alt={testimonial.name}
                     className="w-16 h-16 rounded-full object-cover"
                   />
@@ -56,13 +56,13 @@ const Testimonials = () => {
                     <p className="text-sm text-muted-foreground">{testimonial.location}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex space-x-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-primary text-primary" />
                   ))}
                 </div>
-                
+
                 <p className="text-muted-foreground text-sm italic">"{testimonial.text}"</p>
               </CardContent>
             </Card>

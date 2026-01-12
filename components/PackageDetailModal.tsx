@@ -116,7 +116,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-2">
@@ -128,7 +128,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-2">
@@ -140,7 +140,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-2">
@@ -402,7 +402,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4 text-center">
                 <div className="flex items-center justify-center space-x-2">
@@ -414,7 +414,7 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-4 text-center">
                 <div className="flex items-center justify-center space-x-2">
