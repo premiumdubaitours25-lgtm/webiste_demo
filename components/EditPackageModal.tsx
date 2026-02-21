@@ -235,10 +235,10 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         packageType: packageData.packageType || "",
         place: packageData.place || "",
         packageCategory: mappedCategory,
-        bestTimeToVisit: packageData.bestTimeToVisit || {
-          yearRound: "",
-          winter: "",
-          summer: "",
+        bestTimeToVisit: {
+          yearRound: packageData.bestTimeToVisit?.yearRound || "",
+          winter: packageData.bestTimeToVisit?.winter || "",
+          summer: packageData.bestTimeToVisit?.summer || "",
         },
       });
 
@@ -709,7 +709,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       }
     } catch (error) {
       console.error('Error updating package:', error);
-      alert(`Error updating package: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+      alert(`Error updating package: ${errorMessage}`);
     } finally {
       setUploading(false);
     }

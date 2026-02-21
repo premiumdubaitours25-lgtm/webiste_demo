@@ -263,7 +263,8 @@ export default function DashboardPage() {
         }
       } catch (error) {
         console.error('Error deleting package:', error);
-        alert(`Error deleting package: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+        alert(`Error deleting package: ${errorMessage}`);
       }
     }
   };
@@ -308,7 +309,8 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.error('Error duplicating package:', error);
-      alert(`Error duplicating package: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+      alert(`Error duplicating package: ${errorMessage}`);
     }
   };
 

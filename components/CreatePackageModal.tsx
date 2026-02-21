@@ -328,7 +328,8 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       handleClose();
     } catch (error) {
       console.error('Error creating package:', error);
-      alert('Failed to create package. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+      alert(`Failed to create package: ${errorMessage}`);
     } finally {
       setUploading(false);
     }
