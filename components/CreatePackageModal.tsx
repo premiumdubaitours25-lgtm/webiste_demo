@@ -249,6 +249,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       ideaFor: "",
       abstract: "",
       tourOverview: "",
+      packageCategory: "Regular",
       bestTimeToVisit: {
         yearRound: "",
         winter: "",

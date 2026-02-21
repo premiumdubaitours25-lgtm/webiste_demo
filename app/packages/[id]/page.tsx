@@ -125,6 +125,10 @@ const PackageDetailPage = () => {
     const fetchPackage = async () => {
       if (!params?.id) return;
       
+      // Ensure id is a string (Next.js params can be string | string[])
+      const packageId = Array.isArray(params.id) ? params.id[0] : params.id;
+      if (!packageId) return;
+      
       // Skip API fetch for demo packages (handled by second useEffect)
       // Attraction packages (like burj-khalifa-tickets) should always fetch from API
       const demoPackageIds = [
@@ -143,9 +147,9 @@ const PackageDetailPage = () => {
       ];
       
       // For attraction packages, always fetch from API (no hardcoded fallback)
-      const isAttractionPackage = params.id.includes('ticket') || params.id.includes('attraction') || params.id === 'burj-khalifa-tickets';
+      const isAttractionPackage = packageId.includes('ticket') || packageId.includes('attraction') || packageId === 'burj-khalifa-tickets';
       
-      if (!isAttractionPackage && demoPackageIds.includes(params.id)) {
+      if (!isAttractionPackage && demoPackageIds.includes(packageId)) {
         return;
       }
       
@@ -154,7 +158,7 @@ const PackageDetailPage = () => {
         setError(null);
         
         // Always fetch from API for attraction packages
-        const response = await fetch(`/api/packages/${params.id}`);
+        const response = await fetch(`/api/packages/${packageId}`);
         const result = await response.json();
         
         if (result.success && result.data) {
@@ -197,14 +201,18 @@ const PackageDetailPage = () => {
   useEffect(() => {
     if (!params?.id) return;
     
+    // Ensure id is a string (Next.js params can be string | string[])
+    const packageId = Array.isArray(params.id) ? params.id[0] : params.id;
+    if (!packageId) return;
+    
     // Skip hardcoded data for attraction packages - they must use API data only
-    const isAttractionPackage = params.id.includes('ticket') || params.id.includes('attraction') || params.id === 'burj-khalifa-tickets';
+    const isAttractionPackage = packageId.includes('ticket') || packageId.includes('attraction') || packageId === 'burj-khalifa-tickets';
     if (isAttractionPackage) {
       return; // Don't set any hardcoded data for attraction packages
     }
     
     // Only set hardcoded data for specific demo IDs, skip API fetch for these
-      if (params.id === 'demo-package-id') {
+      if (packageId === 'demo-package-id') {
         // Set hardcoded demo data
         setPackageData({
           _id: 'demo-package-id',
@@ -246,7 +254,7 @@ const PackageDetailPage = () => {
           ]
         } as any); // Cast to any to bypass strict literal type check for 'place' if it mismatches
         setLoading(false);
-      } else if (params.id === 'premium-dubai-tours-default') {
+      } else if (packageId === 'premium-dubai-tours-default') {
         // Set Dubai Signature Private Escape premium package data
         setPackageData({
           _id: 'premium-dubai-tours-default',
@@ -420,7 +428,7 @@ We focus on delivering smooth, well-managed journeys rather than selling oversiz
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-grand-signature-journey') {
+      } else if (packageId === 'dubai-grand-signature-journey') {
         // Set Dubai Grand Signature Journey package data
         setPackageData({
           _id: 'dubai-grand-signature-journey',
@@ -688,7 +696,7 @@ Overnight in Dubai.`
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-elite-grand-explorer') {
+      } else if (packageId === 'dubai-elite-grand-explorer') {
         // Set Dubai Elite Grand Explorer package data
         setPackageData({
           _id: 'dubai-elite-grand-explorer',
@@ -974,7 +982,7 @@ Overnight in Dubai.`
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-private-classic-discovery') {
+      } else if (packageId === 'dubai-private-classic-discovery') {
         // Set Dubai Private Classic Discovery package data
         setPackageData({
           _id: 'dubai-private-classic-discovery',
@@ -1173,7 +1181,7 @@ Overnight in Dubai`
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-grand-explorer') {
+      } else if (packageId === 'dubai-grand-explorer') {
         // Set Dubai Grand Explorer package data
         setPackageData({
           _id: 'dubai-grand-explorer',
@@ -1376,7 +1384,7 @@ Key Highlights`,
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-transit-escape') {
+      } else if (packageId === 'dubai-transit-escape') {
         // Set Dubai Transit Escape package data
         setPackageData({
           _id: 'dubai-transit-escape',
@@ -1608,7 +1616,7 @@ Departure as per flight schedule`
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'classic-discovery-dubai-abu-dhabi') {
+      } else if (packageId === 'classic-discovery-dubai-abu-dhabi') {
         // Set Classic Discovery of Dubai and Abu Dhabi package data
         setPackageData({
           _id: 'classic-discovery-dubai-abu-dhabi',
@@ -1736,7 +1744,7 @@ This flexibility allows travelers to customize their experience based on interes
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-essential-experience') {
+      } else if (packageId === 'dubai-essential-experience') {
         // Set Dubai Essential Experience package data
         setPackageData({
           _id: 'dubai-essential-experience',
@@ -1915,7 +1923,7 @@ Highlights`,
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-grand-experience') {
+      } else if (packageId === 'dubai-grand-experience') {
         // Set Dubai Grand Experience package data
         setPackageData({
           _id: 'dubai-grand-experience',
@@ -2096,7 +2104,7 @@ Key Highlights`,
           ]
         } as any);
       setLoading(false);
-      } else if (params.id === 'dubai-signature-explorer') {
+      } else if (packageId === 'dubai-signature-explorer') {
         // Set Dubai Signature Explorer package data
         setPackageData({
           _id: 'dubai-signature-explorer',
@@ -2269,7 +2277,7 @@ Key Highlights`,
           ]
         } as any);
         setLoading(false);
-      } else if (params.id === 'dubai-stopover-signature') {
+      } else if (packageId === 'dubai-stopover-signature') {
         // Set Dubai Stopover Signature package data
         setPackageData({
           _id: 'dubai-stopover-signature',

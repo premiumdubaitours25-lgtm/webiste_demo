@@ -16,6 +16,7 @@ interface Package {
   price: number;
   duration: string;
   location: string;
+  packageCategory?: string;
   images: Array<{
     url: string;
     alt: string;
