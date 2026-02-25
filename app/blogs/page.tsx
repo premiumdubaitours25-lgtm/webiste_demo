@@ -540,6 +540,12 @@ Explore Dubai with clarity, privacy, and confidence.`,
   // Use blogs from database, fallback to hardcoded if empty
   const displayBlogs = blogs.length > 0 ? blogs : hardcodedBlogs;
 
+  // Helper function to get blog ID (handles both _id and id)
+  const getBlogId = (blog: Blog | typeof hardcodedBlogs[0] | undefined): string => {
+    if (!blog) return '';
+    return ('_id' in blog ? blog._id : blog.id) || '';
+  };
+
   const categories = [
     { name: "All", value: "all", count: displayBlogs.length },
     { name: "Travel Guide", value: "Travel Guide", count: displayBlogs.filter(b => b.category === "Travel Guide").length }
@@ -614,7 +620,7 @@ Explore Dubai with clarity, privacy, and confidence.`,
               <h2 className="text-3xl font-bold text-center text-gray-900 mb-8 font-montserrat">
                 Featured Article
               </h2>
-              <Link href={`/blogs/${featuredBlog._id || featuredBlog.id || 'dubai-stopover-tour'}`} className="block">
+              <Link href={`/blogs/${getBlogId(featuredBlog) || 'dubai-stopover-tour'}`} className="block">
                 <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
                 <div className="md:flex">
                   <div className="md:w-1/2">
@@ -699,7 +705,7 @@ Explore Dubai with clarity, privacy, and confidence.`,
         <section className="py-12 bg-white font-merriweather">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              <Link href={`/blogs/${displayBlogs[1]?._id || displayBlogs[1]?.id || 'dubai-tour-packages-budget-friendly'}`} className="block">
+              <Link href={`/blogs/${getBlogId(displayBlogs[1]) || 'dubai-tour-packages-budget-friendly'}`} className="block">
                 <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
                   <div className="md:flex">
                     <div className="md:w-1/2">
@@ -784,7 +790,7 @@ Explore Dubai with clarity, privacy, and confidence.`,
         <section className="py-12 bg-white font-merriweather">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              <Link href={`/blogs/${displayBlogs[2]?._id || displayBlogs[2]?.id || 'premium-dubai-tour-packages-luxury'}`} className="block">
+              <Link href={`/blogs/${getBlogId(displayBlogs[2]) || 'premium-dubai-tour-packages-luxury'}`} className="block">
                 <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
                   <div className="md:flex">
                     <div className="md:w-1/2">
