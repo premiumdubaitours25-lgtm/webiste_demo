@@ -10,6 +10,7 @@ import { MapPin, Clock, Users, Star, Search, Filter, Calendar } from "lucide-rea
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import BookingModal from "@/components/BookingModal";
 
 interface Package {
   _id: string;
@@ -46,6 +47,8 @@ const PackagesPage = () => {
   const [locationFilter, setLocationFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const router = useRouter();
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
 
   useEffect(() => {
     // Check for URL query parameters first
@@ -390,12 +393,17 @@ const PackagesPage = () => {
                               View Details
                             </Button>
                           </Link>
-                          <Link href="/contact" className="flex-1">
-                            <Button variant="outline" className="w-full">
-                              <Calendar className="h-4 w-4 mr-2" />
-                              Book Now
-                            </Button>
-                          </Link>
+                          <Button 
+                            variant="outline" 
+                            className="w-full flex-1"
+                            onClick={() => {
+                              setSelectedPackage(pkg);
+                              setIsBookingModalOpen(true);
+                            }}
+                          >
+                            <Calendar className="h-4 w-4 mr-2" />
+                            Book Now
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -428,6 +436,22 @@ const PackagesPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Booking Modal */}
+      {selectedPackage && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => {
+            setIsBookingModalOpen(false);
+            setSelectedPackage(null);
+          }}
+          packageData={{
+            _id: selectedPackage._id,
+            title: selectedPackage.title,
+            price: selectedPackage.price,
+          }}
+        />
+      )}
     </div>
   );
 };

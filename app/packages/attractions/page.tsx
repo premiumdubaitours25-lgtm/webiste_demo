@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ticket, Camera, Heart, Sparkles, CheckCircle, Globe, Shield, Users, Star, Zap, ArrowRight, MapPin, Clock } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import BookingModal from "@/components/BookingModal";
 
 interface Package {
   _id: string;
@@ -27,6 +28,8 @@ interface Package {
 const AttractionsActivitiesPage = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
 
   useEffect(() => {
     fetchPackages();
@@ -223,11 +226,16 @@ const AttractionsActivitiesPage = () => {
                             View Details
                           </Button>
                         </Link>
-                        <Link href="/contact" className="flex-1">
-                          <Button variant="outline" className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold">
-                            Book Now
-                          </Button>
-                        </Link>
+                        <Button 
+                          variant="outline" 
+                          className="w-full flex-1 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold"
+                          onClick={() => {
+                            setSelectedPackage(pkg);
+                            setIsBookingModalOpen(true);
+                          }}
+                        >
+                          Book Now
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -872,6 +880,22 @@ const AttractionsActivitiesPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Booking Modal */}
+      {selectedPackage && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => {
+            setIsBookingModalOpen(false);
+            setSelectedPackage(null);
+          }}
+          packageData={{
+            _id: selectedPackage._id,
+            title: selectedPackage.title,
+            price: selectedPackage.price,
+          }}
+        />
+      )}
     </div>
   );
 };

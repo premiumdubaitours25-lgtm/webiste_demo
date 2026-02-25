@@ -57,6 +57,31 @@ export default function Home() {
   const [loadingPremium, setLoadingPremium] = useState(true);
   const [luxuryPackages, setLuxuryPackages] = useState<LuxuryPackage[]>([]);
   const [loadingLuxury, setLoadingLuxury] = useState(true);
+  const [testimonials, setTestimonials] = useState<Array<{
+    _id: string;
+    name: string;
+    role: string;
+    quote: string;
+    rating: number;
+    image?: string;
+  }>>([]);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+  const [blogs, setBlogs] = useState<Array<{
+    _id: string;
+    title: string;
+    excerpt: string;
+    content: string;
+    author: string;
+    authorImage?: string;
+    publishDate: string;
+    readTime: string;
+    category: string;
+    image: string;
+    views: number;
+    likes: number;
+    tags: string[];
+  }>>([]);
+  const [loadingBlogs, setLoadingBlogs] = useState(true);
 
   const carouselAnimation = useScrollAnimation(0.1);
   const domesticPackagesAnimation = useScrollAnimation(0.05);
@@ -67,53 +92,75 @@ export default function Home() {
   const testimonialsAnimation = useScrollAnimation(0.1);
   const bestPlaceAnimation = useScrollAnimation(0.1);
 
-  // Testimonials data
-  const testimonials = [
-    {
-      id: 1,
-      name: "Anupam Kumar",
-      role: "Adventure Traveler",
-      quote: "Our Dubai adventure with Premium Dubai Tours was absolutely incredible! The team was professional, knowledgeable, and made our trip unforgettable. The city tour and desert safari were perfectly organized."
-    },
-    {
-      id: 2,
-      name: "Himanshu Sharma",
-      role: "Cultural Explorer",
-      quote: "The Dubai city tour was amazing! Our guide was so knowledgeable about the history and culture. Premium Dubai Tours really knows how to create authentic experiences. Highly recommended!"
-    },
-    {
-      id: 3,
-      name: "Rushabh Nandeshwar",
-      role: "Family Traveler",
-      quote: "We had the most wonderful family trip to Dubai! The team took care of everything - from hotel bookings to tours. The kids loved every moment. Thank you Premium Dubai Tours for making our dream trip come true!"
-    },
-    {
-      id: 4,
-      name: "Deesha Patil",
-      role: "Wildlife Enthusiast",
-      quote: "The desert safari experience was incredible! The dune bashing, camel rides, and traditional entertainment were amazing. The guides were experts and made sure we had the best experience. Will definitely book with Premium Dubai Tours again!"
-    },
-    {
-      id: 5,
-      name: "Abhijjetn Jaiswal",
-      role: "Honeymooners",
-      quote: "Our honeymoon trip to Dubai was perfect! Premium Dubai Tours arranged everything beautifully - from romantic dinners to luxury experiences. The attention to detail was outstanding. Thank you for making our special trip unforgettable!"
-    },
-    {
-      id: 6,
-      name: "Rajesh Dubey",
-      role: "Trekking Enthusiast",
-      quote: "The Abu Dhabi cultural tour was the experience of a lifetime! Premium Dubai Tours provided excellent support, quality service, and experienced guides. The Sheikh Zayed Mosque and Louvre Abu Dhabi were breathtaking and the experience was worth every penny!"
-    }
-  ];
+  // Fetch Testimonials from database
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setLoadingTestimonials(true);
+        const response = await fetch('/api/testimonials');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setTestimonials(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+      } finally {
+        setLoadingTestimonials(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  // Fetch Blogs from database
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoadingBlogs(true);
+        const response = await fetch('/api/blogs', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            // Limit to 3 blogs for home page
+            const blogsArray = Array.isArray(data.data) ? data.data : [];
+            setBlogs(blogsArray.slice(0, 3));
+          } else {
+            setBlogs([]);
+          }
+        } else {
+          console.error('Failed to fetch blogs:', response.status, response.statusText);
+          setBlogs([]);
+        }
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+        setBlogs([]);
+      } finally {
+        setLoadingBlogs(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   // Carousel functions
   const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    if (testimonials.length > 0) {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }
   };
 
   const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    if (testimonials.length > 0) {
+      setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    }
   };
 
   const goToTestimonial = (index: number) => {
@@ -435,187 +482,90 @@ export default function Home() {
           </div>
 
           {/* Blog Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {/* Blog Card 1 */}
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative">
-                <div className="aspect-video relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Top 10 Must-Visit Places in Dubai"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                  Travel Guide
-                </Badge>
+          {loadingBlogs ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              <div className="flex items-center justify-center h-96 col-span-3">
+                <p className="text-gray-600">Loading blogs...</p>
               </div>
-
-              <CardHeader>
-                <CardTitle className="text-lg line-clamp-2">Top 10 Must-Visit Places in Dubai for First-Time Travelers</CardTitle>
-                <p className="text-gray-600 text-sm line-clamp-3">Discover Dubai's iconic landmarks, from the world's tallest building to man-made islands. Your complete guide to Dubai's must-see attractions.</p>
-              </CardHeader>
-
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    2024-01-15
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <User className="h-4 w-4 mr-2" />
-                    Premium Dubai Tours
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <span className="mr-2">⏱️</span>
-                    8 min read
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <div className="flex flex-wrap gap-1">
-                    <Badge variant="outline" className="text-xs">Dubai</Badge>
-                    <Badge variant="outline" className="text-xs">Travel Guide</Badge>
-                    <Badge variant="outline" className="text-xs">Attractions</Badge>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Eye className="h-4 w-4 mr-1" />
-                      1,250
+            </div>
+          ) : blogs.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {blogs.map((blog) => (
+                <Card 
+                  key={blog._id} 
+                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  onClick={() => router.push(`/blogs/${blog._id}`)}
+                >
+                  <div className="relative">
+                    <div className="aspect-video relative">
+                      <Image
+                        src={blog.image || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
+                        alt={blog.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
-                    <div className="flex items-center">
-                      <Heart className="h-4 w-4 mr-1" />
-                      89
-                    </div>
+                    <Badge className="absolute top-4 right-4 bg-white text-gray-900">
+                      {blog.category}
+                    </Badge>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* Blog Card 2 */}
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative">
-                <div className="aspect-video relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Dubai Desert Safari Experience"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                  Adventure
-                </Badge>
+                  <CardHeader>
+                    <CardTitle className="text-lg line-clamp-2">{blog.title}</CardTitle>
+                    <p className="text-gray-600 text-sm line-clamp-3">{blog.excerpt}</p>
+                  </CardHeader>
+
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {blog.publishDate ? new Date(blog.publishDate).toLocaleDateString() : 'N/A'}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <User className="h-4 w-4 mr-2" />
+                        {blog.author || 'Premium Dubai Tours'}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <span className="mr-2">⏱️</span>
+                        {blog.readTime || '5 min read'}
+                      </div>
+                    </div>
+
+                    {blog.tags && blog.tags.length > 0 && (
+                      <div className="mt-4">
+                        <div className="flex flex-wrap gap-1">
+                          {blog.tags.slice(0, 3).map((tag, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-6 flex items-center justify-between">
+                      <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <div className="flex items-center">
+                          <Eye className="h-4 w-4 mr-1" />
+                          {blog.views || 0}
+                        </div>
+                        <div className="flex items-center">
+                          <Heart className="h-4 w-4 mr-1" />
+                          {blog.likes || 0}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              <div className="flex items-center justify-center h-96 col-span-3">
+                <p className="text-gray-600">No blogs available at the moment.</p>
               </div>
-
-              <CardHeader>
-                <CardTitle className="text-lg line-clamp-2">Dubai Desert Safari: Complete Guide to Dune Bashing & More</CardTitle>
-                <p className="text-gray-600 text-sm line-clamp-3">Experience the thrill of Dubai's desert safari - from dune bashing to camel rides, traditional entertainment, and BBQ dinners under the stars.</p>
-              </CardHeader>
-
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    2024-01-12
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <User className="h-4 w-4 mr-2" />
-                    Premium Dubai Tours
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <span className="mr-2">⏱️</span>
-                    10 min read
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <div className="flex flex-wrap gap-1">
-                    <Badge variant="outline" className="text-xs">Desert Safari</Badge>
-                    <Badge variant="outline" className="text-xs">Adventure</Badge>
-                    <Badge variant="outline" className="text-xs">Dubai</Badge>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Eye className="h-4 w-4 mr-1" />
-                      2,100
-                    </div>
-                    <div className="flex items-center">
-                      <Heart className="h-4 w-4 mr-1" />
-                      156
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Blog Card 3 */}
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative">
-                <div className="aspect-video relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Best Time to Visit Dubai"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                  Travel Tips
-                </Badge>
-              </div>
-
-              <CardHeader>
-                <CardTitle className="text-lg line-clamp-2">Best Time to Visit Dubai: Weather, Events & Travel Tips</CardTitle>
-                <p className="text-gray-600 text-sm line-clamp-3">Plan your perfect Dubai trip! Learn about Dubai's climate, best months to visit, festivals, and tips for making the most of your Dubai experience.</p>
-              </CardHeader>
-
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    2024-01-10
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <User className="h-4 w-4 mr-2" />
-                    Premium Dubai Tours
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <span className="mr-2">⏱️</span>
-                    7 min read
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <div className="flex flex-wrap gap-1">
-                    <Badge variant="outline" className="text-xs">Dubai</Badge>
-                    <Badge variant="outline" className="text-xs">Travel Tips</Badge>
-                    <Badge variant="outline" className="text-xs">Best Time</Badge>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Eye className="h-4 w-4 mr-1" />
-                      980
-                    </div>
-                    <div className="flex items-center">
-                      <Heart className="h-4 w-4 mr-1" />
-                      67
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+            </div>
+          )}
 
           <div className="text-center">
             <Button
@@ -648,66 +598,78 @@ export default function Home() {
 
           {/* Testimonial Carousel */}
           <div className="relative max-w-4xl mx-auto">
-            {/* Carousel Container */}
-            <div className="overflow-hidden">
-              <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-              >
-                {testimonials.map((testimonial) => (
-                  <div key={testimonial.id} className="w-full flex-shrink-0 px-2 sm:px-4">
-                    <Card className="p-4 sm:p-6 md:p-8 hover:shadow-lg transition-shadow">
-                      <CardContent className="p-0">
-                        <div className="flex items-center justify-center mb-4 sm:mb-6">
-                          <div className="flex text-yellow-400">
-                            {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 fill-current" />
-                            ))}
-                          </div>
-                        </div>
-                        <blockquote className="text-gray-700 mb-4 sm:mb-6 md:mb-8 italic text-center text-sm sm:text-base md:text-lg leading-relaxed">
-                          "{testimonial.quote}"
-                        </blockquote>
-                        <div className="flex items-center justify-center">
-                          <div className="text-center">
-                            <h4 className="font-semibold text-gray-900 text-base sm:text-lg">{testimonial.name}</h4>
-                            <p className="text-gray-600 text-sm sm:text-base">{testimonial.role}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
+            {loadingTestimonials ? (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Loading testimonials...</p>
               </div>
-            </div>
+            ) : testimonials.length > 0 ? (
+              <>
+                {/* Carousel Container */}
+                <div className="overflow-hidden">
+                  <div
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
+                  >
+                    {testimonials.map((testimonial) => (
+                      <div key={testimonial._id} className="w-full flex-shrink-0 px-2 sm:px-4">
+                        <Card className="p-4 sm:p-6 md:p-8 hover:shadow-lg transition-shadow">
+                          <CardContent className="p-0">
+                            <div className="flex items-center justify-center mb-4 sm:mb-6">
+                              <div className="flex text-yellow-400">
+                                {[...Array(testimonial.rating || 5)].map((_, i) => (
+                                  <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 fill-current" />
+                                ))}
+                              </div>
+                            </div>
+                            <blockquote className="text-gray-700 mb-4 sm:mb-6 md:mb-8 italic text-center text-sm sm:text-base md:text-lg leading-relaxed">
+                              "{testimonial.quote}"
+                            </blockquote>
+                            <div className="flex items-center justify-center">
+                              <div className="text-center">
+                                <h4 className="font-semibold text-gray-900 text-base sm:text-lg">{testimonial.name}</h4>
+                                <p className="text-gray-600 text-sm sm:text-base">{testimonial.role}</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-            {/* Navigation Buttons */}
-            <Button
-              onClick={prevTestimonial}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 sm:-translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10"
-              size="icon"
-            >
-              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
-            </Button>
-            <Button
-              onClick={nextTestimonial}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 sm:translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10"
-              size="icon"
-            >
-              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
-            </Button>
+                {/* Navigation Buttons */}
+                <Button
+                  onClick={prevTestimonial}
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 sm:-translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10"
+                  size="icon"
+                >
+                  <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                </Button>
+                <Button
+                  onClick={nextTestimonial}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 sm:translate-x-4 bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10"
+                  size="icon"
+                >
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                </Button>
 
-            {/* Dots Indicator */}
-            <div className="flex justify-center mt-8 space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial ? "bg-primary" : "bg-gray-300"
-                    }`}
-                />
-              ))}
-            </div>
+                {/* Dots Indicator */}
+                <div className="flex justify-center mt-8 space-x-2">
+                  {testimonials.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToTestimonial(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial ? "bg-primary" : "bg-gray-300"
+                        }`}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-600">No testimonials available at the moment.</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

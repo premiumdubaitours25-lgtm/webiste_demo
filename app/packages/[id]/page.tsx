@@ -39,6 +39,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import BookingModal from "@/components/BookingModal";
 
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
@@ -120,6 +121,7 @@ const PackageDetailPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'policy'>('overview');
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -4726,7 +4728,11 @@ Key Highlights`,
                   </div>
 
                   <div className="space-y-3">
-                    <Button className="w-full text-lg h-12 shadow-lg shadow-primary/20" size="lg">
+                    <Button 
+                      className="w-full text-lg h-12 shadow-lg shadow-primary/20" 
+                      size="lg"
+                      onClick={() => setIsBookingModalOpen(true)}
+                    >
                       Request Booking
                     </Button>
                     <Button variant="outline" className="w-full h-12 border-primary text-primary hover:bg-primary/5">
@@ -4760,6 +4766,19 @@ Key Highlights`,
 
         </div>
       </div>
+
+      {/* Booking Modal */}
+      {packageData && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => setIsBookingModalOpen(false)}
+          packageData={{
+            _id: packageData._id,
+            title: packageData.title,
+            price: packageData.price,
+          }}
+        />
+      )}
     </div>
   );
 };

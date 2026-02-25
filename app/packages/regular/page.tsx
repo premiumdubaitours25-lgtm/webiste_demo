@@ -8,6 +8,7 @@ import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, ShieldChec
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import BookingModal from "@/components/BookingModal";
 
 interface Package {
   _id: string;
@@ -54,6 +55,8 @@ const RegularPackagesPage = () => {
   const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
     priceRange: [0, 20000],
@@ -751,11 +754,16 @@ const RegularPackagesPage = () => {
                                   View Details
                                 </Button>
                               </Link>
-                              <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Book Now
-                                </Button>
-                              </Link>
+                              <Button 
+                                variant="outline" 
+                                className="w-full flex-1"
+                                onClick={() => {
+                                  setSelectedPackage(pkg);
+                                  setIsBookingModalOpen(true);
+                                }}
+                              >
+                                Book Now
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>
@@ -844,6 +852,22 @@ const RegularPackagesPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Booking Modal */}
+      {selectedPackage && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => {
+            setIsBookingModalOpen(false);
+            setSelectedPackage(null);
+          }}
+          packageData={{
+            _id: selectedPackage._id,
+            title: selectedPackage.title,
+            price: selectedPackage.price,
+          }}
+        />
+      )}
     </div>
   );
 };
