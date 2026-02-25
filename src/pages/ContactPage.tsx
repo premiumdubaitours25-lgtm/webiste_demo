@@ -24,7 +24,7 @@ const ContactPage = () => {
     {
       icon: MapPin,
       title: "Office Address",
-      details: ["Nyati Estate, Mohammadwadi", "Pune - 411060"],
+      details: ["Building A1, Dubai Digital Park", "Dubai Silicon Oasis, Dubai", "United Arab Emirates"],
       description: "Visit our office for personalized travel planning"
     },
     {

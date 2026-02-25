@@ -105,9 +105,9 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-white mt-0.5" />
                 <div className="text-gray-300 text-sm">
-                  <div>Dubai Marina, Building 15</div>
-                  <div>Dubai - 12345, UAE</div>
-                  <div className="text-gray-400 text-xs mt-1">Located in the heart of Dubai</div>
+                  <div>Building A1, Dubai Digital Park</div>
+                  <div>Dubai Silicon Oasis, Dubai</div>
+                  <div>United Arab Emirates</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">

@@ -87,8 +87,8 @@ Please get back to me with more information about available packages and pricing
     {
       icon: MapPin,
       title: "Address Location",
-      details: ["Dubai Marina, Building 15", "Dubai - 12345, UAE"],
-      description: "Located in the heart of Dubai"
+      details: ["Building A1, Dubai Digital Park", "Dubai Silicon Oasis, Dubai", "United Arab Emirates"],
+      description: "Located in Dubai Silicon Oasis"
     },
     {
       icon: Phone,
@@ -342,14 +342,14 @@ Please get back to me with more information about available packages and pricing
                     <CardContent className="p-0">
                       <div className="aspect-video">
                         <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1755227303955!2d55.1366222!3d25.076385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6b5c5c5c5c5d%3A0x5c5c5c5c5c5c5c5c!2sDubai%20Marina!5e0!3m2!1sen!2sae!4v1699123456789!5m2!1sen!2sae"
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1755227303955!2d55.1366222!3d25.076385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6b5c5c5c5c5d%3A0x5c5c5c5c5c5c5c5c!2sDubai%20Silicon%20Oasis!5e0!3m2!1sen!2sae!4v1699123456789!5m2!1sen!2sae"
                           width="100%"
                           height="100%"
                           style={{ border: 0 }}
                           allowFullScreen
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
-                          title="Premium Dubai Tours Location - Dubai Marina, Dubai, UAE"
+                          title="Premium Dubai Tours Location - Building A1, Dubai Digital Park, Dubai Silicon Oasis, Dubai, United Arab Emirates"
                         ></iframe>
                       </div>
                     </CardContent>
@@ -357,7 +357,7 @@ Please get back to me with more information about available packages and pricing
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      Dubai Marina, Building 15, Dubai - 12345, UAE
+                      Building A1, Dubai Digital Park, Dubai Silicon Oasis, Dubai, United Arab Emirates
                     </p>
                     <a 
                       href="https://www.google.com/maps/place/Dubai+Marina/@25.076385,55.1366222,15z/data=!3m1!4b1!4m6!3m5!1s0x3e5f6b5c5c5c5c5d:0x5c5c5c5c5c5c5c5c!8m2!3d25.076385!4d55.1366222!16s%2Fm%2F0jwpq3v"
