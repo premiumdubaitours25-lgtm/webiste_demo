@@ -4674,11 +4674,11 @@ Key Highlights`,
               </div>
             </div>
           ) : (
-            <div className="lg:col-span-1">
-              <div className="sticky top-[100px] space-y-6">
+          <div className="lg:col-span-1">
+            <div className="sticky top-[100px] space-y-6">
 
-                {/* Booking Card */}
-                <Card className={`border-none shadow-2xl overflow-hidden ring-1 ring-black/5 ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
+              {/* Booking Card */}
+              <Card className={`border-none shadow-2xl overflow-hidden ring-1 ring-black/5 ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
                 <div className={`p-6 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
                   <p className="text-white/90 text-sm italic font-medium mb-2">Starting from</p>
                   <div className="flex items-baseline justify-center gap-2 mt-1">

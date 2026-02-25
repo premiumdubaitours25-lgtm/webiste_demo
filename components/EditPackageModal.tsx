@@ -1523,21 +1523,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                     <Card key={category.id}>
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
-                          <Input
+                      <Input
                             placeholder="Category name"
                             value={category.category}
                             onChange={(e) => updateInclusionCategory(category.id, e.target.value)}
                             className="max-w-xs"
-                          />
-                          {inclusions.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
+                      />
+                      {inclusions.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
                               onClick={() => removeInclusionCategory(category.id)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <Minus className="h-4 w-4" />
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Minus className="h-4 w-4" />
                             </Button>
                           )}
                         </div>
@@ -1559,9 +1559,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                                 className="text-red-500 hover:text-red-700"
                               >
                                 <X className="h-4 w-4" />
-                              </Button>
-                            )}
-                          </div>
+                        </Button>
+                      )}
+                    </div>
                         ))}
                         <Button
                           type="button"
@@ -1599,21 +1599,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                     <Card key={category.id}>
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
-                          <Input
+                      <Input
                             placeholder="Category name"
                             value={category.category}
                             onChange={(e) => updateExclusionCategory(category.id, e.target.value)}
                             className="max-w-xs"
-                          />
-                          {exclusions.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
+                      />
+                      {exclusions.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
                               onClick={() => removeExclusionCategory(category.id)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <Minus className="h-4 w-4" />
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Minus className="h-4 w-4" />
                             </Button>
                           )}
                         </div>
@@ -1635,9 +1635,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                                 className="text-red-500 hover:text-red-700"
                               >
                                 <X className="h-4 w-4" />
-                              </Button>
-                            )}
-                          </div>
+                        </Button>
+                      )}
+                    </div>
                         ))}
                         <Button
                           type="button"

@@ -1077,10 +1077,10 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
-        {/* Header */}
-        <div className="bg-white border-b">
+      {/* Header */}
+      <div className="bg-white border-b">
           <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 {!sidebarOpen && (
                   <Button
@@ -1091,7 +1091,7 @@ export default function DashboardPage() {
                     <Menu className="h-5 w-5" />
                   </Button>
                 )}
-                <div>
+            <div>
                   <h1 className="text-3xl font-bold text-gray-900">
                     {activeView === 'packages' && 'Packages'}
                     {activeView === 'testimonials' && 'Testimonials'}
@@ -1103,13 +1103,13 @@ export default function DashboardPage() {
                     {activeView === 'blogs' && 'Manage blog posts and articles'}
                   </p>
                 </div>
-              </div>
-              <div className="flex items-center space-x-4">
+            </div>
+            <div className="flex items-center space-x-4">
                 {activeView === 'packages' && (
-                  <Button size="sm" onClick={openCreatePackageModal}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Package
-                  </Button>
+              <Button size="sm" onClick={openCreatePackageModal}>
+                <Plus className="h-4 w-4 mr-2" />
+                New Package
+              </Button>
                 )}
                 {activeView === 'testimonials' && (
                   <Button size="sm">
@@ -1123,15 +1123,15 @@ export default function DashboardPage() {
                     New Blog
                   </Button>
                 )}
-              </div>
             </div>
           </div>
         </div>
+      </div>
 
         {/* Content Area */}
         <div className="flex-1 overflow-auto">
           {activeView === 'packages' && (
-            <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8">
         {/* Packages Table */}
         <Card>
           <CardHeader>
