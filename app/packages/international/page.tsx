@@ -10,7 +10,6 @@ import { MapPin, Clock, Users, Star, Search, Globe, Plane, Camera } from "lucide
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import PackageFilter from "@/components/PackageFilter";
 
 interface Package {
   _id: string;
@@ -119,9 +118,6 @@ const InternationalPackagesPage = () => {
     }
   }, []); // Run only on mount
 
-  const handleFilterChange = (newFilters: FilterState) => {
-    setFilters(newFilters);
-  };
 
   const fetchPackages = async () => {
     try {
@@ -419,21 +415,11 @@ const InternationalPackagesPage = () => {
         </div>
       </section>
 
-      {/* Filters Section */}
+      {/* Packages Section */}
       <section className="py-8 bg-gray-100 border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              {/* Filter Sidebar */}
-              <div className="lg:col-span-1">
-                <PackageFilter
-                  onFilterChange={handleFilterChange}
-                  packageType="international"
-                />
-              </div>
-
-              {/* Packages Grid */}
-              <div className="lg:col-span-3">
+            <div>
                 {filteredPackages.length === 0 ? (
                   <div className="text-center py-12">
                     <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
@@ -553,7 +539,6 @@ const InternationalPackagesPage = () => {
                     </div>
                   </>
                 )}
-              </div>
             </div>
           </div>
         </div>

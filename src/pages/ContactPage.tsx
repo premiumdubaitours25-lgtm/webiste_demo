@@ -12,19 +12,19 @@ const ContactPage = () => {
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["9970393335", "9104862909"],
+      details: ["+971 50 401 5632", "+971 50 214 2541"],
       description: "Call us anytime for immediate assistance"
     },
     {
       icon: Mail,
       title: "Email Address",
-      details: ["support@premiumdubaitours.com"],
+      details: ["info@premiumdubaitours.com"],
       description: "Send us your queries and we'll respond within 24 hours"
     },
     {
       icon: MapPin,
       title: "Office Address",
-      details: ["Nyati Estate, Mohammadwadi", "Pune - 411060"],
+      details: ["Building A1, Dubai Digital Park", "Dubai Silicon Oasis, Dubai", "United Arab Emirates"],
       description: "Visit our office for personalized travel planning"
     },
     {

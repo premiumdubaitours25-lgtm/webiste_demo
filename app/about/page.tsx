@@ -3,282 +3,412 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Users, Award, Heart, Globe, Mountain, Camera, Star, Calendar } from "lucide-react";
-import Image from "next/image";
+import { MapPin, Award, Shield, CheckCircle, Star, Sparkles, Users, Clock, Car, UserCheck, TrendingUp, Heart } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const AboutPage = () => {
-  const stats = [
-    { icon: Users, label: "Happy Travelers", value: "10,000+" },
-    { icon: Globe, label: "Countries Covered", value: "25+" },
-    { icon: Award, label: "Years Experience", value: "15+" },
-    { icon: Star, label: "5-Star Reviews", value: "4.9/5" },
-  ];
-
-  const values = [
+  const whatSetsUsApart = [
     {
-      icon: Heart,
-      title: "Passion for Travel",
-      description: "We are passionate about creating unforgettable travel experiences that connect you with the world's most beautiful destinations."
+      icon: Shield,
+      title: "Transparent Pricing",
+      description: "Clear inclusions with no hidden costs or misleading information",
+      image: "https://th.bing.com/th/id/OIP.6XOdcf3TQ4clGRinPTqowgHaFF?w=266&h=183&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
+    },
+    {
+      icon: Star,
+      title: "Comfort & Quality",
+      description: "Focus on comfort, timing, and service quality in every experience",
+      image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       icon: Users,
-      title: "Customer First",
-      description: "Your satisfaction is our priority. We go above and beyond to ensure every journey exceeds your expectations."
+      title: "Carefully Selected Partners",
+      description: "Handpicked vehicles, guides, and suppliers that meet our high standards",
+      image: "https://tse2.mm.bing.net/th/id/OIP.lwYPFhYWdpabUJ1JIS6F8QHaE7?rs=1&pid=ImgDetMain&o=7&rm=3"
     },
     {
-      icon: Award,
-      title: "Quality Service",
-      description: "With over 15 years of experience, we deliver exceptional service and attention to detail in every package."
+      icon: Sparkles,
+      title: "Personalized Tours",
+      description: "Customized Dubai tours tailored to your preferences and needs",
+      image: "https://tse3.mm.bing.net/th/id/OIP.mVmw5OWyuDbYW0aV-NMQZAHaF0?pid=ImgDet&w=184&h=144&c=7&dpr=1.3&o=7&rm=3"
     },
     {
-      icon: Globe,
-      title: "Sustainable Tourism",
-      description: "We promote responsible tourism practices that benefit local communities and preserve natural beauty."
+      icon: UserCheck,
+      title: "Professional Support",
+      description: "Dedicated support from booking to completion of your journey",
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
 
-  const team = [
+  const beliefs = [
     {
-      name: "Ahmed Al Maktoum",
-      role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      description: "15+ years in luxury tourism"
+      icon: Star,
+      title: "Service Quality Defines Value",
+      description: "We believe that exceptional service creates lasting value for our guests"
     },
     {
-      name: "Fatima Hassan",
-      role: "Operations Manager",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      description: "Expert in premium travel experiences"
+      icon: Sparkles,
+      title: "Small Upgrades Create Meaningful Comfort",
+      description: "Every detail matters in creating a comfortable and memorable experience"
     },
     {
-      name: "Mohammed Al Rashid",
-      role: "Travel Consultant",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      description: "Specialist in Dubai city tours"
+      icon: Shield,
+      title: "Transparency Builds Long-Term Trust",
+      description: "Honest communication and clear pricing foster lasting relationships"
+    }
+  ];
+
+  const valueDifferences = [
+    "Better vehicles",
+    "Professional guides",
+    "Improved seating and timing",
+    "Less crowd and more comfort",
+    "Best Service throughout the trip"
+  ];
+
+  const whyChooseUs = [
+    {
+      icon: Shield,
+      title: "Transparency",
+      description: "No hidden costs or misleading inclusions. What you see is what you get.",
+      image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-      name: "Sarah Al Zahra",
-      role: "Customer Relations",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      description: "Ensuring exceptional service"
+      icon: Car,
+      title: "Comfort",
+      description: "High-quality vehicles and vetted locations for your peace of mind.",
+      image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      icon: UserCheck,
+      title: "Service",
+      description: "Professional support throughout your journey, from start to finish.",
+      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <section className="relative text-white py-16 md:py-20">
-                 <div 
-           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-           style={{
-             backgroundImage: "url('/bhutan-travel-guide.webp')"
-           }}
-         ></div>
-         <div className="absolute inset-0 bg-black/30"></div>
+      <section className="relative text-white py-24 md:py-32 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')"
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.5)_100%)]"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-6 leading-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+            <Badge className="mb-6 bg-white/20 backdrop-blur-md text-white border-white/30 hover:bg-white/30">
+              <Award className="h-4 w-4 mr-2" />
+              Premium Tour Operator
+            </Badge>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
               About Premium Dubai Tours
             </h1>
-            <p className="text-base md:text-lg lg:text-xl mb-10 opacity-90 leading-relaxed" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-              Your trusted partner for unforgettable travel experiences in Dubai and beyond
+            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-95 leading-relaxed max-w-3xl mx-auto">
+              A premium-focused Dubai travel brand dedicated to delivering well-crafted travel experiences defined by comfort, clarity, and service quality
             </p>
-            <div className="flex flex-wrap justify-center gap-4 mb-10">
-              <Badge variant="secondary" className="text-sm md:text-base px-4 py-2">
+            <div className="flex flex-wrap justify-center gap-4">
+              <Badge variant="secondary" className="text-sm md:text-base px-6 py-3 bg-white/20 backdrop-blur-md text-white border-white/30">
                 <MapPin className="h-4 w-4 mr-2" />
                 Based in Dubai, UAE
               </Badge>
-              <Badge variant="secondary" className="text-sm md:text-base px-4 py-2">
+              <Badge variant="secondary" className="text-sm md:text-base px-6 py-3 bg-white/20 backdrop-blur-md text-white border-white/30">
                 <Award className="h-4 w-4 mr-2" />
                 Licensed Tour Operator
               </Badge>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-semibold mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>15+</div>
-                <div className="text-sm md:text-base opacity-80">Years Experience</div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-20 md:py-28 bg-white relative">
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    alt="Travel Group"
+                    width={600}
+                    height={700}
+                    className="w-full h-[500px] md:h-[600px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                </div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-semibold mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>10K+</div>
-                <div className="text-sm md:text-base opacity-80">Happy Travelers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-semibold mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>25+</div>
-                <div className="text-sm md:text-base opacity-80">Countries</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-semibold mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>4.9/5</div>
-                <div className="text-sm md:text-base opacity-80">Rating</div>
+              <div className="space-y-6">
+                <div className="inline-block">
+                  <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                    <Sparkles className="h-3 w-3 mr-2" />
+                    Our Story
+                  </Badge>
+                </div>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                  About Premium Dubai Tours
+                </h2>
+                <div className="space-y-5 text-gray-700 leading-relaxed text-lg">
+                  <p>
+                    Premium Dubai Tours is a local tour operator based in Dubai, United Arab Emirates. We operate Regular Tours, Premium Tours, Luxury Tours, Adventure Activities, and Day Tours/Attractions and activities in all emirates, along with Oman tours from the United Arab Emirates.
+                  </p>
+                  <p>
+                    We specialize in premium Dubai tours, luxury experiences, and customized travel services for travelers who value comfort, clarity, and professional service over rushed itineraries or unclear pricing. We are not a marketplace for budget deals; however, we also have some regular tours that are more budget-friendly for those customers.
+                  </p>
+                  <p className="font-semibold text-gray-900">
+                    We are a specialized Dubai tour company dedicated to delivering quality, transparency, and genuine comfort to our guests from around the world.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                  <stat.icon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</h3>
-                <p className="text-gray-600">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Philosophy Section */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                Our Core Values
+              </Badge>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Our Philosophy: <span className="text-primary">Quality Over Confusion</span>
+              </h2>
+            </div>
 
-      {/* Our Story Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-6" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                  Our Story
-                </h2>
-                <div className="space-y-4 text-gray-600" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                  <p>
-                    Founded with a passion for travel, Premium Dubai Tours began with a simple mission: 
-                    to share the incredible beauty and rich culture of Dubai and the UAE with travelers from around the world.
-                  </p>
-                  <p>
-                    What started as local tours in Dubai has grown into a comprehensive travel company offering 
-                    city tours, desert safaris, luxury experiences, cultural experiences, and premium travel options throughout the UAE.
-                  </p>
-                  <p>
-                    Today, we're proud to have served over 10,000 satisfied customers and continue to expand our 
-                    offerings while maintaining our commitment to quality, safety, and authentic experiences.
-                  </p>
-                </div>
-                <div className="mt-8">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90">
-                    Explore Our Packages
-                  </Button>
-                </div>
+            <div className="grid lg:grid-cols-2 gap-12 mb-16 items-center">
+              <div className="space-y-6 text-gray-700 leading-relaxed text-lg order-2 lg:order-1">
+                <p>
+                  The Dubai tourism market can be overwhelming. Travelers often encounter massive price differences: for instance, a desert safari can range from AED 25 to AED 550, and cruise dinners from AED 25 to AED 500. This often leaves visitors confused about what they are actually paying for.
+                </p>
+                <p>
+                  We founded Premium Dubai Tours to address this gap and eliminate that uncertainty. We do not chase the lowest price; we pursue the highest value. Our goal is to clearly explain what guests receive, why prices vary, and how service levels affect the overall experience.
+                </p>
+                <p className="font-semibold text-gray-900">
+                  We believe pricing should reflect quality, not confusion. So, we provide a transparent, premium experience where the quality of the vehicle, the expertise of the guide, and the standard of the food and services are guaranteed.
+                </p>
               </div>
-              <div className="relative">
-                <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
+              <div className="relative group order-1 lg:order-2">
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Premium Dubai Tours Team"
+                    src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    alt="Travel Experience"
                     width={600}
-                    height={400}
-                    className="w-full h-full object-cover"
+                    height={600}
+                    className="w-full h-[400px] md:h-[500px] object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-lg shadow-lg">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                      <Mountain className="h-6 w-6 text-white" />
+              </div>
+            </div>
+
+            {/* Beliefs Grid */}
+            <div className="grid md:grid-cols-3 gap-8 mb-16">
+              {beliefs.map((belief, index) => (
+                <Card key={index} className="group border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl bg-white/80 backdrop-blur-sm">
+                  <CardContent className="p-8 text-center">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
+                      <belief.icon className="h-10 w-10 text-primary" />
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Adventure Awaits</h4>
-                      <p className="text-sm text-gray-600">Since 2008</p>
-                    </div>
-                  </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">
+                      {belief.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {belief.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Value Differences */}
+            <div className="relative bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-3xl p-8 md:p-12 shadow-xl border border-primary/10">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+              <div className="relative z-10">
+                <div className="text-center mb-10">
+                  <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                    Sometimes, a modest price difference results in:
+                  </h3>
                 </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                  {valueDifferences.map((item, index) => (
+                    <div key={index} className="flex items-center space-x-4 p-4 bg-white/60 rounded-xl backdrop-blur-sm hover:bg-white/80 transition-colors">
+                      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                        <CheckCircle className="h-6 w-6 text-white" />
+                      </div>
+                      <span className="text-gray-800 font-medium text-lg">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-center text-gray-700 mt-10 text-xl font-semibold italic">
+                  That difference is intentional.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Our Values Section */}
-      <section className="py-16 bg-white">
+      {/* What Sets Us Apart Section */}
+      <section className="py-20 md:py-28 bg-white relative">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                Our Values
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                <Star className="h-3 w-3 mr-2" />
+                What Makes Us Different
+              </Badge>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                What Sets Us Apart
               </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                The principles that guide everything we do and every experience we create
-              </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {values.map((value, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                      <value.icon className="h-8 w-8 text-primary" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {whatSetsUsApart.map((item, index) => (
+                <Card key={index} className="group overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl bg-white">
+                  <div className="relative h-48 overflow-hidden">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      width={400}
+                      height={200}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                    <div className="absolute top-4 right-4">
+                      <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30">
+                        <item.icon className="h-7 w-7 text-white" />
+                      </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                      {value.title}
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                      {item.title}
                     </h3>
-                    <p className="text-gray-600">
-                      {value.description}
+                    <p className="text-gray-600 leading-relaxed">
+                      {item.description}
                     </p>
                   </CardContent>
                 </Card>
               ))}
+            </div>
+            <div className="mt-12 text-center max-w-4xl mx-auto">
+              <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 rounded-2xl p-8 border border-primary/20">
+                <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
+                  Whether travelers are seeking luxury Dubai tours, private experiences, or premium-managed sightseeing along with other top activities that the UAE offers, we focus on delivering travel services with care and consistency.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                Meet Our Team
+      {/* Why Choose Us Section */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                <Heart className="h-3 w-3 mr-2" />
+                Why Travel With Us
+              </Badge>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Why Choose Us?
               </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                The passionate professionals who make your travel dreams come true
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                We specialize in customized Dubai tours that prioritize your time and comfort. Whether you are visiting for business or leisure, our team ensures a seamless experience from arrival to departure.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {team.map((member, index) => (
-                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover"
-                      />
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {whyChooseUs.map((item, index) => (
+                <Card key={index} className="group border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl bg-white overflow-hidden">
+                  <div className="relative h-64 overflow-hidden">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      width={400}
+                      height={300}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 mb-4">
+                        <item.icon className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-white">
+                        {item.title}
+                      </h3>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                      {member.name}
-                    </h3>
-                    <p className="text-primary font-medium mb-2">
-                      {member.role}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {member.description}
+                  </div>
+                  <CardContent className="p-6">
+                    <p className="text-gray-600 leading-relaxed text-lg">
+                      {item.description}
                     </p>
                   </CardContent>
                 </Card>
               ))}
+            </div>
+            <div className="mt-12 text-center">
+              <div className="bg-white rounded-2xl p-8 md:p-12 shadow-xl border border-gray-200 max-w-4xl mx-auto">
+                <p className="text-lg md:text-xl text-gray-700 mb-8 leading-relaxed font-medium">
+                  If you are looking for luxury Dubai tours delivered with professionalism and care, we invite you to explore the UAE with us.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link href="/packages">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all">
+                      Explore Our Packages
+                    </Button>
+                  </Link>
+                  <Link href="/contact">
+                    <Button size="lg" variant="outline" className="border-2 border-primary text-primary hover:bg-primary hover:text-white text-lg px-8 py-6">
+                      Contact Us
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="container mx-auto px-4">
+      <section className="py-20 md:py-28 bg-gradient-to-br from-primary via-primary/95 to-secondary relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/40 to-black/50"></div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-semibold mb-6" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+            <Badge className="mb-6 bg-white/20 backdrop-blur-md text-white border-white/30">
+              <Sparkles className="h-4 w-4 mr-2" />
+              Start Your Journey
+            </Badge>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white">
               Ready to Start Your Journey?
             </h2>
-            <p className="text-lg mb-8 opacity-90" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-              Let us create an unforgettable travel experience tailored just for you
+            <p className="text-lg md:text-xl mb-10 text-white/90 leading-relaxed">
+              Experience luxury Dubai tours delivered with professionalism and care
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
-                  <Calendar className="h-5 w-5 mr-2" />
+                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-all">
                   Book Now
+                </Button>
+              </Link>
+              <Link href="/packages">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 backdrop-blur-sm bg-white/10">
+                  View Packages
                 </Button>
               </Link>
             </div>

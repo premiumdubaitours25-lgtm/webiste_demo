@@ -51,8 +51,8 @@ ${formData.message}
 ---
 *This inquiry was submitted through the website contact form.*`;
 
-      // WhatsApp number (with country code for India)
-      const phoneNumber = "919970393335";
+      // WhatsApp number (with country code)
+      const phoneNumber = "971504015632";
       
       // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -284,12 +284,12 @@ ${formData.message}
               <div className="flex flex-col items-center">
                 <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Call us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">+91 970393335</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">+971 50 401 5632, +971 50 214 2541</p>
               </div>
               <div className="flex flex-col items-center">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />
                 <p className="text-xs sm:text-sm text-gray-600">Email us</p>
-                <p className="font-semibold text-secondary text-sm sm:text-base">support@premiumdubaitours.com</p>
+                <p className="font-semibold text-secondary text-sm sm:text-base">info@premiumdubaitours.com</p>
               </div>
               <div className="flex flex-col items-center">
                 <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-secondary mb-1 sm:mb-2" />

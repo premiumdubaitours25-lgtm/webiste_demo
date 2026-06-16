@@ -64,7 +64,7 @@ Please get back to me with more information about available packages and pricing
     const encodedMessage = encodeURIComponent(whatsappMessage);
     
     // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/919970393335?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/971504015632?text=${encodedMessage}`;
     
     // Open WhatsApp in new tab
     window.open(whatsappUrl, '_blank');
@@ -87,19 +87,19 @@ Please get back to me with more information about available packages and pricing
     {
       icon: MapPin,
       title: "Address Location",
-      details: ["Dubai Marina, Building 15", "Dubai - 12345, UAE"],
-      description: "Located in the heart of Dubai"
+      details: ["Building A1, Dubai Digital Park", "Dubai Silicon Oasis, Dubai", "United Arab Emirates"],
+      description: "Located in Dubai Silicon Oasis"
     },
     {
       icon: Phone,
       title: "Phone Numbers",
-      details: ["+91 9970393335", "+91 9104862909"],
+      details: ["+971 50 401 5632", "+971 50 214 2541"],
       description: "Available 24/7 for emergency support"
     },
     {
       icon: Mail,
       title: "Email Address",
-      details: ["support@premiumdubaitours.com"],
+      details: ["info@premiumdubaitours.com"],
       description: "We respond within 24 hours"
     },
     {
@@ -114,20 +114,20 @@ Please get back to me with more information about available packages and pricing
     {
       name: "Ahmed Al Maktoum",
       role: "General Manager",
-      email: "support@premiumdubaitours.com",
-      phone: "+971 50 123 4567"
+      email: "info@premiumdubaitours.com",
+      phone: "+971 50 401 5632"
     },
     {
       name: "Customer Support",
       role: "Tour Operations",
-      email: "support@premiumdubaitours.com",
-      phone: "+91 9104862909"
+      email: "info@premiumdubaitours.com",
+      phone: "+971 50 214 2541"
     },
     {
       name: "Premium Dubai Tours",
       role: "Customer Relations",
-      email: "support@premiumdubaitours.com",
-      phone: "+91 9970393335"
+      email: "info@premiumdubaitours.com",
+      phone: "+971 50 401 5632"
     }
   ];
 
@@ -228,7 +228,7 @@ Please get back to me with more information about available packages and pricing
                             type="tel"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            placeholder="+91-XXXXXXXXXX"
+                            placeholder="+971 50 401 5632"
                           />
                         </div>
                         <div>
@@ -342,14 +342,14 @@ Please get back to me with more information about available packages and pricing
                     <CardContent className="p-0">
                       <div className="aspect-video">
                         <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1755227303955!2d55.1366222!3d25.076385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6b5c5c5c5c5d%3A0x5c5c5c5c5c5c5c5c!2sDubai%20Marina!5e0!3m2!1sen!2sae!4v1699123456789!5m2!1sen!2sae"
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1755227303955!2d55.1366222!3d25.076385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6b5c5c5c5c5d%3A0x5c5c5c5c5c5c5c5c!2sDubai%20Silicon%20Oasis!5e0!3m2!1sen!2sae!4v1699123456789!5m2!1sen!2sae"
                           width="100%"
                           height="100%"
                           style={{ border: 0 }}
                           allowFullScreen
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
-                          title="Premium Dubai Tours Location - Dubai Marina, Dubai, UAE"
+                          title="Premium Dubai Tours Location - Building A1, Dubai Digital Park, Dubai Silicon Oasis, Dubai, United Arab Emirates"
                         ></iframe>
                       </div>
                     </CardContent>
@@ -357,7 +357,7 @@ Please get back to me with more information about available packages and pricing
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
                       <MapPin className="h-4 w-4 inline mr-1" />
-                      Dubai Marina, Building 15, Dubai - 12345, UAE
+                      Building A1, Dubai Digital Park, Dubai Silicon Oasis, Dubai, United Arab Emirates
                     </p>
                     <a 
                       href="https://www.google.com/maps/place/Dubai+Marina/@25.076385,55.1366222,15z/data=!3m1!4b1!4m6!3m5!1s0x3e5f6b5c5c5c5c5d:0x5c5c5c5c5c5c5c5c!8m2!3d25.076385!4d55.1366222!16s%2Fm%2F0jwpq3v"
@@ -518,13 +518,13 @@ Please get back to me with more information about available packages and pricing
               Let's create the perfect travel experience for you
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="tel:+919970393335">
+              <a href="tel:+971504015632">
                 <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Us Now
                 </Button>
               </a>
-              <a href="mailto:support@premiumdubaitours.com">
+              <a href="mailto:info@premiumdubaitours.com">
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
                   <MessageCircle className="h-5 w-5 mr-2" />
                   Send Email

@@ -87,9 +87,21 @@ interface PackageData {
   _id: string;
   title: string;
   subtitle: string;
+  ideaFor?: string;
   about: string;
   services: string;
   tourDetails: string;
+  abstract?: string;
+  tourOverview?: string;
+  keyHighlights?: string[];
+  hotelOptions?: string[];
+  bestTimeToVisit?: {
+    yearRound?: string;
+    winter?: string;
+    summer?: string;
+  };
+  whyChooseThisTrip?: string[];
+  whyPremiumDubaiTours?: string[];
   price: number;
   duration: string;
   location: string;
@@ -119,8 +131,14 @@ interface PackageData {
     roomType: string;
     nights: string;
   }>;
-  inclusions?: string[];
-  exclusions?: string[];
+  inclusions?: string[] | Array<{
+    category: string;
+    items: string[];
+  }>;
+  exclusions?: string[] | Array<{
+    category: string;
+    items: string[];
+  }>;
   reviews?: Review[];
   bookings: number;
   rating: number;
@@ -139,23 +157,41 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
+    ideaFor: "",
     about: "",
     services: "",
     tourDetails: "",
+    abstract: "",
+    tourOverview: "",
     price: "",
     duration: "",
     location: "",
     capacity: "",
     packageType: "",
     place: "",
-    packageCategory: "",
+    packageCategory: "Regular",
+    bestTimeToVisit: {
+      yearRound: "",
+      winter: "",
+      summer: "",
+    },
   });
 
+  const [keyHighlights, setKeyHighlights] = useState<string[]>([]);
+  const [hotelOptions, setHotelOptions] = useState<string[]>([]);
+  const [whyChooseThisTrip, setWhyChooseThisTrip] = useState<string[]>([]);
+  const [whyPremiumDubaiTours, setWhyPremiumDubaiTours] = useState<string[]>([]);
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
   const [transportation, setTransportation] = useState<TransportationItem[]>([]);
   const [accommodation, setAccommodation] = useState<AccommodationItem[]>([]);
-  const [inclusions, setInclusions] = useState<string[]>([]);
-  const [exclusions, setExclusions] = useState<string[]>([]);
+  interface InclusionExclusionCategory {
+    id: string;
+    category: string;
+    items: string[];
+  }
+
+  const [inclusions, setInclusions] = useState<InclusionExclusionCategory[]>([]);
+  const [exclusions, setExclusions] = useState<InclusionExclusionCategory[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [existingImages, setExistingImages] = useState<Array<{ public_id: string; url: string; alt: string }>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
@@ -166,27 +202,57 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   // Initialize form data when packageData changes
   useEffect(() => {
     if (packageData) {
+      // Map category value to ensure it matches SelectItem values
+      const mapCategory = (category: string | undefined): string => {
+        if (!category) return "Regular";
+        const catLower = category.toLowerCase();
+        if (catLower === 'regular') return 'Regular';
+        if (catLower === 'premium') return 'Premium';
+        if (catLower === 'luxury') return 'Luxury';
+        if (catLower === 'adventure') return 'Adventure';
+        if (catLower === 'oman tour' || catLower === 'oman') return 'Oman Tour';
+        if (catLower === 'attraction and activity' || catLower === 'attraction') return 'Attraction and Activity';
+        // Return as-is if it's already a valid capitalized value
+        return category;
+      };
+
+      const mappedCategory = mapCategory(packageData.packageCategory);
+      console.log('Package Category:', packageData.packageCategory, 'Mapped to:', mappedCategory);
+
       setFormData({
         title: packageData.title || "",
         subtitle: packageData.subtitle || "",
+        ideaFor: packageData.ideaFor || "",
         about: packageData.about || "",
         services: packageData.services || "",
         tourDetails: packageData.tourDetails || "",
+        abstract: packageData.abstract || "",
+        tourOverview: packageData.tourOverview || "",
         price: packageData.price?.toString() || "",
         duration: packageData.duration || "",
         location: packageData.location || "",
         capacity: packageData.capacity || "",
         packageType: packageData.packageType || "",
         place: packageData.place || "",
-        packageCategory: packageData.packageCategory || "Cultural",
+        packageCategory: mappedCategory,
+        bestTimeToVisit: {
+          yearRound: packageData.bestTimeToVisit?.yearRound || "",
+          winter: packageData.bestTimeToVisit?.winter || "",
+          summer: packageData.bestTimeToVisit?.summer || "",
+        },
       });
+
+      setKeyHighlights(packageData.keyHighlights || []);
+      setHotelOptions(packageData.hotelOptions || []);
+      setWhyChooseThisTrip(packageData.whyChooseThisTrip || []);
+      setWhyPremiumDubaiTours(packageData.whyPremiumDubaiTours || []);
 
       setItinerary(
         packageData.itinerary?.map((day, index) => ({
           id: `existing_${index}`,
           day: day.day,
           title: day.title,
-          descriptions: day.description ? day.description.split('\n• ').filter(point => point.trim()) : [""],
+          descriptions: day.description ? day.description.split('\n').filter(point => point.trim()) : [""],
         })) || [{ id: "1", day: 1, title: "", descriptions: [""] }]
       );
 
@@ -210,8 +276,37 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         })) || [{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]
       );
 
-      setInclusions(packageData.inclusions || []);
-      setExclusions(packageData.exclusions || []);
+      // Handle both string array and structured inclusions/exclusions
+      if (packageData.inclusions && Array.isArray(packageData.inclusions)) {
+        if (packageData.inclusions.length > 0 && typeof packageData.inclusions[0] === 'object' && 'category' in packageData.inclusions[0]) {
+          setInclusions((packageData.inclusions as Array<{ category: string; items: string[] }>).map((item, index) => ({
+            id: `inc_${index}`,
+            category: item.category || "",
+            items: item.items || [""]
+          })));
+        } else {
+          // Convert string array to structured format
+          setInclusions([{ id: "1", category: "General", items: (packageData.inclusions as string[]).filter(i => i.trim() !== "") }]);
+        }
+      } else {
+        setInclusions([{ id: "1", category: "", items: [""] }]);
+      }
+
+      if (packageData.exclusions && Array.isArray(packageData.exclusions)) {
+        if (packageData.exclusions.length > 0 && typeof packageData.exclusions[0] === 'object' && 'category' in packageData.exclusions[0]) {
+          setExclusions((packageData.exclusions as Array<{ category: string; items: string[] }>).map((item, index) => ({
+            id: `exc_${index}`,
+            category: item.category || "",
+            items: item.items || [""]
+          })));
+        } else {
+          // Convert string array to structured format
+          setExclusions([{ id: "1", category: "General", items: (packageData.exclusions as string[]).filter(i => i.trim() !== "") }]);
+        }
+      } else {
+        setExclusions([{ id: "1", category: "", items: [""] }]);
+      }
+
       setReviews(packageData.reviews || []);
 
       setExistingImages(packageData.images || []);
@@ -327,33 +422,132 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   };
 
   // Inclusions functions
-  const addInclusion = () => {
-    setInclusions(prev => [...prev, ""]);
+  const addInclusionCategory = () => {
+    const newId = Date.now().toString();
+    setInclusions(prev => [...prev, { id: newId, category: "", items: [""] }]);
   };
 
-  const removeInclusion = (index: number) => {
+  const removeInclusionCategory = (id: string) => {
     if (inclusions.length > 1) {
-      setInclusions(prev => prev.filter((_, i) => i !== index));
+      setInclusions(prev => prev.filter(item => item.id !== id));
     }
   };
 
-  const updateInclusion = (index: number, value: string) => {
-    setInclusions(prev => prev.map((item, i) => i === index ? value : item));
+  const updateInclusionCategory = (id: string, value: string) => {
+    setInclusions(prev => prev.map(item =>
+      item.id === id ? { ...item, category: value } : item
+    ));
+  };
+
+  const addInclusionItem = (categoryId: string) => {
+    setInclusions(prev => prev.map(item =>
+      item.id === categoryId ? { ...item, items: [...item.items, ""] } : item
+    ));
+  };
+
+  const removeInclusionItem = (categoryId: string, itemIndex: number) => {
+    setInclusions(prev => prev.map(item =>
+      item.id === categoryId
+        ? { ...item, items: item.items.filter((_, i) => i !== itemIndex) }
+        : item
+    ));
+  };
+
+  const updateInclusionItem = (categoryId: string, itemIndex: number, value: string) => {
+    setInclusions(prev => prev.map(item =>
+      item.id === categoryId
+        ? { ...item, items: item.items.map((itm, i) => i === itemIndex ? value : itm) }
+        : item
+    ));
   };
 
   // Exclusions functions
-  const addExclusion = () => {
-    setExclusions(prev => [...prev, ""]);
+  const addExclusionCategory = () => {
+    const newId = Date.now().toString();
+    setExclusions(prev => [...prev, { id: newId, category: "", items: [""] }]);
   };
 
-  const removeExclusion = (index: number) => {
+  const removeExclusionCategory = (id: string) => {
     if (exclusions.length > 1) {
-      setExclusions(prev => prev.filter((_, i) => i !== index));
+      setExclusions(prev => prev.filter(item => item.id !== id));
     }
   };
 
-  const updateExclusion = (index: number, value: string) => {
-    setExclusions(prev => prev.map((item, i) => i === index ? value : item));
+  const updateExclusionCategory = (id: string, value: string) => {
+    setExclusions(prev => prev.map(item =>
+      item.id === id ? { ...item, category: value } : item
+    ));
+  };
+
+  const addExclusionItem = (categoryId: string) => {
+    setExclusions(prev => prev.map(item =>
+      item.id === categoryId ? { ...item, items: [...item.items, ""] } : item
+    ));
+  };
+
+  const removeExclusionItem = (categoryId: string, itemIndex: number) => {
+    setExclusions(prev => prev.map(item =>
+      item.id === categoryId
+        ? { ...item, items: item.items.filter((_, i) => i !== itemIndex) }
+        : item
+    ));
+  };
+
+  const updateExclusionItem = (categoryId: string, itemIndex: number, value: string) => {
+    setExclusions(prev => prev.map(item =>
+      item.id === categoryId
+        ? { ...item, items: item.items.map((itm, i) => i === itemIndex ? value : itm) }
+        : item
+    ));
+  };
+
+  // New fields helper functions
+  const addKeyHighlight = () => {
+    setKeyHighlights(prev => [...prev, ""]);
+  };
+
+  const removeKeyHighlight = (index: number) => {
+    setKeyHighlights(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateKeyHighlight = (index: number, value: string) => {
+    setKeyHighlights(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
+  const addHotelOption = () => {
+    setHotelOptions(prev => [...prev, ""]);
+  };
+
+  const removeHotelOption = (index: number) => {
+    setHotelOptions(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateHotelOption = (index: number, value: string) => {
+    setHotelOptions(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
+  const addWhyChooseThisTrip = () => {
+    setWhyChooseThisTrip(prev => [...prev, ""]);
+  };
+
+  const removeWhyChooseThisTrip = (index: number) => {
+    setWhyChooseThisTrip(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateWhyChooseThisTrip = (index: number, value: string) => {
+    setWhyChooseThisTrip(prev => prev.map((item, i) => i === index ? value : item));
+  };
+
+  const addWhyPremiumDubaiTours = () => {
+    setWhyPremiumDubaiTours(prev => [...prev, ""]);
+  };
+
+  const removeWhyPremiumDubaiTours = (index: number) => {
+    setWhyPremiumDubaiTours(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateWhyPremiumDubaiTours = (index: number, value: string) => {
+    setWhyPremiumDubaiTours(prev => prev.map((item, i) => i === index ? value : item));
   };
 
   // Reviews functions
@@ -439,10 +633,18 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       const updatedPackageData = {
         ...formData,
         price: price,
+        abstract: formData.abstract,
+        tourOverview: formData.tourOverview,
+        ideaFor: formData.ideaFor,
+        keyHighlights: keyHighlights.filter(h => h.trim() !== ""),
+        hotelOptions: hotelOptions.filter(h => h.trim() !== ""),
+        bestTimeToVisit: formData.bestTimeToVisit,
+        whyChooseThisTrip: whyChooseThisTrip.filter(w => w.trim() !== ""),
+        whyPremiumDubaiTours: whyPremiumDubaiTours.filter(w => w.trim() !== ""),
         itinerary: itinerary.map(day => ({
           day: day.day,
           title: day.title,
-          description: day.descriptions.filter(desc => desc.trim() !== "").join("\n• ")
+          description: day.descriptions.filter(desc => desc.trim() !== "").join("\n")
         })),
         transportation: transportation.map(item => ({
           type: item.type,
@@ -456,8 +658,18 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           roomType: item.roomType,
           nights: item.nights
         })),
-        inclusions: inclusions.filter(item => item.trim() !== ""),
-        exclusions: exclusions.filter(item => item.trim() !== ""),
+        inclusions: inclusions
+          .filter(item => item.category.trim() !== "" || item.items.some(i => i.trim() !== ""))
+          .map(item => ({
+            category: item.category,
+            items: item.items.filter(i => i.trim() !== "")
+          })),
+        exclusions: exclusions
+          .filter(item => item.category.trim() !== "" || item.items.some(i => i.trim() !== ""))
+          .map(item => ({
+            category: item.category,
+            items: item.items.filter(i => i.trim() !== "")
+          })),
         reviews: reviews.filter(review => review.name.trim() !== "" && review.comment.trim() !== ""),
         images: [...existingImages, ...uploadedNewImages],
         bookings: packageData?.bookings || 0,
@@ -497,7 +709,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       }
     } catch (error) {
       console.error('Error updating package:', error);
-      alert(`Error updating package: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+      alert(`Error updating package: ${errorMessage}`);
     } finally {
       setUploading(false);
     }
@@ -507,22 +720,34 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setFormData({
       title: "",
       subtitle: "",
+      ideaFor: "",
       about: "",
       services: "",
       tourDetails: "",
+      abstract: "",
+      tourOverview: "",
       price: "",
       duration: "",
       location: "",
       capacity: "",
       packageType: "domestic",
       place: "bhutan",
-      packageCategory: "Cultural",
+      packageCategory: "Regular",
+      bestTimeToVisit: {
+        yearRound: "",
+        winter: "",
+        summer: "",
+      },
     });
+    setKeyHighlights([]);
+    setHotelOptions([]);
+    setWhyChooseThisTrip([]);
+    setWhyPremiumDubaiTours([]);
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
     setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
     setAccommodation([{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
-    setInclusions([""]);
-    setExclusions([""]);
+    setInclusions([{ id: "1", category: "", items: [""] }]);
+    setExclusions([{ id: "1", category: "", items: [""] }]);
     setReviews([]);
     setExistingImages([]);
     setNewImages([]);
@@ -562,6 +787,203 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             />
           </div>
 
+          {/* Idea For */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Idea For</label>
+            <Input
+              placeholder="e.g., Airline stopovers, short holidays, business travelers"
+              value={formData.ideaFor}
+              onChange={(e) => handleInputChange('ideaFor', e.target.value)}
+            />
+          </div>
+
+          {/* Abstract */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Abstract</label>
+            <Textarea
+              placeholder="Enter the abstract for this package..."
+              value={formData.abstract}
+              onChange={(e) => handleInputChange('abstract', e.target.value)}
+              rows={4}
+            />
+          </div>
+
+          {/* Tour Overview */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Tour Overview</label>
+            <Textarea
+              placeholder="Enter the tour overview..."
+              value={formData.tourOverview}
+              onChange={(e) => handleInputChange('tourOverview', e.target.value)}
+              rows={6}
+            />
+          </div>
+
+          {/* Key Highlights */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Key Highlights</label>
+            {keyHighlights.map((highlight, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <Input
+                  placeholder={`Highlight ${index + 1}`}
+                  value={highlight}
+                  onChange={(e) => updateKeyHighlight(index, e.target.value)}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeKeyHighlight(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addKeyHighlight}
+              className="w-full"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Highlight
+            </Button>
+          </div>
+
+          {/* Hotel Options */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Hotel Options</label>
+            {hotelOptions.map((option, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <Input
+                  placeholder={`Hotel option ${index + 1}`}
+                  value={option}
+                  onChange={(e) => updateHotelOption(index, e.target.value)}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeHotelOption(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addHotelOption}
+              className="w-full"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Hotel Option
+            </Button>
+          </div>
+
+          {/* Best Time to Visit */}
+          <div className="space-y-4">
+            <label className="text-sm font-medium">Best Time to Visit</label>
+            <div className="space-y-2">
+              <label className="text-xs text-gray-600">Year Round</label>
+              <Textarea
+                placeholder="Year round information..."
+                value={formData.bestTimeToVisit.yearRound}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  bestTimeToVisit: { ...prev.bestTimeToVisit, yearRound: e.target.value }
+                }))}
+                rows={2}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs text-gray-600">Winter</label>
+              <Textarea
+                placeholder="Winter information..."
+                value={formData.bestTimeToVisit.winter}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  bestTimeToVisit: { ...prev.bestTimeToVisit, winter: e.target.value }
+                }))}
+                rows={2}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs text-gray-600">Summer</label>
+              <Textarea
+                placeholder="Summer information..."
+                value={formData.bestTimeToVisit.summer}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  bestTimeToVisit: { ...prev.bestTimeToVisit, summer: e.target.value }
+                }))}
+                rows={2}
+              />
+            </div>
+          </div>
+
+          {/* Why Choose This Trip */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Why Choose This Trip?</label>
+            {whyChooseThisTrip.map((item, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <Input
+                  placeholder={`Reason ${index + 1}`}
+                  value={item}
+                  onChange={(e) => updateWhyChooseThisTrip(index, e.target.value)}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeWhyChooseThisTrip(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addWhyChooseThisTrip}
+              className="w-full"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Reason
+            </Button>
+          </div>
+
+          {/* Why Premium Dubai Tours */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Why Premium Dubai Tours for This Journey?</label>
+            {whyPremiumDubaiTours.map((item, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <Input
+                  placeholder={`Reason ${index + 1}`}
+                  value={item}
+                  onChange={(e) => updateWhyPremiumDubaiTours(index, e.target.value)}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeWhyPremiumDubaiTours(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addWhyPremiumDubaiTours}
+              className="w-full"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Reason
+            </Button>
+          </div>
+
           {/* Package Type, Category and Place Dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
@@ -578,17 +1000,27 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Package Category *</label>
-              <Select value={formData.packageCategory} onValueChange={(value) => handleInputChange('packageCategory', value)}>
-                <SelectTrigger>
+              <Select 
+                value={formData.packageCategory || "Regular"} 
+                onValueChange={(value) => handleInputChange('packageCategory', value)}
+              >
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="z-[200]">
+                  <SelectItem value="Regular">Regular Packages</SelectItem>
+                  <SelectItem value="Premium">Premium Packages</SelectItem>
+                  <SelectItem value="Luxury">Luxury Packages</SelectItem>
+                  <SelectItem value="Adventure">Adventure Packages</SelectItem>
+                  <SelectItem value="Oman Tour">Oman Tour</SelectItem>
+                  <SelectItem value="Attraction and Activity">Attraction and Activity</SelectItem>
                   <SelectItem value="Cultural">Cultural</SelectItem>
-                  <SelectItem value="Adventure">Adventure</SelectItem>
                   <SelectItem value="Wildlife">Wildlife</SelectItem>
                   <SelectItem value="Trekking">Trekking</SelectItem>
                   <SelectItem value="Spiritual">Spiritual</SelectItem>
                   <SelectItem value="Beach">Beach</SelectItem>
+                  <SelectItem value="Deluxe">Deluxe</SelectItem>
+                  <SelectItem value="regular">Regular (Legacy)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -613,6 +1045,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                   <SelectItem value="bali">Bali</SelectItem>
                   <SelectItem value="malaysia">Malaysia</SelectItem>
                   <SelectItem value="singapore">Singapore</SelectItem>
+                  <SelectItem value="dubai">Dubai</SelectItem>
                   {/* Legacy Places */}
                   <SelectItem value="bhutan">Bhutan</SelectItem>
                   <SelectItem value="nepal">Nepal</SelectItem>
@@ -1078,37 +1511,70 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={addInclusion}
-                    className="text-green-600 border-green-300 hover:bg-green-50"
+                    onClick={addInclusionCategory}
+                    className="flex items-center gap-2"
                   >
                     <Plus className="h-4 w-4" />
-                    Add Inclusion
+                    Add Category
                   </Button>
                 </div>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {inclusions.map((item, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-green-600 text-xs">✓</span>
-                      </div>
+                <div className="space-y-4">
+                  {inclusions.map((category) => (
+                    <Card key={category.id}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
                       <Input
-                        value={item}
-                        onChange={(e) => updateInclusion(index, e.target.value)}
-                        placeholder="Enter inclusion item..."
-                        className="flex-1"
+                            placeholder="Category name"
+                            value={category.category}
+                            onChange={(e) => updateInclusionCategory(category.id, e.target.value)}
+                            className="max-w-xs"
                       />
                       {inclusions.length > 1 && (
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          onClick={() => removeInclusion(index)}
+                              onClick={() => removeInclusionCategory(category.id)}
                           className="text-red-500 hover:text-red-700"
                         >
                           <Minus className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        {category.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="flex items-center gap-2">
+                            <Input
+                              placeholder={`Item ${itemIndex + 1}`}
+                              value={item}
+                              onChange={(e) => updateInclusionItem(category.id, itemIndex, e.target.value)}
+                            />
+                            {category.items.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeInclusionItem(category.id, itemIndex)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <X className="h-4 w-4" />
                         </Button>
                       )}
                     </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => addInclusionItem(category.id)}
+                          className="flex items-center gap-2"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add Item
+                        </Button>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               </div>
@@ -1121,37 +1587,70 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={addExclusion}
-                    className="text-red-600 border-red-300 hover:bg-red-50"
+                    onClick={addExclusionCategory}
+                    className="flex items-center gap-2"
                   >
                     <Plus className="h-4 w-4" />
-                    Add Exclusion
+                    Add Category
                   </Button>
                 </div>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {exclusions.map((item, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center">
-                        <span className="text-red-600 text-xs">✗</span>
-                      </div>
+                <div className="space-y-4">
+                  {exclusions.map((category) => (
+                    <Card key={category.id}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
                       <Input
-                        value={item}
-                        onChange={(e) => updateExclusion(index, e.target.value)}
-                        placeholder="Enter exclusion item..."
-                        className="flex-1"
+                            placeholder="Category name"
+                            value={category.category}
+                            onChange={(e) => updateExclusionCategory(category.id, e.target.value)}
+                            className="max-w-xs"
                       />
                       {exclusions.length > 1 && (
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          onClick={() => removeExclusion(index)}
+                              onClick={() => removeExclusionCategory(category.id)}
                           className="text-red-500 hover:text-red-700"
                         >
                           <Minus className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        {category.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="flex items-center gap-2">
+                            <Input
+                              placeholder={`Item ${itemIndex + 1}`}
+                              value={item}
+                              onChange={(e) => updateExclusionItem(category.id, itemIndex, e.target.value)}
+                            />
+                            {category.items.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeExclusionItem(category.id, itemIndex)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <X className="h-4 w-4" />
                         </Button>
                       )}
                     </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => addExclusionItem(category.id)}
+                          className="flex items-center gap-2"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add Item
+                        </Button>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               </div>

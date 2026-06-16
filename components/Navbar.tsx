@@ -86,8 +86,19 @@ const Navbar = () => {
   const navigation: NavigationItem[] = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Packages', href: '/packages/domestic' },
-    { name: 'Blogs', href: '/blogs' },
+    { 
+      name: 'Packages', 
+      href: '/packages/regular',
+      submenu: [
+        { name: 'Regular Packages', href: '/packages/regular' },
+        { name: 'Premium Packages', href: '/packages/premium' },
+        { name: 'Luxury Packages', href: '/packages/luxury' },
+        { name: 'Adventure Activities', href: '/packages/adventure' },
+        { name: 'OMAN Tour', href: '/packages/oman' },
+        { name: 'Attraction and Activity', href: '/packages/attractions' },
+      ]
+    },
+    { name: 'Travel Blog ', href: '/blogs' },
     { name: 'Contact', href: '/contact' },
   ];
 
@@ -257,11 +268,11 @@ const Navbar = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+91 9970393335, +91 9834771258</span>
+                  <span>+971 50 401 5632, +971 50 214 2541</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>support@premiumdubaitours.com</span>
+                  <span>info@premiumdubaitours.com</span>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
@@ -269,7 +280,7 @@ const Navbar = () => {
                   variant="ghost" 
                   size="sm" 
                   className="text-white hover:bg-gray-800"
-                  onClick={() => window.open('https://wa.me/919970393335', '_blank')}
+                  onClick={() => window.open('https://wa.me/971504015632', '_blank')}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Live Chat
@@ -290,13 +301,13 @@ const Navbar = () => {
           {/* Row 1: Phone Numbers */}
           <div className="flex items-center justify-center space-x-2 text-sm">
             <Phone className="h-4 w-4" />
-            <span>+91 9970393335, +91 9834771258</span>
+            <span>+971 50 401 5632, +971 50 214 2541</span>
           </div>
           
           {/* Row 2: Email */}
           <div className="flex items-center justify-center space-x-2 text-base mt-2">
             <Mail className="h-4 w-4" />
-            <span>support@premiumdubaitours.com</span>
+            <span>info@premiumdubaitours.com</span>
           </div>
           
           {/* Row 3: Live Chat & Login */}
@@ -305,7 +316,7 @@ const Navbar = () => {
               variant="ghost" 
               size="sm" 
               className="text-white hover:bg-gray-800 text-base px-4 py-2"
-              onClick={() => window.open('https://wa.me/919970393335', '_blank')}
+              onClick={() => window.open('https://wa.me/971504015632', '_blank')}
             >
               <MessageCircle className="h-5 w-5 mr-2" />
               Live Chat
@@ -339,7 +350,7 @@ const Navbar = () => {
                 PREMIUM DUBAI TOURS
               </h1>
               <p className={`text-xs sm:text-sm font-normal uppercase tracking-wide ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none' }}>
-                LUXURY TRAVEL EXPERIENCES
+                Refined Dubai Travel Experiences 
               </p>
             </div>
           </Link>
@@ -354,7 +365,7 @@ const Navbar = () => {
                   }`} />
                   <Input
                     type="text"
-                    placeholder="Search packages..."
+                    placeholder="Search Dubai tours…"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     className={`pl-10 pr-4 py-2 w-full ${
@@ -480,7 +491,7 @@ const Navbar = () => {
                         <ChevronDown className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-48">
+                    <DropdownMenuContent align="start" className="w-48 z-[130]">
                       {item.submenu.map((subItem) => (
                         <DropdownMenuItem key={subItem.name} asChild>
                           <Link 

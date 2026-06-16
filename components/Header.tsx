@@ -31,7 +31,7 @@ const Header = () => {
 
   // WhatsApp contact function
   const handleWhatsAppClick = () => {
-    const phoneNumber = "9970393335"; // Remove the + and add 91 for India
+    const phoneNumber = "971504015632"; // WhatsApp number with country code
     const message = "Hi! I'm interested in your tour packages. Can you please provide more information?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -66,21 +66,21 @@ const Header = () => {
                 <div className="flex flex-col items-center space-y-0.5">
                   <div className="flex items-center space-x-1">
                     <Phone className="h-3 w-3" />
-                    <span>9970393335</span>
+                    <span>+971 50 401 5632</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Phone className="h-3 w-3" />
-                    <span>9104862909</span>
+                    <span>+971 50 214 2541</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Mail className="h-3 w-3" />
-                  <span className="truncate">support@premiumdubaitours.com</span>
+                  <span className="truncate">info@premiumdubaitours.com</span>
                 </div>
               </div>
               <div className="flex justify-center">
                 <a
-                  href="https://wa.me/91970393335"
+                  href="https://wa.me/971504015632"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-1 hover:text-green-400 transition-colors duration-200 text-xs"
@@ -99,14 +99,14 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>9970393335, 9104862909</span>
+                  <span>+971 50 401 5632, +971 50 214 2541</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>support@premiumdubaitours.com</span>
+                  <span>info@premiumdubaitours.com</span>
                 </div>
                 <a
-                  href="https://wa.me/91970393335"
+                  href="https://wa.me/971504015632"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-2 hover:text-green-400 transition-colors duration-200"

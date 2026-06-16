@@ -7,6 +7,10 @@ import { Badge } from "../../components/ui/badge";
 import CreatePackageModal from "../../components/CreatePackageModal";
 import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
+import CreateTestimonialModal from "../../components/CreateTestimonialModal";
+import CreateBlogModal from "../../components/CreateBlogModal";
+import EditBlogModal from "../../components/EditBlogModal";
+import ViewBookingModal from "../../components/ViewBookingModal";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
@@ -20,18 +24,38 @@ import {
   Filter,
   Search,
   Download,
-  Copy
+  Copy,
+  MessageSquare,
+  FileText,
+  Menu,
+  X,
+  LayoutDashboard,
+  Pencil,
+  Calendar,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { cn } from "../../lib/utils";
 
 interface PackageData {
   _id: string;
   title: string;
   subtitle: string;
+  ideaFor?: string;
   about: string;
   services: string;
   tourDetails: string;
+  abstract?: string;
+  tourOverview?: string;
+  keyHighlights?: string[];
+  hotelOptions?: string[];
+  bestTimeToVisit?: {
+    yearRound?: string;
+    winter?: string;
+    summer?: string;
+  };
+  whyChooseThisTrip?: string[];
+  whyPremiumDubaiTours?: string[];
   price: number;
   duration: string;
   location: string;
@@ -61,22 +85,44 @@ interface PackageData {
     roomType: string;
     nights: string;
   }>;
-  inclusions: string[];
-  exclusions: string[];
+  inclusions?: string[] | Array<{
+    category: string;
+    items: string[];
+  }>;
+  exclusions?: string[] | Array<{
+    category: string;
+    items: string[];
+  }>;
   bookings: number;
   rating: number;
   createdAt: string;
   updatedAt: string;
 }
 
+type DashboardView = 'packages' | 'testimonials' | 'blogs' | 'bookings';
+
 export default function DashboardPage() {
+  const [activeView, setActiveView] = useState<DashboardView>('packages');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isCreatePackageModalOpen, setIsCreatePackageModalOpen] = useState(false);
   const [isViewPackageModalOpen, setIsViewPackageModalOpen] = useState(false);
   const [isEditPackageModalOpen, setIsEditPackageModalOpen] = useState(false);
+  const [isCreateTestimonialModalOpen, setIsCreateTestimonialModalOpen] = useState(false);
+  const [isCreateBlogModalOpen, setIsCreateBlogModalOpen] = useState(false);
+  const [isEditBlogModalOpen, setIsEditBlogModalOpen] = useState(false);
+  const [isViewBookingModalOpen, setIsViewBookingModalOpen] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
   const [packages, setPackages] = useState<PackageData[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<PackageData[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+  const [loadingBlogs, setLoadingBlogs] = useState(true);
+  const [loadingBookings, setLoadingBookings] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [packageTypeFilter, setPackageTypeFilter] = useState("all");
   const [placeFilter, setPlaceFilter] = useState("all");
@@ -84,21 +130,148 @@ export default function DashboardPage() {
 
   const fetchPackages = async () => {
     try {
+      setLoading(true);
+      
+      // First, try to seed packages if database is empty
+      try {
+        const seedResponse = await fetch('/api/packages/seed', { method: 'POST' });
+        const seedData = await seedResponse.json();
+        console.log('Seed response:', seedData);
+      } catch (seedError) {
+        console.log('Seed attempt completed or failed:', seedError);
+      }
+
+      // Wait a bit for database to update
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       const response = await fetch('/api/packages');
       const data = await response.json();
-      if (data.success) {
+      console.log('Fetched packages:', data);
+      if (data.success && data.data) {
         setPackages(data.data);
+        console.log(`Loaded ${data.data.length} packages`);
+      } else {
+        console.warn('No packages data in response:', data);
+        setPackages([]);
       }
     } catch (error) {
       console.error('Error fetching packages:', error);
+      setPackages([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTestimonials = async () => {
+    try {
+      setLoadingTestimonials(true);
+      const response = await fetch('/api/testimonials');
+      const data = await response.json();
+      if (data.success && data.data) {
+        setTestimonials(data.data);
+      } else {
+        setTestimonials([]);
+      }
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+      setTestimonials([]);
+    } finally {
+      setLoadingTestimonials(false);
+    }
+  };
+
+  const fetchBlogs = async () => {
+    try {
+      setLoadingBlogs(true);
+      
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      try {
+        const response = await fetch('/api/blogs', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          // If response is not ok, try to get error message
+          let errorMessage = `Failed to fetch blogs (Status: ${response.status})`;
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+          } catch (parseError) {
+            // If can't parse as JSON, read as text
+            try {
+              const errorText = await response.text();
+              errorMessage = errorText || errorMessage;
+            } catch (textError) {
+              errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+            }
+          }
+          console.error('Error fetching blogs:', errorMessage);
+          setBlogs([]);
+          return;
+        }
+
+        const data = await response.json();
+        
+        if (data.success) {
+          // Handle both data.data and direct data array
+          const blogsArray = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
+          setBlogs(blogsArray);
+        } else {
+          console.warn('Blogs API returned unsuccessful response:', data);
+          setBlogs([]);
+        }
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        
+        const error = fetchError as Error;
+        if (error.name === 'AbortError') {
+          console.error('Request timeout: The server took too long to respond');
+          setBlogs([]);
+        } else if (error.message === 'Failed to fetch' || error.message.includes('NetworkError') || error.message.includes('ERR_INTERNET_DISCONNECTED')) {
+          console.error('Network error: Unable to reach the server. Please check if the server is running.');
+          setBlogs([]);
+        } else {
+          throw fetchError; // Re-throw to be caught by outer catch
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Error details:', errorMessage);
+      setBlogs([]);
+    } finally {
+      setLoadingBlogs(false);
     }
   };
 
   useEffect(() => {
     fetchPackages();
   }, []);
+
+  useEffect(() => {
+    if (activeView === 'testimonials') {
+      fetchTestimonials();
+    }
+    if (activeView === 'blogs') {
+      // Add a small delay to ensure the component is fully mounted
+      const timer = setTimeout(() => {
+        fetchBlogs();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+    if (activeView === 'bookings') {
+      fetchBookings();
+    }
+  }, [activeView]);
 
   useEffect(() => {
     filterPackages();
@@ -215,7 +388,8 @@ export default function DashboardPage() {
         }
       } catch (error) {
         console.error('Error deleting package:', error);
-        alert(`Error deleting package: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+        alert(`Error deleting package: ${errorMessage}`);
       }
     }
   };
@@ -260,7 +434,8 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.error('Error duplicating package:', error);
-      alert(`Error duplicating package: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : error?.toString() || 'Unknown error occurred';
+      alert(`Error duplicating package: ${errorMessage}`);
     }
   };
 
@@ -276,7 +451,6 @@ export default function DashboardPage() {
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Place", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Duration", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Location", bold: true })] })] }),
-            new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Capacity", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Rating", bold: true })] })] }),
             new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Bookings", bold: true })] })] }),
@@ -292,8 +466,7 @@ export default function DashboardPage() {
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.duration || 'N/A' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.location || 'N/A' })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.capacity || 'N/A' })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `₹${pkg.price}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `AED ${pkg.price?.toLocaleString() || '0'}` })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.rating || 0).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (pkg.bookings || 0).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: new Date(pkg.createdAt).toLocaleDateString() })] })] }),
@@ -682,14 +855,8 @@ export default function DashboardPage() {
           }),
           new TableRow({
             children: [
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Capacity" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.capacity || 'N/A' })] })] }),
-            ],
-          }),
-          new TableRow({
-            children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Price" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `₹${pkg.price}` })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `AED ${pkg.price?.toLocaleString() || '0'}` })] })] }),
             ],
           }),
           new TableRow({
@@ -945,26 +1112,187 @@ export default function DashboardPage() {
     );
   }
 
+  const fetchBookings = async () => {
+    try {
+      setLoadingBookings(true);
+      const response = await fetch('/api/bookings', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setBookings(Array.isArray(data.data) ? data.data : []);
+        } else {
+          setBookings([]);
+        }
+      } else {
+        console.error('Failed to fetch bookings:', response.status, response.statusText);
+        setBookings([]);
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setBookings([]);
+    } finally {
+      setLoadingBookings(false);
+    }
+  };
+
+  const sidebarItems = [
+    {
+      id: 'packages' as DashboardView,
+      label: 'Packages',
+      icon: Package,
+      description: 'Manage tour packages'
+    },
+    {
+      id: 'testimonials' as DashboardView,
+      label: 'Testimonials',
+      icon: MessageSquare,
+      description: 'Manage customer reviews'
+    },
+    {
+      id: 'blogs' as DashboardView,
+      label: 'Blogs',
+      icon: FileText,
+      description: 'Manage blog posts'
+    },
+    {
+      id: 'bookings' as DashboardView,
+      label: 'Bookings',
+      icon: Calendar,
+      description: 'Manage customer bookings'
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <aside className={cn(
+        "bg-white border-r transition-all duration-300 ease-in-out fixed lg:static inset-y-0 left-0 z-50",
+        sidebarOpen ? "w-64" : "w-0 lg:w-0",
+        "overflow-hidden lg:overflow-visible"
+      )}>
+        <div className="h-full flex flex-col">
+          {/* Sidebar Header */}
+          <div className="p-6 border-b">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <LayoutDashboard className="h-6 w-6 text-primary" />
+                <h2 className="text-xl font-bold text-gray-900">Dashboard</h2>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Navigation Items */}
+          <nav className="flex-1 p-4 space-y-2">
+            {sidebarItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={cn(
+                    "w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-left",
+                    activeView === item.id
+                      ? "bg-primary text-white"
+                      : "text-gray-700 hover:bg-gray-100"
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <div className="flex-1">
+                    <div className="font-medium">{item.label}</div>
+                    <div className={cn(
+                      "text-xs",
+                      activeView === item.id ? "text-white/80" : "text-gray-500"
+                    )}>
+                      {item.description}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </aside>
+
+      {/* Sidebar Overlay for Mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
       {/* Header */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-4">
+          <div className="px-6 py-4">
           <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                {!sidebarOpen && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSidebarOpen(true)}
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                )}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600 mt-1">Manage your tour packages</p>
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    {activeView === 'packages' && 'Packages'}
+                    {activeView === 'testimonials' && 'Testimonials'}
+                    {activeView === 'blogs' && 'Blogs'}
+                    {activeView === 'bookings' && 'Bookings'}
+                  </h1>
+                  <p className="text-gray-600 mt-1">
+                    {activeView === 'packages' && 'Manage your tour packages'}
+                    {activeView === 'testimonials' && 'Manage customer testimonials and reviews'}
+                    {activeView === 'blogs' && 'Manage blog posts and articles'}
+                    {activeView === 'bookings' && 'Manage customer bookings and reservations'}
+                  </p>
+                </div>
             </div>
             <div className="flex items-center space-x-4">
+                {activeView === 'packages' && (
               <Button size="sm" onClick={openCreatePackageModal}>
                 <Plus className="h-4 w-4 mr-2" />
                 New Package
               </Button>
+                )}
+                {activeView === 'testimonials' && (
+                  <Button size="sm" onClick={() => setIsCreateTestimonialModalOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Testimonial
+                  </Button>
+                )}
+                {activeView === 'blogs' && (
+                  <Button size="sm" onClick={() => setIsCreateBlogModalOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Blog Post
+                  </Button>
+                )}
             </div>
           </div>
         </div>
       </div>
 
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto">
+          {activeView === 'packages' && (
       <div className="container mx-auto px-6 py-8">
         {/* Packages Table */}
         <Card>
@@ -1109,7 +1437,6 @@ export default function DashboardPage() {
                     <th className="text-left p-3">Place</th>
                     <th className="text-left p-3">Duration</th>
                     <th className="text-left p-3">Location</th>
-                    <th className="text-left p-3">Capacity</th>
                     <th className="text-left p-3">Price</th>
                     <th className="text-left p-3">Rating</th>
                     <th className="text-left p-3">Actions</th>
@@ -1167,8 +1494,7 @@ export default function DashboardPage() {
                         </td>
                         <td className="p-3">{pkg.duration || "N/A"}</td>
                         <td className="p-3">{pkg.location || "N/A"}</td>
-                        <td className="p-3">{pkg.capacity || "N/A"}</td>
-                        <td className="p-3 font-medium">₹{pkg.price}</td>
+                        <td className="p-3 font-medium">AED {pkg.price?.toLocaleString() || "0"}</td>
                         <td className="p-3">
                           <div className="flex items-center">
                             <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
@@ -1226,7 +1552,7 @@ export default function DashboardPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={10} className="p-8 text-center text-gray-500">
+                      <td colSpan={9} className="p-8 text-center text-gray-500">
                         <div className="flex flex-col items-center space-y-2">
                           <Package className="h-12 w-12 text-gray-300" />
                           {packages.length === 0 ? (
@@ -1264,12 +1590,392 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+          )}
+
+          {activeView === 'testimonials' && (
+            <div className="container mx-auto px-6 py-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Testimonials</CardTitle>
+                  <CardDescription>Manage customer testimonials and reviews</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingTestimonials ? (
+                    <div className="text-center py-12">
+                      <p className="text-gray-600">Loading testimonials...</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-3">Name</th>
+                            <th className="text-left p-3">Role</th>
+                            <th className="text-left p-3">Quote</th>
+                            <th className="text-left p-3">Rating</th>
+                            <th className="text-left p-3">Status</th>
+                            <th className="text-left p-3">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {testimonials.length > 0 ? (
+                            testimonials.map((testimonial) => (
+                              <tr key={testimonial._id} className="border-b">
+                                <td className="p-3 font-medium">{testimonial.name}</td>
+                                <td className="p-3 text-gray-600">{testimonial.role}</td>
+                                <td className="p-3">
+                                  <p className="text-sm text-gray-700 line-clamp-2 max-w-md">
+                                    {testimonial.quote}
+                                  </p>
+                                </td>
+                                <td className="p-3">
+                                  <div className="flex items-center">
+                                    <Star className="h-4 w-4 text-yellow-500 fill-current mr-1" />
+                                    {testimonial.rating || 5}
+                                  </div>
+                                </td>
+                                <td className="p-3">
+                                  <Badge variant={testimonial.isActive ? 'default' : 'secondary'}>
+                                    {testimonial.isActive ? 'Active' : 'Inactive'}
+                                  </Badge>
+                                </td>
+                                <td className="p-3">
+                                  <div className="flex items-center space-x-2">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={async () => {
+                                        if (window.confirm(`Are you sure you want to delete "${testimonial.name}"?`)) {
+                                          try {
+                                            const response = await fetch(`/api/testimonials/${testimonial._id}`, {
+                                              method: 'DELETE',
+                                            });
+                                            if (response.ok) {
+                                              setTestimonials(prev => prev.filter(t => t._id !== testimonial._id));
+                                              alert('Testimonial deleted successfully!');
+                                            } else {
+                                              alert('Failed to delete testimonial');
+                                            }
+                                          } catch (error) {
+                                            console.error('Error deleting testimonial:', error);
+                                            alert('Error deleting testimonial');
+                                          }
+                                        }
+                                      }}
+                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={6} className="p-8 text-center text-gray-500">
+                                <div className="flex flex-col items-center space-y-2">
+                                  <MessageSquare className="h-12 w-12 text-gray-300" />
+                                  <p>No testimonials yet</p>
+                                  <Button onClick={() => setIsCreateTestimonialModalOpen(true)} size="sm">
+                                    <Plus className="h-4 w-4 mr-2" />
+                                    Add Your First Testimonial
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'bookings' && (
+            <div className="container mx-auto px-6 py-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Bookings</CardTitle>
+                  <CardDescription>Manage customer bookings and reservations</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingBookings ? (
+                    <div className="text-center py-12">
+                      <p className="text-gray-600">Loading bookings...</p>
+                    </div>
+                  ) : bookings.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="flex flex-col items-center space-y-4">
+                        <Calendar className="h-16 w-16 text-gray-300" />
+                        <div>
+                          <p className="text-gray-600 mb-2">No bookings found</p>
+                          <p className="text-sm text-gray-500 mb-4">
+                            Bookings will appear here once customers make reservations.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-3">Booking ID</th>
+                            <th className="text-left p-3">Package</th>
+                            <th className="text-left p-3">Customer</th>
+                            <th className="text-left p-3">Date</th>
+                            <th className="text-left p-3">Status</th>
+                            <th className="text-left p-3">Amount</th>
+                            <th className="text-left p-3">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bookings.map((booking) => (
+                            <tr key={booking._id} className="border-b">
+                              <td className="p-3">
+                                <div className="font-mono text-sm">{booking._id?.slice(-8) || 'N/A'}</div>
+                              </td>
+                              <td className="p-3">
+                                <div className="font-medium">{booking.packageName || booking.packageId || 'N/A'}</div>
+                              </td>
+                              <td className="p-3">
+                                <div>
+                                  <div className="font-medium">{booking.customerName || 'N/A'}</div>
+                                  <div className="text-sm text-gray-500">{booking.customerEmail || ''}</div>
+                                </div>
+                              </td>
+                              <td className="p-3 text-gray-600">
+                                {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'N/A'}
+                              </td>
+                              <td className="p-3">
+                                <Badge variant={booking.status === 'confirmed' ? 'default' : booking.status === 'pending' ? 'secondary' : 'outline'}>
+                                  {booking.status || 'Pending'}
+                                </Badge>
+                              </td>
+                              <td className="p-3">
+                                <div className="font-medium">AED {booking.amount || booking.totalPrice || '0'}</div>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex items-center space-x-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setSelectedBooking(booking);
+                                      setIsViewBookingModalOpen(true);
+                                    }}
+                                    className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeView === 'blogs' && (
+            <div className="container mx-auto px-6 py-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Blogs</CardTitle>
+                  <CardDescription>Manage blog posts and articles</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingBlogs ? (
+                    <div className="text-center py-12">
+                      <p className="text-gray-600">Loading blogs...</p>
+                    </div>
+                  ) : blogs.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="flex flex-col items-center space-y-4">
+                        <FileText className="h-16 w-16 text-gray-300" />
+                        <div>
+                          <p className="text-gray-600 mb-2">No blogs found</p>
+                          <p className="text-sm text-gray-500 mb-4">
+                            Blogs will appear here once they are added to the database.
+                          </p>
+                          <div className="flex flex-col items-center space-y-2">
+                            <Button onClick={() => setIsCreateBlogModalOpen(true)} size="sm">
+                              <Plus className="h-4 w-4 mr-2" />
+                              Add Your First Blog Post
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={async () => {
+                                // Try to seed blogs
+                                try {
+                                  const response = await fetch('/api/blogs/seed', { method: 'POST' });
+                                  if (response.ok) {
+                                    const data = await response.json();
+                                    alert(data.message || 'Blogs seeded successfully!');
+                                    fetchBlogs();
+                                  } else {
+                                    alert('Failed to seed blogs');
+                                  }
+                                } catch (error) {
+                                  console.error('Error seeding blogs:', error);
+                                  alert('Error seeding blogs. Please check the console.');
+                                }
+                              }}
+                            >
+                              Seed Sample Blogs
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-3">Title</th>
+                            <th className="text-left p-3">Category</th>
+                            <th className="text-left p-3">Author</th>
+                            <th className="text-left p-3">Publish Date</th>
+                            <th className="text-left p-3">Views</th>
+                            <th className="text-left p-3">Status</th>
+                            <th className="text-left p-3">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {blogs.map((blog) => (
+                            <tr key={blog._id} className="border-b">
+                                <td className="p-3">
+                                  <div className="flex items-center space-x-3">
+                                    {blog.image && (
+                                      <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-gray-200">
+                                        <img
+                                          src={blog.image}
+                                          alt={blog.title}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </div>
+                                    )}
+                                    <div>
+                                      <div className="font-medium line-clamp-1 max-w-md">{blog.title}</div>
+                                      <div className="text-sm text-gray-500 line-clamp-1 max-w-md">{blog.excerpt}</div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="p-3">
+                                  <Badge variant="outline">{blog.category}</Badge>
+                                </td>
+                                <td className="p-3 text-gray-600">{blog.author || 'Premium Dubai Tours'}</td>
+                                <td className="p-3 text-gray-600">
+                                  {blog.publishDate ? new Date(blog.publishDate).toLocaleDateString() : 'N/A'}
+                                </td>
+                                <td className="p-3">
+                                  <div className="flex items-center">
+                                    <Eye className="h-4 w-4 text-gray-400 mr-1" />
+                                    {blog.views || 0}
+                                  </div>
+                                </td>
+                                <td className="p-3">
+                                  <Badge variant={blog.isPublished ? 'default' : 'secondary'}>
+                                    {blog.isPublished ? 'Published' : 'Draft'}
+                                  </Badge>
+                                </td>
+                                <td className="p-3">
+                                  <div className="flex items-center space-x-2">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => {
+                                        setSelectedBlog(blog);
+                                        setIsEditBlogModalOpen(true);
+                                      }}
+                                      className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                                    >
+                                      <Pencil className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={async () => {
+                                        if (window.confirm(`Are you sure you want to delete "${blog.title}"?`)) {
+                                          try {
+                                            const response = await fetch(`/api/blogs/${blog._id}`, {
+                                              method: 'DELETE',
+                                            });
+                                            if (response.ok) {
+                                              setBlogs(prev => prev.filter(b => b._id !== blog._id));
+                                              alert('Blog deleted successfully!');
+                                            } else {
+                                              alert('Failed to delete blog');
+                                            }
+                                          } catch (error) {
+                                            console.error('Error deleting blog:', error);
+                                            alert('Error deleting blog');
+                                          }
+                                        }
+                                      }}
+                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Create Package Modal */}
       <CreatePackageModal
         isOpen={isCreatePackageModalOpen}
         onClose={() => setIsCreatePackageModalOpen(false)}
         onPackageCreated={handlePackageCreated}
+      />
+
+      {/* Create Testimonial Modal */}
+      <CreateTestimonialModal
+        isOpen={isCreateTestimonialModalOpen}
+        onClose={() => setIsCreateTestimonialModalOpen(false)}
+        onSuccess={() => {
+          fetchTestimonials();
+        }}
+      />
+
+      {/* Create Blog Modal */}
+      <CreateBlogModal
+        isOpen={isCreateBlogModalOpen}
+        onClose={() => setIsCreateBlogModalOpen(false)}
+        onSuccess={() => {
+          fetchBlogs();
+        }}
+      />
+
+      {/* Edit Blog Modal */}
+      <EditBlogModal
+        isOpen={isEditBlogModalOpen}
+        onClose={() => {
+          setIsEditBlogModalOpen(false);
+          setSelectedBlog(null);
+        }}
+        onSuccess={() => {
+          fetchBlogs();
+        }}
+        blog={selectedBlog}
       />
 
       {/* View Package Modal */}
@@ -1291,6 +1997,16 @@ export default function DashboardPage() {
         }}
         packageData={selectedPackage}
         onPackageUpdated={handlePackageUpdated}
+      />
+
+      {/* View Booking Modal */}
+      <ViewBookingModal
+        isOpen={isViewBookingModalOpen}
+        onClose={() => {
+          setIsViewBookingModalOpen(false);
+          setSelectedBooking(null);
+        }}
+        booking={selectedBooking}
       />
     </div>
   );

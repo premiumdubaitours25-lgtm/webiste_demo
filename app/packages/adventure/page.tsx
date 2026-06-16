@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, ShieldCheck, Crown, Gem } from "lucide-react";
+import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,7 +14,7 @@ interface Package {
   title: string;
   subtitle: string;
   about: string;
-  services: string[];
+  services: string[] | string;
   tourDetails: string;
   itinerary: Array<{
     day: number;
@@ -32,12 +30,6 @@ interface Package {
   images: Array<{
     url: string;
     alt: string;
-  }>;
-  reviews?: Array<{
-    name: string;
-    rating: number;
-    comment: string;
-    date: string;
   }>;
   bookings: number;
   rating: number;
@@ -57,7 +49,7 @@ interface FilterState {
   };
 }
 
-const DomesticPackagesPage = () => {
+const AdventureActivitiesPage = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,7 +58,7 @@ const DomesticPackagesPage = () => {
     searchTerm: "",
     priceRange: [0, 20000],
     durationRange: [1, 30],
-    location: "domestic",
+    location: "all",
     departureCity: [],
     tourType: [],
     departBetween: {
@@ -74,96 +66,59 @@ const DomesticPackagesPage = () => {
       endDate: ""
     }
   });
-  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
-    // Check for URL query parameters first
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
 
-    console.log('Initial mount, search param:', searchParam);
-
     if (searchParam) {
-      console.log('Setting initial search term:', searchParam);
       setFilters(prev => ({
         ...prev,
         searchTerm: searchParam
       }));
     }
 
-    // Fetch packages after setting search term
     fetchPackages();
   }, []);
 
   useEffect(() => {
     filterPackages();
-  }, [packages, filters, selectedCategory]);
+  }, [packages, filters]);
 
-  // Refetch packages when searchTerm changes
   useEffect(() => {
-    if (filters.searchTerm !== undefined) { // Only fetch if searchTerm has been initialized
+    if (filters.searchTerm !== undefined) {
       fetchPackages();
     }
   }, [filters.searchTerm]);
 
-  // Simple URL parameter check on mount (since we use force refresh now)
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('search');
-
-    if (searchParam && searchParam !== filters.searchTerm) {
-      setFilters(prev => ({
-        ...prev,
-        searchTerm: searchParam
-      }));
-    }
-  }, []); // Run only on mount
-
 
   const fetchPackages = async () => {
     try {
-      // Build URL with search parameter if searchTerm exists
+      // First, try to seed packages if database is empty
+      try {
+        await fetch('/api/packages/seed', { method: 'POST' });
+      } catch (seedError) {
+        console.log('Seed attempt completed or failed:', seedError);
+      }
+
       const baseUrl = '/api/packages';
       const searchParam = filters.searchTerm ? `?search=${encodeURIComponent(filters.searchTerm)}` : '';
       const url = `${baseUrl}${searchParam}`;
 
       const response = await fetch(url);
       const result = await response.json();
-      if (result.success) {
-        // Filter for domestic packages based on packageType
-        const domesticPackages = result.data.filter((pkg: Package) =>
-          pkg.packageType === 'domestic'
+      if (result.success && result.data) {
+        // Filter STRICTLY for adventure packages (packageCategory must be 'Adventure' or 'adventure')
+        let adventurePackages = result.data.filter((pkg: Package) =>
+          pkg.packageCategory && (
+            pkg.packageCategory === 'Adventure' || 
+            pkg.packageCategory === 'adventure'
+          )
         );
 
-        // Demo Package
-        const demoPackage: Package = {
-          _id: 'demo-package-id',
-          title: 'Royal Dubai Experience',
-          subtitle: 'Luxury Desert & City Tour',
-          about: 'Experience the ultimate luxury in Dubai with our premium package including 5-star accommodation, private desert safari, and VIP access to Burj Khalifa.',
-          services: ['5-Star Hotel', 'Private Transfer', 'Guide', 'All Meals'],
-          tourDetails: 'A comprehensive 5-day tour of Dubai.',
-          itinerary: [
-            { day: 1, title: 'Arrival in Style', description: 'Private transfer to Atlantis The Palm.' },
-            { day: 2, title: 'Modern Dubai', description: 'VIP tour of Burj Khalifa and Dubai Mall.' },
-            { day: 3, title: 'Desert Magic', description: 'Luxury desert safari with private dinner.' }
-          ],
-          price: 5500,
-          duration: '5 Days',
-          location: 'Dubai',
-          capacity: '2 - 4 People',
-          packageType: 'domestic',
-          place: 'Dubai',
-          images: [
-            { url: '/domestic-tour-packages-services.jpg', alt: 'Royal Dubai Experience' }
-          ],
-          bookings: 128,
-          rating: 4.9,
-          packageCategory: 'Luxury'
-        };
-
-        domesticPackages.unshift(demoPackage);
-        setPackages(domesticPackages);
+        setPackages(adventurePackages);
+      } else {
+        setPackages([]);
       }
     } catch (error) {
       console.error('Error fetching packages:', error);
@@ -175,7 +130,6 @@ const DomesticPackagesPage = () => {
   const filterPackages = () => {
     let filtered = packages;
 
-    // Search filter
     if (filters.searchTerm) {
       filtered = filtered.filter(pkg =>
         pkg.title.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
@@ -185,12 +139,10 @@ const DomesticPackagesPage = () => {
       );
     }
 
-    // Price range filter
     filtered = filtered.filter(pkg =>
       pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
     );
 
-    // Duration range filter - improved parsing
     filtered = filtered.filter(pkg => {
       const durationText = pkg.duration.toLowerCase();
       const durationMatch = durationText.match(/(\d+)\s*(?:days?|nights?|day|night)/);
@@ -198,7 +150,6 @@ const DomesticPackagesPage = () => {
         const duration = parseInt(durationMatch[1]);
         return duration >= filters.durationRange[0] && duration <= filters.durationRange[1];
       }
-      // Fallback: look for any number in duration
       const fallbackMatch = durationText.match(/(\d+)/);
       if (fallbackMatch) {
         const duration = parseInt(fallbackMatch[1]);
@@ -207,18 +158,15 @@ const DomesticPackagesPage = () => {
       return true;
     });
 
-    // Location filter - improved
     if (filters.location !== "all") {
       filtered = filtered.filter(pkg => {
         if (filters.location === "domestic") {
-          return pkg.packageType === 'domestic' ||
-            ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'].includes(pkg.place?.toLowerCase());
+          return pkg.packageType === 'domestic';
         }
         return pkg.place?.toLowerCase() === filters.location.toLowerCase();
       });
     }
 
-    // Tour type filter - basic implementation
     if (filters.tourType.length > 0) {
       filtered = filtered.filter(pkg => {
         const packageText = (pkg.title + ' ' + pkg.subtitle + ' ' + pkg.about).toLowerCase();
@@ -226,31 +174,6 @@ const DomesticPackagesPage = () => {
           packageText.includes(type.toLowerCase())
         );
       });
-    }
-
-    // Departure city filter - basic implementation
-    if (filters.departureCity.length > 0) {
-      filtered = filtered.filter(pkg => {
-        // For now, we'll assume all packages are available from all cities
-        // This can be enhanced when departure city data is available
-        return true;
-      });
-    }
-
-    // Date range filter - basic implementation
-    if (filters.departBetween.startDate || filters.departBetween.endDate) {
-      filtered = filtered.filter(pkg => {
-        // For now, we'll assume all packages are available for all dates
-        // This can be enhanced when departure date data is available
-        return true;
-      });
-    }
-
-    // Category filter (Experience Tiers)
-    if (selectedCategory) {
-      filtered = filtered.filter(pkg =>
-        pkg.packageCategory?.toLowerCase() === selectedCategory.toLowerCase()
-      );
     }
 
     setFilteredPackages(filtered);
@@ -264,18 +187,12 @@ const DomesticPackagesPage = () => {
     }).format(price);
   };
 
-  const experienceTiers = [
-    { name: "Deluxe Tour", icon: ShieldCheck, category: "Deluxe" },
-    { name: "Premium Tour", icon: Crown, category: "Premium" },
-    { name: "Luxury Tour", icon: Gem, category: "Luxury" },
-  ];
-
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading domestic packages...</p>
+          <p className="text-gray-600">Loading adventure activities...</p>
         </div>
       </div>
     );
@@ -285,95 +202,43 @@ const DomesticPackagesPage = () => {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
-        {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{
-            backgroundImage: `url('/domestic-tour-packages-services.jpg')`
+            backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda2d32bd4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')`
           }}
         >
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 via-green-800/60 to-green-900/70"></div>
         </div>
 
-        {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 bg-white/20 backdrop-blur-md text-white border-white/30">
+              <Mountain className="h-4 w-4 mr-2" />
+              Adventure Activities
+            </Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
-              Dubai Tour Packages
+              Dubai Adventure Activities
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-90">
-              Explore the incredible beauty of Dubai with our carefully crafted tour packages
+              Thrilling experiences, outdoor adventures, and adrenaline-pumping activities
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary" className="text-lg px-4 py-2">
-                <MapPin className="h-4 w-4 mr-2" />
-                Dubai Packages
+              <Badge variant="secondary" className="text-lg px-4 py-2 bg-white/20 backdrop-blur-md">
+                <Zap className="h-4 w-4 mr-2" />
+                Extreme Sports
               </Badge>
-              <Badge variant="secondary" className="text-lg px-4 py-2">
-                <Star className="h-4 w-4 mr-2" />
-                Local Expertise
+              <Badge variant="secondary" className="text-lg px-4 py-2 bg-white/20 backdrop-blur-md">
+                <Mountain className="h-4 w-4 mr-2" />
+                Outdoor Adventures
               </Badge>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Tiers */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-              Choose Your Experience
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {experienceTiers.map((tier, index) => (
-                <Card
-                  key={index}
-                  className={`text-center hover:shadow-lg transition-all cursor-pointer ${selectedCategory === tier.category
-                    ? 'ring-2 ring-primary bg-primary/5'
-                    : 'hover:bg-gray-50'
-                    }`}
-                  onClick={() => setSelectedCategory(
-                    selectedCategory === tier.category ? "" : tier.category
-                  )}
-                >
-                  <CardContent className="p-6">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${selectedCategory === tier.category
-                      ? 'bg-primary text-white'
-                      : 'bg-primary/10 text-primary'
-                      }`}>
-                      <tier.icon className="h-8 w-8" />
-                    </div>
-                    <h3 className={`text-lg font-semibold mb-2 ${selectedCategory === tier.category
-                      ? 'text-primary'
-                      : 'text-gray-900'
-                      }`}>
-                      {tier.name}
-                    </h3>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Clear Filter Button */}
-            {selectedCategory && (
-              <div className="text-center mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedCategory("")}
-                  className="text-primary border-primary hover:bg-primary hover:text-white"
-                >
-                  Clear Filter
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </section>
 
       {/* Packages Section */}
-      <section className="py-8 bg-gray-100 border-b">
+      <section className="py-8 bg-gradient-to-br from-gray-50 via-white to-gray-50 border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div>
@@ -382,14 +247,14 @@ const DomesticPackagesPage = () => {
                     <div className="w-24 h-24 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
                       <Search className="h-12 w-12 text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No domestic packages found</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">No adventure activities found</h3>
                     <p className="text-gray-600 mb-6">Try adjusting your search criteria</p>
                     <Button onClick={() => {
                       setFilters({
                         searchTerm: "",
                         priceRange: [0, 50000],
                         durationRange: [1, 30],
-                        location: "domestic",
+                        location: "all",
                         departureCity: [],
                         tourType: [],
                         departBetween: {
@@ -397,7 +262,6 @@ const DomesticPackagesPage = () => {
                           endDate: ""
                         }
                       });
-                      setSelectedCategory("");
                     }}>
                       Clear Filters
                     </Button>
@@ -406,19 +270,16 @@ const DomesticPackagesPage = () => {
                   <>
                     <div className="flex justify-between items-center mb-8">
                       <h2 className="text-2xl font-bold text-gray-900">
-                        {selectedCategory
-                          ? `${selectedCategory} Experience Packages`
-                          : 'Domestic Packages'
-                        }
+                        Adventure Activities
                       </h2>
                       <div className="text-sm text-gray-600">
-                        {filteredPackages.length} package{filteredPackages.length !== 1 ? 's' : ''} found
+                        {filteredPackages.length} activit{filteredPackages.length !== 1 ? 'ies' : 'y'} found
                       </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                        <Card key={pkg._id} className="overflow-hidden hover:shadow-xl transition-shadow border-2 border-transparent hover:border-green-500/20">
                           <div className="relative">
                             {pkg.images && pkg.images.length > 0 ? (
                               <div className="aspect-video relative">
@@ -434,17 +295,12 @@ const DomesticPackagesPage = () => {
                                 <Mountain className="h-12 w-12 text-gray-400" />
                               </div>
                             )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
+                            <Badge className="absolute top-4 right-4 bg-white text-gray-900 font-bold">
                               {formatPrice(pkg.price)}
                             </Badge>
-                            <Badge className="absolute top-4 left-4 bg-primary text-white">
-                              {pkg.place === 'darjeeling' ? 'Darjeeling' :
-                                pkg.place === 'sikkim' ? 'Sikkim' :
-                                  pkg.place === 'meghalaya' ? 'Meghalaya' :
-                                    pkg.place === 'arunachal' ? 'Arunachal' :
-                                      pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                                        pkg.place === 'kashmir' ? 'Kashmir' :
-                                          pkg.place === 'leh-ladakh' ? 'Leh Ladakh' : pkg.place}
+                            <Badge className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold">
+                              <Mountain className="h-3 w-3 mr-1" />
+                              Adventure
                             </Badge>
                           </div>
 
@@ -468,7 +324,7 @@ const DomesticPackagesPage = () => {
                                 {pkg.capacity}
                               </div>
                               <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2" />
+                                <Star className="h-4 w-4 mr-2 fill-yellow-400 text-yellow-400" />
                                 {pkg.rating}/5
                               </div>
                             </div>
@@ -479,12 +335,12 @@ const DomesticPackagesPage = () => {
 
                             <div className="mt-6 flex space-x-2">
                               <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full">
+                                <Button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
                                   View Details
                                 </Button>
                               </Link>
                               <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full">
+                                <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50">
                                   Book Now
                                 </Button>
                               </Link>
@@ -500,50 +356,50 @@ const DomesticPackagesPage = () => {
         </div>
       </section>
 
-      {/* Why Choose Nepal Section */}
-      <section className="py-16 bg-white">
+      {/* Why Choose Adventure Activities Section */}
+      <section className="py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Why Choose Dubai for Your Next Adventure?
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Why Choose Adventure Activities?
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Discover the unique experiences that make Dubai a must-visit destination
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Experience the thrill of Dubai with exciting outdoor activities and extreme sports
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                  <Camera className="h-8 w-8 text-primary" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-4">
+                  <Zap className="h-8 w-8 text-green-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Iconic Landmarks
+                <h3 className="text-xl font-semibold mb-3">
+                  Adrenaline Rush
                 </h3>
-                <p className="text-gray-600">
-                  Home to the world's tallest building Burj Khalifa and stunning architectural marvels
+                <p className="text-gray-300">
+                  Skydiving, dune bashing, water sports, and extreme activities for thrill-seekers
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                  <Heart className="h-8 w-8 text-primary" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-4">
+                  <Mountain className="h-8 w-8 text-green-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Luxury Experience
+                <h3 className="text-xl font-semibold mb-3">
+                  Outdoor Exploration
                 </h3>
-                <p className="text-gray-600">
-                  Experience world-class hotels, fine dining, and premium shopping destinations
+                <p className="text-gray-300">
+                  Desert safaris, hiking trails, and nature experiences in Dubai's stunning landscapes
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                  <Mountain className="h-8 w-8 text-primary" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-4">
+                  <Camera className="h-8 w-8 text-green-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Desert Adventures
+                <h3 className="text-xl font-semibold mb-3">
+                  Unforgettable Memories
                 </h3>
-                <p className="text-gray-600">
-                  Dune bashing, camel rides, desert safaris, and traditional entertainment
+                <p className="text-gray-300">
+                  Capture amazing moments with professional photography and unique experiences
                 </p>
               </div>
             </div>
@@ -552,20 +408,29 @@ const DomesticPackagesPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
+      <section className="py-16 bg-gradient-to-r from-green-600 via-green-500 to-green-600 text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Explore Dubai?
+              Explore More Options
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Let us create the perfect Dubai adventure for you
+              Check out our Regular, Premium, and Luxury packages
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
-              <Link href="/packages/international">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                  View International Packages
+              <Link href="/packages/regular">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                  View Regular Packages
+                </Button>
+              </Link>
+              <Link href="/packages/premium">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                  View Premium Packages
+                </Button>
+              </Link>
+              <Link href="/packages/luxury">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                  View Luxury Packages
                 </Button>
               </Link>
             </div>
@@ -576,4 +441,4 @@ const DomesticPackagesPage = () => {
   );
 };
 
-export default DomesticPackagesPage;
+export default AdventureActivitiesPage;

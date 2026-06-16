@@ -18,6 +18,13 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				playfair: ['var(--font-playfair)', 'serif'],
+				cormorant: ['var(--font-cormorant)', 'serif'],
+				poppins: ['var(--font-poppins)', 'sans-serif'],
+				merriweather: ['var(--font-merriweather)', 'serif'],
+				montserrat: ['var(--font-montserrat)', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

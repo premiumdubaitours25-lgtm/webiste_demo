@@ -8,12 +8,13 @@ import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import FloatingButtons from "../components/FloatingButtons"
 import { InquiryFormProvider } from "../contexts/InquiryFormContext"
+import ConditionalLayout from "../components/ConditionalLayout"
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Premium Dubai Tours - Your Gateway to Dubai',
-  description: 'Discover amazing tour packages in Dubai with Premium Dubai Tours',
+  title: 'Premium Dubai Tours | Customized & Luxury Dubai Travel Experiences',
+  description: 'Discover Dubai with Premium Dubai Tours. Enjoy personalized travel experiences tailored to your preferences. Book now for reliable, premium Dubai tours.',
 }
 
 export const viewport = {
@@ -32,12 +33,9 @@ export default function RootLayout({
       <body className={`${inter.className} bg-white`} suppressHydrationWarning>
         <TooltipProvider>
           <InquiryFormProvider>
-            <Navbar />
-            <main className="min-h-screen bg-white">
+            <ConditionalLayout>
               {children}
-            </main>
-            <Footer />
-            <FloatingButtons />
+            </ConditionalLayout>
             <Toaster />
             <Sonner />
           </InquiryFormProvider>

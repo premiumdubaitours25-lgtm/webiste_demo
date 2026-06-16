@@ -89,6 +89,17 @@ const ReviewSchema = new mongoose.Schema({
   },
 });
 
+const InclusionExclusionItemSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    required: true,
+  },
+  items: [{
+    type: String,
+    required: true,
+  }],
+}, { _id: false });
+
 const PackageSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -97,6 +108,10 @@ const PackageSchema = new mongoose.Schema({
   subtitle: {
     type: String,
     required: true,
+  },
+  ideaFor: {
+    type: String,
+    default: '',
   },
   about: {
     type: String,
@@ -110,6 +125,40 @@ const PackageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  abstract: {
+    type: String,
+    default: '',
+  },
+  tourOverview: {
+    type: String,
+    default: '',
+  },
+  keyHighlights: [{
+    type: String,
+  }],
+  hotelOptions: [{
+    type: String,
+  }],
+  bestTimeToVisit: {
+    yearRound: {
+      type: String,
+      default: '',
+    },
+    winter: {
+      type: String,
+      default: '',
+    },
+    summer: {
+      type: String,
+      default: '',
+    },
+  },
+  whyChooseThisTrip: [{
+    type: String,
+  }],
+  whyPremiumDubaiTours: [{
+    type: String,
+  }],
   price: {
     type: Number,
     required: true,
@@ -138,7 +187,7 @@ const PackageSchema = new mongoose.Schema({
       // Domestic destinations
       'darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh',
       // International destinations
-      'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore', 'dubai',
+      'vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore', 'dubai', 'oman',
       // Legacy destinations (keeping for backward compatibility)
       'bhutan', 'nepal'
     ],
@@ -146,19 +195,21 @@ const PackageSchema = new mongoose.Schema({
   packageCategory: {
     type: String,
     required: true,
-    enum: ['Deluxe', 'Premium', 'Luxury', 'Cultural', 'Adventure', 'Wildlife', 'Trekking', 'Spiritual', 'Beach'],
-    default: 'Deluxe',
+    enum: ['Regular', 'Premium', 'Luxury', 'Adventure', 'Oman Tour', 'Attraction and Activity', 'Deluxe', 'Cultural', 'Wildlife', 'Trekking', 'Spiritual', 'Beach', 'regular'],
+    default: 'Regular',
   },
   images: [ImageSchema],
   itinerary: [ItineraryDaySchema],
   transportation: [TransportationSchema],
   accommodation: [AccommodationSchema],
-  inclusions: [{
-    type: String,
-  }],
-  exclusions: [{
-    type: String,
-  }],
+  inclusions: {
+    type: [mongoose.Schema.Types.Mixed],
+    default: [],
+  },
+  exclusions: {
+    type: [mongoose.Schema.Types.Mixed],
+    default: [],
+  },
   reviews: [ReviewSchema],
   bookings: {
     type: Number,
@@ -183,4 +234,9 @@ PackageSchema.pre('save', function (next) {
   next();
 });
 
-export default mongoose.models.Package || mongoose.model('Package', PackageSchema);
+// Clear cached model if it exists to ensure schema changes are picked up
+if (mongoose.models.Package) {
+  delete mongoose.models.Package;
+}
+
+export default mongoose.model('Package', PackageSchema);

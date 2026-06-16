@@ -12,9 +12,9 @@ interface BestPlaceSectionProps {
 const BestPlaceSection = ({ 
   subtitle = "Best Place",
   title = "Discover amazing places",
-  destination = "North East",
-  buttonText = "BOOK NOW",
-  buttonLink = "/contact"
+  destination = "Middle East",
+  buttonText = "See More",
+  buttonLink = "/packages/regular"
 }: BestPlaceSectionProps) => {
   return (
     <section className="relative py-20 overflow-hidden">

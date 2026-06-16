@@ -26,12 +26,11 @@ const Footer = () => {
                </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-bold">Premium Dubai Tours</h3>
-                <p className="text-xs sm:text-sm text-gray-400">Tours & Travels</p>
+                <p className="text-xs sm:text-sm text-gray-400">Dubai Travel Specialists</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm">
-              Your trusted partner for unforgettable travel experiences in around the world.               
-              We create memories that last a lifetime.
+              Premium Dubai Tours specializes in well-curated travel experiences across Dubai, the UAE, and beyond. We focus on comfort, transparency, and professional service for travelers who value quality over shortcuts.
             </p>
             <div className="flex space-x-4">
                 <Link href="https://www.facebook.com/share/1EkLqFyM9F/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300 transition-colors">
@@ -88,14 +87,14 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Our Services</h4>
             <ul className="space-y-2">
-              <li className="text-gray-300 text-sm">Domestic Tours</li>
-              <li className="text-gray-300 text-sm">International Tours</li>
-              <li className="text-gray-300 text-sm">Adventure Sports</li>
-              <li className="text-gray-300 text-sm">Cultural Tours</li>
-              <li className="text-gray-300 text-sm">Trekking & Hiking</li>
-              <li className="text-gray-300 text-sm">Hotel Booking</li>
-              <li className="text-gray-300 text-sm">Flight Booking</li>
-              <li className="text-gray-300 text-sm">Travel Insurance</li>
+              <li className="text-gray-300 text-sm">Premium Dubai Tours</li>
+              <li className="text-gray-300 text-sm">Luxury & Private Tours</li>
+              <li className="text-gray-300 text-sm">Adventure Activities in Dubai</li>
+              <li className="text-gray-300 text-sm">Dubai Day Tours & Tickets</li>
+              <li className="text-gray-300 text-sm">Other Emirates Tours</li>
+              <li className="text-gray-300 text-sm">Oman Tours from Dubai</li>
+              <li className="text-gray-300 text-sm">Customized Travel Services</li>
+              <li className="text-gray-300 text-sm">Visa Assistance</li>
             </ul>
           </div>
 
@@ -106,21 +105,21 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-white mt-0.5" />
                 <div className="text-gray-300 text-sm">
-                  <div>Dubai Marina, Building 15</div>
-                  <div>Dubai - 12345, UAE</div>
-                  <div className="text-gray-400 text-xs mt-1">Located in the heart of Dubai</div>
+                  <div>Building A1, Dubai Digital Park</div>
+                  <div>Dubai Silicon Oasis, Dubai</div>
+                  <div>United Arab Emirates</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-white" />
                 <span className="text-gray-300 text-sm">
-                  +91 9970393335
+                  +971 50 401 5632, +971 50 214 2541
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-white" />
                 <span className="text-gray-300 text-sm">
-                  support@premiumdubaitours.com
+                  info@premiumdubaitours.com
                 </span>
               </div>
             </div>
@@ -129,7 +128,8 @@ const Footer = () => {
             <div className="space-y-3">
               <h5 className="font-semibold">Newsletter</h5>
               <p className="text-gray-300 text-sm">
-                Subscribe to get updates on new packages and offers.
+                Subscribe for curated travel insights, updates, and exclusive experiences.
+
               </p>
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                 <Input 
