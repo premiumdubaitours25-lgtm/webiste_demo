@@ -8,6 +8,7 @@ import { Ticket, Camera, Heart, Sparkles, CheckCircle, Globe, Shield, Users, Sta
 import Link from "next/link";
 import Image from "next/image";
 import BookingModal from "@/components/BookingModal";
+import PackageCard from "@/components/PackageCard";
 
 interface Package {
   _id: string;
@@ -90,7 +91,7 @@ const AttractionsActivitiesPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative text-white py-20 md:py-28 lg:py-32 overflow-hidden">
+      <section className="relative text-white py-16 md:py-16 lg:py-24 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{
@@ -107,13 +108,13 @@ const AttractionsActivitiesPage = () => {
               <Ticket className="h-4 w-4 mr-2" />
               Attractions & Activities
             </Badge>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
               Attractions & Activities
               <span className="block bg-gradient-to-r from-purple-200 to-indigo-200 bg-clip-text text-transparent">
                 Tickets in Dubai
               </span>
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-95 font-light">
+            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-95 font-light">
               Explore the UAE with Confidence
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -131,11 +132,11 @@ const AttractionsActivitiesPage = () => {
       </section>
 
       {/* Introduction Section */}
-      <section className="py-20 bg-gradient-to-b from-white via-gray-50/50 to-white">
+      <section className="py-16 bg-gradient-to-b from-white via-gray-50/50 to-white">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="space-y-6">
-              <p className="text-xl md:text-2xl text-gray-800 leading-relaxed font-light">
+              <p className="text-lg md:text-xl text-gray-800 leading-relaxed font-light">
                 Dubai is not just a destination: it is an <span className="font-semibold text-purple-600">experience capital</span>. From record-breaking skyscrapers and immersive museums to world-class theme parks, adventure sports, and cultural landmarks, the city offers one of the widest ranges of attractions anywhere in the world. Add Abu Dhabi and the other emirates to the mix, and travelers gain access to an unmatched portfolio of experiences within a single country.
               </p>
               <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 p-8 rounded-2xl border border-purple-100 shadow-lg">
@@ -153,11 +154,11 @@ const AttractionsActivitiesPage = () => {
 
       {/* Featured Packages Section */}
       {!loading && (
-        <section className="py-20 bg-gradient-to-b from-white via-purple-50/30 to-white">
+        <section className="py-16 bg-gradient-to-b from-white via-purple-50/30 to-white">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                   Featured Attraction
                   <span className="block text-purple-600 text-3xl md:text-4xl mt-2">Tickets & Packages</span>
                 </h2>
@@ -168,77 +169,7 @@ const AttractionsActivitiesPage = () => {
               {packages.length > 0 ? (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {packages.map((pkg) => (
-                    <Card key={pkg._id} className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-purple-300 hover:-translate-y-2 group">
-                    <div className="relative">
-                      {pkg.images && pkg.images.length > 0 ? (
-                        <div className="aspect-video relative">
-                          <Image
-                            src={pkg.images[0].url}
-                            alt={pkg.images[0].alt || pkg.title}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      ) : (
-                        <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
-                          <Ticket className="h-16 w-16 text-purple-400" />
-                        </div>
-                      )}
-                      <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-gray-900 font-bold px-3 py-1.5 shadow-lg">
-                        From {formatPrice(pkg.price)}
-                      </Badge>
-                      <Badge className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-3 py-1.5 shadow-lg">
-                        <Ticket className="h-4 w-4 mr-1" />
-                        Ticket
-                      </Badge>
-                    </div>
-
-                    <CardHeader className="bg-white">
-                      <CardTitle className="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
-                        {pkg.title}
-                      </CardTitle>
-                      <p className="text-gray-600 mt-2">{pkg.subtitle}</p>
-                    </CardHeader>
-
-                    <CardContent className="bg-white">
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MapPin className="h-4 w-4 mr-2 text-purple-600" />
-                          {pkg.location}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Clock className="h-4 w-4 mr-2 text-purple-600" />
-                          {pkg.duration}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Star className="h-4 w-4 mr-2 fill-yellow-400 text-yellow-400" />
-                          {pkg.rating}/5
-                        </div>
-                      </div>
-
-                      <p className="text-gray-700 text-sm mb-6 line-clamp-3">
-                        {pkg.about}
-                      </p>
-
-                      <div className="flex space-x-3">
-                        <Link href={`/packages/${pkg._id}`} className="flex-1">
-                          <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all">
-                            View Details
-                          </Button>
-                        </Link>
-                        <Button 
-                          variant="outline" 
-                          className="w-full flex-1 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold"
-                          onClick={() => {
-                            setSelectedPackage(pkg);
-                            setIsBookingModalOpen(true);
-                          }}
-                        >
-                          Book Now
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    <PackageCard key={pkg._id} pkg={pkg} />
                   ))}
                 </div>
               ) : (
@@ -261,11 +192,11 @@ const AttractionsActivitiesPage = () => {
       )}
 
       {/* Overview Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 Overview: Attractions & Activities
                 <span className="block text-3xl md:text-4xl text-purple-600 mt-2">Tickets in Dubai</span>
               </h2>
@@ -315,11 +246,11 @@ const AttractionsActivitiesPage = () => {
       </section>
 
       {/* Why Choose Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-purple-50/30">
+      <section className="py-16 bg-gradient-to-br from-gray-50 via-white to-purple-50/30">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Why Book with
                 <span className="block text-purple-600">Premium Dubai Tours?</span>
               </h2>
@@ -433,11 +364,11 @@ const AttractionsActivitiesPage = () => {
       </section>
 
       {/* Attractions Categories */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Dubai's Iconic Attractions
                 <span className="block text-purple-600 text-3xl md:text-4xl mt-2">& Experiences</span>
               </h2>
@@ -670,11 +601,11 @@ const AttractionsActivitiesPage = () => {
       </section>
 
       {/* Abu Dhabi Section */}
-      <section className="py-20 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/30">
+      <section className="py-16 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/30">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Abu Dhabi Attractions
                 <span className="block text-purple-600 text-3xl md:text-4xl mt-2">& Experiences</span>
               </h2>
@@ -755,11 +686,11 @@ const AttractionsActivitiesPage = () => {
       </section>
 
       {/* Beyond Dubai & Abu Dhabi */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Attractions Beyond
                 <span className="block text-purple-600 text-3xl md:text-4xl mt-2">Dubai & Abu Dhabi</span>
               </h2>
@@ -791,11 +722,11 @@ const AttractionsActivitiesPage = () => {
       </section>
 
       {/* Closing Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 A Category Built for
                 <span className="block text-purple-600 text-3xl md:text-4xl mt-2">Growth</span>
               </h2>
@@ -843,44 +774,6 @@ const AttractionsActivitiesPage = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Explore More Options
-            </h2>
-            <p className="text-xl mb-10 opacity-95">
-              Check out our other Dubai packages
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/packages/regular">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-purple-600 text-base px-6 py-6 transition-all shadow-lg hover:shadow-xl">
-                  View Regular Packages
-                </Button>
-              </Link>
-              <Link href="/packages/premium">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-purple-600 text-base px-6 py-6 transition-all shadow-lg hover:shadow-xl">
-                  View Premium Packages
-                </Button>
-              </Link>
-              <Link href="/packages/luxury">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-purple-600 text-base px-6 py-6 transition-all shadow-lg hover:shadow-xl">
-                  View Luxury Packages
-                </Button>
-              </Link>
-              <Link href="/packages/adventure">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-purple-600 text-base px-6 py-6 transition-all shadow-lg hover:shadow-xl">
-                  View Adventure Activities
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Booking Modal */}
       {selectedPackage && (
         <BookingModal

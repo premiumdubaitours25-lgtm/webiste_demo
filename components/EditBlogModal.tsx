@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ImageUrlOrUpload, { uploadImageToCloudinary } from '@/components/ImageUrlOrUpload';
 
 interface Blog {
   _id: string;
@@ -52,6 +53,8 @@ export default function EditBlogModal({
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [authorImageFile, setAuthorImageFile] = useState<File | null>(null);
 
   // Populate form when blog data is available
   useEffect(() => {
@@ -79,6 +82,23 @@ export default function EditBlogModal({
     setLoading(true);
 
     try {
+      let imageUrl = formData.image;
+      let authorImageUrl = formData.authorImage;
+
+      if (imageFile) {
+        imageUrl = await uploadImageToCloudinary(imageFile);
+      }
+
+      if (authorImageFile) {
+        authorImageUrl = await uploadImageToCloudinary(authorImageFile);
+      }
+
+      if (!imageUrl) {
+        setError('Please upload a blog image or provide an image URL');
+        setLoading(false);
+        return;
+      }
+
       // Convert tags string to array
       const tagsArray = formData.tags
         ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
@@ -91,6 +111,8 @@ export default function EditBlogModal({
         },
         body: JSON.stringify({
           ...formData,
+          image: imageUrl,
+          authorImage: authorImageUrl,
           tags: tagsArray,
         }),
       });
@@ -146,6 +168,8 @@ export default function EditBlogModal({
       isPublished: true,
     });
     setError('');
+    setImageFile(null);
+    setAuthorImageFile(null);
     onClose();
   };
 
@@ -220,17 +244,14 @@ export default function EditBlogModal({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="image">Image URL *</Label>
-            <Input
-              id="image"
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              placeholder="https://example.com/image.jpg"
-              type="url"
-              required
-            />
-          </div>
+          <ImageUrlOrUpload
+            id="image"
+            label="Blog Image"
+            value={formData.image}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+            onFileChange={setImageFile}
+            required
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
@@ -243,14 +264,14 @@ export default function EditBlogModal({
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="authorImage">Author Image URL</Label>
-              <Input
+            <div className="space-y-2 md:col-span-1">
+              <ImageUrlOrUpload
                 id="authorImage"
+                label="Author Image"
                 value={formData.authorImage}
-                onChange={(e) => setFormData({ ...formData, authorImage: e.target.value })}
+                onChange={(url) => setFormData({ ...formData, authorImage: url })}
+                onFileChange={setAuthorImageFile}
                 placeholder="https://example.com/author.jpg"
-                type="url"
               />
             </div>
 
@@ -302,7 +323,7 @@ export default function EditBlogModal({
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Updating...' : 'Update Blog Post'}
+              {loading ? (imageFile || authorImageFile ? 'Uploading...' : 'Updating...') : 'Update Blog Post'}
             </Button>
           </div>
         </form>

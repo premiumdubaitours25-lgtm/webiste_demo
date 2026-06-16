@@ -8,6 +8,28 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Minus, X, Upload, Image as ImageIcon, Bold, Star } from "lucide-react";
 
+const DEFAULT_PACKAGE_TYPE_OPTIONS = [
+  'Regular Packages',
+  'Premium Packages',
+  'Luxury Packages',
+  'Adventure Activities',
+  'OMAN Tour',
+  'Attraction and Activity',
+];
+
+const mapPackageType = (category: string | undefined): string => {
+  if (!category) return 'Regular Packages';
+  const catLower = category.toLowerCase();
+  if (catLower === 'regular' || catLower === 'regular packages') return 'Regular Packages';
+  if (catLower === 'premium' || catLower === 'premium packages') return 'Premium Packages';
+  if (catLower === 'luxury' || catLower === 'luxury packages') return 'Luxury Packages';
+  if (catLower === 'adventure' || catLower === 'adventure activities') return 'Adventure Activities';
+  if (catLower === 'oman tour' || catLower === 'oman') return 'Oman Tour';
+  if (catLower === 'attraction and activity' || catLower === 'attraction') return 'Attraction and Activity';
+  if (DEFAULT_PACKAGE_TYPE_OPTIONS.includes(category)) return category;
+  return 'Regular Packages';
+};
+
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -169,7 +191,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     capacity: "",
     packageType: "",
     place: "",
-    packageCategory: "Regular",
+    packageCategory: "Regular Packages",
     bestTimeToVisit: {
       yearRound: "",
       winter: "",
@@ -195,6 +217,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const [reviews, setReviews] = useState<Review[]>([]);
   const [existingImages, setExistingImages] = useState<Array<{ public_id: string; url: string; alt: string }>>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([""]);
+  const [categoryOptions, setCategoryOptions] = useState<string[]>(DEFAULT_PACKAGE_TYPE_OPTIONS);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
@@ -202,22 +226,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   // Initialize form data when packageData changes
   useEffect(() => {
     if (packageData) {
-      // Map category value to ensure it matches SelectItem values
-      const mapCategory = (category: string | undefined): string => {
-        if (!category) return "Regular";
-        const catLower = category.toLowerCase();
-        if (catLower === 'regular') return 'Regular';
-        if (catLower === 'premium') return 'Premium';
-        if (catLower === 'luxury') return 'Luxury';
-        if (catLower === 'adventure') return 'Adventure';
-        if (catLower === 'oman tour' || catLower === 'oman') return 'Oman Tour';
-        if (catLower === 'attraction and activity' || catLower === 'attraction') return 'Attraction and Activity';
-        // Return as-is if it's already a valid capitalized value
-        return category;
-      };
-
-      const mappedCategory = mapCategory(packageData.packageCategory);
-      console.log('Package Category:', packageData.packageCategory, 'Mapped to:', mappedCategory);
+      const mappedCategory = mapPackageType(packageData.packageCategory);
 
       setFormData({
         title: packageData.title || "",
@@ -232,8 +241,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         duration: packageData.duration || "",
         location: packageData.location || "",
         capacity: packageData.capacity || "",
-        packageType: packageData.packageType || "",
-        place: packageData.place || "",
+        packageType: packageData.packageType || "international",
+        place: packageData.place || "dubai",
         packageCategory: mappedCategory,
         bestTimeToVisit: {
           yearRound: packageData.bestTimeToVisit?.yearRound || "",
@@ -311,8 +320,32 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
       setExistingImages(packageData.images || []);
       setNewImages([]);
+      setImageUrls([""]);
     }
   }, [packageData]);
+
+  useEffect(() => {
+    const fetchCategoryOptions = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        if (response.ok && data.success && Array.isArray(data.data) && data.data.length > 0) {
+          const names = data.data
+            .map((item: { name?: string }) => item?.name?.trim())
+            .filter((name: string | undefined): name is string => Boolean(name));
+          if (names.length > 0) {
+            setCategoryOptions(Array.from(new Set([...DEFAULT_PACKAGE_TYPE_OPTIONS, ...names])));
+          }
+        }
+      } catch (error) {
+        console.error('Error loading category options:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchCategoryOptions();
+    }
+  }, [isOpen]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -574,7 +607,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newFiles = Array.from(files).slice(0, 5 - (existingImages.length + newImages.length));
+      const usedSlots = existingImages.length + newImages.length + imageUrls.filter((url) => url.trim() !== "").length;
+      const newFiles = Array.from(files).slice(0, 5 - usedSlots);
       setNewImages(prev => [...prev, ...newFiles]);
     }
   };
@@ -585,6 +619,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
   const removeExistingImage = (index: number) => {
     setExistingImages(prev => prev.filter((_, i) => i !== index));
+  };
+  const addImageUrl = () => {
+    if ((existingImages.length + newImages.length + imageUrls.filter((url) => url.trim() !== "").length) < 5) {
+      setImageUrls(prev => [...prev, ""]);
+    }
+  };
+  const updateImageUrl = (index: number, value: string) => {
+    setImageUrls(prev => prev.map((item, i) => (i === index ? value : item)));
+  };
+  const removeImageUrl = (index: number) => {
+    if (imageUrls.length > 1) {
+      setImageUrls(prev => prev.filter((_, i) => i !== index));
+    } else {
+      setImageUrls([""]);
+    }
   };
 
   const openFileDialog = () => {
@@ -618,8 +667,8 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       }
 
       // Validate required fields
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageType || !formData.place || !formData.packageCategory) {
-        alert('Please fill in all required fields including package type, category and place');
+      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageCategory) {
+        alert('Please fill in all required fields including package type');
         return;
       }
 
@@ -632,6 +681,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       // Prepare updated package data
       const updatedPackageData = {
         ...formData,
+        packageType: 'international',
+        place: packageData?.place || 'dubai',
+        packageCategory: formData.packageCategory,
         price: price,
         abstract: formData.abstract,
         tourOverview: formData.tourOverview,
@@ -646,18 +698,22 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
           title: day.title,
           description: day.descriptions.filter(desc => desc.trim() !== "").join("\n")
         })),
-        transportation: transportation.map(item => ({
-          type: item.type,
-          vehicle: item.vehicle,
-          description: item.description
-        })),
-        accommodation: accommodation.map(item => ({
-          city: item.city,
-          hotel: item.hotel,
-          rooms: item.rooms,
-          roomType: item.roomType,
-          nights: item.nights
-        })),
+        transportation: transportation
+          .filter(item => item.type.trim() && item.vehicle.trim())
+          .map(item => ({
+            type: item.type.trim(),
+            vehicle: item.vehicle.trim(),
+            description: item.description.trim()
+          })),
+        accommodation: accommodation
+          .filter(item => item.city.trim() && item.hotel.trim() && item.rooms.trim() && item.roomType.trim() && item.nights.trim())
+          .map(item => ({
+            city: item.city.trim(),
+            hotel: item.hotel.trim(),
+            rooms: item.rooms.trim(),
+            roomType: item.roomType.trim(),
+            nights: item.nights.trim()
+          })),
         inclusions: inclusions
           .filter(item => item.category.trim() !== "" || item.items.some(i => i.trim() !== ""))
           .map(item => ({
@@ -671,7 +727,13 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             items: item.items.filter(i => i.trim() !== "")
           })),
         reviews: reviews.filter(review => review.name.trim() !== "" && review.comment.trim() !== ""),
-        images: [...existingImages, ...uploadedNewImages],
+        images: [
+          ...existingImages,
+          ...uploadedNewImages,
+          ...imageUrls
+            .filter((url) => url.trim() !== "")
+            .map((url) => ({ url: url.trim(), alt: formData.title })),
+        ].slice(0, 5),
         bookings: packageData?.bookings || 0,
         rating: packageData?.rating || 0
       };
@@ -730,9 +792,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       duration: "",
       location: "",
       capacity: "",
-      packageType: "domestic",
-      place: "bhutan",
-      packageCategory: "Regular",
+      packageType: "international",
+      place: "dubai",
+      packageCategory: "Regular Packages",
       bestTimeToVisit: {
         yearRound: "",
         winter: "",
@@ -751,6 +813,7 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setReviews([]);
     setExistingImages([]);
     setNewImages([]);
+    setImageUrls([""]);
     onClose();
   };
 
@@ -984,74 +1047,24 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             </Button>
           </div>
 
-          {/* Package Type, Category and Place Dropdowns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Package Type *</label>
-              <Select value={formData.packageType} onValueChange={(value) => handleInputChange('packageType', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select package type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="domestic">Domestic</SelectItem>
-                  <SelectItem value="international">International</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Package Category *</label>
-              <Select 
-                value={formData.packageCategory || "Regular"} 
-                onValueChange={(value) => handleInputChange('packageCategory', value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent className="z-[200]">
-                  <SelectItem value="Regular">Regular Packages</SelectItem>
-                  <SelectItem value="Premium">Premium Packages</SelectItem>
-                  <SelectItem value="Luxury">Luxury Packages</SelectItem>
-                  <SelectItem value="Adventure">Adventure Packages</SelectItem>
-                  <SelectItem value="Oman Tour">Oman Tour</SelectItem>
-                  <SelectItem value="Attraction and Activity">Attraction and Activity</SelectItem>
-                  <SelectItem value="Cultural">Cultural</SelectItem>
-                  <SelectItem value="Wildlife">Wildlife</SelectItem>
-                  <SelectItem value="Trekking">Trekking</SelectItem>
-                  <SelectItem value="Spiritual">Spiritual</SelectItem>
-                  <SelectItem value="Beach">Beach</SelectItem>
-                  <SelectItem value="Deluxe">Deluxe</SelectItem>
-                  <SelectItem value="regular">Regular (Legacy)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Place *</label>
-              <Select value={formData.place} onValueChange={(value) => handleInputChange('place', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select place" />
-                </SelectTrigger>
-                <SelectContent>
-                  {/* Domestic Places */}
-                  <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                  <SelectItem value="sikkim">Sikkim</SelectItem>
-                  <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                  <SelectItem value="arunachal">Arunachal</SelectItem>
-                  <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                  <SelectItem value="kashmir">Kashmir</SelectItem>
-                  <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                  {/* International Places */}
-                  <SelectItem value="vietnam">Vietnam</SelectItem>
-                  <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                  <SelectItem value="bali">Bali</SelectItem>
-                  <SelectItem value="malaysia">Malaysia</SelectItem>
-                  <SelectItem value="singapore">Singapore</SelectItem>
-                  <SelectItem value="dubai">Dubai</SelectItem>
-                  {/* Legacy Places */}
-                  <SelectItem value="bhutan">Bhutan</SelectItem>
-                  <SelectItem value="nepal">Nepal</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          {/* Package Type */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Package Type *</label>
+            <Select
+              value={formData.packageCategory || "Regular Packages"}
+              onValueChange={(value) => handleInputChange('packageCategory', value)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select package type" />
+              </SelectTrigger>
+              <SelectContent className="z-[200]">
+                {categoryOptions.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Package Details - Three Small Inputs */}
@@ -1208,17 +1221,48 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             )}
 
             {/* Upload more button when less than 5 images */}
-            {(existingImages.length + newImages.length) < 5 && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={openFileDialog}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add More Images ({(existingImages.length + newImages.length)}/5)
-              </Button>
+            {(existingImages.length + newImages.length + imageUrls.filter((url) => url.trim() !== "").length) < 5 && (
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={openFileDialog}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Upload Image ({(existingImages.length + newImages.length + imageUrls.filter((url) => url.trim() !== "").length)}/5)
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={addImageUrl}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Image URL
+                </Button>
+              </div>
             )}
+            <div className="space-y-2">
+              {imageUrls.map((imageUrl, index) => (
+                <div key={`url_${index}`} className="flex items-center gap-2">
+                  <Input
+                    placeholder={`https://... image ${index + 1}`}
+                    value={imageUrl}
+                    onChange={(e) => updateImageUrl(index, e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeImageUrl(index)}
+                    className="text-red-500"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Itinerary Section */}

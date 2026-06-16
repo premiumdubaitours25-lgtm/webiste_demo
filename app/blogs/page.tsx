@@ -572,7 +572,98 @@ Explore Dubai with clarity, privacy, and confidence.`,
     }
   });
 
-  const featuredBlog = displayBlogs[0];
+  const formatPublishDate = (publishDate: string) => {
+    if (!publishDate) return 'N/A';
+    return typeof publishDate === 'string'
+      ? new Date(publishDate).toLocaleDateString()
+      : new Date(publishDate).toLocaleDateString();
+  };
+
+  const renderBlogCard = (blog: Blog | typeof hardcodedBlogs[0], showFeaturedHeading = false) => (
+    <section key={getBlogId(blog) || blog.title} className="py-12 bg-white font-merriweather">
+      <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
+          {showFeaturedHeading && (
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8 font-montserrat">
+              Featured Article
+            </h2>
+          )}
+          <Link href={`/blogs/${getBlogId(blog)}`} className="block">
+            <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
+              <div className="md:flex">
+                <div className="md:w-1/2">
+                  <div className="aspect-video md:aspect-square relative">
+                    <Image
+                      src={blog.image}
+                      alt={blog.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="md:w-1/2 p-8 pb-8 flex flex-col">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <Badge className="bg-primary text-white">{blog.category}</Badge>
+                    <span className="text-sm text-gray-600">{blog.readTime}</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 font-montserrat">
+                    {blog.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4 font-merriweather leading-relaxed">
+                    {blog.excerpt}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {blog.tags && blog.tags.slice(0, 3).map((tag, index) => (
+                      <Badge key={index} variant="outline" className="text-xs font-merriweather">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <Image
+                            src={blog.authorImage || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"}
+                            alt={blog.author}
+                            width={32}
+                            height={32}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900 font-montserrat">{blog.author}</p>
+                          <p className="text-xs text-gray-600 font-merriweather">
+                            {formatPublishDate(blog.publishDate)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4 text-sm text-gray-600 font-merriweather">
+                      <div className="flex items-center">
+                        <Eye className="h-4 w-4 mr-1" />
+                        {blog.views || 0}
+                      </div>
+                      <div className="flex items-center">
+                        <Heart className="h-4 w-4 mr-1" />
+                        {blog.likes || 0}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-auto">
+                    <Button className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
+                      Read Full Article
+                      <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
 
   return (
     <div className="min-h-screen bg-white font-merriweather">
@@ -611,264 +702,6 @@ Explore Dubai with clarity, privacy, and confidence.`,
           </div>
         </div>
       </section>
-
-      {/* Featured Blog */}
-      {featuredBlog && (
-        <section className="py-12 bg-white font-merriweather">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center text-gray-900 mb-8 font-montserrat">
-                Featured Article
-              </h2>
-              <Link href={`/blogs/${getBlogId(featuredBlog) || 'dubai-stopover-tour'}`} className="block">
-                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
-                <div className="md:flex">
-                  <div className="md:w-1/2">
-                    <div className="aspect-video md:aspect-square relative">
-                      <Image
-                        src={featuredBlog.image}
-                        alt={featuredBlog.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="md:w-1/2 p-8 pb-8 flex flex-col">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <Badge className="bg-primary text-white">{featuredBlog.category}</Badge>
-                      <span className="text-sm text-gray-600">{featuredBlog.readTime}</span>
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4 font-montserrat">
-                      {featuredBlog.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4 font-merriweather leading-relaxed">
-                      {featuredBlog.excerpt}
-                    </p>
-                    <p className="text-gray-600 mb-4 font-merriweather leading-relaxed text-sm">
-                      A Dubai stopover tour allows transit passengers to step beyond the airport and experience the city's iconic skyline, cultural heritage, and world-class attractions, even if they have only a few hours or a single night.
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {featuredBlog.tags && featuredBlog.tags.slice(0, 3).map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs font-merriweather">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 rounded-full overflow-hidden">
-                            <Image
-                              src={featuredBlog.authorImage || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"}
-                              alt={featuredBlog.author}
-                              width={32}
-                              height={32}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-900 font-montserrat">{featuredBlog.author}</p>
-                            <p className="text-xs text-gray-600 font-merriweather">
-                              {featuredBlog.publishDate ? (typeof featuredBlog.publishDate === 'string' ? featuredBlog.publishDate : new Date(featuredBlog.publishDate).toLocaleDateString()) : 'N/A'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 font-merriweather">
-                        <div className="flex items-center">
-                          <Eye className="h-4 w-4 mr-1" />
-                          {featuredBlog.views || 0}
-                        </div>
-                        <div className="flex items-center">
-                          <Heart className="h-4 w-4 mr-1" />
-                          {featuredBlog.likes || 0}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-auto">
-                      <Button className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
-                        Read Full Article
-                        <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Second Blog Card */}
-      {displayBlogs.length > 1 && (
-        <section className="py-12 bg-white font-merriweather">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <Link href={`/blogs/${getBlogId(displayBlogs[1]) || 'dubai-tour-packages-budget-friendly'}`} className="block">
-                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
-                  <div className="md:flex">
-                    <div className="md:w-1/2">
-                      <div className="aspect-video md:aspect-square relative">
-                        <Image
-                          src={displayBlogs[1].image}
-                          alt={displayBlogs[1].title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </div>
-                    <div className="md:w-1/2 p-8 pb-8 flex flex-col">
-                      <div className="flex items-center space-x-4 mb-4">
-                        <Badge className="bg-primary text-white">{displayBlogs[1].category}</Badge>
-                        <span className="text-sm text-gray-600">{displayBlogs[1].readTime}</span>
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4 font-montserrat">
-                        {displayBlogs[1].title}
-                      </h3>
-                      <p className="text-gray-600 mb-4 font-merriweather leading-relaxed">
-                        {displayBlogs[1].excerpt}
-                      </p>
-                      <p className="text-gray-600 mb-4 font-merriweather leading-relaxed text-sm">
-                        For travelers planning their first visit, choosing the right Dubai tour packages can make a significant difference. Well-structured itineraries help visitors explore the city comfortably, avoid unnecessary expenses, and experience Dubai's highlights without confusion.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {displayBlogs[1].tags && displayBlogs[1].tags.slice(0, 3).map((tag, index) => (
-                          <Badge key={index} variant="outline" className="text-xs font-merriweather">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 rounded-full overflow-hidden">
-                              <Image
-                                src={displayBlogs[1].authorImage || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"}
-                                alt={displayBlogs[1].author}
-                                width={32}
-                                height={32}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-900 font-montserrat">{displayBlogs[1].author}</p>
-                              <p className="text-xs text-gray-600 font-merriweather">
-                                {displayBlogs[1].publishDate ? new Date(displayBlogs[1].publishDate).toLocaleDateString() : 'N/A'}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600 font-merriweather">
-                          <div className="flex items-center">
-                            <Eye className="h-4 w-4 mr-1" />
-                            {displayBlogs[1].views || 0}
-                          </div>
-                          <div className="flex items-center">
-                            <Heart className="h-4 w-4 mr-1" />
-                            {displayBlogs[1].likes || 0}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-auto">
-                        <Button className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
-                          Read Full Article
-                          <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Third Blog Card */}
-      {displayBlogs.length > 2 && (
-        <section className="py-12 bg-white font-merriweather">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <Link href={`/blogs/${getBlogId(displayBlogs[2]) || 'premium-dubai-tour-packages-luxury'}`} className="block">
-                <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-primary/30">
-                  <div className="md:flex">
-                    <div className="md:w-1/2">
-                      <div className="aspect-video md:aspect-square relative">
-                        <Image
-                          src={displayBlogs[2].image}
-                          alt={displayBlogs[2].title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </div>
-                    <div className="md:w-1/2 p-8 pb-8 flex flex-col">
-                      <div className="flex items-center space-x-4 mb-4">
-                        <Badge className="bg-primary text-white">{displayBlogs[2].category}</Badge>
-                        <span className="text-sm text-gray-600">{displayBlogs[2].readTime}</span>
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4 font-montserrat">
-                        {displayBlogs[2].title}
-                      </h3>
-                      <p className="text-gray-600 mb-4 font-merriweather leading-relaxed">
-                        {displayBlogs[2].excerpt}
-                      </p>
-                      <p className="text-gray-600 mb-4 font-merriweather leading-relaxed text-sm">
-                        At Premium Dubai Tours, our premium category is designed for travelers who want Dubai on their own terms. These packages are private, customizable, and priced per vehicle rather than per person, offering exclusivity, comfort, and personalization.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {displayBlogs[2].tags && displayBlogs[2].tags.slice(0, 3).map((tag, index) => (
-                          <Badge key={index} variant="outline" className="text-xs font-merriweather">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 rounded-full overflow-hidden">
-                              <Image
-                                src={displayBlogs[2].authorImage || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"}
-                                alt={displayBlogs[2].author}
-                                width={32}
-                                height={32}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-900 font-montserrat">{displayBlogs[2].author}</p>
-                              <p className="text-xs text-gray-600 font-merriweather">
-                                {displayBlogs[2].publishDate ? new Date(displayBlogs[2].publishDate).toLocaleDateString() : 'N/A'}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600 font-merriweather">
-                          <div className="flex items-center">
-                            <Eye className="h-4 w-4 mr-1" />
-                            {displayBlogs[2].views || 0}
-                          </div>
-                          <div className="flex items-center">
-                            <Heart className="h-4 w-4 mr-1" />
-                            {displayBlogs[2].likes || 0}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-auto">
-                        <Button className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
-                          Read Full Article
-                          <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Filters Section */}
       <section className="py-8 bg-gray-100 border-b">
@@ -917,6 +750,22 @@ Explore Dubai with clarity, privacy, and confidence.`,
           </div>
         </div>
       </section>
+
+      {/* Blog Articles */}
+      {loading ? (
+        <section className="py-16 text-center text-gray-600 font-merriweather">
+          Loading articles...
+        </section>
+      ) : filteredBlogs.length === 0 ? (
+        <section className="py-16 text-center text-gray-600 font-merriweather">
+          No articles found matching your search.
+        </section>
+      ) : (
+        <>
+          {renderBlogCard(filteredBlogs[0], true)}
+          {filteredBlogs.slice(1).map((blog) => renderBlogCard(blog))}
+        </>
+      )}
 
       {/* Newsletter Section */}
       <section className="py-16 bg-primary text-white font-merriweather">

@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BookingModal from "@/components/BookingModal";
+import PackageCard from "@/components/PackageCard";
 
 interface Package {
   _id: string;
@@ -201,10 +202,10 @@ const PackagesPage = () => {
       <section className="bg-gradient-to-r from-primary to-primary/80 text-white py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               Tour Packages
             </h1>
-            <p className="text-2xl md:text-3xl mb-10 opacity-90">
+            <p className="text-lg md:text-xl lg:text-2xl mb-8 opacity-90">
               Discover amazing destinations with our carefully crafted tour packages
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -332,81 +333,7 @@ const PackagesPage = () => {
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredPackages.map((pkg) => (
-                    <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="relative">
-                        {pkg.images && pkg.images.length > 0 ? (
-                          <div className="aspect-video relative">
-                            <Image
-                              src={pkg.images[0].url}
-                              alt={pkg.images[0].alt || pkg.title}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                            <MapPin className="h-12 w-12 text-gray-400" />
-                          </div>
-                        )}
-                        <div className="absolute top-4 right-4 space-y-2">
-                          <Badge className="bg-white text-gray-900 block">
-                            {formatPrice(pkg.price)}
-                          </Badge>
-                          <Badge variant="outline" className="bg-primary/10 text-primary border-primary block">
-                            {pkg.packageCategory || 'Cultural'}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      <CardHeader>
-                        <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                        <p className="text-gray-600">{pkg.subtitle}</p>
-                      </CardHeader>
-
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <MapPin className="h-4 w-4 mr-2" />
-                            {pkg.location}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Clock className="h-4 w-4 mr-2" />
-                            {pkg.duration}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Users className="h-4 w-4 mr-2" />
-                            {pkg.capacity}
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600">
-                            <Star className="h-4 w-4 mr-2" />
-                            {pkg.rating}/5 ({pkg.bookings} bookings)
-                          </div>
-                        </div>
-
-                        <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                          {pkg.about}
-                        </p>
-
-                        <div className="mt-6 flex space-x-2">
-                          <Link href={`/packages/${pkg._id}`} className="flex-1">
-                            <Button className="w-full">
-                              View Details
-                            </Button>
-                          </Link>
-                          <Button 
-                            variant="outline" 
-                            className="w-full flex-1"
-                            onClick={() => {
-                              setSelectedPackage(pkg);
-                              setIsBookingModalOpen(true);
-                            }}
-                          >
-                            <Calendar className="h-4 w-4 mr-2" />
-                            Book Now
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <PackageCard key={pkg._id} pkg={pkg} />
                   ))}
                 </div>
               </>
@@ -414,29 +341,6 @@ const PackagesPage = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Can't Find What You're Looking For?
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              We can create a custom package tailored to your specific needs and preferences
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
-              <Link href="/packages/domestic">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                  View Domestic Packages
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Booking Modal */}
       {selectedPackage && (
         <BookingModal

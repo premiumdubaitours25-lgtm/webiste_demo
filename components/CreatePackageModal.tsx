@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Minus, X } from "lucide-react";
+import { Plus, Minus, X, Star } from "lucide-react";
 
 interface ItineraryDay {
   id: string;
@@ -21,11 +21,113 @@ interface InclusionExclusionItem {
   items: string[];
 }
 
+interface TransportationItem {
+  id: string;
+  type: string;
+  vehicle: string;
+  description: string;
+}
+
+interface AccommodationItem {
+  id: string;
+  city: string;
+  hotel: string;
+  rooms: string;
+  roomType: string;
+  nights: string;
+}
+
+interface Review {
+  name: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
 interface CreatePackageModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPackageCreated: (packageData: any) => void;
 }
+
+const DEFAULT_INCLUSIONS: InclusionExclusionItem[] = [
+  {
+    id: "inc-1",
+    category: "Ticket Inclusions",
+    items: [
+      "Entry ticket to Burj Khalifa – At The Top (Levels 124 & 125)",
+      "Access during Prime Hours",
+      "Use of observation decks and digital telescopes",
+    ],
+  },
+  {
+    id: "inc-2",
+    category: "Timings (Prime Hours)",
+    items: [
+      "12:00 PM – 08:00 PM",
+      "(Sunset hours are the most popular and fill quickly)",
+      "Exact entry time is subject to availability at the time of booking.",
+    ],
+  },
+  {
+    id: "inc-3",
+    category: "Pricing (Per Person)",
+    items: [
+      "Adult: AED 260",
+      "Child (3–8 years): AED 210",
+      "Children below 3 years: Free of charge",
+    ],
+  },
+];
+
+const DEFAULT_EXCLUSIONS: InclusionExclusionItem[] = [
+  {
+    id: "exc-1",
+    category: "Transfers",
+    items: [
+      "Tickets are sold without transfers by default (Private pickup and drop-off can be arranged on request)",
+    ],
+  },
+  {
+    id: "exc-2",
+    category: "Terms & Conditions",
+    items: [
+      "Tickets are subject to availability, especially during sunset hours",
+      "Entry is valid only for the selected date and time slot",
+      "Tickets are non-refundable and non-transferable",
+      "Guests must arrive at least 15 minutes before the scheduled time",
+      "Large bags, outside food, and drinks are not permitted",
+      "Prime hour definition is determined by Burj Khalifa management",
+      "Management reserves the right to adjust timings or access levels",
+    ],
+  },
+  {
+    id: "exc-3",
+    category: "Child Policy",
+    items: [
+      "Children below 3 years: Free of charge",
+      "Children from 3 to 8 years: Child ticket applies",
+      "Children above 8 years: Adult ticket applies",
+      "Children under 16 years must be accompanied by an adult",
+    ],
+  },
+  {
+    id: "exc-4",
+    category: "Add On",
+    items: [
+      "Highly recommended to combine with Dubai Mall, Fountain Show, or Downtown dining",
+    ],
+  },
+];
+
+const DEFAULT_PACKAGE_TYPE_OPTIONS = [
+  'Regular Packages',
+  'Premium Packages',
+  'Luxury Packages',
+  'Adventure Activities',
+  'OMAN Tour',
+  'Attraction and Activity',
+];
 
 const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackageModalProps) => {
   const [formData, setFormData] = useState({
@@ -34,7 +136,14 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     ideaFor: "",
     abstract: "",
     tourOverview: "",
-    packageCategory: "Regular",
+    about: "",
+    services: "",
+    tourDetails: "",
+    price: "",
+    duration: "",
+    location: "",
+    capacity: "",
+    packageCategory: "Regular Packages",
     bestTimeToVisit: {
       yearRound: "",
       winter: "",
@@ -49,13 +158,43 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([
     { id: "1", day: 1, title: "", description: "" }
   ]);
-  const [inclusions, setInclusions] = useState<InclusionExclusionItem[]>([
-    { id: "1", category: "", items: [""] }
+  const [inclusions, setInclusions] = useState<InclusionExclusionItem[]>(DEFAULT_INCLUSIONS);
+  const [exclusions, setExclusions] = useState<InclusionExclusionItem[]>(DEFAULT_EXCLUSIONS);
+  const [images, setImages] = useState<string[]>([""]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [transportation, setTransportation] = useState<TransportationItem[]>([
+    { id: "1", type: "", vehicle: "", description: "" }
   ]);
-  const [exclusions, setExclusions] = useState<InclusionExclusionItem[]>([
-    { id: "1", category: "", items: [""] }
+  const [accommodation, setAccommodation] = useState<AccommodationItem[]>([
+    { id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }
   ]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<string[]>(DEFAULT_PACKAGE_TYPE_OPTIONS);
   const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const fetchCategoryOptions = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        if (response.ok && data.success && Array.isArray(data.data) && data.data.length > 0) {
+          const names = data.data
+            .map((item: { name?: string }) => item?.name?.trim())
+            .filter((name: string | undefined): name is string => Boolean(name));
+          if (names.length > 0) {
+            setCategoryOptions(Array.from(new Set(names)));
+          }
+        }
+      } catch (error) {
+        console.error('Error loading category options:', error);
+      }
+    };
+
+    if (isOpen) {
+      fetchCategoryOptions();
+    }
+  }, [isOpen]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -241,6 +380,80 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     ));
   };
 
+  // Image handlers
+  const addImage = () => setImages(prev => [...prev, ""]);
+  const removeImage = (index: number) => {
+    if (images.length > 1) {
+      setImages(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+  const updateImage = (index: number, value: string) => {
+    setImages(prev => prev.map((item, i) => (i === index ? value : item)));
+  };
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const remainingSlots = 5 - (images.filter((url) => url.trim() !== "").length + imageFiles.length);
+      if (remainingSlots <= 0) return;
+      const selectedFiles = Array.from(files).slice(0, remainingSlots);
+      setImageFiles(prev => [...prev, ...selectedFiles]);
+    }
+    event.target.value = "";
+  };
+  const removeImageFile = (index: number) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+  };
+  const openFileDialog = () => {
+    fileInputRef.current?.click();
+  };
+
+  // Transportation handlers
+  const addTransportation = () => {
+    setTransportation(prev => [...prev, { id: Date.now().toString(), type: "", vehicle: "", description: "" }]);
+  };
+  const removeTransportation = (id: string) => {
+    if (transportation.length > 1) {
+      setTransportation(prev => prev.filter(item => item.id !== id));
+    }
+  };
+  const updateTransportation = (id: string, field: keyof TransportationItem, value: string) => {
+    setTransportation(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
+  };
+
+  // Accommodation handlers
+  const addAccommodation = () => {
+    setAccommodation(prev => [...prev, { id: Date.now().toString(), city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
+  };
+  const removeAccommodation = (id: string) => {
+    if (accommodation.length > 1) {
+      setAccommodation(prev => prev.filter(item => item.id !== id));
+    }
+  };
+  const updateAccommodation = (id: string, field: keyof AccommodationItem, value: string) => {
+    setAccommodation(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
+  };
+
+  // Reviews handlers
+  const addReview = () => {
+    const newReview: Review = {
+      name: "",
+      rating: 5,
+      comment: "",
+      date: new Date().toISOString(),
+    };
+    setReviews(prev => [...prev, newReview]);
+  };
+
+  const removeReview = (index: number) => {
+    setReviews(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateReview = (index: number, field: keyof Review, value: string | number) => {
+    setReviews(prev => prev.map((review, i) =>
+      i === index ? { ...review, [field]: value } : review
+    ));
+  };
+
   const handleClose = () => {
     // Reset form
     setFormData({
@@ -249,7 +462,14 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
       ideaFor: "",
       abstract: "",
       tourOverview: "",
-      packageCategory: "Regular",
+      about: "",
+      services: "",
+      tourDetails: "",
+      price: "",
+      duration: "",
+      location: "",
+      capacity: "",
+      packageCategory: "Regular Packages",
       bestTimeToVisit: {
         yearRound: "",
         winter: "",
@@ -261,8 +481,13 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     setWhyChooseThisTrip([""]);
     setWhyPremiumDubaiTours([""]);
     setItinerary([{ id: "1", day: 1, title: "", description: "" }]);
-    setInclusions([{ id: "1", category: "", items: [""] }]);
-    setExclusions([{ id: "1", category: "", items: [""] }]);
+    setInclusions(DEFAULT_INCLUSIONS);
+    setExclusions(DEFAULT_EXCLUSIONS);
+    setImages([""]);
+    setImageFiles([]);
+    setTransportation([{ id: "1", type: "", vehicle: "", description: "" }]);
+    setAccommodation([{ id: "1", city: "", hotel: "", rooms: "", roomType: "", nights: "" }]);
+    setReviews([]);
     onClose();
   };
 
@@ -270,9 +495,30 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
     try {
       setUploading(true);
 
+      let uploadedImages: Array<{ url: string; alt?: string; public_id?: string }> = [];
+      if (imageFiles.length > 0) {
+        const uploadFormData = new FormData();
+        imageFiles.forEach((file) => uploadFormData.append("images", file));
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadFormData,
+        });
+        if (!uploadResponse.ok) {
+          throw new Error("Failed to upload package images");
+        }
+        const uploadResult = await uploadResponse.json();
+        uploadedImages = uploadResult.data || [];
+      }
+
       // Validate required fields
-      if (!formData.title || !formData.subtitle) {
-        alert('Please fill in Title and Subtitle');
+      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity) {
+        alert('Please fill all required fields');
+        return;
+      }
+
+      const price = parseFloat(formData.price);
+      if (isNaN(price) || price <= 0) {
+        alert('Please enter a valid price');
         return;
       }
 
@@ -305,20 +551,43 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             category: item.category,
             items: item.items.filter(i => i.trim() !== "")
           })),
-        // Required fields for model
-        about: formData.abstract || formData.tourOverview || "",
-        tourDetails: formData.tourOverview || formData.abstract || "",
-        price: 0,
-        duration: "",
-        location: "Dubai, UAE",
-        capacity: "",
+        about: formData.about,
+        services: formData.services,
+        tourDetails: formData.tourDetails,
+        price: price,
+        duration: formData.duration,
+        location: formData.location,
+        capacity: formData.capacity,
         packageType: "international",
         place: "dubai",
-        packageCategory: formData.packageCategory || "Regular",
-        images: [],
-        transportation: [],
-        accommodation: [],
-        reviews: [],
+        packageCategory: formData.packageCategory || "Regular Packages",
+        images: [
+          ...images
+          .filter((url) => url.trim() !== "")
+          .map((url) => ({ url: url.trim(), alt: formData.title })),
+          ...uploadedImages.map((image) => ({
+            url: image.url,
+            alt: image.alt || formData.title,
+            ...(image.public_id ? { public_id: image.public_id } : {}),
+          })),
+        ].slice(0, 5),
+        transportation: transportation
+          .filter(item => item.type.trim() && item.vehicle.trim())
+          .map(item => ({
+            type: item.type.trim(),
+            vehicle: item.vehicle.trim(),
+            description: item.description.trim()
+          })),
+        accommodation: accommodation
+          .filter(item => item.city.trim() && item.hotel.trim() && item.rooms.trim() && item.roomType.trim() && item.nights.trim())
+          .map(item => ({
+            city: item.city.trim(),
+            hotel: item.hotel.trim(),
+            rooms: item.rooms.trim(),
+            roomType: item.roomType.trim(),
+            nights: item.nights.trim()
+          })),
+        reviews: reviews.filter(review => review.name.trim() !== "" && review.comment.trim() !== ""),
         bookings: 0,
         rating: 0
       };
@@ -400,31 +669,161 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             />
           </div>
 
-          {/* Package Category */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Package Category *</label>
+            <label className="text-sm font-medium">About Premium Dubai Tours *</label>
+            <Textarea
+              placeholder="Write about your company and this package..."
+              value={formData.about}
+              onChange={(e) => handleInputChange('about', e.target.value)}
+              rows={4}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Our Services *</label>
+            <Textarea
+              placeholder="List the services included in this package..."
+              value={formData.services}
+              onChange={(e) => handleInputChange('services', e.target.value)}
+              rows={4}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Tour Details *</label>
+            <Textarea
+              placeholder="Provide detailed information about the tour..."
+              value={formData.tourDetails}
+              onChange={(e) => handleInputChange('tourDetails', e.target.value)}
+              rows={4}
+            />
+          </div>
+
+          {/* Package Type */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Package Type *</label>
             <Select 
               value={formData.packageCategory} 
               onValueChange={(value) => setFormData({ ...formData, packageCategory: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Select package type" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Regular">Regular Packages</SelectItem>
-                <SelectItem value="Premium">Premium Packages</SelectItem>
-                <SelectItem value="Luxury">Luxury Packages</SelectItem>
-                <SelectItem value="Adventure">Adventure Packages</SelectItem>
-                <SelectItem value="Oman Tour">Oman Tour</SelectItem>
-                <SelectItem value="Attraction and Activity">Attraction and Activity</SelectItem>
-                <SelectItem value="Cultural">Cultural</SelectItem>
-                <SelectItem value="Wildlife">Wildlife</SelectItem>
-                <SelectItem value="Trekking">Trekking</SelectItem>
-                <SelectItem value="Spiritual">Spiritual</SelectItem>
-                <SelectItem value="Beach">Beach</SelectItem>
-                <SelectItem value="Deluxe">Deluxe</SelectItem>
+              <SelectContent className="z-[200]">
+                {categoryOptions.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Price (₹) *</label>
+              <Input
+                type="number"
+                placeholder="29999"
+                value={formData.price}
+                onChange={(e) => handleInputChange('price', e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Duration *</label>
+              <Input
+                placeholder="e.g., 4N/5D"
+                value={formData.duration}
+                onChange={(e) => handleInputChange('duration', e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Capacity *</label>
+              <Input
+                placeholder="e.g., 4 Adults"
+                value={formData.capacity}
+                onChange={(e) => handleInputChange('capacity', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Location *</label>
+            <Input
+              placeholder="e.g., Downtown Dubai"
+              value={formData.location}
+              onChange={(e) => handleInputChange('location', e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Package Images (URLs or Upload)</label>
+              <span className="text-xs text-gray-500">Max 5 images total</span>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+            <div className="flex flex-wrap gap-2">
+              {images.length < 5 && (
+                <Button type="button" variant="outline" size="sm" onClick={addImage} className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  Add URL
+                </Button>
+              )}
+              {(images.filter((url) => url.trim() !== "").length + imageFiles.length) < 5 && (
+                <Button type="button" variant="outline" size="sm" onClick={openFileDialog} className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  Upload from device
+                </Button>
+              )}
+            </div>
+            {images.map((image, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Input
+                  placeholder={`https://... image ${index + 1}`}
+                  value={image}
+                  onChange={(e) => updateImage(index, e.target.value)}
+                />
+                {images.length > 1 && (
+                  <Button type="button" variant="ghost" size="sm" onClick={() => removeImage(index)} className="text-red-500">
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+            {imageFiles.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-gray-700">New Uploads</p>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {imageFiles.map((file, index) => (
+                    <div key={`${file.name}-${index}`} className="relative group">
+                      <div className="aspect-square rounded-lg overflow-hidden border-2 border-gray-200">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`New image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => removeImageFile(index)}
+                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Key Highlights */}
@@ -566,6 +965,97 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
             </div>
           </div>
 
+          {/* Transportation */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Transportation</label>
+              <Button type="button" variant="outline" size="sm" onClick={addTransportation} className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Add Transportation
+              </Button>
+            </div>
+            {transportation.map((item) => (
+              <Card key={item.id}>
+                <CardContent className="pt-4 space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Input
+                      placeholder="e.g., In Dubai, Transfers"
+                      value={item.type}
+                      onChange={(e) => updateTransportation(item.id, 'type', e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g., Ertiga, Swift Desire"
+                      value={item.vehicle}
+                      onChange={(e) => updateTransportation(item.id, 'vehicle', e.target.value)}
+                    />
+                  </div>
+                  <Textarea
+                    placeholder="e.g., transfers from Airport/Station"
+                    value={item.description}
+                    onChange={(e) => updateTransportation(item.id, 'description', e.target.value)}
+                    rows={2}
+                  />
+                  {transportation.length > 1 && (
+                    <Button type="button" variant="ghost" size="sm" onClick={() => removeTransportation(item.id)} className="text-red-500">
+                      <Minus className="h-4 w-4 mr-1" />
+                      Remove
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Accommodation */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Accommodation</label>
+              <Button type="button" variant="outline" size="sm" onClick={addAccommodation} className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Add Accommodation
+              </Button>
+            </div>
+            {accommodation.map((item) => (
+              <Card key={item.id}>
+                <CardContent className="pt-4 space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Input
+                      placeholder="e.g., Thimphu, Paro"
+                      value={item.city}
+                      onChange={(e) => updateAccommodation(item.id, 'city', e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g., Hotel Park or Similar"
+                      value={item.hotel}
+                      onChange={(e) => updateAccommodation(item.id, 'hotel', e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g., 2 Rooms"
+                      value={item.rooms}
+                      onChange={(e) => updateAccommodation(item.id, 'rooms', e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g., Double Sharing"
+                      value={item.roomType}
+                      onChange={(e) => updateAccommodation(item.id, 'roomType', e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g., 01, 02"
+                      value={item.nights}
+                      onChange={(e) => updateAccommodation(item.id, 'nights', e.target.value)}
+                    />
+                  </div>
+                  {accommodation.length > 1 && (
+                    <Button type="button" variant="ghost" size="sm" onClick={() => removeAccommodation(item.id)} className="text-red-500">
+                      <Minus className="h-4 w-4 mr-1" />
+                      Remove
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
           {/* Best Time to Visit */}
           <div className="space-y-4">
             <label className="text-sm font-medium">Best Time to Visit Dubai</label>
@@ -684,7 +1174,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
           {/* Inclusions */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Inclusions</label>
+              <label className="text-sm font-medium">What's Included</label>
               <Button
                 type="button"
                 variant="outline"
@@ -760,7 +1250,7 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
           {/* Exclusions */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">Exclusions</label>
+              <label className="text-sm font-medium">What's Not Included</label>
               <Button
                 type="button"
                 variant="outline"
@@ -830,6 +1320,89 @@ const CreatePackageModal = ({ isOpen, onClose, onPackageCreated }: CreatePackage
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+
+          {/* Reviews Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Customer Reviews</label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addReview}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Review
+              </Button>
+            </div>
+            <div className="space-y-4">
+              {reviews.map((review, index) => (
+                <Card key={index}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base">Review {index + 1}</CardTitle>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeReview(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <Input
+                        placeholder="Customer name"
+                        value={review.name}
+                        onChange={(e) => updateReview(index, 'name', e.target.value)}
+                      />
+                      <Select
+                        value={review.rating.toString()}
+                        onValueChange={(value) => updateReview(index, 'rating', parseInt(value))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select rating" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {[5, 4, 3, 2, 1].map((rating) => (
+                            <SelectItem key={rating} value={rating.toString()}>
+                              {rating} Star{rating !== 1 ? 's' : ''}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Textarea
+                      placeholder="Enter customer review..."
+                      value={review.comment}
+                      onChange={(e) => updateReview(index, 'comment', e.target.value)}
+                      rows={3}
+                    />
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <span>Date: {new Date(review.date).toLocaleDateString()}</span>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-3 w-3 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {reviews.length === 0 && (
+                <div className="text-center py-6 text-gray-500 border border-dashed rounded-md">
+                  <p>No reviews added yet. Click "Add Review" to add customer reviews.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

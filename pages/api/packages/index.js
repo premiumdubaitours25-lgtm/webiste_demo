@@ -2,6 +2,26 @@ import connectDB from '../../../lib/mongodb';
 import Package from '../../../models/Package';
 import { isConnected } from '../../../lib/mongodb';
 
+const normalizePackageCategory = (category) => {
+  if (!category || typeof category !== 'string') return category;
+  const value = category.trim().toLowerCase();
+  const map = {
+    regular: 'Regular',
+    'regular packages': 'Regular',
+    premium: 'Premium',
+    'premium packages': 'Premium',
+    luxury: 'Luxury',
+    'luxury packages': 'Luxury',
+    adventure: 'Adventure',
+    'adventure activities': 'Adventure',
+    oman: 'Oman Tour',
+    'oman tour': 'Oman Tour',
+    'attraction and activity': 'Attraction and Activity',
+    'attractions and activities': 'Attraction and Activity',
+  };
+  return map[value] || category;
+};
+
 // Demo data for when database is unavailable
 const getDemoPackages = () => {
   return [
@@ -200,7 +220,10 @@ export default async function handler(req, res) {
 
     try {
       console.log('Received package data:', JSON.stringify(req.body, null, 2));
-      const packageData = req.body;
+      const packageData = {
+        ...req.body,
+        packageCategory: normalizePackageCategory(req.body?.packageCategory),
+      };
       const newPackage = new Package(packageData);
       const savedPackage = await newPackage.save();
       console.log('Package saved successfully:', savedPackage._id);

@@ -8,6 +8,7 @@ import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, Crown, Che
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PackageCard from "@/components/PackageCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 interface Package {
@@ -59,7 +60,7 @@ const PremiumPackagesPage = () => {
   const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 20000],
+    priceRange: [0, 10000000],
     durationRange: [1, 30],
     location: "all",
     departureCity: [],
@@ -338,7 +339,7 @@ const PremiumPackagesPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative text-white py-16 md:py-20 lg:py-24 overflow-hidden">
+      <section className="relative text-white py-16 md:py-20 lg:py-16 md:py-20 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
           style={{
@@ -354,10 +355,10 @@ const PremiumPackagesPage = () => {
               <Crown className="h-4 w-4 mr-2" />
               Premium Packages
             </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 font-playfair tracking-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 font-playfair tracking-tight">
               Premium Dubai Tour Packages
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-90 font-poppins font-light tracking-wide">
+            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-90 font-poppins font-light tracking-wide">
               Enhanced comfort, personalized service, and exclusive experiences
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -375,19 +376,19 @@ const PremiumPackagesPage = () => {
       </section>
 
       {/* Premium Dubai Tours Introduction Section - Modern Design */}
-      <section className="py-24 md:py-32 bg-gradient-to-br from-amber-50 via-white to-amber-50/30 relative overflow-hidden">
+      <section className="py-16 md:py-16 md:py-20 bg-gradient-to-br from-amber-50 via-white to-amber-50/30 relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
               <Badge className="mb-6 bg-gradient-to-r from-amber-500 to-amber-600 text-white border-none px-6 py-2 text-sm font-semibold shadow-lg">
                 <Sparkles className="h-4 w-4 mr-2" />
                 Premium Dubai Tours
               </Badge>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 leading-tight font-playfair tracking-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gray-900 leading-tight font-playfair tracking-tight">
                 Discover Dubai with a <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Local Tour Operating Company</span>
               </h2>
             </div>
@@ -398,7 +399,7 @@ const PremiumPackagesPage = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                     <Crown className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 font-cormorant tracking-wide">Refined Experiences</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 font-cormorant tracking-wide">Refined Experiences</h3>
                   <p className="text-gray-700 leading-relaxed text-lg font-poppins font-light">
                     Discover Dubai with a local tour operating company, Premium Dubai Tours. We are a Dubai-based travel agency committed to delivering refined, comfortable, and trustworthy travel experiences.
                   </p>
@@ -410,7 +411,7 @@ const PremiumPackagesPage = () => {
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                     <Star className="h-8 w-8 text-white fill-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 font-cormorant tracking-wide">Beyond Standard</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 font-cormorant tracking-wide">Beyond Standard</h3>
                   <p className="text-gray-700 leading-relaxed text-lg font-poppins font-light">
                     Our premium tours go beyond standard sightseeing, focusing on personalized attention, transparent pricing, and reliable service designed for travelers who value quality and peace of mind.
                   </p>
@@ -436,7 +437,7 @@ const PremiumPackagesPage = () => {
                     <Button onClick={() => {
                       setFilters({
                         searchTerm: "",
-                        priceRange: [0, 50000],
+                        priceRange: [0, 10000000],
                         durationRange: [1, 30],
                         location: "all",
                         departureCity: [],
@@ -452,7 +453,7 @@ const PremiumPackagesPage = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mb-8">
+                    <div className="flex justify-between items-center mb-6">
                       <h2 className="text-2xl font-bold text-gray-900 font-playfair tracking-tight">
                         Premium Packages
                       </h2>
@@ -463,78 +464,7 @@ const PremiumPackagesPage = () => {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredPackages.map((pkg) => (
-                        <Card 
-                          key={pkg._id} 
-                          className="overflow-hidden hover:shadow-xl transition-all duration-300 group border-2 border-transparent hover:border-amber-500/30"
-                        >
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative overflow-hidden">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover group-hover:scale-110 transition-transform duration-300"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                                <Crown className="h-12 w-12 text-amber-600" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-gray-900 font-semibold shadow-lg">
-                              {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-amber-500 text-white shadow-lg">
-                              Premium
-                            </Badge>
-                            {pkg.images && pkg.images.length > 1 && (
-                              <Badge className="absolute bottom-4 right-4 bg-black/50 text-white backdrop-blur-sm">
-                                <Camera className="h-3 w-3 mr-1" />
-                                {pkg.images.length} Photos
-                              </Badge>
-                            )}
-                          </div>
-
-                          <CardHeader>
-                            <CardTitle className="text-xl font-cormorant tracking-wide group-hover:text-amber-600 transition-colors">{pkg.title}</CardTitle>
-                            <p className="text-gray-600 font-poppins font-light">{pkg.subtitle}</p>
-                          </CardHeader>
-
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2 text-amber-500" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2 text-amber-500" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2 text-amber-500" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2 text-amber-500 fill-amber-500" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3 font-poppins font-light">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6">
-                              <Link href={`/packages/${pkg._id}`} className="block">
-                                <Button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white">
-                                  View Full Details
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <PackageCard key={pkg._id} pkg={pkg} />
                       ))}
                     </div>
                   </>
@@ -545,7 +475,7 @@ const PremiumPackagesPage = () => {
       </section>
 
       {/* What Are Premium Dubai Tours Section - Modern Split Layout */}
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-20 bg-white relative">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
@@ -556,7 +486,7 @@ const PremiumPackagesPage = () => {
                     <Badge className="mb-6 bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-1">
                       What We Offer
                     </Badge>
-                    <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 leading-tight font-playfair tracking-tight">
+                    <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900 leading-tight font-playfair tracking-tight">
                       What Are Premium Dubai Tours?
                     </h3>
                     <p className="text-lg text-gray-700 leading-relaxed font-poppins font-light tracking-wide">
@@ -603,15 +533,15 @@ const PremiumPackagesPage = () => {
       </section>
 
       {/* Who Should Choose Premium Dubai Tours - Modern Grid */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 via-white to-amber-50/20 relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-gray-50 via-white to-amber-50/20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
               <Badge className="mb-6 bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-1">
                 Perfect For You
               </Badge>
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
+              <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
                 Who Should Choose Premium Dubai Tours?
               </h3>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins font-light tracking-wide">
@@ -676,14 +606,14 @@ const PremiumPackagesPage = () => {
       </section>
 
       {/* What Makes Premium Tours Different - Modern Feature Grid */}
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-20 bg-white relative">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
               <Badge className="mb-6 bg-amber-500/10 text-amber-600 border-amber-500/20 px-4 py-1">
                 Our Difference
               </Badge>
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
+              <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
                 What Makes Premium Tours Different?
               </h3>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins font-light tracking-wide">
@@ -734,7 +664,7 @@ const PremiumPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-playfair tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-playfair tracking-tight">
                 Why Choose Premium Packages?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto font-poppins font-light tracking-wide">
@@ -781,15 +711,15 @@ const PremiumPackagesPage = () => {
       </section>
 
       {/* What's Included Section - Modern List Design */}
-      <section className="py-24 bg-gradient-to-br from-amber-50 via-white to-gray-50 relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-amber-50 via-white to-gray-50 relative overflow-hidden">
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
               <Badge className="mb-6 bg-gradient-to-r from-amber-500 to-amber-600 text-white border-none px-6 py-2 text-sm font-semibold shadow-lg">
                 Complete Package
               </Badge>
-              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
+              <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 font-playfair tracking-tight">
                 What's Included in Premium Dubai Tours?
               </h3>
               <p className="text-xl text-gray-600 font-poppins font-light tracking-wide">
@@ -834,7 +764,7 @@ const PremiumPackagesPage = () => {
       </section>
 
       {/* Customization and Assurance Section - Modern Split Cards */}
-      <section className="py-24 bg-white relative">
+      <section className="py-16 md:py-20 bg-white relative">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8">
@@ -878,33 +808,6 @@ const PremiumPackagesPage = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-amber-500 to-amber-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 font-playfair tracking-tight">
-              Explore More Options
-            </h2>
-            <p className="text-xl mb-8 opacity-90 font-poppins font-light tracking-wide">
-              Check out our Regular and Luxury packages
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/packages/regular">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-amber-500">
-                  View Regular Packages
-                </Button>
-              </Link>
-              <Link href="/packages/luxury">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-amber-500">
-                  View Luxury Packages
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Package Detail Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">

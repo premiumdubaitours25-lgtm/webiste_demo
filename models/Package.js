@@ -195,7 +195,7 @@ const PackageSchema = new mongoose.Schema({
   packageCategory: {
     type: String,
     required: true,
-    enum: ['Regular', 'Premium', 'Luxury', 'Adventure', 'Oman Tour', 'Attraction and Activity', 'Deluxe', 'Cultural', 'Wildlife', 'Trekking', 'Spiritual', 'Beach', 'regular'],
+    trim: true,
     default: 'Regular',
   },
   images: [ImageSchema],

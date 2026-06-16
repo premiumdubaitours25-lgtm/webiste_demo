@@ -4633,6 +4633,53 @@ Key Highlights`,
                 </CardContent>
               </Card>
             </section>
+
+            {/* Reviews Section */}
+            <section id="reviews">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className={`text-3xl font-bold text-gray-900 ${isPremium ? 'font-playfair' : ''}`}>Customer Reviews</h3>
+                <Badge variant="outline" className={`${isPremium ? 'bg-gradient-to-r from-amber-500/10 to-amber-600/10 text-amber-700 border-amber-300/50' : 'text-primary border-primary/20 bg-primary/5'}`}>
+                  {(packageData.reviews?.length || 0)} review{(packageData.reviews?.length || 0) !== 1 ? 's' : ''}
+                </Badge>
+              </div>
+
+              {packageData.reviews && packageData.reviews.length > 0 ? (
+                <div className="grid gap-4">
+                  {packageData.reviews.map((review, idx) => (
+                    <Card key={idx} className={`${isPremium ? 'border-2 border-amber-200/50 bg-gradient-to-br from-white to-amber-50/20' : 'border-gray-200'} shadow-md`}>
+                      <CardContent className="p-5">
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div>
+                            <p className={`font-semibold text-gray-900 ${isPremium ? 'font-cormorant text-lg' : ''}`}>{review.name}</p>
+                            <p className="text-xs text-gray-500">
+                              {review.date ? new Date(review.date).toLocaleDateString() : 'Recent review'}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-4 w-4 ${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <p className={`text-gray-700 leading-relaxed ${isPremium ? 'font-poppins font-light' : ''}`}>
+                          {review.comment}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className={`${isPremium ? 'border-2 border-amber-200/50 bg-gradient-to-br from-white to-amber-50/20' : 'border-gray-200'} shadow-md`}>
+                  <CardContent className="p-8 text-center">
+                    <Star className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500">No customer reviews yet.</p>
+                  </CardContent>
+                </Card>
+              )}
+            </section>
               </>
             )}
           </div>
@@ -4680,68 +4727,67 @@ Key Highlights`,
             <div className="sticky top-[100px] space-y-6">
 
               {/* Booking Card */}
-              <Card className={`border-none shadow-2xl overflow-hidden ring-1 ring-black/5 ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
-                <div className={`p-6 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
-                  <p className="text-white/90 text-sm italic font-medium mb-2">Starting from</p>
-                  <div className="flex items-baseline justify-center gap-2 mt-1">
+              <Card className={`border-none shadow-xl overflow-hidden ring-1 ring-black/5 max-w-sm mx-auto lg:max-w-none ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
+                <div className={`p-3 md:p-4 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
+                  <p className="text-white/90 text-xs italic font-medium mb-1">Starting from</p>
+                  <div className="flex items-baseline justify-center gap-1.5">
                     {isPremium && packageData.price === 0 ? (
                       <>
-                        <h2 className={`text-4xl font-bold ${isPremium ? 'font-playfair' : ''}`}>Custom Pricing</h2>
-                        <span className="text-lg opacity-90">/ vehicle</span>
+                        <h2 className={`text-2xl md:text-3xl font-bold ${isPremium ? 'font-playfair' : ''}`}>Custom Pricing</h2>
+                        <span className="text-sm opacity-90">/ vehicle</span>
                       </>
                     ) : (
                       <>
-                        <h2 className={`text-4xl font-bold ${isPremium ? 'font-playfair' : ''}`}>{formatPrice(packageData.price)}</h2>
-                        <span className="text-lg opacity-90">/ person</span>
+                        <h2 className={`text-2xl md:text-3xl font-bold ${isPremium ? 'font-playfair' : ''}`}>{formatPrice(packageData.price)}</h2>
+                        <span className="text-sm opacity-90">/ person</span>
                       </>
                     )}
                   </div>
                   {isPremium && (
-                    <p className="text-white/80 text-xs mt-2 font-poppins">Up to 6 guests per vehicle</p>
+                    <p className="text-white/80 text-[11px] mt-1 font-poppins">Up to 6 guests per vehicle</p>
                   )}
-                  <div className={`mt-4 inline-flex items-center gap-1.5 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium ${isPremium ? 'bg-white/20 border border-white/30' : 'bg-white/20'}`}>
-                    <ShieldCheck className="h-4 w-4" />
+                  <div className={`mt-2 inline-flex items-center gap-1 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium ${isPremium ? 'bg-white/20 border border-white/30' : 'bg-white/20'}`}>
+                    <ShieldCheck className="h-3 w-3" />
                     No Hidden Charges
                   </div>
                 </div>
 
-                <CardContent className="p-6 space-y-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Travel Date</Label>
+                <CardContent className="p-3 md:p-4 space-y-3">
+                  <div className="space-y-2.5">
+                    <div className="space-y-1">
+                      <Label className="text-xs">Travel Date</Label>
                       <div className="relative">
-                        <CalendarIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                        <Input type="date" className="pl-10" />
+                        <CalendarIcon className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+                        <Input type="date" className="pl-8 h-9 text-sm" />
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label>Guests</Label>
-                      <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <Label className="text-xs">Guests</Label>
+                      <div className="grid grid-cols-2 gap-2">
                         <div className="relative">
-                          <Users className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                          <Input type="number" placeholder="Adults" min="1" className="pl-10" />
+                          <Users className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+                          <Input type="number" placeholder="Adults" min="1" className="pl-8 h-9 text-sm" />
                         </div>
-                        <Input type="number" placeholder="Kids" min="0" />
+                        <Input type="number" placeholder="Kids" min="0" className="h-9 text-sm" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <Button 
-                      className="w-full text-lg h-12 shadow-lg shadow-primary/20" 
-                      size="lg"
+                      className="w-full text-sm h-9 shadow-md shadow-primary/20" 
                       onClick={() => setIsBookingModalOpen(true)}
                     >
                       Request Booking
                     </Button>
-                    <Button variant="outline" className="w-full h-12 border-primary text-primary hover:bg-primary/5">
-                      <Phone className="h-4 w-4 mr-2" />
+                    <Button variant="outline" className="w-full h-9 text-sm border-primary text-primary hover:bg-primary/5">
+                      <Phone className="h-3.5 w-3.5 mr-1.5" />
                       Talk to an Expert
                     </Button>
                   </div>
 
-                  <p className="text-xs text-center text-gray-500 pt-2">
+                  <p className="text-[10px] text-center text-gray-500 pt-1">
                     Free cancellation up to 48 hours before tour
                   </p>
                 </CardContent>

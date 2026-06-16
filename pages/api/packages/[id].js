@@ -2,6 +2,26 @@ import connectDB from '../../../lib/mongodb';
 import Package from '../../../models/Package';
 import { isConnected } from '../../../lib/mongodb';
 
+const normalizePackageCategory = (category) => {
+  if (!category || typeof category !== 'string') return category;
+  const value = category.trim().toLowerCase();
+  const map = {
+    regular: 'Regular',
+    'regular packages': 'Regular',
+    premium: 'Premium',
+    'premium packages': 'Premium',
+    luxury: 'Luxury',
+    'luxury packages': 'Luxury',
+    adventure: 'Adventure',
+    'adventure activities': 'Adventure',
+    oman: 'Oman Tour',
+    'oman tour': 'Oman Tour',
+    'attraction and activity': 'Attraction and Activity',
+    'attractions and activities': 'Attraction and Activity',
+  };
+  return map[value] || category;
+};
+
 // Demo data helper
 const getDemoPackage = (id) => {
   const demoPackages = [
@@ -83,10 +103,15 @@ export default async function handler(req, res) {
     try {
       console.log('Updating package with ID:', id);
       console.log('Request body:', JSON.stringify(req.body, null, 2));
+      const payload = {
+        ...req.body,
+        packageCategory: normalizePackageCategory(req.body?.packageCategory),
+        updatedAt: Date.now(),
+      };
       
       const packageData = await Package.findByIdAndUpdate(
         id,
-        { ...req.body, updatedAt: Date.now() },
+        payload,
         { new: true, runValidators: true }
       );
       

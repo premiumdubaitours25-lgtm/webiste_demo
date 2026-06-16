@@ -10,6 +10,7 @@ import { MapPin, Clock, Users, Star, Search, Globe, Plane, Camera } from "lucide
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PackageCard from "@/components/PackageCard";
 
 interface Package {
   _id: string;
@@ -342,10 +343,10 @@ const InternationalPackagesPage = () => {
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-10 whitespace-nowrap">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10 whitespace-nowrap">
               International Packages
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-12 opacity-90">
+            <p className="text-lg md:text-xl lg:text-2xl mb-12 opacity-90">
               Explore the world with our carefully crafted international tour packages
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -366,7 +367,7 @@ const InternationalPackagesPage = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">
               Popular International Destinations
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -447,7 +448,7 @@ const InternationalPackagesPage = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mb-8">
+                    <div className="flex justify-between items-center mb-6">
                       <h2 className="text-2xl font-bold text-gray-900">
                         {selectedDestination
                           ? `${selectedDestination.charAt(0).toUpperCase() + selectedDestination.slice(1)} Packages`
@@ -461,80 +462,7 @@ const InternationalPackagesPage = () => {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                                <Globe className="h-12 w-12 text-gray-400" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                              {formatPrice(pkg.price)}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-primary text-white">
-                              {pkg.place === 'bhutan' ? 'Bhutan' :
-                                pkg.place === 'nepal' ? 'Nepal' :
-                                  pkg.place === 'dubai' ? 'Dubai' :
-                                    pkg.place === 'vietnam' ? 'Vietnam' :
-                                      pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                                        pkg.place === 'bali' ? 'Bali' :
-                                          pkg.place === 'malaysia' ? 'Malaysia' :
-                                            pkg.place === 'singapore' ? 'Singapore' : pkg.place}
-                            </Badge>
-                          </div>
-
-                          <CardHeader>
-                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                            <p className="text-gray-600">{pkg.subtitle}</p>
-                          </CardHeader>
-
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6 flex space-x-2">
-                              <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full">
-                                  View Details
-                                </Button>
-                              </Link>
-                              <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Book Now
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <PackageCard key={pkg._id} pkg={pkg} />
                       ))}
                     </div>
                   </>
@@ -549,7 +477,7 @@ const InternationalPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 Why Choose International Travel?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -590,28 +518,6 @@ const InternationalPackagesPage = () => {
                   Visit iconic landmarks, try exotic cuisines, and create unforgettable memories
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Explore the World?
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Let us create the perfect international adventure for you
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
-              <Link href="/packages/domestic">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                  View Domestic Packages
-                </Button>
-              </Link>
             </div>
           </div>
         </div>

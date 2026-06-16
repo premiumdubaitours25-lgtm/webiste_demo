@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../../components/ui/dialog";
 import CreatePackageModal from "../../components/CreatePackageModal";
 import PackageDetailModal from "../../components/PackageDetailModal";
 import EditPackageModal from "../../components/EditPackageModal";
@@ -11,6 +12,7 @@ import CreateTestimonialModal from "../../components/CreateTestimonialModal";
 import CreateBlogModal from "../../components/CreateBlogModal";
 import EditBlogModal from "../../components/EditBlogModal";
 import ViewBookingModal from "../../components/ViewBookingModal";
+import ImageUrlOrUpload, { uploadImageToCloudinary } from "../../components/ImageUrlOrUpload";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
@@ -32,8 +34,18 @@ import {
   LayoutDashboard,
   Pencil,
   Calendar,
+  Tags,
+  ChevronUp,
+  ChevronDown,
+  Crown,
+  Heart,
+  Shield,
+  Globe,
+  Phone,
+  Sparkles,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { cn } from "../../lib/utils";
 
@@ -99,7 +111,18 @@ interface PackageData {
   updatedAt: string;
 }
 
-type DashboardView = 'packages' | 'testimonials' | 'blogs' | 'bookings';
+type DashboardView = 'packages' | 'testimonials' | 'blogs' | 'bookings' | 'categories';
+
+const CARD_ICON_OPTIONS = [
+  { value: 'crown', label: 'Crown', Icon: Crown },
+  { value: 'star', label: 'Star', Icon: Star },
+  { value: 'heart', label: 'Heart', Icon: Heart },
+  { value: 'clock', label: 'Clock', Icon: Calendar },
+  { value: 'shield', label: 'Shield', Icon: Shield },
+  { value: 'globe', label: 'Globe', Icon: Globe },
+  { value: 'phone', label: 'Phone', Icon: Phone },
+  { value: 'sparkles', label: 'Sparkles', Icon: Sparkles },
+] as const;
 
 export default function DashboardPage() {
   const [activeView, setActiveView] = useState<DashboardView>('packages');
@@ -119,14 +142,36 @@ export default function DashboardPage() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [blogs, setBlogs] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
   const [loadingBlogs, setLoadingBlogs] = useState(true);
   const [loadingBookings, setLoadingBookings] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [packageTypeFilter, setPackageTypeFilter] = useState("all");
   const [placeFilter, setPlaceFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] = useState(false);
+  const [newCategoryForm, setNewCategoryForm] = useState({
+    name: "",
+    heroTitle: "",
+    heroSubtitle: "",
+    heroBackgroundImage: "",
+  });
+  const [heroBackgroundImageFile, setHeroBackgroundImageFile] = useState<File | null>(null);
+  const [categorySections, setCategorySections] = useState<
+    Array<{
+      badge: string;
+      title: string;
+      subtitle: string;
+      layout: 'simple' | 'cards';
+      content: string;
+      cards: Array<{ title: string; description: string; icon: string; iconImage: string; iconImageFile?: File | null }>;
+    }>
+  >([]);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [editingCategoryName, setEditingCategoryName] = useState("");
 
   const fetchPackages = async () => {
     try {
@@ -270,6 +315,9 @@ export default function DashboardPage() {
     }
     if (activeView === 'bookings') {
       fetchBookings();
+    }
+    if (activeView === 'categories') {
+      fetchCategories();
     }
   }, [activeView]);
 
@@ -1141,6 +1189,309 @@ export default function DashboardPage() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      setLoadingCategories(true);
+      const response = await fetch('/api/categories');
+      const data = await response.json();
+
+      if (response.ok && data.success && Array.isArray(data.data)) {
+        setCategories(data.data);
+      } else {
+        setCategories([]);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      setCategories([]);
+    } finally {
+      setLoadingCategories(false);
+    }
+  };
+
+  const handleCreateCategory = async () => {
+    const name = newCategoryForm.name.trim();
+    if (!name) {
+      alert('Please enter a category name');
+      return;
+    }
+
+    try {
+      let heroBackgroundImageUrl = newCategoryForm.heroBackgroundImage.trim();
+      if (heroBackgroundImageFile) {
+        heroBackgroundImageUrl = await uploadImageToCloudinary(heroBackgroundImageFile);
+      }
+
+      const processedSections = await Promise.all(
+        categorySections.map(async (section) => {
+          const processedCards = await Promise.all(
+            section.cards.map(async (card) => {
+              let iconImage = card.iconImage.trim();
+              if (card.iconImageFile) {
+                iconImage = await uploadImageToCloudinary(card.iconImageFile);
+              }
+
+              return {
+                title: card.title.trim(),
+                description: card.description.trim(),
+                icon: card.icon.trim(),
+                iconImage,
+              };
+            })
+          );
+
+          return {
+            badge: section.badge.trim(),
+            title: section.title.trim(),
+            subtitle: section.subtitle.trim(),
+            layout: section.layout,
+            content: section.content.trim(),
+            cards: processedCards.filter((card) => card.title || card.description || card.icon || card.iconImage),
+          };
+        })
+      );
+
+      const response = await fetch('/api/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          pageConfig: {
+            hero: {
+              title: newCategoryForm.heroTitle.trim(),
+              subtitle: newCategoryForm.heroSubtitle.trim(),
+              backgroundImage: heroBackgroundImageUrl,
+            },
+            sections: processedSections
+              .filter(
+                (section) =>
+                  section.badge ||
+                  section.title ||
+                  section.subtitle ||
+                  section.content ||
+                  (section.cards && section.cards.length > 0)
+              ),
+          },
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setNewCategoryForm({
+          name: "",
+          heroTitle: "",
+          heroSubtitle: "",
+          heroBackgroundImage: "",
+        });
+        setHeroBackgroundImageFile(null);
+        setCategorySections([]);
+        setIsCreateCategoryModalOpen(false);
+        fetchCategories();
+        alert('Category added successfully!');
+      } else {
+        alert(data.error || 'Failed to add category');
+      }
+    } catch (error) {
+      console.error('Error creating category:', error);
+      alert('Failed to add category');
+    }
+  };
+
+  const addCategorySection = () => {
+    setCategorySections((prev) => [
+      ...prev,
+      {
+        badge: "",
+        title: "",
+        subtitle: "",
+        layout: 'simple',
+        content: "",
+        cards: [],
+      },
+    ]);
+  };
+
+  const updateCategorySection = (
+    index: number,
+    field: 'badge' | 'title' | 'subtitle' | 'layout' | 'content',
+    value: string
+  ) => {
+    setCategorySections((prev) =>
+      prev.map((section, i) =>
+        i === index
+          ? {
+              ...section,
+              [field]: field === 'layout' ? (value === 'cards' ? 'cards' : 'simple') : value,
+            }
+          : section
+      )
+    );
+  };
+
+  const addSectionCard = (sectionIndex: number) => {
+    setCategorySections((prev) =>
+      prev.map((section, i) =>
+        i === sectionIndex
+          ? { ...section, cards: [...section.cards, { title: "", description: "", icon: "star", iconImage: "", iconImageFile: null }] }
+          : section
+      )
+    );
+  };
+
+  const updateSectionCard = (
+    sectionIndex: number,
+    cardIndex: number,
+    field: 'title' | 'description' | 'icon' | 'iconImage',
+    value: string
+  ) => {
+    setCategorySections((prev) =>
+      prev.map((section, i) =>
+        i === sectionIndex
+          ? {
+              ...section,
+              cards: section.cards.map((card, j) =>
+                j === cardIndex ? { ...card, [field]: value } : card
+              ),
+            }
+          : section
+      )
+    );
+  };
+
+  const updateSectionCardIconFile = (
+    sectionIndex: number,
+    cardIndex: number,
+    file: File | null
+  ) => {
+    setCategorySections((prev) =>
+      prev.map((section, i) =>
+        i === sectionIndex
+          ? {
+              ...section,
+              cards: section.cards.map((card, j) =>
+                j === cardIndex ? { ...card, iconImageFile: file } : card
+              ),
+            }
+          : section
+      )
+    );
+  };
+
+  const removeSectionCard = (sectionIndex: number, cardIndex: number) => {
+    setCategorySections((prev) =>
+      prev.map((section, i) =>
+        i === sectionIndex
+          ? { ...section, cards: section.cards.filter((_, j) => j !== cardIndex) }
+          : section
+      )
+    );
+  };
+
+  const moveSectionCard = (sectionIndex: number, cardIndex: number, direction: 'up' | 'down') => {
+    setCategorySections((prev) =>
+      prev.map((section, i) => {
+        if (i !== sectionIndex) return section;
+        const targetIndex = direction === 'up' ? cardIndex - 1 : cardIndex + 1;
+        if (targetIndex < 0 || targetIndex >= section.cards.length) return section;
+        const nextCards = [...section.cards];
+        [nextCards[cardIndex], nextCards[targetIndex]] = [nextCards[targetIndex], nextCards[cardIndex]];
+        return { ...section, cards: nextCards };
+      })
+    );
+  };
+
+  const removeCategorySection = (index: number) => {
+    setCategorySections((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const moveCategorySection = (index: number, direction: 'up' | 'down') => {
+    setCategorySections((prev) => {
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= prev.length) return prev;
+      const next = [...prev];
+      [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+      return next;
+    });
+  };
+
+  const resetCategoryModalForm = () => {
+    setNewCategoryForm({
+      name: "",
+      heroTitle: "",
+      heroSubtitle: "",
+      heroBackgroundImage: "",
+    });
+    setHeroBackgroundImageFile(null);
+    setCategorySections([]);
+  };
+
+  const handleDeleteCategory = async (categoryId: string, categoryName: string) => {
+    if (!window.confirm(`Delete category "${categoryName}"?`)) return;
+
+    try {
+      const response = await fetch(`/api/categories/${categoryId}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setCategories((prev) => prev.filter((item) => item._id !== categoryId));
+        alert('Category deleted successfully!');
+      } else {
+        alert(data.error || 'Failed to delete category');
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      alert('Failed to delete category');
+    }
+  };
+
+  const handleStartEditCategory = (categoryId: string, currentName: string) => {
+    setEditingCategoryId(categoryId);
+    setEditingCategoryName(currentName);
+  };
+
+  const handleCancelEditCategory = () => {
+    setEditingCategoryId(null);
+    setEditingCategoryName("");
+  };
+
+  const handleSaveEditCategory = async () => {
+    if (!editingCategoryId) return;
+
+    const name = editingCategoryName.trim();
+    if (!name) {
+      alert('Please enter a category name');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/categories/${editingCategoryId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setCategories((prev) =>
+          prev.map((item) => (item._id === editingCategoryId ? data.data : item))
+        );
+        setEditingCategoryId(null);
+        setEditingCategoryName("");
+        alert('Category updated successfully!');
+      } else {
+        alert(data.error || 'Failed to update category');
+      }
+    } catch (error) {
+      console.error('Error updating category:', error);
+      alert('Failed to update category');
+    }
+  };
+
   const sidebarItems = [
     {
       id: 'packages' as DashboardView,
@@ -1165,6 +1516,12 @@ export default function DashboardPage() {
       label: 'Bookings',
       icon: Calendar,
       description: 'Manage customer bookings'
+    },
+    {
+      id: 'categories' as DashboardView,
+      label: 'Categories',
+      icon: Tags,
+      description: 'Manage package categories'
     }
   ];
 
@@ -1257,12 +1614,14 @@ export default function DashboardPage() {
                     {activeView === 'testimonials' && 'Testimonials'}
                     {activeView === 'blogs' && 'Blogs'}
                     {activeView === 'bookings' && 'Bookings'}
+                    {activeView === 'categories' && 'Categories'}
                   </h1>
                   <p className="text-gray-600 mt-1">
                     {activeView === 'packages' && 'Manage your tour packages'}
                     {activeView === 'testimonials' && 'Manage customer testimonials and reviews'}
                     {activeView === 'blogs' && 'Manage blog posts and articles'}
                     {activeView === 'bookings' && 'Manage customer bookings and reservations'}
+                    {activeView === 'categories' && 'Add and manage package categories'}
                   </p>
                 </div>
             </div>
@@ -1283,6 +1642,12 @@ export default function DashboardPage() {
                   <Button size="sm" onClick={() => setIsCreateBlogModalOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Blog Post
+                  </Button>
+                )}
+                {activeView === 'categories' && (
+                  <Button size="sm" onClick={() => setIsCreateCategoryModalOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Category
                   </Button>
                 )}
             </div>
@@ -1346,12 +1711,12 @@ export default function DashboardPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="Cultural">Cultural</SelectItem>
-                    <SelectItem value="Adventure">Adventure</SelectItem>
-                    <SelectItem value="Wildlife">Wildlife</SelectItem>
-                    <SelectItem value="Trekking">Trekking</SelectItem>
-                    <SelectItem value="Spiritual">Spiritual</SelectItem>
-                    <SelectItem value="Beach">Beach</SelectItem>
+                    <SelectItem value="Regular">Regular Packages</SelectItem>
+                    <SelectItem value="Premium">Premium Packages</SelectItem>
+                    <SelectItem value="Luxury">Luxury Packages</SelectItem>
+                    <SelectItem value="Adventure">Adventure Activities</SelectItem>
+                    <SelectItem value="Oman Tour">OMAN Tour</SelectItem>
+                    <SelectItem value="Attraction and Activity">Attraction and Activity</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -1783,6 +2148,112 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {activeView === 'categories' && (
+            <div className="container mx-auto px-6 py-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Categories</CardTitle>
+                  <CardDescription>Create and manage categories for package organization</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between gap-2 mb-6 p-3 rounded-md bg-gray-50 border">
+                    <p className="text-sm text-gray-600">
+                      Create a category page with Hero section and custom sections.
+                    </p>
+                    <Button size="sm" onClick={() => setIsCreateCategoryModalOpen(true)}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Category Page
+                    </Button>
+                  </div>
+
+                  {loadingCategories ? (
+                    <div className="text-center py-12 text-gray-600">Loading categories...</div>
+                  ) : categories.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="flex flex-col items-center space-y-3">
+                        <Tags className="h-12 w-12 text-gray-300" />
+                        <p className="text-gray-600">No categories added yet</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left p-3">Category</th>
+                            <th className="text-left p-3">Slug</th>
+                            <th className="text-left p-3">Created</th>
+                            <th className="text-left p-3">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {categories.map((category) => (
+                            <tr key={category._id} className="border-b">
+                              <td className="p-3 font-medium">
+                                {editingCategoryId === category._id ? (
+                                  <Input
+                                    value={editingCategoryName}
+                                    onChange={(e) => setEditingCategoryName(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleSaveEditCategory();
+                                      }
+                                      if (e.key === 'Escape') {
+                                        handleCancelEditCategory();
+                                      }
+                                    }}
+                                  />
+                                ) : (
+                                  category.name
+                                )}
+                              </td>
+                              <td className="p-3 text-gray-600">{category.slug}</td>
+                              <td className="p-3 text-gray-600">
+                                {category.createdAt ? new Date(category.createdAt).toLocaleDateString() : 'N/A'}
+                              </td>
+                              <td className="p-3">
+                                <div className="flex items-center gap-2">
+                                  {editingCategoryId === category._id ? (
+                                    <>
+                                      <Button variant="outline" size="sm" onClick={handleSaveEditCategory}>
+                                        Save
+                                      </Button>
+                                      <Button variant="ghost" size="sm" onClick={handleCancelEditCategory}>
+                                        Cancel
+                                      </Button>
+                                    </>
+                                  ) : (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleStartEditCategory(category._id, category.name)}
+                                      className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                                    >
+                                      <Pencil className="h-4 w-4" />
+                                    </Button>
+                                  )}
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleDeleteCategory(category._id, category.name)}
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           {activeView === 'blogs' && (
             <div className="container mx-auto px-6 py-8">
               <Card>
@@ -1939,6 +2410,336 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Create Category Page Modal */}
+      <Dialog
+        open={isCreateCategoryModalOpen}
+        onOpenChange={(open) => {
+          setIsCreateCategoryModalOpen(open);
+          if (!open) resetCategoryModalForm();
+        }}
+      >
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create Category Page</DialogTitle>
+            <DialogDescription>
+              Set up a new category with hero section and optional custom content sections. Packages section stays enabled by default.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Category Name *</label>
+              <Input
+                placeholder="e.g. Himanshu Specials"
+                value={newCategoryForm.name}
+                onChange={(e) => setNewCategoryForm((prev) => ({ ...prev, name: e.target.value }))}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold">Hero Section</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Input
+                  placeholder="Hero title (optional)"
+                  value={newCategoryForm.heroTitle}
+                  onChange={(e) => setNewCategoryForm((prev) => ({ ...prev, heroTitle: e.target.value }))}
+                />
+                <Input
+                  placeholder="Hero subtitle (optional)"
+                  value={newCategoryForm.heroSubtitle}
+                  onChange={(e) => setNewCategoryForm((prev) => ({ ...prev, heroSubtitle: e.target.value }))}
+                />
+              </div>
+              <ImageUrlOrUpload
+                id="category-hero-background-image"
+                label="Hero Background Image URL (Optional)"
+                value={newCategoryForm.heroBackgroundImage}
+                onChange={(url) => setNewCategoryForm((prev) => ({ ...prev, heroBackgroundImage: url }))}
+                onFileChange={setHeroBackgroundImageFile}
+                placeholder="https://example.com/hero-background.jpg"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Custom Sections (Optional)</h3>
+                <Button type="button" variant="outline" size="sm" onClick={addCategorySection}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Section
+                </Button>
+              </div>
+
+              {categorySections.length === 0 ? (
+                <p className="text-sm text-gray-500">No extra sections added yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {categorySections.map((section, index) => (
+                    <div key={index} className="border rounded-lg p-3 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium">Section {index + 1}</p>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => moveCategorySection(index, 'up')}
+                            disabled={index === 0}
+                            title="Move section up"
+                          >
+                            <ChevronUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => moveCategorySection(index, 'down')}
+                            disabled={index === categorySections.length - 1}
+                            title="Move section down"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeCategorySection(index)}
+                            className="text-red-500 hover:text-red-700"
+                            title="Remove section"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <Input
+                        placeholder="Section badge text (optional)"
+                        value={section.badge}
+                        onChange={(e) => updateCategorySection(index, 'badge', e.target.value)}
+                      />
+                      <Input
+                        placeholder="Section title"
+                        value={section.title}
+                        onChange={(e) => updateCategorySection(index, 'title', e.target.value)}
+                      />
+                      <Input
+                        placeholder="Section subtitle (optional)"
+                        value={section.subtitle}
+                        onChange={(e) => updateCategorySection(index, 'subtitle', e.target.value)}
+                      />
+                      <div>
+                        <label className="text-xs text-gray-500 mb-1 block">Section Layout</label>
+                        <Select
+                          value={section.layout}
+                          onValueChange={(value) => updateCategorySection(index, 'layout', value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select layout" />
+                          </SelectTrigger>
+                          <SelectContent className="z-[220]">
+                            <SelectItem value="simple">Simple Content</SelectItem>
+                            <SelectItem value="cards">Cards Grid (like sample)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      {section.layout === 'simple' ? (
+                        <>
+                          <Textarea
+                            placeholder="Section content"
+                            rows={3}
+                            value={section.content}
+                            onChange={(e) => updateCategorySection(index, 'content', e.target.value)}
+                          />
+                        </>
+                      ) : (
+                        <div className="space-y-3 rounded-xl border border-amber-100 p-3 bg-gradient-to-br from-amber-50/40 to-white">
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm font-medium">Section Cards</p>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => addSectionCard(index)}
+                            >
+                              <Plus className="h-4 w-4 mr-1" />
+                              Add Card
+                            </Button>
+                          </div>
+                          {section.cards.length === 0 ? (
+                            <p className="text-xs text-gray-500">No cards added yet.</p>
+                          ) : (
+                            section.cards.map((card, cardIndex) => (
+                              <div key={cardIndex} className="space-y-2 border rounded-lg p-3 bg-white shadow-sm">
+                                <div className="flex items-center justify-between">
+                                  <p className="text-xs font-medium">Card {cardIndex + 1}</p>
+                                  <div className="flex items-center gap-1">
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => moveSectionCard(index, cardIndex, 'up')}
+                                      disabled={cardIndex === 0}
+                                      title="Move card up"
+                                    >
+                                      <ChevronUp className="h-3 w-3" />
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => moveSectionCard(index, cardIndex, 'down')}
+                                      disabled={cardIndex === section.cards.length - 1}
+                                      title="Move card down"
+                                    >
+                                      <ChevronDown className="h-3 w-3" />
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => removeSectionCard(index, cardIndex)}
+                                      className="text-red-500 hover:text-red-700"
+                                      title="Remove card"
+                                    >
+                                      <X className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                </div>
+                                <Input
+                                  placeholder="Card title"
+                                  value={card.title}
+                                  onChange={(e) =>
+                                    updateSectionCard(index, cardIndex, 'title', e.target.value)
+                                  }
+                                />
+                                <Textarea
+                                  placeholder="Card description"
+                                  rows={2}
+                                  value={card.description}
+                                  onChange={(e) =>
+                                    updateSectionCard(index, cardIndex, 'description', e.target.value)
+                                  }
+                                />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                  <div>
+                                    <label className="text-xs text-gray-500 mb-1 block">Icon Style</label>
+                                    <Select
+                                      value={card.icon || 'star'}
+                                      onValueChange={(value) =>
+                                        updateSectionCard(index, cardIndex, 'icon', value)
+                                      }
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select icon" />
+                                      </SelectTrigger>
+                                      <SelectContent className="z-[230]">
+                                        {CARD_ICON_OPTIONS.map((iconOption) => (
+                                          <SelectItem key={iconOption.value} value={iconOption.value}>
+                                            {iconOption.label}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <ImageUrlOrUpload
+                                    id={`card-icon-image-${index}-${cardIndex}`}
+                                    label="Card Icon Image (Optional)"
+                                    value={card.iconImage || ''}
+                                    onChange={(url) =>
+                                      updateSectionCard(index, cardIndex, 'iconImage', url)
+                                    }
+                                    onFileChange={(file) =>
+                                      updateSectionCardIconFile(index, cardIndex, file)
+                                    }
+                                    placeholder="https://example.com/icon.png"
+                                  />
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+
+                      <div className="mt-3 border rounded-md p-3 bg-white">
+                        <p className="text-xs font-semibold text-gray-500 mb-2">Section Preview</p>
+                        {section.badge && (
+                          <div className="text-center mb-2">
+                            <span className="inline-flex items-center rounded-full bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 text-xs font-medium">
+                              {section.badge}
+                            </span>
+                          </div>
+                        )}
+                        {section.title && (
+                          <h4 className="text-lg font-semibold text-gray-900 mb-1 text-center">{section.title}</h4>
+                        )}
+                        {section.subtitle && (
+                          <p className="text-sm text-gray-600 mb-2 text-center">{section.subtitle}</p>
+                        )}
+                        {section.layout === 'cards' ? (
+                          section.cards.length > 0 ? (
+                            <div className="grid md:grid-cols-2 gap-3">
+                              {section.cards.map((card, cardIndex) => (
+                                <div key={`preview-card-${cardIndex}`} className="rounded-xl border border-amber-100 bg-gradient-to-br from-white to-amber-50/50 p-3 shadow-sm">
+                                  <div className="flex items-start gap-3">
+                                    <div className="w-10 h-10 rounded-lg bg-amber-500 text-white flex items-center justify-center overflow-hidden shadow">
+                                      {card.iconImage ? (
+                                        <img
+                                          src={card.iconImage}
+                                          alt={card.title || `Card ${cardIndex + 1}`}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      ) : (
+                                        (() => {
+                                          const iconItem = CARD_ICON_OPTIONS.find((item) => item.value === (card.icon || 'star'));
+                                          const IconComp = iconItem?.Icon || Star;
+                                          return <IconComp className="h-5 w-5" />;
+                                        })()
+                                      )}
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-semibold text-gray-900">{card.title || `Card ${cardIndex + 1}`}</p>
+                                      <p className="text-xs text-gray-700 mt-1">{card.description || 'Card description...'}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-gray-500">Add cards to see preview.</p>
+                          )
+                        ) : (
+                          <>
+                            {section.content && (
+                              <p className="text-sm text-gray-700 whitespace-pre-wrap">{section.content}</p>
+                            )}
+                            {!section.content && (
+                              <p className="text-xs text-gray-500">Add content to see preview.</p>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCreateCategoryModalOpen(false);
+                resetCategoryModalForm();
+              }}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleCreateCategory}>
+              Create Category Page
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Create Package Modal */}
       <CreatePackageModal

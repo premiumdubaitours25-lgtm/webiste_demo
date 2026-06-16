@@ -626,6 +626,15 @@ export default function Home() {
                             </blockquote>
                             <div className="flex items-center justify-center">
                               <div className="text-center">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden mx-auto mb-3 border border-gray-200">
+                                  <Image
+                                    src={testimonial.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"}
+                                    alt={testimonial.name}
+                                    width={64}
+                                    height={64}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
                                 <h4 className="font-semibold text-gray-900 text-base sm:text-lg">{testimonial.name}</h4>
                                 <p className="text-gray-600 text-sm sm:text-base">{testimonial.role}</p>
                               </div>

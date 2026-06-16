@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Star, X } from 'lucide-react';
+import { Star } from 'lucide-react';
+import ImageUrlOrUpload, { uploadImageToCloudinary } from '@/components/ImageUrlOrUpload';
 
 interface CreateTestimonialModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export default function CreateTestimonialModal({
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,12 +38,20 @@ export default function CreateTestimonialModal({
     setLoading(true);
 
     try {
+      let imageUrl = formData.image;
+      if (imageFile) {
+        imageUrl = await uploadImageToCloudinary(imageFile);
+      }
+
       const response = await fetch('/api/testimonials', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          image: imageUrl,
+        }),
       });
 
       // Get response text first to handle both JSON and HTML errors
@@ -90,6 +100,7 @@ export default function CreateTestimonialModal({
       image: '',
     });
     setError('');
+    setImageFile(null);
     onClose();
   };
 
@@ -167,16 +178,14 @@ export default function CreateTestimonialModal({
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="image">Image URL (Optional)</Label>
-            <Input
-              id="image"
-              value={formData.image}
-              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-              placeholder="https://example.com/image.jpg"
-              type="url"
-            />
-          </div>
+          <ImageUrlOrUpload
+            id="image"
+            label="Image (Optional)"
+            value={formData.image}
+            onChange={(url) => setFormData({ ...formData, image: url })}
+            onFileChange={setImageFile}
+            placeholder="https://example.com/image.jpg"
+          />
 
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
@@ -189,7 +198,7 @@ export default function CreateTestimonialModal({
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Creating...' : 'Create Testimonial'}
+              {loading ? (imageFile ? 'Uploading...' : 'Creating...') : 'Create Testimonial'}
             </Button>
           </div>
         </form>

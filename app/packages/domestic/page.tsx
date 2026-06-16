@@ -10,6 +10,7 @@ import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, ShieldChec
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PackageCard from "@/components/PackageCard";
 
 interface Package {
   _id: string;
@@ -299,10 +300,10 @@ const DomesticPackagesPage = () => {
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               Dubai Tour Packages
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-90">
+            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-90">
               Explore the incredible beauty of Dubai with our carefully crafted tour packages
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -323,7 +324,7 @@ const DomesticPackagesPage = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">
               Choose Your Experience
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -404,7 +405,7 @@ const DomesticPackagesPage = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mb-8">
+                    <div className="flex justify-between items-center mb-6">
                       <h2 className="text-2xl font-bold text-gray-900">
                         {selectedCategory
                           ? `${selectedCategory} Experience Packages`
@@ -418,79 +419,7 @@ const DomesticPackagesPage = () => {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                                <Mountain className="h-12 w-12 text-gray-400" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                              {formatPrice(pkg.price)}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-primary text-white">
-                              {pkg.place === 'darjeeling' ? 'Darjeeling' :
-                                pkg.place === 'sikkim' ? 'Sikkim' :
-                                  pkg.place === 'meghalaya' ? 'Meghalaya' :
-                                    pkg.place === 'arunachal' ? 'Arunachal' :
-                                      pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                                        pkg.place === 'kashmir' ? 'Kashmir' :
-                                          pkg.place === 'leh-ladakh' ? 'Leh Ladakh' : pkg.place}
-                            </Badge>
-                          </div>
-
-                          <CardHeader>
-                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                            <p className="text-gray-600">{pkg.subtitle}</p>
-                          </CardHeader>
-
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6 flex space-x-2">
-                              <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full">
-                                  View Details
-                                </Button>
-                              </Link>
-                              <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Book Now
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <PackageCard key={pkg._id} pkg={pkg} />
                       ))}
                     </div>
                   </>
@@ -505,7 +434,7 @@ const DomesticPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 Why Choose Dubai for Your Next Adventure?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -546,28 +475,6 @@ const DomesticPackagesPage = () => {
                   Dune bashing, camel rides, desert safaris, and traditional entertainment
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Explore Dubai?
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Let us create the perfect Dubai adventure for you
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
-              <Link href="/packages/international">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                  View International Packages
-                </Button>
-              </Link>
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BookingModal from "@/components/BookingModal";
+import PackageCard from "@/components/PackageCard";
 
 interface Package {
   _id: string;
@@ -59,7 +60,7 @@ const RegularPackagesPage = () => {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 20000],
+    priceRange: [0, 10000000],
     durationRange: [1, 30],
     location: "all",
     departureCity: [],
@@ -603,6 +604,32 @@ const RegularPackagesPage = () => {
     }).format(price);
   };
 
+  const getPackageImage = (pkg: Package): { url: string; alt: string } | null => {
+    if (!pkg.images || pkg.images.length === 0) return null;
+    const firstImage = pkg.images[0] as unknown;
+
+    if (typeof firstImage === 'string') {
+      return { url: firstImage, alt: pkg.title };
+    }
+
+    if (
+      typeof firstImage === 'object' &&
+      firstImage !== null &&
+      'url' in firstImage &&
+      typeof (firstImage as { url: unknown }).url === 'string'
+    ) {
+      return {
+        url: (firstImage as { url: string }).url,
+        alt:
+          'alt' in firstImage && typeof (firstImage as { alt?: unknown }).alt === 'string'
+            ? (firstImage as { alt?: string }).alt || pkg.title
+            : pkg.title,
+      };
+    }
+
+    return null;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -633,10 +660,10 @@ const RegularPackagesPage = () => {
               <ShieldCheck className="h-4 w-4 mr-2" />
               Regular Packages
             </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               Regular Dubai Tour Packages
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-90">
+            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-90">
               Affordable and comfortable Dubai tours designed for budget-conscious travelers
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -668,7 +695,7 @@ const RegularPackagesPage = () => {
                     <Button onClick={() => {
                       setFilters({
                         searchTerm: "",
-                        priceRange: [0, 50000],
+                        priceRange: [0, 10000000],
                         durationRange: [1, 30],
                         location: "all",
                         departureCity: [],
@@ -684,7 +711,7 @@ const RegularPackagesPage = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mb-8">
+                    <div className="flex justify-between items-center mb-6">
                       <h2 className="text-2xl font-bold text-gray-900">
                         Regular Packages
                       </h2>
@@ -695,78 +722,7 @@ const RegularPackagesPage = () => {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                                <Mountain className="h-12 w-12 text-gray-400" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900">
-                              {pkg.price > 0 ? formatPrice(pkg.price) : 'Custom Pricing'}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-primary text-white">
-                              Regular
-                            </Badge>
-                          </div>
-
-                          <CardHeader>
-                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                            <p className="text-gray-600">{pkg.subtitle}</p>
-                          </CardHeader>
-
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6 flex space-x-2">
-                              <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full">
-                                  View Details
-                                </Button>
-                              </Link>
-                              <Button 
-                                variant="outline" 
-                                className="w-full flex-1"
-                                onClick={() => {
-                                  setSelectedPackage(pkg);
-                                  setIsBookingModalOpen(true);
-                                }}
-                              >
-                                Book Now
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <PackageCard key={pkg._id} pkg={pkg} />
                       ))}
                     </div>
                   </>
@@ -781,7 +737,7 @@ const RegularPackagesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                 Why Choose Regular Packages?
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -826,33 +782,6 @@ const RegularPackagesPage = () => {
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Explore More Options
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Check out our Premium and Luxury packages for enhanced experiences
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/packages/premium">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                  View Premium Packages
-                </Button>
-              </Link>
-              <Link href="/packages/luxury">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                  View Luxury Packages
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Booking Modal */}
       {selectedPackage && (
         <BookingModal

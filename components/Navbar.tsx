@@ -27,6 +27,21 @@ interface NavigationItem {
   submenu?: Array<{ name: string; href: string }>;
 }
 
+interface CategoryItem {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+const LEGACY_CATEGORY_ROUTES: Record<string, string> = {
+  'regular-packages': '/packages/regular',
+  'premium-packages': '/packages/premium',
+  'luxury-packages': '/packages/luxury',
+  'adventure-activities': '/packages/adventure',
+  'oman-tour': '/packages/oman',
+  'attraction-and-activity': '/packages/attractions',
+};
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,6 +50,7 @@ const Navbar = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [isInHeroSection, setIsInHeroSection] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -83,20 +99,43 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname, mounted]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        if (response.ok && data.success && Array.isArray(data.data)) {
+          setCategories(data.data);
+        }
+      } catch (error) {
+        console.error('Error loading navbar categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const packageSubmenu = categories.length > 0
+    ? categories.map((category) => ({
+        name: category.name,
+        href: LEGACY_CATEGORY_ROUTES[category.slug] || `/packages/category/${category.slug}`,
+      }))
+    : [
+        { name: 'Regular Packages', href: '/packages/category/regular-packages' },
+        { name: 'Premium Packages', href: '/packages/category/premium-packages' },
+        { name: 'Luxury Packages', href: '/packages/category/luxury-packages' },
+        { name: 'Adventure Activities', href: '/packages/category/adventure-activities' },
+        { name: 'OMAN Tour', href: '/packages/category/oman-tour' },
+        { name: 'Attraction and Activity', href: '/packages/category/attraction-and-activity' },
+      ];
+
   const navigation: NavigationItem[] = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { 
       name: 'Packages', 
-      href: '/packages/regular',
-      submenu: [
-        { name: 'Regular Packages', href: '/packages/regular' },
-        { name: 'Premium Packages', href: '/packages/premium' },
-        { name: 'Luxury Packages', href: '/packages/luxury' },
-        { name: 'Adventure Activities', href: '/packages/adventure' },
-        { name: 'OMAN Tour', href: '/packages/oman' },
-        { name: 'Attraction and Activity', href: '/packages/attractions' },
-      ]
+      href: '/packages',
+      submenu: packageSubmenu
     },
     { name: 'Travel Blog ', href: '/blogs' },
     { name: 'Contact', href: '/contact' },
@@ -260,18 +299,18 @@ const Navbar = () => {
         : 'bg-white shadow-lg border-b border-gray-300'
     }`}>
       {/* Top Bar */}
-      <div className="bg-black text-white py-1">
+      <div className="bg-black text-white py-px">
         {/* Desktop Layout */}
         <div className="hidden md:block">
           <div className="container mx-auto px-4">
-            <div className="flex justify-between items-center text-sm">
-              <div className="flex items-center space-x-4">
+            <div className="flex justify-between items-center text-[11px]">
+              <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
-                  <Phone className="h-4 w-4" />
+                  <Phone className="h-3 w-3" />
                   <span>+971 50 401 5632, +971 50 214 2541</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4" />
+                  <Mail className="h-3 w-3" />
                   <span>info@premiumdubaitours.com</span>
                 </div>
               </div>
@@ -279,15 +318,15 @@ const Navbar = () => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-white hover:bg-gray-800"
+                  className="text-white hover:bg-gray-800 text-[11px] px-2 py-1 h-auto"
                   onClick={() => window.open('https://wa.me/971504015632', '_blank')}
                 >
-                  <MessageCircle className="h-4 w-4 mr-2" />
+                  <MessageCircle className="h-3 w-3 mr-1.5" />
                   Live Chat
                 </Button>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
-                    <User className="h-4 w-4 mr-2" />
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 text-[11px] px-2 py-1 h-auto">
+                    <User className="h-3 w-3 mr-1.5" />
                     Login
                   </Button>
                 </Link>
@@ -297,16 +336,16 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Layout - Full Width */}
-        <div className="md:hidden px-4 space-y-1">
+        <div className="md:hidden px-4 space-y-0.5">
           {/* Row 1: Phone Numbers */}
-          <div className="flex items-center justify-center space-x-2 text-sm">
-            <Phone className="h-4 w-4" />
+          <div className="flex items-center justify-center space-x-1.5 text-xs">
+            <Phone className="h-3 w-3" />
             <span>+971 50 401 5632, +971 50 214 2541</span>
           </div>
           
           {/* Row 2: Email */}
-          <div className="flex items-center justify-center space-x-2 text-base mt-2">
-            <Mail className="h-4 w-4" />
+          <div className="flex items-center justify-center space-x-1.5 text-sm mt-1">
+            <Mail className="h-3 w-3" />
             <span>info@premiumdubaitours.com</span>
           </div>
           
@@ -315,15 +354,15 @@ const Navbar = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white hover:bg-gray-800 text-base px-4 py-2"
+              className="text-white hover:bg-gray-800 text-sm px-3 py-1.5"
               onClick={() => window.open('https://wa.me/971504015632', '_blank')}
             >
-              <MessageCircle className="h-5 w-5 mr-2" />
+              <MessageCircle className="h-4 w-4 mr-1.5" />
               Live Chat
             </Button>
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 text-base px-4 py-2">
-                <User className="h-5 w-5 mr-2" />
+              <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 text-sm px-3 py-1.5">
+                <User className="h-4 w-4 mr-1.5" />
                 Login
               </Button>
             </Link>
@@ -333,10 +372,10 @@ const Navbar = () => {
 
       {/* Main Navigation */}
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-between items-center py-0.5">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="relative w-20 h-20">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="relative w-12 h-12">
               <Image
                 src="/pdt_logo.png"
                 alt="Premium Dubai Tours Logo"
@@ -346,10 +385,10 @@ const Navbar = () => {
               />
             </div>
             <div className="flex flex-col">
-              <h1 className={`text-lg sm:text-xl font-bold uppercase leading-tight ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none', fontWeight: 700 }}>
+              <h1 className={`text-xs sm:text-sm font-bold uppercase leading-tight ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none', fontWeight: 700 }}>
                 PREMIUM DUBAI TOURS
               </h1>
-              <p className={`text-xs sm:text-sm font-normal uppercase tracking-wide ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none' }}>
+              <p className={`text-[9px] sm:text-[10px] font-normal uppercase tracking-wide ${isInHeroSection ? 'text-white' : 'text-black'}`} style={{ textShadow: isInHeroSection ? '2px 2px 4px rgba(0,0,0,0.5)' : 'none' }}>
                 Refined Dubai Travel Experiences 
               </p>
             </div>
@@ -477,7 +516,7 @@ const Navbar = () => {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className={`flex items-center space-x-1 text-lg ${
+                        className={`flex items-center space-x-1 text-sm ${
                           isInHeroSection
                             ? isActive(item.href)
                               ? 'text-white font-semibold'
@@ -511,7 +550,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`font-medium text-lg transition-colors ${
+                    className={`font-medium text-sm transition-colors ${
                       isInHeroSection
                         ? isActive(item.href)
                           ? 'text-white font-semibold'

@@ -8,6 +8,7 @@ import { MapPin, Clock, Users, Star, Search, Mountain, Camera, Heart, Zap } from
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PackageCard from "@/components/PackageCard";
 
 interface Package {
   _id: string;
@@ -56,7 +57,7 @@ const AdventureActivitiesPage = () => {
   const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: "",
-    priceRange: [0, 20000],
+    priceRange: [0, 10000000],
     durationRange: [1, 30],
     location: "all",
     departureCity: [],
@@ -217,10 +218,10 @@ const AdventureActivitiesPage = () => {
               <Mountain className="h-4 w-4 mr-2" />
               Adventure Activities
             </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               Dubai Adventure Activities
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-10 opacity-90">
+            <p className="text-lg md:text-xl lg:text-2xl mb-10 opacity-90">
               Thrilling experiences, outdoor adventures, and adrenaline-pumping activities
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -252,7 +253,7 @@ const AdventureActivitiesPage = () => {
                     <Button onClick={() => {
                       setFilters({
                         searchTerm: "",
-                        priceRange: [0, 50000],
+                        priceRange: [0, 10000000],
                         durationRange: [1, 30],
                         location: "all",
                         departureCity: [],
@@ -268,7 +269,7 @@ const AdventureActivitiesPage = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mb-8">
+                    <div className="flex justify-between items-center mb-6">
                       <h2 className="text-2xl font-bold text-gray-900">
                         Adventure Activities
                       </h2>
@@ -279,74 +280,7 @@ const AdventureActivitiesPage = () => {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredPackages.map((pkg) => (
-                        <Card key={pkg._id} className="overflow-hidden hover:shadow-xl transition-shadow border-2 border-transparent hover:border-green-500/20">
-                          <div className="relative">
-                            {pkg.images && pkg.images.length > 0 ? (
-                              <div className="aspect-video relative">
-                                <Image
-                                  src={pkg.images[0].url}
-                                  alt={pkg.images[0].alt || pkg.title}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                                <Mountain className="h-12 w-12 text-gray-400" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-4 right-4 bg-white text-gray-900 font-bold">
-                              {formatPrice(pkg.price)}
-                            </Badge>
-                            <Badge className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold">
-                              <Mountain className="h-3 w-3 mr-1" />
-                              Adventure
-                            </Badge>
-                          </div>
-
-                          <CardHeader>
-                            <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                            <p className="text-gray-600">{pkg.subtitle}</p>
-                          </CardHeader>
-
-                          <CardContent>
-                            <div className="space-y-3">
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {pkg.location}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {pkg.duration}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Users className="h-4 w-4 mr-2" />
-                                {pkg.capacity}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="h-4 w-4 mr-2 fill-yellow-400 text-yellow-400" />
-                                {pkg.rating}/5
-                              </div>
-                            </div>
-
-                            <p className="text-gray-600 text-sm mt-4 line-clamp-3">
-                              {pkg.about}
-                            </p>
-
-                            <div className="mt-6 flex space-x-2">
-                              <Link href={`/packages/${pkg._id}`} className="flex-1">
-                                <Button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
-                                  View Details
-                                </Button>
-                              </Link>
-                              <Link href="/contact" className="flex-1">
-                                <Button variant="outline" className="w-full border-green-500 text-green-600 hover:bg-green-50">
-                                  Book Now
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <PackageCard key={pkg._id} pkg={pkg} />
                       ))}
                     </div>
                   </>
@@ -361,7 +295,7 @@ const AdventureActivitiesPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 Why Choose Adventure Activities?
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -402,37 +336,6 @@ const AdventureActivitiesPage = () => {
                   Capture amazing moments with professional photography and unique experiences
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-green-600 via-green-500 to-green-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Explore More Options
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Check out our Regular, Premium, and Luxury packages
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/packages/regular">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
-                  View Regular Packages
-                </Button>
-              </Link>
-              <Link href="/packages/premium">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
-                  View Premium Packages
-                </Button>
-              </Link>
-              <Link href="/packages/luxury">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
-                  View Luxury Packages
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
