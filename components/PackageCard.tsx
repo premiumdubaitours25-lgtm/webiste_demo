@@ -34,11 +34,18 @@ const getPackageImage = (pkg: PackageCardData): { url: string; alt: string } | n
   const firstImage = pkg.images[0];
 
   if (typeof firstImage === 'string') {
-    return { url: firstImage, alt: pkg.title };
+    const url = firstImage?.trim();
+    if (!url) return null;
+    return { url, alt: pkg.title };
   }
 
-  if (firstImage?.url) {
-    return { url: firstImage.url, alt: firstImage.alt || pkg.title };
+  const url = firstImage?.url?.trim?.() || '';
+  if (url) {
+    // next/image only supports local paths (starting with "/") or remote URLs (starting with http(s))
+    const isLocal = url.startsWith('/');
+    const isRemote = url.startsWith('http://') || url.startsWith('https://');
+    if (!isLocal && !isRemote) return null;
+    return { url, alt: firstImage.alt?.trim?.() || pkg.title };
   }
 
   return null;

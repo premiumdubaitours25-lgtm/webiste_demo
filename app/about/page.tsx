@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +8,40 @@ import { MapPin, Award, Shield, CheckCircle, Star, Sparkles, Users, Clock, Car, 
 import Link from "next/link";
 import Image from "next/image";
 
+type TeamMember = {
+  _id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  description?: string;
+  photo?: string;
+};
+
 const AboutPage = () => {
+  const [teams, setTeams] = useState<TeamMember[]>([]);
+  const [loadingTeams, setLoadingTeams] = useState(true);
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const res = await fetch('/api/teams');
+        const data = await res.json();
+        if (res.ok && data?.success && Array.isArray(data.data)) {
+          setTeams(data.data);
+        } else {
+          setTeams([]);
+        }
+      } catch (e) {
+        console.error('Error fetching teams:', e);
+        setTeams([]);
+      } finally {
+        setLoadingTeams(false);
+      }
+    };
+
+    fetchTeams();
+  }, []);
+
   const whatSetsUsApart = [
     {
       icon: Shield,
@@ -380,6 +414,69 @@ const AboutPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Team Section */}
+      <section className="py-20 md:py-28 bg-gray-100 relative">
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">
+                Our Team
+              </h2>
+              <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Meet the people behind Premium Dubai Tours, committed to making every trip smooth and memorable.
+              </p>
+            </div>
+
+            {loadingTeams ? (
+              <div className="text-center text-gray-600 py-10">Loading team...</div>
+            ) : teams.length === 0 ? (
+              <div className="text-center text-gray-600 py-10">
+                No team members added yet.
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {teams.map((member) => (
+                  <Card
+                    key={member._id}
+                    className="bg-white border-0 shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    <CardContent className="p-8 text-center">
+                      <div className="relative w-28 h-28 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-white shadow">
+                        {member.photo ? (
+                          <Image
+                            src={member.photo}
+                            alt={member.name}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20" />
+                        )}
+                      </div>
+
+                      <h3 className="text-2xl font-semibold text-gray-900 mb-2">{member.name}</h3>
+
+                      {member.email && (
+                        <p className="text-primary font-semibold text-sm mb-1">{member.email}</p>
+                      )}
+                      {member.phone && (
+                        <p className="text-sm text-gray-500 mb-4">{member.phone}</p>
+                      )}
+
+                      {member.description && (
+                        <p className="text-gray-600 leading-relaxed text-sm">
+                          {member.description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

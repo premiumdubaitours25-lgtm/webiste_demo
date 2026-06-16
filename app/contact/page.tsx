@@ -110,27 +110,6 @@ Please get back to me with more information about available packages and pricing
     }
   ];
 
-  const teamMembers = [
-    {
-      name: "Ahmed Al Maktoum",
-      role: "General Manager",
-      email: "info@premiumdubaitours.com",
-      phone: "+971 50 401 5632"
-    },
-    {
-      name: "Customer Support",
-      role: "Tour Operations",
-      email: "info@premiumdubaitours.com",
-      phone: "+971 50 214 2541"
-    },
-    {
-      name: "Premium Dubai Tours",
-      role: "Customer Relations",
-      email: "info@premiumdubaitours.com",
-      phone: "+971 50 401 5632"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -370,37 +349,6 @@ Please get back to me with more information about available packages and pricing
                   </div>
                 </div>
 
-                {/* Team Members */}
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                    Our Team
-                  </h2>
-                  <div className="space-y-4">
-                    {teamMembers.map((member, index) => (
-                      <Card key={index}>
-                        <CardContent className="p-4">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                              <Users className="h-6 w-6 text-primary" />
-                            </div>
-                            <div className="flex-1">
-                              <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                              <p className="text-sm text-gray-600">{member.role}</p>
-                              <div className="flex items-center space-x-4 mt-1">
-                                <a href={`mailto:${member.email}`} className="text-xs text-primary hover:underline">
-                                  {member.email}
-                                </a>
-                                <a href={`tel:${member.phone}`} className="text-xs text-primary hover:underline">
-                                  {member.phone}
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </div>

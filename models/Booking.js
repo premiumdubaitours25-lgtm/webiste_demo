@@ -50,6 +50,21 @@ const BookingSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  pricingTierName: {
+    type: String,
+    default: '',
+    trim: true,
+  },
+  pricingTierPricePerPerson: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  pricingTierDescription: {
+    type: String,
+    default: '',
+    trim: true,
+  },
   totalPrice: {
     type: Number,
     required: true,
@@ -64,6 +79,16 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     enum: ['pending', 'paid', 'refunded'],
     default: 'pending',
+  },
+  stripeSessionId: {
+    type: String,
+    default: '',
+    trim: true,
+  },
+  stripePaymentIntentId: {
+    type: String,
+    default: '',
+    trim: true,
   },
   specialRequests: {
     type: String,

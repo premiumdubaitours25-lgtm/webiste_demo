@@ -139,6 +139,24 @@ const PackageSchema = new mongoose.Schema({
   hotelOptions: [{
     type: String,
   }],
+  // Pricing tiers like Diamond/Silver/etc. (each with its own name + price)
+  pricingOptions: [{
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  }],
   bestTimeToVisit: {
     yearRound: {
       type: String,

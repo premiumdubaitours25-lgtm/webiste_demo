@@ -30,7 +30,12 @@ const getPackageImageUrl = (pkg: Package): string | null => {
   }
 
   if (typeof firstImage === 'object' && firstImage?.url) {
-    return firstImage.url;
+    const url = firstImage.url?.trim?.() || '';
+    if (!url) return null;
+    const isLocal = url.startsWith('/');
+    const isRemote = url.startsWith('http://') || url.startsWith('https://');
+    if (!isLocal && !isRemote) return null;
+    return url;
   }
 
   return null;

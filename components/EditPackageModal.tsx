@@ -117,6 +117,11 @@ interface PackageData {
   tourOverview?: string;
   keyHighlights?: string[];
   hotelOptions?: string[];
+  pricingOptions?: Array<{
+    name: string;
+    description?: string;
+    price: number;
+  }>;
   bestTimeToVisit?: {
     yearRound?: string;
     winter?: string;
@@ -201,6 +206,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
   const [keyHighlights, setKeyHighlights] = useState<string[]>([]);
   const [hotelOptions, setHotelOptions] = useState<string[]>([]);
+  const [pricingOptions, setPricingOptions] = useState<Array<{ name: string; description: string; price: string }>>([
+    { name: "Diamond", description: "", price: "" },
+  ]);
   const [whyChooseThisTrip, setWhyChooseThisTrip] = useState<string[]>([]);
   const [whyPremiumDubaiTours, setWhyPremiumDubaiTours] = useState<string[]>([]);
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
@@ -253,6 +261,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
 
       setKeyHighlights(packageData.keyHighlights || []);
       setHotelOptions(packageData.hotelOptions || []);
+      // Pricing tiers (Diamond/Silver/etc.)
+      const basePrice = typeof packageData.price === "number" ? packageData.price : undefined;
+      if (Array.isArray(packageData.pricingOptions) && packageData.pricingOptions.length > 0) {
+        setPricingOptions(
+          packageData.pricingOptions.map((t: any) => ({
+            name: String(t?.name ?? ""),
+            description: String(t?.description ?? ""),
+            price: typeof t?.price === "number" ? t.price.toString() : "",
+          }))
+        );
+      } else {
+        setPricingOptions([
+          { name: "Diamond", description: "", price: basePrice?.toString() ?? "" },
+        ]);
+      }
       setWhyChooseThisTrip(packageData.whyChooseThisTrip || []);
       setWhyPremiumDubaiTours(packageData.whyPremiumDubaiTours || []);
 
@@ -559,6 +582,21 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     setHotelOptions(prev => prev.map((item, i) => i === index ? value : item));
   };
 
+  // Pricing tier helpers (Diamond/Silver/etc.)
+  const addPricingOption = () => {
+    setPricingOptions((prev) => [...prev, { name: "", description: "", price: "" }]);
+  };
+
+  const removePricingOption = (index: number) => {
+    setPricingOptions((prev) => (prev.length > 1 ? prev.filter((_, i) => i !== index) : prev));
+  };
+
+  const updatePricingOption = (index: number, field: "name" | "description" | "price", value: string) => {
+    setPricingOptions((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
+
   const addWhyChooseThisTrip = () => {
     setWhyChooseThisTrip(prev => [...prev, ""]);
   };
@@ -667,16 +705,31 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
       }
 
       // Validate required fields
-      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.price || !formData.duration || !formData.location || !formData.capacity || !formData.packageCategory) {
+      if (!formData.title || !formData.subtitle || !formData.about || !formData.services || !formData.tourDetails || !formData.duration || !formData.location || !formData.capacity || !formData.packageCategory) {
         alert('Please fill in all required fields including package type');
         return;
       }
 
-      const price = parseFloat(formData.price);
-      if (isNaN(price) || price <= 0) {
-        alert('Please enter a valid price');
+      const diamondTier =
+        pricingOptions.find((t) => t.name.trim().toLowerCase() === 'diamond') || pricingOptions[0];
+      const diamondPrice = parseFloat(diamondTier?.price || '');
+      if (isNaN(diamondPrice) || diamondPrice <= 0) {
+        alert('Please enter a valid Diamond tier price');
         return;
       }
+
+      const normalizedPricingOptions = pricingOptions
+        .map((t) => {
+          const name = t.name.trim();
+          const description = t.description.trim();
+          const tierPrice = parseFloat(t.price);
+          return {
+            name,
+            description,
+            price: !isNaN(tierPrice) && tierPrice > 0 ? tierPrice : diamondPrice,
+          };
+        })
+        .filter((t) => t.name);
 
       // Prepare updated package data
       const updatedPackageData = {
@@ -684,7 +737,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
         packageType: 'international',
         place: packageData?.place || 'dubai',
         packageCategory: formData.packageCategory,
-        price: price,
+        // Keep base package price in sync with Diamond tier
+        price: diamondPrice,
+        pricingOptions: normalizedPricingOptions,
         abstract: formData.abstract,
         tourOverview: formData.tourOverview,
         ideaFor: formData.ideaFor,
@@ -803,6 +858,9 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
     });
     setKeyHighlights([]);
     setHotelOptions([]);
+    setPricingOptions([
+      { name: "Diamond", description: "", price: "" },
+    ]);
     setWhyChooseThisTrip([]);
     setWhyPremiumDubaiTours([]);
     setItinerary([{ id: "1", day: 1, title: "", descriptions: [""] }]);
@@ -1128,15 +1186,68 @@ const EditPackageModal = ({ isOpen, onClose, packageData, onPackageUpdated }: Ed
             />
           </div>
 
-          {/* Price */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Price (₹)</label>
-            <Input
-              type="number"
-              placeholder="29999"
-              value={formData.price}
-              onChange={(e) => handleInputChange('price', e.target.value)}
-            />
+          {/* Pricing Tiers */}
+          <div className="space-y-3 mt-2">
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Pricing Tiers (Diamond / Silver / etc.)</label>
+                <p className="text-xs text-gray-500">Diamond tier price is used as the default package price.</p>
+              </div>
+              <Button type="button" variant="outline" size="sm" onClick={addPricingOption} className="h-8">
+                <Plus className="h-4 w-4 mr-1" />
+                Add Tier
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              {pricingOptions.map((tier, index) => (
+                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+                  <div className="space-y-2">
+                    <label className="text-xs font-medium text-gray-600">Tier name</label>
+                    <Input
+                      value={tier.name}
+                      placeholder={index === 0 ? "Diamond" : index === 1 ? "Silver" : "Tier name"}
+                      onChange={(e) => updatePricingOption(index, "name", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-xs font-medium text-gray-600">Tier description</label>
+                    <Input
+                      value={tier.description}
+                      placeholder="e.g., 5-star hotel + private transfer"
+                      onChange={(e) => updatePricingOption(index, "description", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-medium text-gray-600">Tier price (₹)</label>
+                    <Input
+                      type="number"
+                      value={tier.price}
+                      placeholder={index === 0 ? "Diamond default price" : packageData?.price?.toString() || "29999"}
+                      onChange={(e) => updatePricingOption(index, "price", e.target.value)}
+                    />
+                  </div>
+
+                  {pricingOptions.length > 1 ? (
+                    <div className="space-y-2">
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => removePricingOption(index)}
+                        className="w-full"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="h-10" />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Image Management Section */}

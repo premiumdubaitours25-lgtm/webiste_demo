@@ -15,16 +15,22 @@ interface Package {
   _id: string;
   title: string;
   price: number;
+  pricingOptions?: Array<{
+    name: string;
+    description?: string;
+    price: number;
+  }>;
 }
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   packageData: Package | null;
+  initialSelectedTier?: string;
   onBookingSuccess?: () => void;
 }
 
-export default function BookingModal({ isOpen, onClose, packageData, onBookingSuccess }: BookingModalProps) {
+export default function BookingModal({ isOpen, onClose, packageData, initialSelectedTier, onBookingSuccess }: BookingModalProps) {
   const [formData, setFormData] = useState({
     customerName: '',
     customerEmail: '',
@@ -39,12 +45,41 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const pricingOptions =
+    packageData?.pricingOptions && Array.isArray(packageData.pricingOptions) && packageData.pricingOptions.length > 0
+      ? packageData.pricingOptions
+      : packageData
+        ? [
+            // Backward compat: if a package doesn't have structured tiers yet,
+            // still show Diamond/Silver selection.
+            { name: 'Diamond', description: 'Premium tier', price: packageData.price * 1.25 },
+            { name: 'Silver', description: 'Value tier', price: packageData.price * 0.85 },
+          ]
+        : [];
+
+  const [selectedTierName, setSelectedTierName] = useState<string>(pricingOptions[0]?.name || 'Standard');
+
+  // Keep the selected pricing tier in sync with modal open + package change
+  useEffect(() => {
+    if (!isOpen) return;
+    const defaultTier =
+      initialSelectedTier && pricingOptions.some((t) => t.name === initialSelectedTier)
+        ? initialSelectedTier
+        : pricingOptions[0]?.name || 'Standard';
+    setSelectedTierName(defaultTier);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, packageData?._id, initialSelectedTier]);
+
+  const selectedTierPrice =
+    pricingOptions.find((t) => t.name === selectedTierName)?.price ?? packageData?.price ?? 0;
+  const selectedTierDescription =
+    pricingOptions.find((t) => t.name === selectedTierName)?.description?.trim() || '';
 
   // Calculate total price
   const calculateTotal = () => {
     if (!packageData) return 0;
-    const adultPrice = packageData.price * formData.numberOfAdults;
-    const childPrice = packageData.price * 0.7 * formData.numberOfChildren; // 70% for children
+    const adultPrice = selectedTierPrice * formData.numberOfAdults;
+    const childPrice = selectedTierPrice * 0.7 * formData.numberOfChildren; // 70% for children
     return adultPrice + childPrice;
   };
 
@@ -143,11 +178,14 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
         travelDate: formData.travelDate,
         numberOfAdults: formData.numberOfAdults,
         numberOfChildren: formData.numberOfChildren,
-        amount: packageData.price,
+        amount: selectedTierPrice,
         totalPrice: totalPrice,
         status: 'pending',
         paymentStatus: 'pending',
         specialRequests: formData.specialRequests.trim(),
+        pricingTierName: selectedTierName,
+        pricingTierPricePerPerson: selectedTierPrice,
+        pricingTierDescription: selectedTierDescription,
       };
 
       const response = await fetch('/api/bookings', {
@@ -161,13 +199,28 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setSuccess(true);
-        setTimeout(() => {
-          if (onBookingSuccess) {
-            onBookingSuccess();
-          }
-          onClose();
-        }, 2000);
+        const bookingId = data.data?._id;
+        if (!bookingId) {
+          setError('Booking created but payment could not be started.');
+          return;
+        }
+
+        const checkoutResponse = await fetch('/api/stripe/create-checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ bookingId }),
+        });
+
+        const checkoutData = await checkoutResponse.json();
+
+        if (checkoutResponse.ok && checkoutData.success && checkoutData.data?.url) {
+          window.location.href = checkoutData.data.url;
+          return;
+        }
+
+        setError(checkoutData.error || 'Booking saved but payment could not be started. Please contact support.');
       } else {
         setError(data.error || 'Failed to create booking. Please try again.');
       }
@@ -187,7 +240,7 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Book Your Package</DialogTitle>
           <DialogDescription>
-            Fill in your details to complete the booking
+            Fill in your details and pay securely with Stripe
           </DialogDescription>
         </DialogHeader>
 
@@ -200,10 +253,30 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
                 <Badge variant="outline" className="mt-2">
                   Package ID: {packageData._id.slice(-8)}
                 </Badge>
+                {pricingOptions.length > 1 && (
+                  <div className="mt-3">
+                    <Label className="text-sm font-medium">Pricing Tier</Label>
+                    <Select value={selectedTierName} onValueChange={setSelectedTierName}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select pricing" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {pricingOptions.map((tier) => (
+                          <SelectItem key={tier.name} value={tier.name}>
+                            {tier.name} - AED {tier.price}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {selectedTierDescription && (
+                      <p className="mt-1 text-xs text-gray-600">{selectedTierDescription}</p>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="text-right">
                 <p className="text-sm text-gray-600">Price per person</p>
-                <p className="text-2xl font-bold text-primary">AED {packageData.price}</p>
+                <p className="text-2xl font-bold text-primary">AED {selectedTierPrice}</p>
               </div>
             </div>
           </CardContent>
@@ -365,13 +438,13 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
             <CardContent className="p-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Adults ({formData.numberOfAdults} × AED {packageData.price})</span>
-                  <span>AED {packageData.price * formData.numberOfAdults}</span>
+                  <span>Adults ({formData.numberOfAdults} × AED {selectedTierPrice})</span>
+                  <span>AED {selectedTierPrice * formData.numberOfAdults}</span>
                 </div>
                 {formData.numberOfChildren > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span>Children ({formData.numberOfChildren} × AED {Math.round(packageData.price * 0.7)})</span>
-                    <span>AED {Math.round(packageData.price * 0.7 * formData.numberOfChildren)}</span>
+                    <span>Children ({formData.numberOfChildren} × AED {Math.round(selectedTierPrice * 0.7)})</span>
+                    <span>AED {Math.round(selectedTierPrice * 0.7 * formData.numberOfChildren)}</span>
                   </div>
                 )}
                 <div className="border-t pt-2 mt-2 flex justify-between font-bold text-lg">
@@ -414,7 +487,7 @@ export default function BookingModal({ isOpen, onClose, packageData, onBookingSu
               className="flex-1"
               disabled={loading || success}
             >
-              {loading ? 'Creating Booking...' : success ? 'Booking Created!' : 'Confirm Booking'}
+              {loading ? 'Redirecting to Stripe...' : success ? 'Booking Created!' : 'Pay with Stripe'}
             </Button>
           </div>
         </form>

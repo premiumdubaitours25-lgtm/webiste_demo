@@ -90,6 +90,57 @@ interface PackageDetailModalProps {
   packageData: PackageData | null;
 }
 
+const isStructuredInclusionExclusion = (
+  item: string | { category: string; items: string[] }
+): item is { category: string; items: string[] } => {
+  return typeof item === 'object' && item !== null && 'category' in item && 'items' in item;
+};
+
+const renderInclusionExclusionList = (
+  items: PackageData['inclusions'] | PackageData['exclusions'],
+  variant: 'inclusion' | 'exclusion'
+) => {
+  if (!items || items.length === 0) return null;
+
+  const isStructured = isStructuredInclusionExclusion(items[0]);
+  const iconClass = variant === 'inclusion' ? 'text-green-600' : 'text-red-600';
+  const bgClass = variant === 'inclusion' ? 'bg-green-100' : 'bg-red-100';
+  const icon = variant === 'inclusion' ? '✓' : '✗';
+
+  if (isStructured) {
+    return (items as Array<{ category: string; items: string[] }>).map((group, groupIndex) => (
+      <div key={groupIndex} className="space-y-2">
+        {group.category && (
+          <p className="text-sm font-semibold text-gray-900">{group.category}</p>
+        )}
+        <ul className="space-y-2">
+          {(group.items || []).filter((item) => item.trim()).map((item, itemIndex) => (
+            <li key={itemIndex} className="flex items-start space-x-3">
+              <div className={`flex-shrink-0 w-5 h-5 ${bgClass} rounded-full flex items-center justify-center mt-0.5`}>
+                <span className={`${iconClass} text-xs`}>{icon}</span>
+              </div>
+              <span className="text-gray-700 text-sm">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ));
+  }
+
+  return (
+    <ul className="space-y-2">
+      {(items as string[]).map((item, index) => (
+        <li key={index} className="flex items-start space-x-3">
+          <div className={`flex-shrink-0 w-5 h-5 ${bgClass} rounded-full flex items-center justify-center mt-0.5`}>
+            <span className={`${iconClass} text-xs`}>{icon}</span>
+          </div>
+          <span className="text-gray-700 text-sm">{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModalProps) => {
   if (!packageData) return null;
 
@@ -369,17 +420,8 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-green-700">What's Included</h3>
                   <Card>
-                    <CardContent className="p-4">
-                      <ul className="space-y-2">
-                        {packageData.inclusions.map((item, index) => (
-                          <li key={index} className="flex items-start space-x-3">
-                            <div className="flex-shrink-0 w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                              <span className="text-green-600 text-xs">✓</span>
-                            </div>
-                            <span className="text-gray-700 text-sm">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <CardContent className="p-4 space-y-4">
+                      {renderInclusionExclusionList(packageData.inclusions, 'inclusion')}
                     </CardContent>
                   </Card>
                 </div>
@@ -390,17 +432,8 @@ const PackageDetailModal = ({ isOpen, onClose, packageData }: PackageDetailModal
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-red-700">What's Not Included</h3>
                   <Card>
-                    <CardContent className="p-4">
-                      <ul className="space-y-2">
-                        {packageData.exclusions.map((item, index) => (
-                          <li key={index} className="flex items-start space-x-3">
-                            <div className="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center mt-0.5">
-                              <span className="text-red-600 text-xs">✗</span>
-                            </div>
-                            <span className="text-gray-700 text-sm">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <CardContent className="p-4 space-y-4">
+                      {renderInclusionExclusionList(packageData.exclusions, 'exclusion')}
                     </CardContent>
                   </Card>
                 </div>

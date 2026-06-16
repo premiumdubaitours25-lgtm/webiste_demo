@@ -24,6 +24,10 @@ interface Package {
     description: string;
   }>;
   price: number;
+  pricingOptions?: Array<{
+    name: string;
+    price: number;
+  }>;
   duration: string;
   location: string;
   capacity: string;
@@ -794,6 +798,7 @@ const RegularPackagesPage = () => {
             _id: selectedPackage._id,
             title: selectedPackage.title,
             price: selectedPackage.price,
+            pricingOptions: selectedPackage.pricingOptions,
           }}
         />
       )}

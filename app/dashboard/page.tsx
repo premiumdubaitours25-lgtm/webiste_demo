@@ -13,6 +13,7 @@ import CreateBlogModal from "../../components/CreateBlogModal";
 import EditBlogModal from "../../components/EditBlogModal";
 import ViewBookingModal from "../../components/ViewBookingModal";
 import ImageUrlOrUpload, { uploadImageToCloudinary } from "../../components/ImageUrlOrUpload";
+import TeamsDashboardPanel from "../../components/TeamsDashboardPanel";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
@@ -43,6 +44,7 @@ import {
   Globe,
   Phone,
   Sparkles,
+  Users,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
@@ -111,7 +113,7 @@ interface PackageData {
   updatedAt: string;
 }
 
-type DashboardView = 'packages' | 'testimonials' | 'blogs' | 'bookings' | 'categories';
+type DashboardView = 'packages' | 'testimonials' | 'blogs' | 'bookings' | 'categories' | 'teams';
 
 const CARD_ICON_OPTIONS = [
   { value: 'crown', label: 'Crown', Icon: Crown },
@@ -1522,6 +1524,12 @@ export default function DashboardPage() {
       label: 'Categories',
       icon: Tags,
       description: 'Manage package categories'
+    },
+    {
+      id: 'teams' as DashboardView,
+      label: 'Teams',
+      icon: Users,
+      description: 'Manage team members'
     }
   ];
 
@@ -1615,6 +1623,7 @@ export default function DashboardPage() {
                     {activeView === 'blogs' && 'Blogs'}
                     {activeView === 'bookings' && 'Bookings'}
                     {activeView === 'categories' && 'Categories'}
+                    {activeView === 'teams' && 'Teams'}
                   </h1>
                   <p className="text-gray-600 mt-1">
                     {activeView === 'packages' && 'Manage your tour packages'}
@@ -1622,6 +1631,7 @@ export default function DashboardPage() {
                     {activeView === 'blogs' && 'Manage blog posts and articles'}
                     {activeView === 'bookings' && 'Manage customer bookings and reservations'}
                     {activeView === 'categories' && 'Add and manage package categories'}
+                    {activeView === 'teams' && 'Upload and manage team member profiles'}
                   </p>
                 </div>
             </div>
@@ -2055,6 +2065,12 @@ export default function DashboardPage() {
                   )}
                 </CardContent>
               </Card>
+            </div>
+          )}
+
+          {activeView === 'teams' && (
+            <div className="container mx-auto px-6 py-8">
+              <TeamsDashboardPanel />
             </div>
           )}
 

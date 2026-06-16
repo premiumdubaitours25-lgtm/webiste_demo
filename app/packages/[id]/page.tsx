@@ -34,7 +34,7 @@ import {
   MapPin, Clock, Users, Star, Calendar, Phone, Mail, ArrowLeft,
   CheckCircle, Plane, Camera, Globe, Heart, Share, Car, Hotel,
   Utensils, Info, X, Car as CarIcon, Building, Bed,
-  Calendar as CalendarIcon, ChevronRight, PlayCircle, Sparkles, ShieldCheck, Ticket, ArrowRight
+  Calendar as CalendarIcon, ChevronRight, ChevronDown, PlayCircle, Sparkles, ShieldCheck, Ticket, ArrowRight
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,6 +65,11 @@ interface Package {
   tourOverview?: string;
   keyHighlights?: string[];
   hotelOptions?: string[];
+  pricingOptions?: Array<{
+    name: string;
+    description?: string;
+    price: number;
+  }>;
   bestTimeToVisit?: {
     yearRound?: string;
     winter?: string;
@@ -113,6 +118,32 @@ interface Package {
   rating: number;
 }
 
+type PricingTier = {
+  name: string;
+  description: string;
+  price: number;
+};
+
+const getPackagePricingTiers = (pkg: Package | null): PricingTier[] => {
+  if (!pkg) return [];
+
+  const raw = pkg.pricingOptions;
+  if (Array.isArray(raw) && raw.length > 0) {
+    const structured = typeof raw[0] === 'object' && raw[0] !== null && 'name' in raw[0];
+    if (structured) {
+      return raw
+        .map((tier) => ({
+          name: String(tier.name || '').trim(),
+          description: String(tier.description || '').trim(),
+          price: Number(tier.price) > 0 ? Number(tier.price) : pkg.price,
+        }))
+        .filter((tier) => tier.name);
+    }
+  }
+
+  return [];
+};
+
 const PackageDetailPage = () => {
   const params = useParams();
   const router = useRouter();
@@ -122,6 +153,23 @@ const PackageDetailPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'policy'>('overview');
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [expandedPricingTier, setExpandedPricingTier] = useState('');
+
+  useEffect(() => {
+    if (!packageData) {
+      setExpandedPricingTier('');
+      return;
+    }
+
+    const tiers = getPackagePricingTiers(packageData);
+    if (tiers.length > 0) {
+      setExpandedPricingTier((prev) =>
+        tiers.some((tier) => tier.name === prev) ? prev : tiers[0].name
+      );
+    } else {
+      setExpandedPricingTier('');
+    }
+  }, [packageData]);
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -2506,6 +2554,50 @@ Key Highlights`,
   }
 
   const isPremium = (packageData as any).packageCategory === 'premium';
+  const pricingTiers = getPackagePricingTiers(packageData);
+
+  const renderTierBookingForm = (tierName?: string) => (
+    <div className="space-y-3 pt-1 border-t border-gray-100">
+      <div className="space-y-1">
+        <Label className="text-xs">Travel Date</Label>
+        <div className="relative">
+          <CalendarIcon className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+          <Input type="date" className="pl-8 h-9 text-sm" />
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <Label className="text-xs">Guests</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="relative">
+            <Users className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
+            <Input type="number" placeholder="Adults" min="1" className="pl-8 h-9 text-sm" />
+          </div>
+          <Input type="number" placeholder="Kids" min="0" className="h-9 text-sm" />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Button
+          className="w-full text-sm h-9 shadow-md shadow-primary/20"
+          onClick={() => {
+            if (tierName) setExpandedPricingTier(tierName);
+            setIsBookingModalOpen(true);
+          }}
+        >
+          Request Booking
+        </Button>
+        <Button variant="outline" className="w-full h-9 text-sm border-primary text-primary hover:bg-primary/5">
+          <Phone className="h-3.5 w-3.5 mr-1.5" />
+          Talk to an Expert
+        </Button>
+      </div>
+
+      <p className="text-[10px] text-center text-gray-500">
+        Free cancellation up to 48 hours before tour
+      </p>
+    </div>
+  );
 
   return (
     <div className={`min-h-screen ${playfair.variable} ${cormorant.variable} ${poppins.variable} ${isPremium ? 'bg-gradient-to-br from-amber-50/30 via-white to-amber-50/20' : 'bg-[#F8FAFC]'}`}>
@@ -3187,16 +3279,42 @@ Key Highlights`,
                         </CardHeader>
                         <CardContent className="pt-6">
                           <ul className="space-y-3">
-                            {((packageData as any).pricingOptions || [
-                              'Tour Only (No Hotel Accommodation)',
-                              'Premium 4-Star Hotel Accommodation',
-                              'Luxury 5-Star Hotel Accommodation'
-                            ]).map((option: string, idx: number) => (
-                              <li key={idx} className="flex items-start">
-                                <span className="mr-3 text-indigo-600 font-bold">•</span>
-                                <span className="text-gray-700 font-poppins font-light">{option}</span>
-                              </li>
-                            ))}
+                            {(() => {
+                              const raw = (packageData as any).pricingOptions;
+                              const structured =
+                                Array.isArray(raw) &&
+                                raw.length > 0 &&
+                                typeof raw[0] === 'object' &&
+                                raw[0] !== null;
+
+                              if (structured) {
+                                return raw.map((tier: any, idx: number) => (
+                                  <li key={idx} className="flex items-start">
+                                    <span className="mr-3 text-indigo-600 font-bold">•</span>
+                                    <span className="text-gray-700 font-poppins font-light">
+                                      <strong>{tier.name}</strong> - AED {tier.price}
+                                      {tier.description ? ` (${tier.description})` : ''}
+                                    </span>
+                                  </li>
+                                ));
+                              }
+
+                              // Backward compat with older string[] pricingOptions
+                              const fallback = [
+                                'Tour Only (No Hotel Accommodation)',
+                                'Premium 4-Star Hotel Accommodation',
+                                'Luxury 5-Star Hotel Accommodation',
+                              ];
+
+                              const list = Array.isArray(raw) && raw.length > 0 ? raw : fallback;
+
+                              return list.map((option: any, idx: number) => (
+                                <li key={idx} className="flex items-start">
+                                  <span className="mr-3 text-indigo-600 font-bold">•</span>
+                                  <span className="text-gray-700 font-poppins font-light">{option}</span>
+                                </li>
+                              ));
+                            })()}
                           </ul>
                         </CardContent>
                       </Card>
@@ -4724,88 +4842,90 @@ Key Highlights`,
             </div>
           ) : (
           <div className="lg:col-span-1">
-            <div className="sticky top-[100px] space-y-6">
+            <div className="sticky top-[100px] space-y-4">
 
-              {/* Booking Card */}
-              <Card className={`border-none shadow-xl overflow-hidden ring-1 ring-black/5 max-w-sm mx-auto lg:max-w-none ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
-                <div className={`p-3 md:p-4 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
-                  <p className="text-white/90 text-xs italic font-medium mb-1">Starting from</p>
-                  <div className="flex items-baseline justify-center gap-1.5">
-                    {isPremium && packageData.price === 0 ? (
-                      <>
-                        <h2 className={`text-2xl md:text-3xl font-bold ${isPremium ? 'font-playfair' : ''}`}>Custom Pricing</h2>
-                        <span className="text-sm opacity-90">/ vehicle</span>
-                      </>
-                    ) : (
-                      <>
-                        <h2 className={`text-2xl md:text-3xl font-bold ${isPremium ? 'font-playfair' : ''}`}>{formatPrice(packageData.price)}</h2>
-                        <span className="text-sm opacity-90">/ person</span>
-                      </>
-                    )}
-                  </div>
-                  {isPremium && (
-                    <p className="text-white/80 text-[11px] mt-1 font-poppins">Up to 6 guests per vehicle</p>
-                  )}
-                  <div className={`mt-2 inline-flex items-center gap-1 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-medium ${isPremium ? 'bg-white/20 border border-white/30' : 'bg-white/20'}`}>
-                    <ShieldCheck className="h-3 w-3" />
-                    No Hidden Charges
-                  </div>
-                </div>
-
-                <CardContent className="p-3 md:p-4 space-y-3">
-                  <div className="space-y-2.5">
-                    <div className="space-y-1">
-                      <Label className="text-xs">Travel Date</Label>
-                      <div className="relative">
-                        <CalendarIcon className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
-                        <Input type="date" className="pl-8 h-9 text-sm" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <Label className="text-xs">Guests</Label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="relative">
-                          <Users className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
-                          <Input type="number" placeholder="Adults" min="1" className="pl-8 h-9 text-sm" />
-                        </div>
-                        <Input type="number" placeholder="Kids" min="0" className="h-9 text-sm" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Button 
-                      className="w-full text-sm h-9 shadow-md shadow-primary/20" 
-                      onClick={() => setIsBookingModalOpen(true)}
+              {pricingTiers.length > 0 ? (
+                pricingTiers.map((tier, idx) => {
+                  const isExpanded = expandedPricingTier === tier.name;
+                  return (
+                    <Card
+                      key={`${tier.name}-${idx}`}
+                      className={cn(
+                        'border-none shadow-xl overflow-hidden ring-1 ring-black/5 max-w-sm mx-auto lg:max-w-none transition-all',
+                        isExpanded
+                          ? isPremium
+                            ? 'ring-amber-400/50 border-2 border-amber-200'
+                            : 'ring-primary/30 border-2 border-primary/20'
+                          : 'border border-gray-100'
+                      )}
                     >
-                      Request Booking
-                    </Button>
-                    <Button variant="outline" className="w-full h-9 text-sm border-primary text-primary hover:bg-primary/5">
-                      <Phone className="h-3.5 w-3.5 mr-1.5" />
-                      Talk to an Expert
-                    </Button>
-                  </div>
+                      <button
+                        type="button"
+                        onClick={() => setExpandedPricingTier(isExpanded ? '' : tier.name)}
+                        className={cn(
+                          'w-full p-4 text-left transition-colors',
+                          isExpanded
+                            ? isPremium
+                              ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white'
+                              : 'bg-primary text-white'
+                            : 'bg-white hover:bg-gray-50 text-gray-900'
+                        )}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="font-bold text-base">{tier.name} Package</p>
+                            <p className={cn('text-xl font-bold mt-1', isExpanded ? 'text-white' : isPremium ? 'text-amber-600' : 'text-primary')}>
+                              {formatPrice(tier.price)}
+                              <span className={cn('text-xs font-normal ml-1', isExpanded ? 'text-white/80' : 'text-gray-500')}>
+                                / person
+                              </span>
+                            </p>
+                            {tier.description && (
+                              <p className={cn('text-xs mt-2 leading-relaxed', isExpanded ? 'text-white/85' : 'text-gray-600')}>
+                                {tier.description}
+                              </p>
+                            )}
+                          </div>
+                          <ChevronDown
+                            className={cn(
+                              'h-5 w-5 shrink-0 transition-transform duration-200',
+                              isExpanded ? 'rotate-180 text-white' : 'text-gray-400'
+                            )}
+                          />
+                        </div>
+                      </button>
 
-                  <p className="text-[10px] text-center text-gray-500 pt-1">
-                    Free cancellation up to 48 hours before tour
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Agent Card */}
-              <Card className="bg-gradient-to-br from-gray-900 to-gray-800 text-white border-none shadow-lg">
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Phone className="h-6 w-6 text-primary" />
+                      {isExpanded && (
+                        <CardContent className="p-4 pt-3 bg-white">
+                          {renderTierBookingForm(tier.name)}
+                        </CardContent>
+                      )}
+                    </Card>
+                  );
+                })
+              ) : (
+                <Card className={`border-none shadow-xl overflow-hidden ring-1 ring-black/5 max-w-sm mx-auto lg:max-w-none ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
+                  <div className={`p-4 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
+                    <p className="text-white/90 text-xs italic font-medium mb-1">Starting from</p>
+                    <div className="flex items-baseline justify-center gap-1.5">
+                      {isPremium && packageData.price === 0 ? (
+                        <>
+                          <h2 className={`text-2xl font-bold ${isPremium ? 'font-playfair' : ''}`}>Custom Pricing</h2>
+                          <span className="text-sm opacity-90">/ vehicle</span>
+                        </>
+                      ) : (
+                        <>
+                          <h2 className={`text-2xl font-bold ${isPremium ? 'font-playfair' : ''}`}>{formatPrice(packageData.price)}</h2>
+                          <span className="text-sm opacity-90">/ person</span>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Need Help?</p>
-                    <p className="font-bold text-lg">+971 50 401 5632, +971 50 214 2541</p>
-                    <p className="text-xs text-gray-400 mt-0.5">24/7 Support Available</p>
-                  </div>
-                </CardContent>
-              </Card>
+                  <CardContent className="p-4">
+                    {renderTierBookingForm()}
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
           )}
@@ -4818,10 +4938,12 @@ Key Highlights`,
         <BookingModal
           isOpen={isBookingModalOpen}
           onClose={() => setIsBookingModalOpen(false)}
+          initialSelectedTier={expandedPricingTier}
           packageData={{
             _id: packageData._id,
             title: packageData.title,
             price: packageData.price,
+            pricingOptions: pricingTiers.length > 0 ? pricingTiers : (packageData as any).pricingOptions,
           }}
         />
       )}
