@@ -17,13 +17,18 @@ import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import { useState, useEffect } from "react";
 import { useInquiryForm } from "../contexts/InquiryFormContext";
 
+interface PackageImage {
+  url: string;
+  alt?: string;
+}
+
 interface DeluxePackage {
   _id: string;
   title: string;
   subtitle?: string;
   price: number;
   duration?: string;
-  images?: string[];
+  images?: Array<PackageImage | string>;
   packageCategory?: string;
 }
 
@@ -33,7 +38,7 @@ interface PremiumPackage {
   subtitle?: string;
   price: number;
   duration?: string;
-  images?: string[];
+  images?: Array<PackageImage | string>;
   packageCategory?: string;
 }
 
@@ -43,7 +48,7 @@ interface LuxuryPackage {
   subtitle?: string;
   price: number;
   duration?: string;
-  images?: string[];
+  images?: Array<PackageImage | string>;
   packageCategory?: string;
 }
 
@@ -206,6 +211,9 @@ export default function Home() {
       const firstImage = pkg.images[0];
       if (typeof firstImage === 'string' && firstImage.trim() !== '') {
         return firstImage;
+      }
+      if (typeof firstImage === 'object' && firstImage?.url) {
+        return firstImage.url;
       }
     }
     return "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";

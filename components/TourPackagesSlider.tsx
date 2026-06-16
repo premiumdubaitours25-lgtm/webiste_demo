@@ -6,15 +6,43 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
+interface PackageImage {
+  url: string;
+  alt?: string;
+}
+
 interface Package {
   _id: string;
   title: string;
   subtitle?: string;
   price: number;
   duration?: string;
-  images?: string[];
+  images?: Array<PackageImage | string>;
   packageCategory?: string;
 }
+
+const getPackageImageUrl = (pkg: Package): string | null => {
+  if (!pkg.images || pkg.images.length === 0) return null;
+
+  const firstImage = pkg.images[0];
+  if (typeof firstImage === 'string' && firstImage.trim() !== '') {
+    return firstImage;
+  }
+
+  if (typeof firstImage === 'object' && firstImage?.url) {
+    return firstImage.url;
+  }
+
+  return null;
+};
+
+const FALLBACK_IMAGE =
+  'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80';
+
+const isRegularPackage = (pkg: Package) => {
+  const category = (pkg.packageCategory || '').trim().toLowerCase();
+  return category === 'regular' || category === 'regular packages';
+};
 
 const TourPackagesSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,15 +57,16 @@ const TourPackagesSlider = () => {
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.data) {
-            // Filter for Regular packages only
-            const regularPackages = data.data.filter((pkg: Package) => 
-              pkg.packageCategory === 'Regular' || 
-              pkg.packageCategory?.toLowerCase() === 'regular'
-            );
-            
-            // Take first 5 Regular packages (with or without images - we'll use placeholder if needed)
-            const selectedPackages = regularPackages.slice(0, 5);
-            setPackages(selectedPackages);
+            const regularPackages = data.data
+              .filter((pkg: Package) => isRegularPackage(pkg))
+              .sort((a: Package, b: Package) => {
+                const aHasImage = getPackageImageUrl(a) ? 1 : 0;
+                const bHasImage = getPackageImageUrl(b) ? 1 : 0;
+                return bHasImage - aHasImage;
+              })
+              .slice(0, 6);
+
+            setPackages(regularPackages);
           }
         }
       } catch (error) {
@@ -143,22 +172,22 @@ const TourPackagesSlider = () => {
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
                 {packages.map((pkg, index) => {
-                  // Get the first valid (non-empty) image URL
-                  const firstImage = pkg.images && pkg.images.length > 0 ? pkg.images[0] : null;
-                  const imageUrl = (typeof firstImage === 'string' && firstImage.trim() !== '')
-                    ? firstImage
-                    : "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80";
-                  
+                  const imageUrl = getPackageImageUrl(pkg) || FALLBACK_IMAGE;
+                  const imageAlt =
+                    typeof pkg.images?.[0] === 'object' && pkg.images[0]?.alt
+                      ? pkg.images[0].alt
+                      : pkg.title;
+
                   return (
                   <div key={pkg._id} className="w-full flex-shrink-0">
                     <div className="relative h-[350px] md:h-[450px]">
-                      {/* Background Image */}
                       <Image
                         src={imageUrl}
-                        alt={pkg.title}
+                        alt={imageAlt}
                         fill
                         className="object-cover"
                         priority={index === 0}
+                        sizes="100vw"
                       />
                       
                       {/* Overlay */}
