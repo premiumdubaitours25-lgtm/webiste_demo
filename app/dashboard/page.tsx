@@ -12,6 +12,7 @@ import CreateTestimonialModal from "../../components/CreateTestimonialModal";
 import CreateBlogModal from "../../components/CreateBlogModal";
 import EditBlogModal from "../../components/EditBlogModal";
 import ViewBookingModal from "../../components/ViewBookingModal";
+import EditBookingModal from "../../components/EditBookingModal";
 import ImageUrlOrUpload, { uploadImageToCloudinary } from "../../components/ImageUrlOrUpload";
 import TeamsDashboardPanel from "../../components/TeamsDashboardPanel";
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, HeadingLevel, ImageRun } from 'docx';
@@ -136,6 +137,7 @@ export default function DashboardPage() {
   const [isCreateBlogModalOpen, setIsCreateBlogModalOpen] = useState(false);
   const [isEditBlogModalOpen, setIsEditBlogModalOpen] = useState(false);
   const [isViewBookingModalOpen, setIsViewBookingModalOpen] = useState(false);
+  const [isEditBookingModalOpen, setIsEditBookingModalOpen] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
@@ -149,6 +151,7 @@ export default function DashboardPage() {
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
   const [loadingBlogs, setLoadingBlogs] = useState(true);
   const [loadingBookings, setLoadingBookings] = useState(true);
+  const [deletingBookingId, setDeletingBookingId] = useState<string | null>(null);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [packageTypeFilter, setPackageTypeFilter] = useState("all");
@@ -1191,6 +1194,55 @@ export default function DashboardPage() {
     }
   };
 
+  const handleDeleteBooking = async (booking: { _id: string; customerName?: string; recordType?: string }) => {
+    if (!booking._id || deletingBookingId === booking._id) return;
+
+    const label = booking.recordType === 'inquiry' ? 'inquiry' : 'booking';
+    if (
+      !window.confirm(
+        `Are you sure you want to delete this ${label} for "${booking.customerName || 'this customer'}"? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    setDeletingBookingId(booking._id);
+
+    try {
+      const response = await fetch(`/api/bookings/${booking._id}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+
+      if ((response.ok && data.success) || response.status === 404) {
+        setBookings((prev) => prev.filter((b) => b._id !== booking._id));
+        if (selectedBooking?._id === booking._id) {
+          setSelectedBooking(null);
+          setIsViewBookingModalOpen(false);
+        }
+        if (response.ok && data.success) {
+          alert(`${label.charAt(0).toUpperCase() + label.slice(1)} deleted successfully!`);
+        }
+      } else {
+        alert(data.error || `Failed to delete ${label}`);
+      }
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+      alert(`Error deleting ${label}`);
+    } finally {
+      setDeletingBookingId(null);
+    }
+  };
+
+  const handleBookingUpdated = (updatedBooking: any) => {
+    setBookings((prev) =>
+      prev.map((b) => (b._id === updatedBooking._id ? { ...b, ...updatedBooking } : b))
+    );
+    if (selectedBooking?._id === updatedBooking._id) {
+      setSelectedBooking((prev) => (prev ? { ...prev, ...updatedBooking } : prev));
+    }
+  };
+
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
@@ -2079,7 +2131,7 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Bookings</CardTitle>
-                  <CardDescription>Manage customer bookings and reservations</CardDescription>
+                  <CardDescription>Manage customer bookings, reservations, and expert inquiries</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {loadingBookings ? (
@@ -2131,9 +2183,24 @@ export default function DashboardPage() {
                                 {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'N/A'}
                               </td>
                               <td className="p-3">
-                                <Badge variant={booking.status === 'confirmed' ? 'default' : booking.status === 'pending' ? 'secondary' : 'outline'}>
-                                  {booking.status || 'Pending'}
-                                </Badge>
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  {booking.recordType === 'inquiry' && (
+                                    <Badge variant="outline" className="border-amber-300 bg-amber-50 text-amber-800">
+                                      Expert Inquiry
+                                    </Badge>
+                                  )}
+                                  <Badge
+                                    variant={
+                                      booking.status === 'confirmed' || booking.status === 'completed'
+                                        ? 'default'
+                                        : booking.status === 'pending'
+                                          ? 'secondary'
+                                          : 'outline'
+                                    }
+                                  >
+                                    {booking.status || 'Pending'}
+                                  </Badge>
+                                </div>
                               </td>
                               <td className="p-3">
                                 <div className="font-medium">AED {booking.amount || booking.totalPrice || '0'}</div>
@@ -2145,11 +2212,31 @@ export default function DashboardPage() {
                                     size="sm"
                                     onClick={() => {
                                       setSelectedBooking(booking);
+                                      setIsEditBookingModalOpen(true);
+                                    }}
+                                    className="text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setSelectedBooking(booking);
                                       setIsViewBookingModalOpen(true);
                                     }}
                                     className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
                                   >
                                     <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleDeleteBooking(booking)}
+                                    disabled={deletingBookingId === booking._id}
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 disabled:opacity-50"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </div>
                               </td>
@@ -2823,6 +2910,17 @@ export default function DashboardPage() {
           setIsViewBookingModalOpen(false);
           setSelectedBooking(null);
         }}
+        booking={selectedBooking}
+      />
+
+      {/* Edit Booking Modal */}
+      <EditBookingModal
+        isOpen={isEditBookingModalOpen}
+        onClose={() => {
+          setIsEditBookingModalOpen(false);
+          setSelectedBooking(null);
+        }}
+        onSuccess={handleBookingUpdated}
         booking={selectedBooking}
       />
     </div>

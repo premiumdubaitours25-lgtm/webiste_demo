@@ -494,7 +494,7 @@ export default function BookingModal({ isOpen, onClose, packageData, initialSele
               className="flex-1"
               disabled={loading || success}
             >
-              {loading ? 'Redirecting to Stripe...' : success ? 'Booking Created!' : 'Pay with Stripe'}
+              {loading ? 'Redirecting to Stripe...' : success ? 'Booking Created!' : 'Book Your Seat'}
             </Button>
           </div>
         </form>

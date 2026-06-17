@@ -6,12 +6,9 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   ArrowLeft,
   Calendar,
-  Calendar as CalendarIcon,
   CheckCircle,
   ChevronDown,
   Clock,
@@ -322,45 +319,32 @@ export function SectionTitle({
 
 export function TierBookingForm({
   tierName,
+  tierPrice,
   onRequestBooking,
+  onTalkToExpert,
 }: {
   tierName?: string;
+  tierPrice?: number;
   onRequestBooking: (tierName?: string) => void;
+  onTalkToExpert?: (tierName?: string, tierPrice?: number) => void;
 }) {
   return (
     <div className="space-y-3 border-t border-slate-100 pt-3">
-      <div className="space-y-1">
-        <Label className="text-[10px] font-medium uppercase tracking-wide text-slate-500">Travel Date</Label>
-        <div className="relative">
-          <CalendarIcon className="absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" />
-          <Input type="date" className="h-9 rounded-lg border-slate-200 bg-slate-50 pl-8 text-sm" />
-        </div>
-      </div>
-
-      <div className="space-y-1">
-        <Label className="text-[10px] font-medium uppercase tracking-wide text-slate-500">Guests</Label>
-        <div className="grid grid-cols-2 gap-1.5">
-          <div className="relative">
-            <Users className="absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" />
-            <Input type="number" placeholder="Adults" min="1" className="h-9 rounded-lg border-slate-200 bg-slate-50 pl-8 text-sm" />
-          </div>
-          <Input type="number" placeholder="Kids" min="0" className="h-9 rounded-lg border-slate-200 bg-slate-50 text-sm" />
-        </div>
-      </div>
-
-      <div className="space-y-1.5 pt-0.5">
+      <div className="space-y-1.5">
         <Button
           className="h-9 w-full rounded-lg bg-slate-900 text-sm text-white shadow-md hover:bg-slate-800"
           onClick={() => onRequestBooking(tierName)}
         >
-          Pay with Stripe
+          Book Your Seat
         </Button>
         <Button
+          type="button"
           variant="outline"
           className="h-8 w-full rounded-lg border-slate-300 text-xs text-slate-700 hover:bg-slate-50"
+          onClick={() => onTalkToExpert?.(tierName, tierPrice)}
         >
           <Phone className="mr-1.5 h-3.5 w-3.5" />
-          Talk to an Expert
+          Enquiry
         </Button>
       </div>
 
@@ -374,6 +358,7 @@ export function PricingSidebar({
   expandedPricingTier,
   onToggleTier,
   onRequestBooking,
+  onTalkToExpert,
   packageData,
   formatPrice,
   isPremium,
@@ -382,10 +367,17 @@ export function PricingSidebar({
   expandedPricingTier: string;
   onToggleTier: (name: string) => void;
   onRequestBooking: (tierName?: string) => void;
+  onTalkToExpert?: (details: { tierName?: string; tierPrice?: number }) => void;
   packageData: { price: number };
   formatPrice: (price: number) => string;
   isPremium: boolean;
 }) {
+  const tierFormProps = {
+    onRequestBooking,
+    onTalkToExpert: (tierName?: string, tierPrice?: number) => {
+      onTalkToExpert?.({ tierName, tierPrice });
+    },
+  };
   const tierAccent = (name: string) => {
     const lower = name.toLowerCase();
     if (lower.includes('diamond')) return 'from-slate-900 via-slate-800 to-slate-900';
@@ -456,7 +448,7 @@ export function PricingSidebar({
 
                   {isExpanded && (
                     <CardContent className="p-3 pt-2">
-                      <TierBookingForm tierName={tier.name} onRequestBooking={onRequestBooking} />
+                      <TierBookingForm tierName={tier.name} tierPrice={tier.price} {...tierFormProps} />
                     </CardContent>
                   )}
                 </Card>
@@ -470,7 +462,7 @@ export function PricingSidebar({
                 <p className="text-xs text-white/75">per person</p>
               </div>
               <CardContent className="p-3">
-                <TierBookingForm onRequestBooking={onRequestBooking} />
+                <TierBookingForm {...tierFormProps} />
               </CardContent>
             </Card>
           )}
