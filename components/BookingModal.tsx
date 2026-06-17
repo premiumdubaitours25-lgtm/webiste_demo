@@ -213,10 +213,17 @@ export default function BookingModal({ isOpen, onClose, packageData, initialSele
           body: JSON.stringify({ bookingId }),
         });
 
-        const checkoutData = await checkoutResponse.json();
+        const checkoutData = await checkoutResponse.json().catch(() => ({}));
 
         if (checkoutResponse.ok && checkoutData.success && checkoutData.data?.url) {
           window.location.href = checkoutData.data.url;
+          return;
+        }
+
+        if (checkoutResponse.status === 404) {
+          setError(
+            'Payment service is not available yet. Your booking was saved — please contact support to complete payment.'
+          );
           return;
         }
 

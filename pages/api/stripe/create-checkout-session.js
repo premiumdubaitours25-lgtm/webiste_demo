@@ -10,6 +10,13 @@ export default async function handler(req, res) {
   }
 
   try {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.status(503).json({
+        success: false,
+        error: 'Payment is not configured on the server. Please contact support.',
+      });
+    }
+
     const { bookingId } = req.body;
 
     if (!bookingId) {
