@@ -75,7 +75,8 @@ export default async function handler(req, res) {
           pricingTierDescription,
           status, 
           paymentStatus, 
-          specialRequests 
+          specialRequests,
+          recordType,
         } = req.body;
 
         // Validate required fields
@@ -152,6 +153,7 @@ export default async function handler(req, res) {
           pricingTierDescription: pricingTierDescription || '',
           status: status || 'pending',
           paymentStatus: paymentStatus || 'pending',
+          recordType: recordType || 'booking',
           specialRequests: specialRequests ? specialRequests.trim() : '',
         });
 

@@ -26,6 +26,7 @@ interface Booking {
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   paymentStatus: 'pending' | 'paid' | 'refunded';
   specialRequests?: string;
+  recordType?: 'booking' | 'inquiry';
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
@@ -102,10 +103,12 @@ export default function ViewBookingModal({ isOpen, onClose, booking }: ViewBooki
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
             <FileText className="h-6 w-6" />
-            Booking Details
+            {booking.recordType === 'inquiry' ? 'Expert Inquiry Details' : 'Booking Details'}
           </DialogTitle>
           <DialogDescription>
-            Complete booking information and customer details
+            {booking.recordType === 'inquiry'
+              ? 'Customer inquiry submitted via Enquiry'
+              : 'Complete booking information and customer details'}
           </DialogDescription>
         </DialogHeader>
 
@@ -118,7 +121,12 @@ export default function ViewBookingModal({ isOpen, onClose, booking }: ViewBooki
                   <p className="text-sm text-gray-600 mb-1">Booking ID</p>
                   <p className="font-mono font-semibold text-lg">{booking._id}</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
+                  {booking.recordType === 'inquiry' && (
+                    <Badge variant="outline" className="border-amber-300 bg-amber-50 text-amber-800">
+                      Expert Inquiry
+                    </Badge>
+                  )}
                   {getStatusBadge(booking.status)}
                   {getPaymentStatusBadge(booking.paymentStatus)}
                 </div>

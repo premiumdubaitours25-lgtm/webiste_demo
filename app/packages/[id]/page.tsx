@@ -40,6 +40,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import BookingModal from "@/components/BookingModal";
+import PackageExpertInquiryModal from "@/components/PackageExpertInquiryModal";
 import {
   PackageHero,
   PackageNavTabs,
@@ -162,6 +163,11 @@ const PackageDetailPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'inclusions' | 'reviews'>('overview');
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [isExpertInquiryOpen, setIsExpertInquiryOpen] = useState(false);
+  const [expertInquiryContext, setExpertInquiryContext] = useState({
+    tierName: '',
+    tierPrice: 0,
+  });
   const [expandedPricingTier, setExpandedPricingTier] = useState('');
 
   useEffect(() => {
@@ -2570,6 +2576,15 @@ Key Highlights`,
     setIsBookingModalOpen(true);
   };
 
+  const handleTalkToExpert = (details: { tierName?: string; tierPrice?: number }) => {
+    if (details.tierName) setExpandedPricingTier(details.tierName);
+    setExpertInquiryContext({
+      tierName: details.tierName || '',
+      tierPrice: details.tierPrice || packageData?.price || 0,
+    });
+    setIsExpertInquiryOpen(true);
+  };
+
   const navTabs = [
     { id: 'overview', label: 'Overview', icon: Info },
     { id: 'itinerary', label: 'Itinerary', icon: Calendar },
@@ -4681,6 +4696,7 @@ Key Highlights`,
               expandedPricingTier={expandedPricingTier}
               onToggleTier={(name) => setExpandedPricingTier(name)}
               onRequestBooking={handleRequestBooking}
+              onTalkToExpert={handleTalkToExpert}
               packageData={packageData}
               formatPrice={formatPrice}
               isPremium={isPremium}
@@ -4703,6 +4719,20 @@ Key Highlights`,
             price: packageData.price,
             pricingOptions: pricingTiers.length > 0 ? pricingTiers : (packageData as any).pricingOptions,
           }}
+        />
+      )}
+
+      {packageData && (
+        <PackageExpertInquiryModal
+          isOpen={isExpertInquiryOpen}
+          onClose={() => setIsExpertInquiryOpen(false)}
+          packageData={{
+            _id: packageData._id,
+            title: packageData.title,
+            price: packageData.price,
+          }}
+          tierName={expertInquiryContext.tierName || undefined}
+          tierPrice={expertInquiryContext.tierPrice || undefined}
         />
       )}
     </div>
