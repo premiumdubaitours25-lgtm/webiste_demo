@@ -9,6 +9,25 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useInquiryForm } from "../contexts/InquiryFormContext";
+import { cn } from "@/lib/utils";
+
+const PACKAGE_LISTING_SLUGS = new Set([
+  'regular',
+  'premium',
+  'luxury',
+  'adventure',
+  'oman',
+  'attractions',
+  'domestic',
+  'international',
+]);
+
+function isPackageDetailPath(pathname: string | null) {
+  if (!pathname) return false;
+  const match = pathname.match(/^\/packages\/([^/]+)$/);
+  if (!match) return false;
+  return !PACKAGE_LISTING_SLUGS.has(match[1]);
+}
 
 interface SearchPackage {
   _id: string;
@@ -49,12 +68,18 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isInHeroSection, setIsInHeroSection] = useState(false);
+  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  const [navHeight, setNavHeight] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [categories, setCategories] = useState<CategoryItem[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const lastScrollY = useRef(0);
+  const isNavbarHiddenRef = useRef(false);
   const pathname = usePathname();
   const router = useRouter();
   const { openForm } = useInquiryForm();
+  const isPackageDetailPage = isPackageDetailPath(pathname);
 
   // Initialize search term from URL on component mount
   useEffect(() => {
@@ -71,6 +96,70 @@ const Navbar = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || !navRef.current) return;
+    const updateHeight = () => {
+      if (navRef.current) setNavHeight(navRef.current.offsetHeight);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, [mounted, pathname]);
+
+  // Hide navbar on scroll down (package detail pages only)
+  useEffect(() => {
+    if (!mounted || !isPackageDetailPage) {
+      isNavbarHiddenRef.current = false;
+      setIsNavbarHidden(false);
+      return;
+    }
+
+    let ticking = false;
+
+    const updateNavbarVisibility = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY.current;
+      let nextHidden = isNavbarHiddenRef.current;
+
+      if (currentY < 96) {
+        nextHidden = false;
+      } else if (delta > 16) {
+        nextHidden = true;
+      } else if (delta < -16) {
+        nextHidden = false;
+      }
+
+      if (nextHidden !== isNavbarHiddenRef.current) {
+        isNavbarHiddenRef.current = nextHidden;
+        setIsNavbarHidden(nextHidden);
+      }
+
+      lastScrollY.current = currentY;
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateNavbarVisibility);
+    };
+
+    lastScrollY.current = window.scrollY;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [mounted, isPackageDetailPage, pathname]);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const offset = isPackageDetailPage ? '1rem' : '0px';
+    document.documentElement.style.setProperty('--site-navbar-offset', offset);
+
+    return () => {
+      document.documentElement.style.removeProperty('--site-navbar-offset');
+    };
+  }, [mounted, isPackageDetailPage]);
 
   // Check if hero section is in view (only on home page)
   useEffect(() => {
@@ -293,11 +382,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`sticky top-0 z-[120] transition-all duration-300 ${
-      isInHeroSection 
-        ? 'bg-transparent shadow-none border-b-0' 
-        : 'bg-white shadow-lg border-b border-gray-300'
-    }`}>
+    <>
+      {isPackageDetailPage && (
+        <div aria-hidden style={{ height: navHeight || 108 }} />
+      )}
+      <nav
+        ref={navRef}
+        className={cn(
+          'z-[120] will-change-transform transition-transform duration-300 ease-in-out',
+          isPackageDetailPage ? 'fixed top-0 left-0 right-0 w-full' : 'sticky top-0',
+          isPackageDetailPage && isNavbarHidden && '-translate-y-full pointer-events-none',
+          isInHeroSection
+            ? 'bg-transparent shadow-none border-b-0'
+            : 'bg-white shadow-lg border-b border-gray-300'
+        )}
+      >
       {/* Top Bar */}
       <div className="bg-black text-white py-px">
         {/* Desktop Layout */}
@@ -764,6 +863,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+    </>
   );
 };
 

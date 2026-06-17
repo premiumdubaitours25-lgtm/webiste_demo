@@ -152,6 +152,15 @@ All colors MUST be HSL.
     transform: translateY(-4px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes fade-in {

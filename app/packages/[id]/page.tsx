@@ -40,6 +40,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import BookingModal from "@/components/BookingModal";
+import {
+  PackageHero,
+  PackageNavTabs,
+  TrustFeatureGrid,
+  ContentSection,
+  PackageItineraryHeader,
+  SectionTitle,
+  PricingSidebar,
+} from "@/components/PackageDetail/PackageDetailModern";
 
 // Utility function to render text with bold formatting
 const renderBoldText = (text: string) => {
@@ -151,7 +160,7 @@ const PackageDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'policy'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'inclusions' | 'reviews'>('overview');
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [expandedPricingTier, setExpandedPricingTier] = useState('');
 
@@ -2556,173 +2565,35 @@ Key Highlights`,
   const isPremium = (packageData as any).packageCategory === 'premium';
   const pricingTiers = getPackagePricingTiers(packageData);
 
-  const renderTierBookingForm = (tierName?: string) => (
-    <div className="space-y-3 pt-1 border-t border-gray-100">
-      <div className="space-y-1">
-        <Label className="text-xs">Travel Date</Label>
-        <div className="relative">
-          <CalendarIcon className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
-          <Input type="date" className="pl-8 h-9 text-sm" />
-        </div>
-      </div>
+  const handleRequestBooking = (tierName?: string) => {
+    if (tierName) setExpandedPricingTier(tierName);
+    setIsBookingModalOpen(true);
+  };
 
-      <div className="space-y-1">
-        <Label className="text-xs">Guests</Label>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="relative">
-            <Users className="absolute left-2.5 top-2 h-3.5 w-3.5 text-gray-400" />
-            <Input type="number" placeholder="Adults" min="1" className="pl-8 h-9 text-sm" />
-          </div>
-          <Input type="number" placeholder="Kids" min="0" className="h-9 text-sm" />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Button
-          className="w-full text-sm h-9 shadow-md shadow-primary/20"
-          onClick={() => {
-            if (tierName) setExpandedPricingTier(tierName);
-            setIsBookingModalOpen(true);
-          }}
-        >
-          Request Booking
-        </Button>
-        <Button variant="outline" className="w-full h-9 text-sm border-primary text-primary hover:bg-primary/5">
-          <Phone className="h-3.5 w-3.5 mr-1.5" />
-          Talk to an Expert
-        </Button>
-      </div>
-
-      <p className="text-[10px] text-center text-gray-500">
-        Free cancellation up to 48 hours before tour
-      </p>
-    </div>
-  );
+  const navTabs = [
+    { id: 'overview', label: 'Overview', icon: Info },
+    { id: 'itinerary', label: 'Itinerary', icon: Calendar },
+    { id: 'inclusions', label: 'Inclusions', icon: CheckCircle },
+    { id: 'reviews', label: 'Reviews', icon: Star },
+  ];
 
   return (
-    <div className={`min-h-screen ${playfair.variable} ${cormorant.variable} ${poppins.variable} ${isPremium ? 'bg-gradient-to-br from-amber-50/30 via-white to-amber-50/20' : 'bg-[#F8FAFC]'}`}>
-      {/* Immersive Hero Section */}
-      <div className={`relative h-[70vh] md:h-[80vh] w-full overflow-hidden ${isPremium ? 'shadow-2xl' : ''}`}>
-        <div className="absolute inset-0">
-          {Array.isArray(packageData.images) && packageData.images.length > 0 ? (
-            <Image
-              src={packageData.images[selectedImageIndex].url}
-              alt={packageData.images[selectedImageIndex].alt || packageData.title}
-              fill
-              className="object-cover transition-transform duration-700 hover:scale-105"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-              <Globe className="h-24 w-24 text-amber-600" />
-            </div>
-          )}
-          <div className={`absolute inset-0 ${isPremium ? 'bg-gradient-to-t from-black/95 via-black/50 to-black/20' : 'bg-gradient-to-t from-black/90 via-black/40 to-transparent'}`} />
-          {isPremium && (
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-transparent" />
-          )}
-        </div>
+    <div className={`min-h-screen ${playfair.variable} ${cormorant.variable} ${poppins.variable} bg-[#F4F6F8]`}>
+      <PackageHero
+        packageData={packageData}
+        selectedImageIndex={selectedImageIndex}
+        onSelectImage={setSelectedImageIndex}
+        onBack={() => router.back()}
+        isPremium={isPremium}
+        isInternational={!!isInternational}
+        formatPrice={formatPrice}
+      />
 
-        {/* Navigation Bar Overlay */}
-        <div className="absolute top-0 left-0 right-0 p-6 z-20">
-          <div className="container mx-auto flex justify-between items-center">
-            <Button
-              variant="outline"
-              className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white"
-              onClick={() => router.back()}
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-            <div className="flex gap-3">
-              <Button size="icon" variant="outline" className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white rounded-full">
-                <Heart className="h-5 w-5" />
-              </Button>
-              <Button size="icon" variant="outline" className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 hover:text-white rounded-full">
-                <Share className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Hero Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 z-20 text-white">
-          <div className="container mx-auto max-w-7xl">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <div className="max-w-3xl animate-fade-in-up">
-                <div className="flex items-center gap-3 mb-6">
-                  {isPremium ? (
-                    <Badge className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white border-none px-4 py-1.5 text-sm font-semibold backdrop-blur-sm shadow-xl">
-                      <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-                      Premium Package
-                    </Badge>
-                  ) : (
-                    <Badge className="bg-primary/90 hover:bg-primary text-white border-none px-3 py-1 text-sm font-medium backdrop-blur-sm shadow-lg">
-                      {isInternational ? "International" : "Domestic"}
-                    </Badge>
-                  )}
-                  <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 text-sm font-medium text-yellow-400 shadow-xl">
-                    <Star className="h-4 w-4 fill-current" />
-                    <span className="font-bold">{packageData.rating}</span>
-                    <span className="text-white/70 ml-1">({packageData.reviews?.length || 0} reviews)</span>
-                  </div>
-                </div>
-
-                <h1 className={`text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight mb-6 text-shadow-lg leading-tight ${isPremium ? 'font-playfair' : ''}`}>
-                  {packageData.title}
-                </h1>
-                {packageData.subtitle && (
-                  <p className={`text-xl md:text-2xl text-white/90 mb-6 ${isPremium ? 'font-poppins font-light' : ''}`}>
-                    {packageData.subtitle}
-                  </p>
-                )}
-
-                <div className={`flex flex-wrap items-center gap-6 text-lg text-white/95 font-medium ${isPremium ? 'font-poppins' : ''}`}>
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                    <MapPin className={`h-5 w-5 ${isPremium ? 'text-amber-400' : 'text-primary'}`} />
-                    <span>{packageData.location}</span>
-                  </div>
-                  <div className="h-1.5 w-1.5 bg-white/50 rounded-full hidden md:block" />
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                    <Clock className={`h-5 w-5 ${isPremium ? 'text-amber-400' : 'text-primary'}`} />
-                    <span>{packageData.duration}</span>
-                  </div>
-                  <div className="h-1.5 w-1.5 bg-white/50 rounded-full hidden md:block" />
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                    <Users className={`h-5 w-5 ${isPremium ? 'text-amber-400' : 'text-primary'}`} />
-                    <span>{packageData.capacity}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Thumbnail Gallery Preview (Desktop) */}
-              <div className="hidden lg:flex gap-3">
-                {Array.isArray(packageData.images) && packageData.images.slice(0, 3).map((image, index) => (
-                  <div
-                    key={index}
-                    className={`relative w-24 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all shadow-xl ${selectedImageIndex === index ? 'border-primary ring-2 ring-primary/30' : 'border-white/30 hover:border-white'
-                      }`}
-                    onClick={() => setSelectedImageIndex(index)}
-                  >
-                    <Image src={image.url} alt={image.alt} fill className="object-cover" />
-                  </div>
-                ))}
-                {packageData.images.length > 3 && (
-                  <div className="w-24 h-16 rounded-lg bg-black/50 border-2 border-white/30 flex items-center justify-center text-white font-medium cursor-pointer hover:bg-black/70 backdrop-blur-sm">
-                    +{packageData.images.length - 3}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8 lg:py-12 relative z-10 -mt-8">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="relative z-10 w-full px-4 pb-12 pt-2 sm:px-6 lg:px-10 lg:pb-16 xl:px-14">
+        <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-stretch lg:gap-8 xl:grid-cols-[minmax(0,1fr)_300px]">
 
           {/* Main Content Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="min-w-0 space-y-8">
 
             {/* Special View for Attraction Packages - Dynamic Data from Database */}
             {isAttractionPackage && (
@@ -2957,51 +2828,33 @@ Key Highlights`,
             {/* Regular Package View - Only show if NOT an attraction package */}
             {!isAttractionPackage && (
               <>
-            {/* Navigation Tabs */}
-            <div className={`rounded-2xl shadow-xl border p-2 sticky top-[80px] z-10 backdrop-blur-xl ${isPremium ? 'bg-gradient-to-r from-white to-amber-50/50 border-amber-200/50' : 'bg-white/90 border-gray-100'}`}>
-              <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-                {[
-                  { id: 'overview', label: 'Overview', icon: Info },
-                  { id: 'itinerary', label: 'Itinerary', icon: Calendar },
-                  { id: 'inclusions', label: 'Inclusions', icon: CheckCircle },
-                  { id: 'reviews', label: 'Reviews', icon: Star },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => {
-                      const el = document.getElementById(tab.id);
-                      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      setActiveTab(tab.id as any);
-                    }}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
-                      activeTab === tab.id 
-                        ? isPremium 
-                          ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg' 
-                          : 'bg-primary text-white shadow-lg'
-                        : isPremium
-                          ? 'bg-transparent text-gray-700 hover:bg-amber-50/50'
-                          : 'bg-transparent text-gray-600 hover:bg-gray-50'
-                      }`}
-                  >
-                    <tab.icon className="h-4 w-4" />
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Navigation Tabs + Overview (no gap between) */}
+            <div className="space-y-0">
+            <PackageNavTabs
+              tabs={navTabs}
+              activeTab={activeTab}
+              onTabClick={(id) => {
+                const el = document.getElementById(id);
+                el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActiveTab(id as typeof activeTab);
+              }}
+            />
 
             {/* Overview Section */}
             <section id="overview" className="space-y-6">
-              <Card className={`border-none shadow-xl overflow-hidden animate-fade-in-up ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-amber-200/50' : ''}`}>
-                <CardHeader className={`${isPremium ? 'bg-gradient-to-r from-amber-500/10 to-amber-600/10 border-b border-amber-200/50' : 'bg-gray-50/50 border-b border-gray-100'} pb-4`}>
+              <div className="overflow-hidden rounded-2xl rounded-t-none border border-t-0 border-slate-200/80 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+                <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-5 py-4 md:px-6">
                   <div className="flex items-center gap-3">
-                    <div className={`p-3 rounded-xl ${isPremium ? 'bg-gradient-to-br from-amber-500 to-amber-600' : 'bg-primary/10'}`}>
-                      <PlayCircle className={`h-6 w-6 ${isPremium ? 'text-white' : 'text-primary'}`} />
+                    <div className="rounded-xl bg-slate-900 p-3 text-white">
+                      <PlayCircle className="h-6 w-6" />
                     </div>
-                    <CardTitle className={`text-2xl font-bold text-gray-900 ${isPremium ? 'font-playfair' : ''}`}>Experience Highlights</CardTitle>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Tour details</p>
+                      <h2 className="font-playfair text-2xl font-bold text-slate-900 md:text-3xl">Experience Highlights</h2>
+                    </div>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-6">
+                </div>
+                <div className="space-y-6 p-6">
                   {/* Package Title & Subtitle - Already shown in hero, but can add here if needed */}
                   
                   {/* Abstract */}
@@ -3169,18 +3022,12 @@ Key Highlights`,
                     </Card>
                   )}
 
-                  {/* About Premium Dubai Tours */}
                   {packageData.about && (
-                    <Card className="mb-6 bg-gradient-to-br from-amber-50/50 to-white border-2 border-amber-200/50 shadow-lg">
-                      <CardHeader className="bg-gradient-to-r from-amber-500/10 to-amber-600/10 border-b border-amber-200/50">
-                        <CardTitle className="text-xl font-bold text-gray-900 font-playfair">About Premium Dubai Tours</CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <p className={`text-lg text-gray-700 leading-relaxed ${isPremium ? 'font-poppins font-light' : 'font-light'}`}>
-                    {packageData.about}
-                  </p>
-                      </CardContent>
-                    </Card>
+                    <ContentSection title="About This Tour">
+                      <p className="whitespace-pre-line text-base leading-relaxed text-slate-600">
+                        {packageData.about}
+                      </p>
+                    </ContentSection>
                   )}
 
                   {/* Premium Package Specific Content - Dubai Private Classic Discovery */}
@@ -4581,23 +4428,9 @@ Key Highlights`,
                     </div>
                   )}
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {[
-                      { icon: CheckCircle, text: "Verified Experience", color: isPremium ? "text-green-600" : "text-green-500", bg: isPremium ? "bg-green-50" : "bg-gray-50" },
-                      { icon: ShieldCheck, text: "Best Price Guarantee", color: isPremium ? "text-blue-600" : "text-blue-500", bg: isPremium ? "bg-blue-50" : "bg-gray-50" },
-                      { icon: Users, text: "Expert Local Guides", color: isPremium ? "text-purple-600" : "text-purple-500", bg: isPremium ? "bg-purple-50" : "bg-gray-50" },
-                      { icon: Heart, text: "Curated with Love", color: isPremium ? "text-red-600" : "text-red-500", bg: isPremium ? "bg-red-50" : "bg-gray-50" },
-                    ].map((feature, idx) => (
-                      <div key={idx} className={`flex items-center gap-3 p-5 rounded-xl ${feature.bg} border-2 border-transparent hover:border-${feature.color.split('-')[1]}-200 transition-all shadow-sm hover:shadow-md`}>
-                        <div className={`p-2 rounded-lg ${isPremium ? 'bg-white' : ''}`}>
-                          <feature.icon className={`h-6 w-6 ${feature.color}`} />
-                        </div>
-                        <span className={`font-semibold text-gray-800 ${isPremium ? 'font-poppins' : ''}`}>{feature.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                  <TrustFeatureGrid isPremium={isPremium} />
+                </div>
+              </div>
 
               {/* Accomodation Cards (If any) */}
               {Array.isArray(packageData.accommodation) && packageData.accommodation.length > 0 && (
@@ -4628,34 +4461,29 @@ Key Highlights`,
                 </div>
               )}
             </section>
+            </div>
 
-            {/* Itinerary Section */}
-            <section id="itinerary">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className={`text-3xl font-bold text-gray-900 ${isPremium ? 'font-playfair' : ''}`}>Daily Itinerary</h3>
-                <Badge variant="outline" className={`${isPremium ? 'bg-gradient-to-r from-amber-500/10 to-amber-600/10 text-amber-700 border-amber-300/50' : 'text-primary border-primary/20 bg-primary/5'}`}>
-                  {packageData.duration}
-                </Badge>
-              </div>
+            <section id="itinerary" className="mt-12">
+              <PackageItineraryHeader duration={packageData.duration} />
 
-              <div className={`space-y-6 relative before:absolute before:left-[23px] before:top-6 before:bottom-6 before:w-[3px] ${isPremium ? 'before:bg-gradient-to-b before:from-amber-500/50 before:via-amber-300/30 before:to-amber-100/20' : 'before:bg-gradient-to-b before:from-primary/50 before:via-gray-200 before:to-gray-100'}`}>
+              <div className={`relative mx-auto w-full max-w-4xl space-y-5 px-4 sm:px-6 md:px-8 before:absolute before:left-[39px] before:top-6 before:bottom-6 before:w-[2px] sm:before:left-[47px] md:before:left-[55px] ${isPremium ? 'before:bg-gradient-to-b before:from-amber-400/60 before:via-amber-200/40 before:to-slate-100' : 'before:bg-gradient-to-b before:from-slate-900/40 before:via-slate-200 before:to-slate-100'}`}>
                 {Array.isArray(packageData.itinerary) && packageData.itinerary.map((day, index) => (
-                  <div key={index} className="relative pl-16 group">
-                    {/* Timeline Dot */}
-                    <div className={`absolute left-0 top-0 w-12 h-12 rounded-full bg-white border-3 flex items-center justify-center shadow-lg z-10 group-hover:scale-110 transition-transform ${isPremium ? 'border-amber-500 bg-gradient-to-br from-amber-50 to-white' : 'border-primary'}`}>
-                      <span className={`font-bold text-sm ${isPremium ? 'text-amber-600' : 'text-primary'}`}>{day.day}</span>
+                  <div key={index} className="group relative pl-14 sm:pl-16">
+                    <div className={`absolute left-0 top-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border bg-white shadow-md transition-transform group-hover:scale-105 sm:h-12 sm:w-12 ${isPremium ? 'border-amber-300' : 'border-slate-300'}`}>
+                      <span className={`text-sm font-bold ${isPremium ? 'text-amber-600' : 'text-slate-900'}`}>{day.day}</span>
                     </div>
 
-                    <Card className={`border-l-4 transition-all duration-300 shadow-md hover:shadow-xl ${isPremium ? 'border-l-amber-500/0 hover:border-l-amber-500 bg-gradient-to-br from-white to-amber-50/20' : 'border-l-primary/0 hover:border-l-primary'}`}>
-                      <CardHeader className={`py-5 ${isPremium ? 'bg-gradient-to-r from-amber-500/5 to-transparent' : ''}`}>
-                        <CardTitle className={`text-lg flex items-center gap-3 ${isPremium ? 'font-cormorant' : ''}`}>
-                          <span className={`font-bold ${isPremium ? 'text-amber-600' : 'text-primary'}`}>Day {day.day}</span>
-                          <span className={`w-1.5 h-1.5 rounded-full ${isPremium ? 'bg-amber-400' : 'bg-gray-300'}`}></span>
-                          <span className={isPremium ? 'font-playfair' : ''}>{day.title}</span>
+                    <Card className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                      <CardHeader className="border-b border-slate-100 bg-slate-50/60 px-4 py-3 sm:px-5 sm:py-4">
+                        <CardTitle className="flex flex-wrap items-center gap-2 text-base font-semibold text-slate-900 sm:gap-3 sm:text-lg">
+                          <span className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wide ${isPremium ? 'bg-amber-100 text-amber-700' : 'bg-slate-900 text-white'}`}>
+                            Day {day.day}
+                          </span>
+                          <span className="font-playfair">{day.title}</span>
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="pb-5 pt-0">
-                        <div className={`text-gray-700 leading-relaxed pl-1 ${isPremium ? 'font-poppins font-light' : ''}`}>
+                      <CardContent className="px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4">
+                        <div className="text-sm leading-relaxed text-slate-600 sm:text-base">
                           {day.description.split('\n').map((line, i) => (
                             <p key={i} className="mb-2 last:mb-0">{line}</p>
                           ))}
@@ -4668,12 +4496,14 @@ Key Highlights`,
             </section>
 
             {/* Inclusions & Exclusions */}
-            <section id="inclusions" className="grid md:grid-cols-2 gap-6">
-              <Card className={`${isPremium ? 'border-2 border-green-200/50 bg-gradient-to-br from-green-50/50 to-white shadow-lg' : 'border-green-100 bg-green-50/30'}`}>
-                <CardHeader className={isPremium ? 'bg-gradient-to-r from-green-500/10 to-green-600/10 border-b border-green-200/50' : ''}>
-                  <CardTitle className={`text-xl flex items-center text-green-700 ${isPremium ? 'font-playfair' : ''}`}>
-                    <div className={`p-2 rounded-xl mr-3 ${isPremium ? 'bg-gradient-to-br from-green-500 to-green-600' : 'bg-green-100'}`}>
-                      <CheckCircle className={`h-5 w-5 ${isPremium ? 'text-white' : ''}`} />
+            <section id="inclusions" className="mt-12 space-y-2">
+              <SectionTitle eyebrow="What is included" title="Inclusions & Exclusions" />
+              <div className="mx-auto grid max-w-4xl gap-5 px-4 sm:px-6 md:grid-cols-2 md:px-8 md:gap-6">
+              <Card className="overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50/60 to-white shadow-sm">
+                <CardHeader className="rounded-t-3xl border-b border-emerald-100/80 bg-white/60">
+                  <CardTitle className="flex items-center text-xl text-emerald-800 font-playfair">
+                    <div className="mr-3 rounded-xl bg-emerald-600 p-2">
+                      <CheckCircle className="h-5 w-5 text-white" />
                     </div>
                     What's Included
                   </CardTitle>
@@ -4710,11 +4540,11 @@ Key Highlights`,
                 </CardContent>
               </Card>
 
-              <Card className={`${isPremium ? 'border-2 border-red-200/50 bg-gradient-to-br from-red-50/50 to-white shadow-lg' : 'border-red-100 bg-red-50/30'}`}>
-                <CardHeader className={isPremium ? 'bg-gradient-to-r from-red-500/10 to-red-600/10 border-b border-red-200/50' : ''}>
-                  <CardTitle className={`text-xl flex items-center text-red-700 ${isPremium ? 'font-playfair' : ''}`}>
-                    <div className={`p-2 rounded-xl mr-3 ${isPremium ? 'bg-gradient-to-br from-red-500 to-red-600' : 'bg-red-100'}`}>
-                      <X className={`h-5 w-5 ${isPremium ? 'text-white' : ''}`} />
+              <Card className="overflow-hidden rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50/60 to-white shadow-sm">
+                <CardHeader className="rounded-t-3xl border-b border-rose-100/80 bg-white/60">
+                  <CardTitle className="flex items-center text-xl text-rose-800 font-playfair">
+                    <div className="mr-3 rounded-xl bg-rose-600 p-2">
+                      <X className="h-5 w-5 text-white" />
                     </div>
                     What's Excluded
                   </CardTitle>
@@ -4750,21 +4580,23 @@ Key Highlights`,
                   })}
                 </CardContent>
               </Card>
-            </section>
-
-            {/* Reviews Section */}
-            <section id="reviews">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className={`text-3xl font-bold text-gray-900 ${isPremium ? 'font-playfair' : ''}`}>Customer Reviews</h3>
-                <Badge variant="outline" className={`${isPremium ? 'bg-gradient-to-r from-amber-500/10 to-amber-600/10 text-amber-700 border-amber-300/50' : 'text-primary border-primary/20 bg-primary/5'}`}>
-                  {(packageData.reviews?.length || 0)} review{(packageData.reviews?.length || 0) !== 1 ? 's' : ''}
-                </Badge>
               </div>
+            </section>
+            <section id="reviews" className="mt-12">
+              <SectionTitle
+                eyebrow="Guest feedback"
+                title="Customer Reviews"
+                badge={
+                  <Badge variant="outline" className={`rounded-full px-4 py-1.5 ${isPremium ? 'bg-gradient-to-r from-amber-500/10 to-amber-600/10 text-amber-700 border-amber-300/50' : 'border-primary/20 bg-primary/5 text-primary'}`}>
+                    {(packageData.reviews?.length || 0)} review{(packageData.reviews?.length || 0) !== 1 ? 's' : ''}
+                  </Badge>
+                }
+              />
 
               {packageData.reviews && packageData.reviews.length > 0 ? (
-                <div className="grid gap-4">
+                <div className="mx-auto grid max-w-4xl gap-4 px-4 sm:px-6 md:px-8">
                   {packageData.reviews.map((review, idx) => (
-                    <Card key={idx} className={`${isPremium ? 'border-2 border-amber-200/50 bg-gradient-to-br from-white to-amber-50/20' : 'border-gray-200'} shadow-md`}>
+                    <Card key={idx} className={`overflow-hidden rounded-3xl ${isPremium ? 'border-2 border-amber-200/50 bg-gradient-to-br from-white to-amber-50/20' : 'border border-gray-200 bg-white'} shadow-md`}>
                       <CardContent className="p-5">
                         <div className="flex items-start justify-between gap-4 mb-3">
                           <div>
@@ -4790,12 +4622,14 @@ Key Highlights`,
                   ))}
                 </div>
               ) : (
-                <Card className={`${isPremium ? 'border-2 border-amber-200/50 bg-gradient-to-br from-white to-amber-50/20' : 'border-gray-200'} shadow-md`}>
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 md:px-8">
+                <Card className={`overflow-hidden rounded-3xl ${isPremium ? 'border-2 border-amber-200/50 bg-gradient-to-br from-white to-amber-50/20' : 'border border-gray-200 bg-white'} shadow-md`}>
                   <CardContent className="p-8 text-center">
                     <Star className="h-10 w-10 text-gray-300 mx-auto mb-3" />
                     <p className="text-gray-500">No customer reviews yet.</p>
                   </CardContent>
                 </Card>
+                </div>
               )}
             </section>
               </>
@@ -4804,8 +4638,8 @@ Key Highlights`,
 
           {/* Sticky Sidebar */}
           {isAttractionPackage ? (
-            <div className="lg:col-span-1">
-              <div className="sticky top-[100px] space-y-6">
+            <div className="w-full lg:max-w-[300px] lg:justify-self-end">
+              <div className="sticky top-[var(--site-navbar-offset,6rem)] space-y-4">
                 {/* Simplified Booking Card for Attraction Packages */}
                 <Card className="border-none shadow-2xl overflow-hidden ring-1 ring-black/5 bg-gradient-to-br from-purple-50 to-indigo-50 border-2 border-purple-200">
                   <div className="p-6 text-white text-center bg-gradient-to-r from-purple-600 to-indigo-600">
@@ -4841,92 +4675,16 @@ Key Highlights`,
               </div>
             </div>
           ) : (
-          <div className="lg:col-span-1">
-            <div className="sticky top-[100px] space-y-4">
-
-              {pricingTiers.length > 0 ? (
-                pricingTiers.map((tier, idx) => {
-                  const isExpanded = expandedPricingTier === tier.name;
-                  return (
-                    <Card
-                      key={`${tier.name}-${idx}`}
-                      className={cn(
-                        'border-none shadow-xl overflow-hidden ring-1 ring-black/5 max-w-sm mx-auto lg:max-w-none transition-all',
-                        isExpanded
-                          ? isPremium
-                            ? 'ring-amber-400/50 border-2 border-amber-200'
-                            : 'ring-primary/30 border-2 border-primary/20'
-                          : 'border border-gray-100'
-                      )}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setExpandedPricingTier(isExpanded ? '' : tier.name)}
-                        className={cn(
-                          'w-full p-4 text-left transition-colors',
-                          isExpanded
-                            ? isPremium
-                              ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white'
-                              : 'bg-primary text-white'
-                            : 'bg-white hover:bg-gray-50 text-gray-900'
-                        )}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <p className="font-bold text-base">{tier.name} Package</p>
-                            <p className={cn('text-xl font-bold mt-1', isExpanded ? 'text-white' : isPremium ? 'text-amber-600' : 'text-primary')}>
-                              {formatPrice(tier.price)}
-                              <span className={cn('text-xs font-normal ml-1', isExpanded ? 'text-white/80' : 'text-gray-500')}>
-                                / person
-                              </span>
-                            </p>
-                            {tier.description && (
-                              <p className={cn('text-xs mt-2 leading-relaxed', isExpanded ? 'text-white/85' : 'text-gray-600')}>
-                                {tier.description}
-                              </p>
-                            )}
-                          </div>
-                          <ChevronDown
-                            className={cn(
-                              'h-5 w-5 shrink-0 transition-transform duration-200',
-                              isExpanded ? 'rotate-180 text-white' : 'text-gray-400'
-                            )}
-                          />
-                        </div>
-                      </button>
-
-                      {isExpanded && (
-                        <CardContent className="p-4 pt-3 bg-white">
-                          {renderTierBookingForm(tier.name)}
-                        </CardContent>
-                      )}
-                    </Card>
-                  );
-                })
-              ) : (
-                <Card className={`border-none shadow-xl overflow-hidden ring-1 ring-black/5 max-w-sm mx-auto lg:max-w-none ${isPremium ? 'bg-gradient-to-br from-white to-amber-50/30 border-2 border-amber-200/50' : 'bg-white'}`}>
-                  <div className={`p-4 text-white text-center ${isPremium ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500' : 'bg-primary'}`}>
-                    <p className="text-white/90 text-xs italic font-medium mb-1">Starting from</p>
-                    <div className="flex items-baseline justify-center gap-1.5">
-                      {isPremium && packageData.price === 0 ? (
-                        <>
-                          <h2 className={`text-2xl font-bold ${isPremium ? 'font-playfair' : ''}`}>Custom Pricing</h2>
-                          <span className="text-sm opacity-90">/ vehicle</span>
-                        </>
-                      ) : (
-                        <>
-                          <h2 className={`text-2xl font-bold ${isPremium ? 'font-playfair' : ''}`}>{formatPrice(packageData.price)}</h2>
-                          <span className="text-sm opacity-90">/ person</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <CardContent className="p-4">
-                    {renderTierBookingForm()}
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+          <div className="w-full lg:max-w-[300px] lg:justify-self-end lg:h-full">
+            <PricingSidebar
+              pricingTiers={pricingTiers}
+              expandedPricingTier={expandedPricingTier}
+              onToggleTier={(name) => setExpandedPricingTier(name)}
+              onRequestBooking={handleRequestBooking}
+              packageData={packageData}
+              formatPrice={formatPrice}
+              isPremium={isPremium}
+            />
           </div>
           )}
 
