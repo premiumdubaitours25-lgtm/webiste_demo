@@ -105,6 +105,12 @@ const PackageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    default: '',
+    trim: true,
+    lowercase: true,
+  },
   subtitle: {
     type: String,
     required: true,
@@ -139,7 +145,6 @@ const PackageSchema = new mongoose.Schema({
   hotelOptions: [{
     type: String,
   }],
-  // Pricing tiers like Diamond/Silver/etc. (each with its own name + price)
   pricingOptions: [{
     name: {
       type: String,

@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import PackageCard from '@/components/PackageCard';
+import { LEGACY_CATEGORY_ROUTES, normalizePackageCategoryKey } from '@/lib/packageSlug';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ interface PackageItem {
   images?: Array<{ url: string; alt?: string }>;
   bookings?: number;
   rating?: number;
+  slug?: string;
 }
 
 interface CategoryItem {
@@ -63,41 +65,23 @@ const CARD_ICON_MAP: Record<string, any> = {
   sparkles: Sparkles,
 };
 
-const DEFAULT_FIXED_CATEGORY_SLUGS = new Set([
-  'regular-packages',
-  'premium-packages',
-  'luxury-packages',
-  'adventure-activities',
-  'oman-tour',
-  'attraction-and-activity',
-]);
-
-const normalizeCategory = (value: string) => {
-  const normalized = value.trim().toLowerCase();
-  const map: Record<string, string> = {
-    regular: 'regular',
-    'regular packages': 'regular',
-    premium: 'premium',
-    'premium packages': 'premium',
-    luxury: 'luxury',
-    'luxury packages': 'luxury',
-    adventure: 'adventure',
-    'adventure activities': 'adventure',
-    'oman tour': 'oman-tour',
-    oman: 'oman-tour',
-    'attraction and activity': 'attraction-and-activity',
-    'attractions and activities': 'attraction-and-activity',
-  };
-  return map[normalized] || normalized.replace(/\s+/g, '-');
-};
+const DEFAULT_FIXED_CATEGORY_SLUGS = new Set(Object.keys(LEGACY_CATEGORY_ROUTES));
 
 export default function CategoryPackagesPage() {
   const params = useParams<{ slug: string }>();
+  const router = useRouter();
   const slug = params?.slug || '';
 
   const [loading, setLoading] = useState(true);
   const [allPackages, setAllPackages] = useState<PackageItem[]>([]);
   const [categories, setCategories] = useState<CategoryItem[]>([]);
+
+  useEffect(() => {
+    const legacyRoute = LEGACY_CATEGORY_ROUTES[slug as keyof typeof LEGACY_CATEGORY_ROUTES];
+    if (legacyRoute) {
+      router.replace(legacyRoute);
+    }
+  }, [slug, router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,7 +153,9 @@ export default function CategoryPackagesPage() {
   const filteredPackages = useMemo(
     () =>
       allPackages.filter(
-        (pkg) => normalizeCategory(pkg.packageCategory || '') === normalizeCategory(slug)
+        (pkg) =>
+          normalizePackageCategoryKey(pkg.packageCategory || '') ===
+          normalizePackageCategoryKey(slug)
       ),
     [allPackages, slug]
   );
@@ -181,6 +167,17 @@ export default function CategoryPackagesPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading packages...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (LEGACY_CATEGORY_ROUTES[slug as keyof typeof LEGACY_CATEGORY_ROUTES]) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirecting...</p>
         </div>
       </div>
     );

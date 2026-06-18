@@ -1,6 +1,7 @@
 import connectDB from '../../../lib/mongodb';
 import Package from '../../../models/Package';
 import { isConnected } from '../../../lib/mongodb';
+import { withPackageSlug } from '../../../lib/findPackage';
 
 const normalizePackageCategory = (category) => {
   if (!category || typeof category !== 'string') return category;
@@ -220,10 +221,10 @@ export default async function handler(req, res) {
 
     try {
       console.log('Received package data:', JSON.stringify(req.body, null, 2));
-      const packageData = {
+      const packageData = withPackageSlug({
         ...req.body,
         packageCategory: normalizePackageCategory(req.body?.packageCategory),
-      };
+      });
       const newPackage = new Package(packageData);
       const savedPackage = await newPackage.save();
       console.log('Package saved successfully:', savedPackage._id);

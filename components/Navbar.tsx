@@ -31,6 +31,7 @@ function isPackageDetailPath(pathname: string | null) {
 
 interface SearchPackage {
   _id: string;
+  slug?: string;
   title: string;
   subtitle: string;
   location: string;
@@ -52,14 +53,7 @@ interface CategoryItem {
   slug: string;
 }
 
-const LEGACY_CATEGORY_ROUTES: Record<string, string> = {
-  'regular-packages': '/packages/regular',
-  'premium-packages': '/packages/premium',
-  'luxury-packages': '/packages/luxury',
-  'adventure-activities': '/packages/adventure',
-  'oman-tour': '/packages/oman',
-  'attraction-and-activity': '/packages/attractions',
-};
+import { LEGACY_CATEGORY_ROUTES, getPackagePath } from '@/lib/packageSlug';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -210,12 +204,12 @@ const Navbar = () => {
         href: LEGACY_CATEGORY_ROUTES[category.slug] || `/packages/category/${category.slug}`,
       }))
     : [
-        { name: 'Regular Packages', href: '/packages/category/regular-packages' },
-        { name: 'Premium Packages', href: '/packages/category/premium-packages' },
-        { name: 'Luxury Packages', href: '/packages/category/luxury-packages' },
-        { name: 'Adventure Activities', href: '/packages/category/adventure-activities' },
-        { name: 'OMAN Tour', href: '/packages/category/oman-tour' },
-        { name: 'Attraction and Activity', href: '/packages/category/attraction-and-activity' },
+        { name: 'Regular Packages', href: '/packages/regular' },
+        { name: 'Premium Packages', href: '/packages/premium' },
+        { name: 'Luxury Packages', href: '/packages/luxury' },
+        { name: 'Adventure Activities', href: '/packages/adventure' },
+        { name: 'OMAN Tour', href: '/packages/oman' },
+        { name: 'Attraction and Activity', href: '/packages/attractions' },
       ];
 
   const navigation: NavigationItem[] = [
@@ -531,7 +525,7 @@ const Navbar = () => {
                       {searchResults.map((pkg) => (
                         <Link
                           key={pkg._id}
-                          href={`/packages/${pkg._id}`}
+                          href={getPackagePath(pkg)}
                           className="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
                           onClick={() => setIsSearchOpen(false)}
                         >
@@ -735,7 +729,7 @@ const Navbar = () => {
                         {searchResults.map((pkg) => (
                           <Link
                             key={pkg._id}
-                            href={`/packages/${pkg._id}`}
+                            href={getPackagePath(pkg)}
                             className="block p-3 hover:bg-gray-50 rounded-lg transition-colors"
                             onClick={() => {
                               setIsSearchOpen(false);
