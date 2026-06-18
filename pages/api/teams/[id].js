@@ -18,6 +18,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'PUT') {
       const name = req.body?.name?.trim();
+      const designation = req.body?.designation?.trim?.() || '';
       const email = req.body?.email?.trim?.() || '';
       const phone = req.body?.phone?.trim?.() || '';
       const description = req.body?.description?.trim?.() || '';
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
 
       const updated = await Team.findByIdAndUpdate(
         id,
-        { name, email, phone, description, photo, updatedAt: Date.now() },
+        { name, designation, email, phone, description, photo, updatedAt: Date.now() },
         { new: true, runValidators: true }
       );
 

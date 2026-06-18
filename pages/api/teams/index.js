@@ -14,6 +14,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
       const name = req.body?.name?.trim();
+      const designation = req.body?.designation?.trim?.() || '';
       const email = req.body?.email?.trim?.() || '';
       const phone = req.body?.phone?.trim?.() || '';
       const description = req.body?.description?.trim?.() || '';
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
 
       const team = await Team.create({
         name,
+        designation,
         email,
         phone,
         description,
