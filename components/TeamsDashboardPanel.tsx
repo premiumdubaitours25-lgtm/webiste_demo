@@ -20,6 +20,7 @@ import ImageUrlOrUpload, { uploadImageToCloudinary } from '@/components/ImageUrl
 type TeamMember = {
   _id: string;
   name: string;
+  designation?: string;
   email?: string;
   phone?: string;
   description?: string;
@@ -29,6 +30,7 @@ type TeamMember = {
 
 type TeamForm = {
   name: string;
+  designation: string;
   email: string;
   phone: string;
   description: string;
@@ -47,6 +49,7 @@ export default function TeamsDashboardPanel() {
 
   const [form, setForm] = useState<TeamForm>({
     name: '',
+    designation: '',
     email: '',
     phone: '',
     description: '',
@@ -85,6 +88,7 @@ export default function TeamsDashboardPanel() {
     setPhotoFile(null);
     setForm({
       name: '',
+      designation: '',
       email: '',
       phone: '',
       description: '',
@@ -97,7 +101,7 @@ export default function TeamsDashboardPanel() {
     setEditingId(null);
     setError('');
     setPhotoFile(null);
-    setForm({ name: '', email: '', phone: '', description: '', photo: '' });
+    setForm({ name: '', designation: '', email: '', phone: '', description: '', photo: '' });
     setIsModalOpen(true);
   };
 
@@ -108,6 +112,7 @@ export default function TeamsDashboardPanel() {
     setPhotoFile(null);
     setForm({
       name: team.name || '',
+      designation: team.designation || '',
       email: team.email || '',
       phone: team.phone || '',
       description: team.description || '',
@@ -129,6 +134,7 @@ export default function TeamsDashboardPanel() {
 
       const payload = {
         name: form.name.trim(),
+        designation: form.designation.trim(),
         email: form.email.trim(),
         phone: form.phone.trim(),
         description: form.description.trim(),
@@ -201,6 +207,7 @@ export default function TeamsDashboardPanel() {
                   <tr className="border-b">
                     <th className="text-left p-3">Photo</th>
                     <th className="text-left p-3">Name</th>
+                    <th className="text-left p-3">Designation</th>
                     <th className="text-left p-3">Email</th>
                     <th className="text-left p-3">Phone</th>
                     <th className="text-left p-3">Description</th>
@@ -225,6 +232,7 @@ export default function TeamsDashboardPanel() {
                         )}
                       </td>
                       <td className="p-3 font-medium">{team.name}</td>
+                      <td className="p-3 text-gray-600">{team.designation || '-'}</td>
                       <td className="p-3 text-gray-600">{team.email || '-'}</td>
                       <td className="p-3 text-gray-600">{team.phone || '-'}</td>
                       <td className="p-3 text-gray-600">
@@ -305,6 +313,15 @@ export default function TeamsDashboardPanel() {
                   value={form.name}
                   onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
                   required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="team-designation">Designation</Label>
+                <Input
+                  id="team-designation"
+                  value={form.designation}
+                  onChange={(e) => setForm((p) => ({ ...p, designation: e.target.value }))}
+                  placeholder="e.g. Tour Guide, Sales Manager"
                 />
               </div>
               <div className="space-y-2">

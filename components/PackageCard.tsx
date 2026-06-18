@@ -13,6 +13,8 @@ export interface PackageCardData {
   price: number;
   rating?: number;
   bookings?: number;
+  reviewCount?: number;
+  reviews?: Array<{ rating?: number; name?: string; comment?: string }>;
   images?: Array<{ url: string; alt?: string } | string>;
 }
 
@@ -86,6 +88,9 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   const image = getPackageImage(pkg);
   const durationShort = formatDurationShort(pkg.duration || '');
   const locationLabel = (pkg.location || 'Dubai, UAE').toUpperCase();
+  const rating = pkg.rating ?? 0;
+  const reviewCount =
+    pkg.reviewCount ?? (Array.isArray(pkg.reviews) ? pkg.reviews.length : 0);
 
   return (
     <article className="group overflow-hidden rounded-xl bg-white shadow-md ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
@@ -113,8 +118,14 @@ export default function PackageCard({ pkg }: PackageCardProps) {
           {pkg.title}
         </h3>
 
-        <div className="mt-2 flex items-center gap-2">
-          {renderStars(pkg.rating)}
+        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+          {renderStars(rating)}
+          {rating > 0 && (
+            <span className="text-[11px] font-semibold text-slate-800">{rating.toFixed(1)}</span>
+          )}
+          <span className="text-[11px] text-gray-500">
+            ({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})
+          </span>
         </div>
 
         <p className="mt-1 text-xs text-gray-500">{pkg.duration}</p>

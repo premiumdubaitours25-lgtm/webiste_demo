@@ -11,6 +11,7 @@ import Image from "next/image";
 type TeamMember = {
   _id: string;
   name: string;
+  designation?: string;
   email?: string;
   phone?: string;
   description?: string;
@@ -460,8 +461,12 @@ const AboutPage = () => {
 
                       <h3 className="text-2xl font-semibold text-gray-900 mb-2">{member.name}</h3>
 
+                      {member.designation && (
+                        <p className="text-primary font-semibold text-sm mb-2">{member.designation}</p>
+                      )}
+
                       {member.email && (
-                        <p className="text-primary font-semibold text-sm mb-1">{member.email}</p>
+                        <p className="text-gray-600 text-sm mb-1">{member.email}</p>
                       )}
                       {member.phone && (
                         <p className="text-sm text-gray-500 mb-4">{member.phone}</p>
