@@ -86,7 +86,6 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   const image = getPackageImage(pkg);
   const durationShort = formatDurationShort(pkg.duration || '');
   const locationLabel = (pkg.location || 'Dubai, UAE').toUpperCase();
-  const bookings = pkg.bookings ?? 0;
 
   return (
     <article className="group overflow-hidden rounded-xl bg-white shadow-md ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
@@ -116,9 +115,6 @@ export default function PackageCard({ pkg }: PackageCardProps) {
 
         <div className="mt-2 flex items-center gap-2">
           {renderStars(pkg.rating)}
-          <span className="text-[11px] text-gray-500">
-            {bookings} Booking{bookings !== 1 ? 's' : ''}
-          </span>
         </div>
 
         <p className="mt-1 text-xs text-gray-500">{pkg.duration}</p>
