@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, MapPin, Star } from 'lucide-react';
+import { getPackagePath } from '@/lib/packageSlug';
 
 export interface PackageCardData {
   _id: string;
@@ -14,6 +15,7 @@ export interface PackageCardData {
   rating?: number;
   bookings?: number;
   reviewCount?: number;
+  slug?: string;
   reviews?: Array<{ rating?: number; name?: string; comment?: string }>;
   images?: Array<{ url: string; alt?: string } | string>;
 }
@@ -91,8 +93,10 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   const rating = pkg.rating ?? 0;
   const reviewCount =
     pkg.reviewCount ?? (Array.isArray(pkg.reviews) ? pkg.reviews.length : 0);
+  const packageHref = getPackagePath(pkg);
 
   return (
+    <Link href={packageHref} className="block">
     <article className="group overflow-hidden rounded-xl bg-white shadow-md ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
       <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
         {image ? (
@@ -140,15 +144,15 @@ export default function PackageCard({ pkg }: PackageCardProps) {
             </p>
           </div>
 
-          <Link
-            href={`/packages/${pkg._id}`}
-            aria-label={`View ${pkg.title}`}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white transition-colors hover:bg-slate-800"
+          <div
+            aria-hidden="true"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white transition-colors group-hover:bg-slate-800"
           >
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </div>
         </div>
       </div>
     </article>
+    </Link>
   );
 }

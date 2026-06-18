@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { getPackagePath } from '@/lib/packageSlug';
 
 interface PackageImage {
   url: string;
@@ -13,6 +14,7 @@ interface PackageImage {
 
 interface Package {
   _id: string;
+  slug?: string;
   title: string;
   subtitle?: string;
   price: number;
@@ -223,7 +225,7 @@ const TourPackagesSlider = () => {
                               </div>
                             )}
                           </div>
-                          <Link href={`/packages/${pkg._id}`}>
+                          <Link href={getPackagePath(pkg)}>
                             <Button 
                               size="lg" 
                               className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3 text-lg"

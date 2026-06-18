@@ -1,6 +1,7 @@
 import connectDB from '../../../lib/mongodb';
 import Package from '../../../models/Package';
 import { isConnected } from '../../../lib/mongodb';
+import { findPackageByIdOrSlug } from '../../../lib/findPackage';
 
 const normalizePackageCategory = (category) => {
   if (!category || typeof category !== 'string') return category;
@@ -81,7 +82,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, data: packageData, demo: true });
       }
 
-      const packageData = await Package.findById(id);
+      const packageData = await findPackageByIdOrSlug(id);
       if (!packageData) {
         // Return demo data if not found
         console.log('Package not found, returning demo data');

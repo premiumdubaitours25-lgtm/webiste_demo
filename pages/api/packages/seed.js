@@ -2808,6 +2808,11 @@ export default async function handler(req, res) {
         const existing = await Package.findOne({ title: pkg.title });
         
         if (existing) {
+          if (!existing.slug && pkg._id) {
+            await Package.findByIdAndUpdate(existing._id, {
+              slug: String(pkg._id).trim().toLowerCase(),
+            });
+          }
           results.skipped.push(pkg.title || pkg._id);
           continue;
         }
@@ -2816,7 +2821,14 @@ export default async function handler(req, res) {
         const { _id, ...packageData } = pkg;
 
         // Create new package
-        const newPackage = new Package(packageData);
+        const newPackage = new Package({
+          ...packageData,
+          slug: String(_id || packageData.title)
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, ''),
+        });
         await newPackage.save();
         results.created.push(pkg.title || pkg._id);
       } catch (error) {
