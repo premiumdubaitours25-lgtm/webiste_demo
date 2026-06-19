@@ -229,30 +229,7 @@ const PackageFilter = ({ onFilterChange, packageType, availableCities = [] }: Pa
           />
         </div>
 
-        {/* Location Filter */}
-        <div className="space-y-3">
-          <h4 className="font-medium text-gray-900">Location</h4>
-          <div className="flex space-x-2">
-            <Button
-              variant={packageType === 'domestic' ? "default" : "outline"}
-              size="sm"
-              onClick={() => updateFilters({ location: 'domestic' })}
-              className="flex-1"
-            >
-              <MapPin className="h-4 w-4 mr-2" />
-              India
-            </Button>
-            <Button
-              variant={packageType === 'international' ? "default" : "outline"}
-              size="sm"
-              onClick={() => updateFilters({ location: 'international' })}
-              className="flex-1"
-            >
-              <MapPin className="h-4 w-4 mr-2" />
-              World
-            </Button>
-          </div>
-        </div>
+        {/* Location filter removed — packages use dynamic categories */}
 
         {/* Price Range */}
         <Collapsible open={expandedSections.price} onOpenChange={() => toggleSection('price')}>

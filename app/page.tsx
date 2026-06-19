@@ -364,7 +364,7 @@ export default function Home() {
             <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 text-white font-bold px-12 py-7 rounded-full shadow-lg transition-all active:scale-95"
-              onClick={() => router.push('/packages')}
+              onClick={() => router.push('/packages/premium')}
             >
               <Package className="mr-2 h-5 w-5" />
               VIEW ALL PREMIUM OFFERS
@@ -458,7 +458,7 @@ export default function Home() {
             <Button
               size="lg"
               className="bg-amber-500 hover:bg-amber-600 text-[#0a0a0b] font-bold px-12 py-7 rounded-full shadow-[0_0_30px_rgba(245,158,11,0.3)] transition-all active:scale-95"
-              onClick={() => router.push('/packages/international')}
+              onClick={() => router.push('/packages/luxury')}
             >
               EXPLORE ULTIMATE LUXURY
               <Star className="ml-2 h-5 w-5 fill-[#0a0a0b]" />
@@ -731,8 +731,8 @@ export default function Home() {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-primary"
+              variant="secondary"
+              className="bg-white text-primary hover:bg-gray-100 font-semibold"
               onClick={() => router.push('/packages')}
             >
               <Package className="mr-2 h-5 w-5" />

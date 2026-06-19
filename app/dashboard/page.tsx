@@ -154,7 +154,6 @@ export default function DashboardPage() {
   const [deletingBookingId, setDeletingBookingId] = useState<string | null>(null);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [packageTypeFilter, setPackageTypeFilter] = useState("all");
   const [placeFilter, setPlaceFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] = useState(false);
@@ -328,22 +327,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     filterPackages();
-  }, [packages, searchTerm, packageTypeFilter, placeFilter, categoryFilter]);
-
-  // Reset place filter when package type changes
-  useEffect(() => {
-    if (packageTypeFilter !== "all" && placeFilter !== "all") {
-      // Check if current place filter is valid for the selected package type
-      const domesticPlaces = ['darjeeling', 'sikkim', 'meghalaya', 'arunachal', 'himachal-pradesh', 'kashmir', 'leh-ladakh'];
-      const internationalPlaces = ['vietnam', 'sri-lanka', 'bali', 'malaysia', 'singapore'];
-
-      if (packageTypeFilter === 'domestic' && !domesticPlaces.includes(placeFilter)) {
-        setPlaceFilter("all");
-      } else if (packageTypeFilter === 'international' && !internationalPlaces.includes(placeFilter)) {
-        setPlaceFilter("all");
-      }
-    }
-  }, [packageTypeFilter, placeFilter]);
+  }, [packages, searchTerm, placeFilter, categoryFilter]);
 
   const filterPackages = () => {
     let filtered = packages;
@@ -355,11 +339,6 @@ export default function DashboardPage() {
         pkg.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
         pkg.location.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    }
-
-    // Package type filter
-    if (packageTypeFilter !== "all") {
-      filtered = filtered.filter(pkg => pkg.packageType === packageTypeFilter);
     }
 
     // Place filter
@@ -515,7 +494,7 @@ export default function DashboardPage() {
             children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: (index + 1).toString() })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.title })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.packageType === 'domestic' ? 'Domestic' : 'International' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.packageCategory || 'N/A' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.place === 'bhutan' ? 'Bhutan' : 'Nepal' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.duration || 'N/A' })] })] }),
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.location || 'N/A' })] })] }),
@@ -559,10 +538,10 @@ export default function DashboardPage() {
               children: [new TextRun({ text: `Total Packages: ${filteredPackages.length}`, size: 20 })],
             }),
             new Paragraph({
-              children: [new TextRun({ text: `Domestic Packages: ${filteredPackages.filter(p => p.packageType === 'domestic').length}`, size: 20 })],
+              children: [new TextRun({ text: `Regular Packages: ${filteredPackages.filter(p => (p.packageCategory || '').toLowerCase().includes('regular')).length}`, size: 20 })],
             }),
             new Paragraph({
-              children: [new TextRun({ text: `International Packages: ${filteredPackages.filter(p => p.packageType === 'international').length}`, size: 20 })],
+              children: [new TextRun({ text: `Premium Packages: ${filteredPackages.filter(p => (p.packageCategory || '').toLowerCase().includes('premium')).length}`, size: 20 })],
             }),
             new Paragraph({
               children: [new TextRun({ text: `Total Bookings: ${filteredPackages.reduce((sum, p) => sum + (p.bookings || 0), 0)}`, size: 20 })],
@@ -915,7 +894,7 @@ export default function DashboardPage() {
           new TableRow({
             children: [
               new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Type" })] })] }),
-              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.packageType === 'domestic' ? 'Domestic' : 'International' })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: pkg.packageCategory || 'N/A' })] })] }),
             ],
           }),
           new TableRow({
@@ -1023,7 +1002,7 @@ export default function DashboardPage() {
                 rows: [
                   new TableRow({
                     children: [
-                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Type", bold: true })] })] }),
+                      new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Category", bold: true })] })] }),
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Vehicle", bold: true })] })] }),
                       new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Description", bold: true })] })] }),
                     ],
@@ -1740,7 +1719,7 @@ export default function DashboardPage() {
           <CardContent>
             {/* Filters Section */}
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Search */}
                 <div className="lg:col-span-2">
                   <div className="relative">
@@ -1753,18 +1732,6 @@ export default function DashboardPage() {
                     />
                   </div>
                 </div>
-
-                {/* Package Type Filter */}
-                <Select value={packageTypeFilter} onValueChange={setPackageTypeFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Package Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="domestic">Domestic</SelectItem>
-                    <SelectItem value="international">International</SelectItem>
-                  </SelectContent>
-                </Select>
 
                 {/* Category Filter */}
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
@@ -1789,61 +1756,22 @@ export default function DashboardPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Places</SelectItem>
-                    {packageTypeFilter === 'domestic' ? (
-                      <>
-                        {/* Domestic Places */}
-                        <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                        <SelectItem value="sikkim">Sikkim</SelectItem>
-                        <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                        <SelectItem value="arunachal">Arunachal</SelectItem>
-                        <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                        <SelectItem value="kashmir">Kashmir</SelectItem>
-                        <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                      </>
-                    ) : packageTypeFilter === 'international' ? (
-                      <>
-                        {/* International Places */}
-                        <SelectItem value="vietnam">Vietnam</SelectItem>
-                        <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                        <SelectItem value="bali">Bali</SelectItem>
-                        <SelectItem value="malaysia">Malaysia</SelectItem>
-                        <SelectItem value="singapore">Singapore</SelectItem>
-                      </>
-                    ) : (
-                      <>
-                        {/* All Places when no type filter is selected */}
-                        {/* Domestic Places */}
-                        <SelectItem value="darjeeling">Darjeeling</SelectItem>
-                        <SelectItem value="sikkim">Sikkim</SelectItem>
-                        <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                        <SelectItem value="arunachal">Arunachal</SelectItem>
-                        <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                        <SelectItem value="kashmir">Kashmir</SelectItem>
-                        <SelectItem value="leh-ladakh">Leh Ladakh</SelectItem>
-                        {/* International Places */}
-                        <SelectItem value="vietnam">Vietnam</SelectItem>
-                        <SelectItem value="sri-lanka">Sri Lanka</SelectItem>
-                        <SelectItem value="bali">Bali</SelectItem>
-                        <SelectItem value="malaysia">Malaysia</SelectItem>
-                        <SelectItem value="singapore">Singapore</SelectItem>
-                        {/* Legacy Places */}
-                        <SelectItem value="bhutan">Bhutan</SelectItem>
-                        <SelectItem value="nepal">Nepal</SelectItem>
-                      </>
-                    )}
+                    <SelectItem value="dubai">Dubai</SelectItem>
+                    <SelectItem value="abu-dhabi">Abu Dhabi</SelectItem>
+                    <SelectItem value="uae">UAE</SelectItem>
+                    <SelectItem value="oman">Oman</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {/* Clear Filters Button */}
-              {(searchTerm || packageTypeFilter !== "all" || placeFilter !== "all" || categoryFilter !== "all") && (
+              {(searchTerm || placeFilter !== "all" || categoryFilter !== "all") && (
                 <div className="mt-4">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => {
                       setSearchTerm("");
-                      setPackageTypeFilter("all");
                       setPlaceFilter("all");
                       setCategoryFilter("all");
                     }}
@@ -1859,7 +1787,6 @@ export default function DashboardPage() {
                 <thead>
                   <tr className="border-b">
                     <th className="text-left p-3">Package Title</th>
-                    <th className="text-left p-3">Type</th>
                     <th className="text-left p-3">Category</th>
                     <th className="text-left p-3">Place</th>
                     <th className="text-left p-3">Duration</th>
@@ -1892,31 +1819,13 @@ export default function DashboardPage() {
                           </div>
                         </td>
                         <td className="p-3">
-                          <Badge variant={pkg.packageType === 'domestic' ? 'default' : 'secondary'}>
-                            {pkg.packageType === 'domestic' ? 'Domestic' : 'International'}
-                          </Badge>
-                        </td>
-                        <td className="p-3">
                           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                            {pkg.packageCategory || 'Cultural'}
+                            {pkg.packageCategory || 'Uncategorized'}
                           </Badge>
                         </td>
                         <td className="p-3">
                           <Badge variant="outline">
-                            {pkg.place === 'darjeeling' ? 'Darjeeling' :
-                              pkg.place === 'sikkim' ? 'Sikkim' :
-                                pkg.place === 'meghalaya' ? 'Meghalaya' :
-                                  pkg.place === 'arunachal' ? 'Arunachal' :
-                                    pkg.place === 'himachal-pradesh' ? 'Himachal Pradesh' :
-                                      pkg.place === 'kashmir' ? 'Kashmir' :
-                                        pkg.place === 'leh-ladakh' ? 'Leh Ladakh' :
-                                          pkg.place === 'vietnam' ? 'Vietnam' :
-                                            pkg.place === 'sri-lanka' ? 'Sri Lanka' :
-                                              pkg.place === 'bali' ? 'Bali' :
-                                                pkg.place === 'malaysia' ? 'Malaysia' :
-                                                  pkg.place === 'singapore' ? 'Singapore' :
-                                                    pkg.place === 'bhutan' ? 'Bhutan' :
-                                                      pkg.place === 'nepal' ? 'Nepal' : pkg.place}
+                            {pkg.place || pkg.location || 'N/A'}
                           </Badge>
                         </td>
                         <td className="p-3">{pkg.duration || "N/A"}</td>
@@ -1998,7 +1907,6 @@ export default function DashboardPage() {
                                 size="sm"
                                 onClick={() => {
                                   setSearchTerm("");
-                                  setPackageTypeFilter("all");
                                   setPlaceFilter("all");
                                   setCategoryFilter("all");
                                 }}

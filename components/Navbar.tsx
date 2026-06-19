@@ -18,8 +18,6 @@ const PACKAGE_LISTING_SLUGS = new Set([
   'adventure',
   'oman',
   'attractions',
-  'domestic',
-  'international',
 ]);
 
 function isPackageDetailPath(pathname: string | null) {
@@ -291,80 +289,18 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Destination mapping for smart routing
-  const getDestinationCategory = (searchTerm: string): 'international' | 'domestic' | 'general' => {
-    const term = searchTerm.toLowerCase();
-    
-    // International destinations
-    const internationalDestinations = [
-      'nepal', 'bhutan', 'dubai', 'vietnam', 'sri lanka', 'srilanka', 'bali', 
-      'malaysia', 'singapore', 'thailand', 'indonesia', 'philippines', 'japan',
-      'china', 'south korea', 'taiwan', 'hong kong', 'macau', 'myanmar',
-      'cambodia', 'laos', 'bangladesh', 'pakistan', 'afghanistan', 'iran',
-      'turkey', 'egypt', 'morocco', 'south africa', 'kenya', 'tanzania',
-      'mauritius', 'seychelles', 'maldives', 'fiji', 'australia', 'new zealand',
-      'europe', 'france', 'italy', 'spain', 'germany', 'switzerland', 'austria',
-      'netherlands', 'belgium', 'greece', 'portugal', 'norway', 'sweden',
-      'denmark', 'finland', 'iceland', 'ireland', 'uk', 'england', 'scotland',
-      'wales', 'canada', 'usa', 'america', 'brazil', 'argentina', 'chile',
-      'peru', 'colombia', 'mexico', 'cuba', 'jamaica', 'costa rica'
-    ];
-    
-    // Domestic destinations
-    const domesticDestinations = [
-      'india', 'kashmir', 'leh', 'ladakh', 'himachal', 'manali', 'shimla',
-      'dharamshala', 'mcleodganj', 'uttarakhand', 'rishikesh', 'haridwar',
-      'dehradun', 'mussoorie', 'nainital', 'rajasthan', 'jaipur', 'udaipur',
-      'jodhpur', 'jaisalmer', 'bikaner', 'mount abu', 'goa', 'kerala',
-      'munnar', 'alleppey', 'kochi', 'trivandrum', 'karnataka', 'bangalore',
-      'mysore', 'coorg', 'ooty', 'tamil nadu', 'chennai', 'madurai',
-      'pondicherry', 'mahabalipuram', 'andhra pradesh', 'hyderabad', 'visakhapatnam',
-      'telangana', 'maharashtra', 'mumbai', 'pune', 'nashik', 'aurangabad',
-      'gujarat', 'ahmedabad', 'surat', 'vadodara', 'rajkot', 'bhavnagar',
-      'madhya pradesh', 'bhopal', 'indore', 'gwalior', 'ujjain', 'khajuraho',
-      'west bengal', 'kolkata', 'darjeeling', 'kalimpong', 'gangtok', 'sikkim',
-      'assam', 'guwahati', 'kaziranga', 'manipur', 'imphal', 'meghalaya',
-      'shillong', 'cherrapunji', 'mizoram', 'aizawl', 'nagaland', 'kohima',
-      'tripura', 'agartala', 'arunachal pradesh', 'itanagar', 'tawang',
-      'odisha', 'bhubaneswar', 'puri', 'konark', 'jharkhand', 'ranchi',
-      'bihar', 'patna', 'bodh gaya', 'nalanda', 'chhattisgarh', 'raipur',
-      'jagdalpur', 'punjab', 'chandigarh', 'amritsar', 'haryana', 'gurgaon',
-      'faridabad', 'himachal pradesh', 'uttar pradesh', 'lucknow', 'agra',
-      'varanasi', 'allahabad', 'kanpur', 'jhansi', 'mathura', 'vrindavan'
-    ];
-    
-    // Check if search term matches any destination
-    for (const dest of internationalDestinations) {
-      if (term.includes(dest) || dest.includes(term)) {
-        return 'international';
-      }
-    }
-    
-    for (const dest of domesticDestinations) {
-      if (term.includes(dest) || dest.includes(term)) {
-        return 'domestic';
-      }
-    }
-    
-    return 'general';
-  };
-
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      const category = getDestinationCategory(searchTerm.trim());
-      
-      // Force page refresh to ensure search works correctly
-      if (category === 'international') {
-        window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm.trim())}`;
-      } else if (category === 'domestic') {
-        window.location.href = `/packages/domestic?search=${encodeURIComponent(searchTerm.trim())}`;
-      } else {
-        window.location.href = `/packages?search=${encodeURIComponent(searchTerm.trim())}`;
-      }
-      
+      window.location.href = `/packages?search=${encodeURIComponent(searchTerm.trim())}`;
       setIsSearchOpen(false);
     }
+  };
+
+  const goToSearchResults = () => {
+    if (!searchTerm.trim()) return;
+    setIsSearchOpen(false);
+    window.location.href = `/packages?search=${encodeURIComponent(searchTerm.trim())}`;
   };
 
   const formatPrice = (price: number) => {
@@ -570,19 +506,7 @@ const Navbar = () => {
                       ))}
                       <div className="border-t pt-2 mt-2">
                         <button
-                          onClick={() => {
-                            const category = getDestinationCategory(searchTerm);
-                            setIsSearchOpen(false);
-                            
-                            // Force page refresh to ensure search works correctly
-                            if (category === 'international') {
-                              window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm)}`;
-                            } else if (category === 'domestic') {
-                              window.location.href = `/packages/domestic?search=${encodeURIComponent(searchTerm)}`;
-                            } else {
-                              window.location.href = `/packages?search=${encodeURIComponent(searchTerm)}`;
-                            }
-                          }}
+                          onClick={goToSearchResults}
                           className="block w-full text-center text-sm text-primary hover:text-primary/80 py-2"
                         >
                           View all results for "{searchTerm}"
@@ -770,18 +694,8 @@ const Navbar = () => {
                         <div className="border-t pt-2 mt-2">
                           <button
                             onClick={() => {
-                              const category = getDestinationCategory(searchTerm);
-                              setIsSearchOpen(false);
                               setIsMenuOpen(false);
-                              
-                              // Force page refresh to ensure search works correctly
-                              if (category === 'international') {
-                                window.location.href = `/packages/international?search=${encodeURIComponent(searchTerm)}`;
-                              } else if (category === 'domestic') {
-                                window.location.href = `/packages/domestic?search=${encodeURIComponent(searchTerm)}`;
-                              } else {
-                                window.location.href = `/packages?search=${encodeURIComponent(searchTerm)}`;
-                              }
+                              goToSearchResults();
                             }}
                             className="block w-full text-center text-sm text-primary hover:text-primary/80 py-2"
                           >
