@@ -212,15 +212,19 @@ Please get back to me with more information about available packages and pricing
                         </div>
                         <div>
                           <label htmlFor="packageType" className="block text-sm font-medium text-gray-700 mb-2">
-                            Package Type
+                            Package Category
                           </label>
                           <Select value={formData.packageType} onValueChange={handleSelectChange}>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select package type" />
+                              <SelectValue placeholder="Select package category" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="domestic">Domestic Packages</SelectItem>
-                              <SelectItem value="international">International Packages</SelectItem>
+                              <SelectItem value="regular">Regular Packages</SelectItem>
+                              <SelectItem value="premium">Premium Packages</SelectItem>
+                              <SelectItem value="luxury">Luxury Packages</SelectItem>
+                              <SelectItem value="adventure">Adventure Activities</SelectItem>
+                              <SelectItem value="oman">OMAN Tour</SelectItem>
+                              <SelectItem value="attractions">Attraction and Activity</SelectItem>
                               <SelectItem value="custom">Custom Package</SelectItem>
                               <SelectItem value="general">General Inquiry</SelectItem>
                             </SelectContent>
@@ -416,7 +420,7 @@ Please get back to me with more information about available packages and pricing
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    We recommend booking at least 2-3 months in advance for domestic packages and 3-6 months for international trips to ensure availability and better prices.
+                    We recommend booking at least 2-3 months in advance for premium packages to ensure availability and better prices.
                   </p>
                 </CardContent>
               </Card>
@@ -426,7 +430,7 @@ Please get back to me with more information about available packages and pricing
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    Yes, we provide complete visa assistance for all our international packages. Our team will guide you through the entire process and help with documentation.
+                    Yes, we provide complete visa assistance for eligible tour packages. Our team will guide you through the entire process and help with documentation.
                   </p>
                 </CardContent>
               </Card>

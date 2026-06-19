@@ -161,12 +161,12 @@ const Header = () => {
                         <li>
                           <NavigationMenuLink asChild>
                             <Link
-                              href="/packages/domestic"
+                              href="/packages/regular"
                               className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                             >
-                              <div className="text-sm font-medium leading-none text-foreground">Domestic</div>
+                              <div className="text-sm font-medium leading-none text-foreground">Regular Packages</div>
                               <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Explore amazing destinations within India
+                                Explore our regular Dubai tour packages
                               </p>
                             </Link>
                           </NavigationMenuLink>
@@ -174,12 +174,38 @@ const Header = () => {
                         <li>
                           <NavigationMenuLink asChild>
                             <Link
-                              href="/packages/international"
+                              href="/packages/premium"
                               className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                             >
-                              <div className="text-sm font-medium leading-none text-foreground">International</div>
+                              <div className="text-sm font-medium leading-none text-foreground">Premium Packages</div>
                               <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Discover incredible destinations worldwide
+                                Curated premium travel experiences
+                              </p>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href="/packages/luxury"
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            >
+                              <div className="text-sm font-medium leading-none text-foreground">Luxury Packages</div>
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                Signature luxury journeys in Dubai
+                              </p>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href="/packages"
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            >
+                              <div className="text-sm font-medium leading-none text-foreground">All Packages</div>
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                Browse all available tour packages
                               </p>
                             </Link>
                           </NavigationMenuLink>
@@ -257,18 +283,32 @@ const Header = () => {
                   <div className="font-medium text-white">Packages</div>
                   <div className="ml-4 space-y-2">
                     <Link
-                      href="/packages/domestic"
+                      href="/packages/regular"
                       className="block text-white/80 hover:text-primary transition-colors duration-200"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Domestic
+                      Regular Packages
                     </Link>
                     <Link
-                      href="/packages/international"
+                      href="/packages/premium"
                       className="block text-white/80 hover:text-primary transition-colors duration-200"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      International
+                      Premium Packages
+                    </Link>
+                    <Link
+                      href="/packages/luxury"
+                      className="block text-white/80 hover:text-primary transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Luxury Packages
+                    </Link>
+                    <Link
+                      href="/packages"
+                      className="block text-white/80 hover:text-primary transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      All Packages
                     </Link>
                   </div>
                 </div>

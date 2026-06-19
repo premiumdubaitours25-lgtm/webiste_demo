@@ -580,12 +580,10 @@ const RegularPackagesPage = () => {
     });
 
     if (filters.location !== "all") {
-      filtered = filtered.filter(pkg => {
-        if (filters.location === "domestic") {
-          return pkg.packageType === 'domestic';
-        }
-        return pkg.place?.toLowerCase() === filters.location.toLowerCase();
-      });
+      filtered = filtered.filter(pkg =>
+        pkg.place?.toLowerCase() === filters.location.toLowerCase() ||
+        pkg.location?.toLowerCase().includes(filters.location.toLowerCase())
+      );
     }
 
     if (filters.tourType.length > 0) {

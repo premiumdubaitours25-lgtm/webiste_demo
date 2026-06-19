@@ -509,7 +509,7 @@ const AboutPage = () => {
                 </Button>
               </Link>
               <Link href="/packages">
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 backdrop-blur-sm bg-white/10">
+                <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100 text-lg px-8 py-6 shadow-xl font-semibold">
                   View Packages
                 </Button>
               </Link>
